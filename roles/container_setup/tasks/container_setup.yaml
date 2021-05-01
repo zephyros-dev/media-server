@@ -1,0 +1,25 @@
+- name: Setup container group
+  become: yes
+  ansible.builtin.group:
+    name: container
+    state: present
+
+- name: Setup container user
+  become: yes
+  ansible.builtin.user:
+    name: container
+    group: container
+    create_home: yes
+    state: present
+
+- name: Add the admin user to the container group
+  become: yes
+  ansible.builtin.user:
+    name: '{{ ansible_user }}'
+    append: yes
+    groups: container
+
+# - name: Setup the media folder
+#   become: yes
+#   ansible.builtin.file:
+#     path: '{{  }}'

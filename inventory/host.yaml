@@ -1,0 +1,6 @@
+all:
+  children:
+    server:
+      hosts: localhost
+    service:
+      hosts: localhost

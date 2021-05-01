@@ -1,0 +1,25 @@
+- name: Radarr pod
+  containers.podman.podman_pod:
+    name: radarr
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+
+- name: Radarr
+  containers.podman.podman_container:
+    name: radarr-web
+    image: 'linuxserver/radarr:{{ radarr_tag }}'
+    env:
+      PUID: '{{ global_puid }}'
+      PGID: '{{ global_pgid }}'
+      # - UMASK_SET=022 #optional
+    pod: radarr
+    # ports:
+    #   - 7878
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '{{ radarr_data }}/config:/config'
+      - '{{ global_media }}:/home'
+      - '{{ transmission_download }}:/downloads'
+    restart_policy: 'on-failure'
+    state: '{{ radarr_state }}'

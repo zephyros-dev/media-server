@@ -1,0 +1,30 @@
+- name: Librespeed config
+  file:
+    path: '{{ librespeed_data }}/config'
+    state: directory
+
+- name: Librespeed pod
+  containers.podman.podman_pod:
+    name: librespeed
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+    
+- name: Librespeed
+  containers.podman.podman_container:
+    name: librespeed-web
+    image: 'ghcr.io/linuxserver/librespeed:{{ librespeed_tag }}'
+    pod: librespeed
+    # ports:
+    # - '80:80'
+    env:
+      PUID: 'global_puid'
+      PGID: 'global_pgid'
+      PASSWORD: 'librespeed_password'
+    volumes:
+      - '{{ librespeed_data }}/config:/config'
+      - '/etc/localtime:/etc/localtime:ro'
+    # network:
+    #   - caddy
+    restart_policy: 'on-failure'
+    state: '{{ librespeed_state }}'

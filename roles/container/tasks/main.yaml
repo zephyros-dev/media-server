@@ -1,0 +1,50 @@
+- name: Create Network
+  import_tasks: network.yaml
+
+- name: Scrutiny
+  import_tasks: scrutiny.yaml
+
+- name: Caddy
+  import_tasks: caddy.yaml
+
+# - name: Test
+#   import_tasks: test.yaml
+
+- name: Pgadmin4
+  import_tasks: pgadmin.yaml
+
+- name: Nextcloud
+  import_tasks: nextcloud.yaml
+
+- name: Librespeed
+  import_tasks: librespeed.yaml
+
+- name: Syncthing
+  import_tasks: syncthing.yaml
+
+- name: Transmission
+  import_tasks: transmission.yaml
+
+- name: Jackett
+  import_tasks: jackett.yaml
+
+- name: Jellyfin
+  import_tasks: jellyfin.yaml
+
+- name: Pymedusa
+  import_tasks: pymedusa.yaml
+
+- name: Radarr
+  import_tasks: radarr.yaml 
+
+- name: Bazarr
+  import_tasks: bazarr.yaml
+
+- name: Headphones
+  import_tasks: headphones.yaml
+
+- name: Calibrew
+  import_tasks: calibrew.yaml
+
+- name: Privatebin
+  import_tasks: privatebin.yaml

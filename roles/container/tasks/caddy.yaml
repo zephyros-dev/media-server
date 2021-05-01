@@ -1,0 +1,20 @@
+- name: Caddy
+  containers.podman.podman_container:
+    name: caddy
+    image: 'caddy:{{ caddy_tag }}'
+    env:
+      PROXY_SITE: '{{ caddy_proxy_site }}'
+      HOST_ADDRESS: '{{ caddy_host_address }}'
+    network:
+      - caddy
+    ports:
+      - '10080:80'
+      - '10443:443'
+    volumes:
+      - '{{ caddy_config }}/Caddyfile:/etc/caddy/Caddyfile:ro'
+      - '{{ caddy_config }}/config:/config'
+      - '{{ caddy_data }}/data:/data'
+      - '/etc/localtime:/etc/localtime:ro'
+    restart_policy: 'on-failure'
+    recreate: yes
+    state: '{{ caddy_state }}'

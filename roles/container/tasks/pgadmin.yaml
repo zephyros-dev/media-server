@@ -1,0 +1,28 @@
+- name: Pgadmin data
+  file:
+    path: '{{ pgadmin_data }}/pgadmin'
+    state: directory
+
+- name: pgadmin pod
+  containers.podman.podman_pod:
+    name: pgadmin
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+
+- name: Pgadmin
+  containers.podman.podman_container:
+    name: pgadmin-web
+    image: 'dpage/pgadmin4:{{ pgadmin_tag }}'
+    env:
+      PGADMIN_DEFAULT_EMAIL: '{{ pgadmin_email }}'
+      PGADMIN_DEFAULT_PASSWORD: '{{ pgadmin_password }}'
+    # ports:
+    #   - '80'
+    pod: pgadmin
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '{{ pgadmin_data }}/pgadmin:/var/lib/pgadmin'
+    network: caddy
+    restart_policy: 'on-failure'
+    state: '{{ pgadmin_state }}'

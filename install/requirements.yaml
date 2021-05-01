@@ -1,0 +1,7 @@
+collections:
+- ansible.posix
+- community.docker
+- containers.podman
+- community.libvirt
+roles:
+- src: bertvv.samba

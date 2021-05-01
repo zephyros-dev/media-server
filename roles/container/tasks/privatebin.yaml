@@ -1,0 +1,19 @@
+- name: Privatebin pod
+  containers.podman.podman_pod:
+    name: privatebin
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+
+- name: Privatebin
+  containers.podman.podman_container:
+    name: privatebin-web
+    image: 'privatebin/nginx-fpm-alpine:{{ privatebin_tag }}'
+    # ports:
+    # - '8080'
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '{{ privatebin_data }}/data:/srv/data'
+    pod: privatebin
+    restart_policy: 'on-failure'
+    state: '{{ privatebin_state }}'

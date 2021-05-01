@@ -1,0 +1,24 @@
+- name: Bazarr pod
+  containers.podman.podman_pod:
+    name: bazarr
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+    
+- name: Bazarr
+  containers.podman.podman_container:
+    name: bazarr-web
+    image: 'linuxserver/bazarr:{{ bazarr_tag }}'
+    env:
+      PUID: '{{ global_puid }}'
+      PGID: '{{ global_pgid }}'
+      # UMASK_SET: 022 #optional
+    volumes:
+      - '{{ bazarr_data }}/config:/config'
+      - '{{ global_media }}:/home'
+      - '/etc/localtime:/etc/localtime:ro'
+    pod: bazarr
+    # ports:
+    #   - 6767
+    restart_policy: 'on-failure'
+    state: '{{ bazarr_state }}'

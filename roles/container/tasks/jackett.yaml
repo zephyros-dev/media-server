@@ -1,0 +1,23 @@
+- name: jackett pod
+  containers.podman.podman_pod:
+    name: jackett
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+
+- name: Jackett
+  containers.podman.podman_container:
+    name: jackett-web
+    image: 'linuxserver/jackett:{{ jackett_tag }}'
+    env:
+      AUTO_UPDATE: 'true' #optional
+      # - RUN_OPTS=run options here #optional
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '{{ jackett_data }}/config:/config'
+      # - path to blackhole:/downloads
+    pod: jackett
+    # ports:
+    #   - 9117
+    restart_policy: 'on-failure'
+    state: '{{ jackett_state }}'

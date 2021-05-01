@@ -1,0 +1,30 @@
+- name: Transmission pod
+  containers.podman.podman_pod:
+    name: transmission
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+
+- name: Transmission
+  containers.podman.podman_container:
+    name: transmission-web
+    image: 'linuxserver/transmission:{{ transmission_tag }}'
+    env:
+      PUID: '{{ global_puid }}'
+      PGID: '{{ global_pgid }}'
+    #   TRANSMISSION_WEB_HOME=/combustion-release/ #optional
+      USER: '{{ transmission_user }}' #optional
+      PASS: '{{ transmission_password }}' #optional
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '{{ transmission_data }}/config:/config'
+      - '{{ transmission_download }}:/downloads'
+      # Watch folder for auto download
+      # - '{{ transmission_watch }}:/watch'
+    pod: transmission
+    # ports:
+    #   - 9091:9091
+    #   - 51413
+    #   - 51413/udp
+    restart_policy: 'on-failure'
+    state: '{{ transmission_state }}'

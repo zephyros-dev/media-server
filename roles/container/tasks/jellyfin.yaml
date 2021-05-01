@@ -1,0 +1,25 @@
+- name: Jellyfin pod
+  containers.podman.podman_pod:
+    name: jellyfin
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+
+- name: Jellyfin
+# The mpv-shim config file is conf.json
+  containers.podman.podman_container:
+    name: jellyfin-web
+    image: 'jellyfin/jellyfin:{{ jellyfin_tag }}'
+    # user: 1000:1000
+    # Use host network_mode for DLNA
+    # network_mode: host 
+    # ports:
+      # - 8096
+    pod: jellyfin
+    volumes:
+      - '{{ jellyfin_config }}/config:/config'
+      - '{{ jellyfin_data }}/cache:/cache'
+      - '{{ global_media }}:/home'
+      - '/etc/localtime:/etc/localtime:ro'
+    restart_policy: 'on-failure'
+    state: '{{ jellyfin_state }}'

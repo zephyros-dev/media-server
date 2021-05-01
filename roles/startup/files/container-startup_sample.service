@@ -1,0 +1,15 @@
+[Unit]
+Description=Run container service at startup
+# After=local-fs.target
+# After=network.target
+After=podman.socket
+#After=XXX
+
+[Service]
+WorkingDirectory=ServiceDirectory
+ExecStart=/usr/bin/ansible-playbook ServiceDirectory/container.yaml
+RemainAfterExit=true
+Type=oneshot
+
+[Install]
+WantedBy=default.target

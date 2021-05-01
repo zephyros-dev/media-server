@@ -1,0 +1,14 @@
+- name: Syncthing
+  containers.podman.podman_container:
+    name: syncthing
+    image: 'syncthing/syncthing:{{ syncthing_tag }}'
+    # Host network, should be used for local discovery
+    network_mode: host
+    env:
+      PUID: '{{ global_puid }}'
+      PGID: '{{ global_pgid }}'
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '{{ syncthing_data }}:/var/syncthing'
+    restart_policy: 'on-failure'
+    state: '{{ syncthing_state }}'

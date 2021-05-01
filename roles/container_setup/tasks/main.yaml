@@ -1,0 +1,2 @@
+- name: Container setup
+  import_tasks: container_setup.yaml

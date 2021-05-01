@@ -1,0 +1,23 @@
+- name: Pymedusa pod
+  containers.podman.podman_pod:
+    name: pymedusa
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+    
+- name: Pymedusa
+  containers.podman.podman_container:
+    name: pymedusa-web
+    image: 'pymedusa/medusa:{{ pymedusa_tag }}'
+    env:
+      PODMAN_SYSTEMD_UNIT: pymedusa
+    pod: pymedusa
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '{{ pymedusa_data }}/config:/config'
+      - '{{ global_media }}:/home'
+      - '{{ transmission_download }}:/downloads'
+    # ports:
+    #   - 8081
+    restart_policy: 'on-failure'
+    state: '{{ pymedusa_state }}'

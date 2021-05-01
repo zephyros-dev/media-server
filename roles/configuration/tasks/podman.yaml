@@ -1,0 +1,15 @@
+- name: Podman
+  become: True
+  dnf:
+    name:
+      - slirp4netns
+      - podman-docker
+    state: latest
+
+- name: Podman testing repo
+  become: True
+  dnf:
+    name:
+      - podman
+    # enablerepo: updates-testing
+    state: latest

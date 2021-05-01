@@ -1,0 +1,26 @@
+- name: Headphones pod
+  containers.podman.podman_pod:
+    name: headphones
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+
+- name: Headphones
+  containers.podman.podman_container:
+    name: headphones-web
+    image: 'linuxserver/headphones:{{ headphones_tag }}'
+    env:
+      PUID: '{{ global_puid }}'
+      PGID: '{{ global_pgid }}'
+    #   TZ: Asia/Ho_Chi_Minh
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '{{ headphones_data }}/config:/config'
+      - '{{ transmission_download }}:/downloads'
+      - '{{ global_media }}:/home'
+      # - /path/to/music:/music
+    pod: headphones
+    # ports:
+    #   - 8181
+    restart_policy: 'on-failure'
+    state: '{{ headphones_state }}'

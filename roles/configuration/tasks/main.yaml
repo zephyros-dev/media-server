@@ -1,0 +1,20 @@
+# - name: Deploy key
+#   import_tasks: key_deploy.yaml
+
+- name: Setup Podman rootless
+  import_tasks: podman.yaml
+
+- name: Install packages
+  import_tasks: package.yaml
+
+- name: Setup linger systemd podman rootless
+  import_tasks: systemd.yaml
+
+- name: Setup Virtualization
+  import_tasks: virtualization.yaml
+
+- name: Setup Samba
+  import_tasks: samba.yaml
+
+- name: Update all packages
+  import_tasks: update.yaml

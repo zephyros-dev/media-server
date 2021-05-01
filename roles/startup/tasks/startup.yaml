@@ -1,0 +1,23 @@
+- name: Create user systemd folder
+  file:
+    path: './.config/systemd/user'
+    state: directory
+
+- name: Copy sample file to remote
+  ansible.builtin.copy:
+    src: 'container-startup_sample.service'
+    dest: './.config/systemd/user/container-startup.service'
+
+- name: Edit systemd file
+  ansible.builtin.replace:
+    path: './.config/systemd/user/container-startup.service'
+    regexp: 'ServiceDirectory'
+    replace: '{{ global_service_path }}'
+
+- name: Run service
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    scope: user
+    enabled: yes
+    state: started
+    name: container-startup  

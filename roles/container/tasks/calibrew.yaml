@@ -1,0 +1,22 @@
+- name: Calibrew pod
+  containers.podman.podman_pod:
+    name: calibrew
+    network: caddy
+    recreate: '{{ pod_recreate }}'
+    state: started
+    
+- name: Calibrew
+  containers.podman.podman_container:
+    name: calibrew-web
+    image: 'linuxserver/calibre-web:{{ calibrew_tag }}'
+    env:
+      PUID: '{{ global_puid }}'
+      PGID: '{{ global_pgid }}'
+    volumes:
+      - '{{ calibrew_data }}/config:/config'
+      - '{{ calibrew_book }}:/books'
+    pod: calibrew
+    # ports:
+    #   - 8083
+    restart_policy: 'on-failure'
+    state: '{{ calibrew_state }}'
