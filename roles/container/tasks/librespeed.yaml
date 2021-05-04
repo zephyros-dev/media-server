@@ -7,9 +7,8 @@
   containers.podman.podman_pod:
     name: librespeed
     network: caddy
-    recreate: '{{ pod_recreate }}'
-    state: started
-    
+    state: '{{ librespeed_state }}'
+
 - name: Librespeed
   containers.podman.podman_container:
     name: librespeed-web

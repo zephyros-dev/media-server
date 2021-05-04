@@ -2,9 +2,8 @@
   containers.podman.podman_pod:
     name: calibrew
     network: caddy
-    recreate: '{{ pod_recreate }}'
-    state: started
-    
+    state: '{{ calibrew_state }}'
+            
 - name: Calibrew
   containers.podman.podman_container:
     name: calibrew-web

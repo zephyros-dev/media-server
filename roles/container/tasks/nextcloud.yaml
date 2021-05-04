@@ -3,7 +3,7 @@
     name: nextcloud
     network: caddy
     recreate: '{{ pod_recreate }}'
-    state: started
+    state: '{{ nextcloud_state }}'
 
 - name: Nextcloud Web data
   file:

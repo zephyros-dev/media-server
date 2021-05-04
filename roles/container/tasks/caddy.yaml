@@ -16,5 +16,4 @@
       - '{{ caddy_data }}/data:/data'
       - '/etc/localtime:/etc/localtime:ro'
     restart_policy: 'on-failure'
-    recreate: yes
     state: '{{ caddy_state }}'

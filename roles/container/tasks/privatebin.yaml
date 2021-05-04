@@ -2,9 +2,8 @@
   containers.podman.podman_pod:
     name: privatebin
     network: caddy
-    recreate: '{{ pod_recreate }}'
-    state: started
-
+    state: '{{ privatebin_state }}'
+    
 - name: Privatebin
   containers.podman.podman_container:
     name: privatebin-web

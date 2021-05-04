@@ -2,9 +2,8 @@
   containers.podman.podman_pod:
     name: bazarr
     network: caddy
-    recreate: '{{ pod_recreate }}'
-    state: started
-    
+    state: '{{ bazarr_state }}'
+            
 - name: Bazarr
   containers.podman.podman_container:
     name: bazarr-web

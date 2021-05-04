@@ -2,9 +2,8 @@
   containers.podman.podman_pod:
     name: pymedusa
     network: caddy
-    recreate: '{{ pod_recreate }}'
-    state: started
-    
+    state: '{{ pymedusa_state }}'
+        
 - name: Pymedusa
   containers.podman.podman_container:
     name: pymedusa-web

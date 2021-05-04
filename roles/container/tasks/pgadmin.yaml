@@ -7,9 +7,8 @@
   containers.podman.podman_pod:
     name: pgadmin
     network: caddy
-    recreate: '{{ pod_recreate }}'
-    state: started
-
+    state: '{{ pgadmin_state }}'
+    
 - name: Pgadmin
   containers.podman.podman_container:
     name: pgadmin-web

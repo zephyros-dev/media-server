@@ -1,4 +1,11 @@
+# https://github.com/containers/podman/discussions/10036#discussioncomment-629380
+- name: Remove the rootless-cni-infra container 
+  containers.podman.podman_container:
+    name: rootless-cni-infra
+    state: absent
+    
 - name: Create service podman network
   containers.podman.podman_network:
     name: caddy
     state: '{{ network_state }}'
+    recreate: '{{ network_recreate }}'
