@@ -7,7 +7,7 @@
 - name: Headphones
   containers.podman.podman_container:
     name: headphones-web
-    image: 'linuxserver/headphones:{{ headphones_tag }}'
+    image: 'ghcr.io/linuxserver/headphones:{{ headphones_tag }}'
     env:
       PUID: '{{ global_puid }}'
       PGID: '{{ global_pgid }}'

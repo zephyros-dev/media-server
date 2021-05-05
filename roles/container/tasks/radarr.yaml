@@ -7,7 +7,7 @@
 - name: Radarr
   containers.podman.podman_container:
     name: radarr-web
-    image: 'linuxserver/radarr:{{ radarr_tag }}'
+    image: 'ghcr.io/linuxserver/radarr:{{ radarr_tag }}'
     env:
       PUID: '{{ global_puid }}'
       PGID: '{{ global_pgid }}'

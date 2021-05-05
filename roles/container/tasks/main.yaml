@@ -1,6 +1,9 @@
 - name: Create Network
   import_tasks: network.yaml
 
+- name: Heimdall
+  import_tasks: heimdall.yaml
+
 - name: Scrutiny
   import_tasks: scrutiny.yaml
 

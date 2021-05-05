@@ -34,6 +34,7 @@
     name: 
       - git
       - golang
+      - ShellCheck
     state: latest
 - name: Misc software
   become: True

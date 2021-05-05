@@ -7,7 +7,7 @@
 - name: Transmission
   containers.podman.podman_container:
     name: transmission-web
-    image: 'linuxserver/transmission:{{ transmission_tag }}'
+    image: 'ghcr.io/linuxserver/transmission:{{ transmission_tag }}'
     env:
       PUID: '{{ global_puid }}'
       PGID: '{{ global_pgid }}'

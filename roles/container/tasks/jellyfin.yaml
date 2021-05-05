@@ -16,9 +16,9 @@
       # - 8096
     pod: jellyfin
     volumes:
+      - '/etc/localtime:/etc/localtime:ro'
       - '{{ jellyfin_config }}/config:/config'
       - '{{ jellyfin_data }}/cache:/cache'
       - '{{ global_media }}:/home'
-      - '/etc/localtime:/etc/localtime:ro'
     restart_policy: 'on-failure'
     state: '{{ jellyfin_state }}'

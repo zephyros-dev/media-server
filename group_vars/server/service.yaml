@@ -13,8 +13,8 @@ global_pgid: '0'
 
 # Network
 network_state: 'present'
-network_recreate: 'no'
-pod_recreate: 'no'
+network_recreate: 'yes'
+pod_recreate: 'yes'
 
 # container_state: started or absent only since the state is shared between container and pod
 
@@ -30,6 +30,15 @@ caddy_config: '{{ global_config_path }}/caddy'
 caddy_data: '{{ global_data_path }}/caddy'
 caddy_proxy_site: '{{ vault_caddy_proxy_site }}'
 caddy_host_address: '{{ vault_caddy_host_address }}'
+caddy_basic_auth_user: '{{ vault_caddy_basic_auth_user }}'
+caddy_basic_auth_pass: '{{ vault_caddy_basic_auth_pass }}'
+
+# Heimdall
+heimdall_tag: 'latest'
+heimdall_state: 'started'
+# heimdall_data: '{{ global_data_path }}/heimdall'
+# heimdall_data_config: '{{ heimdall_data }}/config'
+heimdall_data_config: 'heimdall'
 
 # Librespeed
 librespeed_tag: 'latest'

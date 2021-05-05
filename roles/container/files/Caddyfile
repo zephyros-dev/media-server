@@ -1,0 +1,68 @@
+test.{$PROXY_SITE} {
+    reverse_proxy test:80
+}
+heimdall.{$PROXY_SITE} {
+    reverse_proxy heimdall:80
+}
+netdata.{$PROXY_SITE} {
+    reverse_proxy {$HOST_ADDRESS}:19999
+    basicauth {
+        {$BASIC_AUTH_USER} {$BASIC_AUTH_PASS}
+    }
+}
+scrutiny.{$PROXY_SITE} {
+    reverse_proxy {$HOST_ADDRESS}:8080
+    basicauth {
+        {$BASIC_AUTH_USER} {$BASIC_AUTH_PASS}
+    }
+}
+pgadmin.{$PROXY_SITE} {
+    reverse_proxy pgadmin:80
+}
+librespeed.{$PROXY_SITE} {
+    reverse_proxy librespeed:80
+}
+syncthing.{$PROXY_SITE} {
+    reverse_proxy {$HOST_ADDRESS}:8384
+}
+nextcloud.{$PROXY_SITE} {
+    encode gzip
+    reverse_proxy nextcloud:80 {
+        # header_up Host {http.reverse_proxy.upstream.hostporti}
+        # header_up X-Forwarded-Host {host}
+        header_down Strict-Transport-Security "max-age=15552000;"
+        header_down Referrer-Policy "strict-origin-when-cross-origin"
+        header_down X-XSS-Protection "1; mode=block"
+        header_down X-Content-Type-Options "nosniff"
+        header_down X-Frame-Options "SAMEORIGIN"
+        }
+    redir /.well-known/carddav /remote.php/carddav 301
+    redir /.well-known/caldav /remote.php/caldav 301
+}
+jellyfin.{$PROXY_SITE} {
+    reverse_proxy jellyfin:8096
+}
+pymedusa.{$PROXY_SITE} {
+    reverse_proxy pymedusa:8081
+}
+radarr.{$PROXY_SITE} {
+    reverse_proxy radarr:7878
+}
+bazarr.{$PROXY_SITE} {
+    reverse_proxy bazarr:6767
+}
+headphones.{$PROXY_SITE} {
+    reverse_proxy headphones:8181
+}
+transmission.{$PROXY_SITE} {
+    reverse_proxy transmission:9091
+}
+jackett.{$PROXY_SITE} {
+    reverse_proxy jackett:9117
+}
+calibrew.{$PROXY_SITE} {
+    reverse_proxy calibrew:8083
+}
+privatebin.{$PROXY_SITE} {
+    reverse_proxy privatebin:8080
+}

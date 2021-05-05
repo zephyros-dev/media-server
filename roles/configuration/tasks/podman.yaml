@@ -11,5 +11,5 @@
   dnf:
     name:
       - podman
-    # enablerepo: updates-testing
+    enablerepo: updates-testing
     state: latest

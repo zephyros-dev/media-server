@@ -7,11 +7,12 @@
 - name: Calibrew
   containers.podman.podman_container:
     name: calibrew-web
-    image: 'linuxserver/calibre-web:{{ calibrew_tag }}'
+    image: 'ghcr.io/linuxserver/calibre-web:{{ calibrew_tag }}'
     env:
       PUID: '{{ global_puid }}'
       PGID: '{{ global_pgid }}'
     volumes:
+      - '/etc/localtime:/etc/localtime:ro'
       - '{{ calibrew_data }}/config:/config'
       - '{{ calibrew_book }}:/books'
     pod: calibrew

@@ -7,7 +7,7 @@
 - name: Bazarr
   containers.podman.podman_container:
     name: bazarr-web
-    image: 'linuxserver/bazarr:{{ bazarr_tag }}'
+    image: 'ghcr.io/linuxserver/bazarr:{{ bazarr_tag }}'
     env:
       PUID: '{{ global_puid }}'
       PGID: '{{ global_pgid }}'

@@ -1,3 +1,13 @@
+- name: Create Caddy config folder
+  file:
+    path: '{{ caddy_config }}'
+    state: directory
+
+- name: Update Caddyfile
+  copy:
+    src: Caddyfile
+    dest: '{{ caddy_config }}/Caddyfile'
+
 - name: Caddy
   containers.podman.podman_container:
     name: caddy
@@ -5,15 +15,17 @@
     env:
       PROXY_SITE: '{{ caddy_proxy_site }}'
       HOST_ADDRESS: '{{ caddy_host_address }}'
+      BASIC_AUTH_USER: '{{ caddy_basic_auth_user }}'
+      BASIC_AUTH_PASS: '{{ caddy_basic_auth_pass }}'
     network:
       - caddy
     ports:
       - '10080:80'
       - '10443:443'
     volumes:
+      - '/etc/localtime:/etc/localtime:ro'
       - '{{ caddy_config }}/Caddyfile:/etc/caddy/Caddyfile:ro'
       - '{{ caddy_config }}/config:/config'
       - '{{ caddy_data }}/data:/data'
-      - '/etc/localtime:/etc/localtime:ro'
     restart_policy: 'on-failure'
     state: '{{ caddy_state }}'

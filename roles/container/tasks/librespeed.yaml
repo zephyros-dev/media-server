@@ -21,8 +21,8 @@
       PGID: 'global_pgid'
       PASSWORD: 'librespeed_password'
     volumes:
-      - '{{ librespeed_data }}/config:/config'
       - '/etc/localtime:/etc/localtime:ro'
+      - '{{ librespeed_data }}/config:/config'
     # network:
     #   - caddy
     restart_policy: 'on-failure'
