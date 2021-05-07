@@ -14,7 +14,7 @@ global_pgid: '0'
 # Network
 network_state: 'present'
 network_recreate: 'yes'
-pod_recreate: 'yes'
+pod_recreate: 'no'
 
 # container_state: started or absent only since the state is shared between container and pod
 

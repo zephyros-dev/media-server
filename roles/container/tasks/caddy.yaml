@@ -28,4 +28,5 @@
       - '{{ caddy_config }}/config:/config'
       - '{{ caddy_data }}/data:/data'
     restart_policy: 'on-failure'
+    recreate: yes
     state: '{{ caddy_state }}'

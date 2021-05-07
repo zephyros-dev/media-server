@@ -1,4 +1,5 @@
 # https://github.com/containers/podman/discussions/10036#discussioncomment-629380
+# NOTE: Doing this will make containers run at startup, but the playbook is no longer idempotent
 - name: Remove the rootless-cni-infra container 
   containers.podman.podman_container:
     name: rootless-cni-infra
