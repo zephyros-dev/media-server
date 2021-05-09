@@ -1,3 +1,9 @@
+(basic-auth) {
+  basicauth / {
+    {$BASIC_AUTH_USER} {$BASIC_AUTH_PASS}
+  }
+}
+
 test.{$PROXY_SITE} {
     reverse_proxy test:80
 }
@@ -5,16 +11,12 @@ heimdall.{$PROXY_SITE} {
     reverse_proxy heimdall:80
 }
 netdata.{$PROXY_SITE} {
+    import basic-auth
     reverse_proxy {$HOST_ADDRESS}:19999
-    basicauth {
-        {$BASIC_AUTH_USER} {$BASIC_AUTH_PASS}
-    }
 }
 scrutiny.{$PROXY_SITE} {
+    import basic-auth
     reverse_proxy {$HOST_ADDRESS}:8080
-    basicauth {
-        {$BASIC_AUTH_USER} {$BASIC_AUTH_PASS}
-    }
 }
 pgadmin.{$PROXY_SITE} {
     reverse_proxy pgadmin:80

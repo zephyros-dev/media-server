@@ -7,6 +7,8 @@
   copy:
     src: Caddyfile
     dest: '{{ caddy_config }}/Caddyfile'
+  notify:
+  - Restart Caddy
 
 - name: Caddy
   containers.podman.podman_container:
@@ -28,5 +30,4 @@
       - '{{ caddy_config }}/config:/config'
       - '{{ caddy_data }}/data:/data'
     restart_policy: 'on-failure'
-    recreate: yes
     state: '{{ caddy_state }}'

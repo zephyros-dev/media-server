@@ -3,13 +3,11 @@
     name: pymedusa
     network: caddy
     state: '{{ pymedusa_state }}'
-        
+
 - name: Pymedusa
   containers.podman.podman_container:
     name: pymedusa-web
     image: 'pymedusa/medusa:{{ pymedusa_tag }}'
-    env:
-      PODMAN_SYSTEMD_UNIT: pymedusa
     pod: pymedusa
     volumes:
       - '/etc/localtime:/etc/localtime:ro'

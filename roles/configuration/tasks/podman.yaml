@@ -13,3 +13,13 @@
       - podman
     enablerepo: updates-testing
     state: latest
+
+- name: Create container config folder
+  file:
+    path: '~/.config/containers'
+    state: directory
+
+- name: Change podman registries configuration
+  copy:
+    src: 'podman/registries.conf'
+    dest: '~/.config/containers/registries.conf'

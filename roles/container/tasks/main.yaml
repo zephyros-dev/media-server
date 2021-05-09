@@ -10,9 +10,6 @@
 - name: Caddy
   import_tasks: caddy.yaml
 
-- name: Test
-  import_tasks: test.yaml
-
 - name: Pgadmin4
   import_tasks: pgadmin.yaml
 

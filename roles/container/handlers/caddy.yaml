@@ -1,0 +1,4 @@
+- name: Restart Caddy
+  containers.podman.podman_container:
+    name: caddy
+    force_restart: yes
