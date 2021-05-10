@@ -1,50 +1,50 @@
 - name: Create Network
-  import_tasks: network.yaml
-
-- name: Heimdall
-  import_tasks: heimdall.yaml
-
-- name: Scrutiny
-  import_tasks: scrutiny.yaml
+  import_tasks: 'network/network.yaml'
 
 - name: Caddy
-  import_tasks: caddy.yaml
+  import_tasks: 'network/caddy.yaml'
 
-- name: Pgadmin4
-  import_tasks: pgadmin.yaml
+- name: Heimdall
+  import_tasks: 'service/heimdall.yaml'
+
+- name: Scrutiny
+  import_tasks: 'service/scrutiny.yaml'
 
 - name: Nextcloud
-  import_tasks: nextcloud.yaml
+  import_tasks: 'service/nextcloud.yaml'
 
 - name: Librespeed
-  import_tasks: librespeed.yaml
+  import_tasks: 'service/librespeed.yaml'
 
 - name: Syncthing
-  import_tasks: syncthing.yaml
+  import_tasks: 'service/syncthing.yaml'
 
 - name: Transmission
-  import_tasks: transmission.yaml
+  import_tasks: 'service/transmission.yaml'
 
 - name: Jackett
-  import_tasks: jackett.yaml
+  import_tasks: 'service/jackett.yaml'
 
 - name: Jellyfin
-  import_tasks: jellyfin.yaml
+  import_tasks: 'service/jellyfin.yaml'
 
 - name: Pymedusa
-  import_tasks: pymedusa.yaml
+  import_tasks: 'service/pymedusa.yaml'
 
 - name: Radarr
-  import_tasks: radarr.yaml 
+  import_tasks: 'service/radarr.yaml' 
 
 - name: Bazarr
-  import_tasks: bazarr.yaml
+  import_tasks: 'service/bazarr.yaml'
 
 - name: Headphones
-  import_tasks: headphones.yaml
+  import_tasks: 'service/headphones.yaml'
 
 - name: Calibrew
-  import_tasks: calibrew.yaml
+  import_tasks: 'service/calibrew.yaml'
 
 - name: Privatebin
-  import_tasks: privatebin.yaml
+  import_tasks: 'service/privatebin.yaml'
+
+- name: Pgadmin4
+  import_tasks: 'admin/pgadmin.yaml'

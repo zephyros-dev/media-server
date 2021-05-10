@@ -1,9 +1,6 @@
 [Unit]
 Description=Run container service at startup
-# After=local-fs.target
-# After=network.target
 After=podman.socket
-#After=XXX
 
 [Service]
 WorkingDirectory=ServiceDirectory

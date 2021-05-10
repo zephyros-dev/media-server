@@ -23,7 +23,5 @@
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
       - '{{ librespeed_data }}/config:/config'
-    # network:
-    #   - caddy
     restart_policy: 'on-failure'
     state: '{{ librespeed_state }}'
