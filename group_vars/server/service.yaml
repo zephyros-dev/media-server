@@ -15,6 +15,7 @@ global_pgid: '0'
 network_state: 'present'
 
 # container_state: started or absent only since the state is shared between container and pod
+test_state: 'absent'
 
 # Scrutiny
 scrutiny_tag: 'latest'
@@ -26,10 +27,11 @@ caddy_tag: 'latest'
 caddy_state: 'started'
 caddy_config: '{{ global_config_path }}/caddy'
 caddy_data: '{{ global_data_path }}/caddy'
-caddy_proxy_site: '{{ vault_caddy_proxy_site }}'
-caddy_host_address: '{{ vault_caddy_host_address }}'
-caddy_basic_auth_user: '{{ vault_caddy_basic_auth_user }}'
-caddy_basic_auth_pass: '{{ vault_caddy_basic_auth_pass }}'
+caddy_caddyfile_proxy_site: '{{ vault_caddy_caddyfile_proxy_site }}'
+caddy_caddyfile_host_address: '{{ vault_caddy_caddyfile_host_address }}'
+caddy_caddyfile_basic_auth_user: '{{ vault_caddy_caddyfile_basic_auth_user }}'
+caddy_caddyfile_basic_auth_pass: '{{ vault_caddy_caddyfile_basic_auth_pass }}'
+caddy_caddyfile_auth_token: '{{ vault_caddy_caddyfile_auth_token }}'
 
 # Heimdall
 heimdall_tag: 'latest'

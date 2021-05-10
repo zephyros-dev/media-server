@@ -1,33 +1,63 @@
 (basic-auth) {
   basicauth / {
-    {$BASIC_AUTH_USER} {$BASIC_AUTH_PASS}
+    {$CADDYFILE_BASIC_AUTH_USER} {$CADDYFILE_BASIC_AUTH_PASS}
   }
 }
-
-test.{$PROXY_SITE} {
+# A snippet to check if a cookie token is set. if not, store the current page as the referer and redirect to auth site
+(proxy-auth) {
+  # if cookie not = some-token-nonsense
+  @no-auth {
+    not header_regexp mycookie Cookie myid={$CADDYFILE_AUTH_TOKEN}
+    # https://github.com/caddyserver/caddy/issues/3916
+  }
+  # store current time, page and redirect to auth
+  route @no-auth {
+    header Set-Cookie "myreferer={scheme}://{host}{uri}; Domain={$CADDYFILE_PROXY_SITE}; Path=/; Max-Age=30; HttpOnly; SameSite=Strict; Secure"
+    redir https://auth.{$CADDYFILE_PROXY_SITE}
+  }
+}
+auth.{$CADDYFILE_PROXY_SITE} {
+  route {
+    # require authentication
+    import basic-auth
+    # upon successful auth, set a client token
+    header Set-Cookie "myid={$CADDYFILE_AUTH_TOKEN}; Domain={$CADDYFILE_PROXY_SITE}; Path=/; Max-Age=3600; HttpOnly; SameSite=Strict; Secure"
+    # delete the referer cookie
+    header +Set-Cookie "myreferer=null; Domain={$CADDYFILE_PROXY_SITE}; Path=/; Expires=Thu, 25 Sep 1971 12:00:00 GMT; HttpOnly; SameSite=Strict; Secure"
+    # redirect back to the original site
+    redir {http.request.cookie.myreferer}
+  }
+  # fallback
+  respond "Nope"
+}
+test.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy test:80
 }
-heimdall.{$PROXY_SITE} {
+heimdall.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy heimdall:80
 }
-netdata.{$PROXY_SITE} {
-    import basic-auth
-    reverse_proxy {$HOST_ADDRESS}:19999
+netdata.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:19999
 }
-scrutiny.{$PROXY_SITE} {
-    import basic-auth
-    reverse_proxy {$HOST_ADDRESS}:8080
+scrutiny.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:8080
 }
-pgadmin.{$PROXY_SITE} {
+pgadmin.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy pgadmin:80
 }
-librespeed.{$PROXY_SITE} {
+librespeed.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy librespeed:80
 }
-syncthing.{$PROXY_SITE} {
-    reverse_proxy {$HOST_ADDRESS}:8384
+syncthing.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:8384
 }
-nextcloud.{$PROXY_SITE} {
+nextcloud.{$CADDYFILE_PROXY_SITE} {
     encode gzip
     reverse_proxy nextcloud:80 {
         # header_up Host {http.reverse_proxy.upstream.hostporti}
@@ -41,30 +71,35 @@ nextcloud.{$PROXY_SITE} {
     redir /.well-known/carddav /remote.php/carddav 301
     redir /.well-known/caldav /remote.php/caldav 301
 }
-jellyfin.{$PROXY_SITE} {
+jellyfin.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy jellyfin:8096
 }
-pymedusa.{$PROXY_SITE} {
+pymedusa.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy pymedusa:8081
 }
-radarr.{$PROXY_SITE} {
+radarr.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy radarr:7878
 }
-bazarr.{$PROXY_SITE} {
+bazarr.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy bazarr:6767
 }
-headphones.{$PROXY_SITE} {
+headphones.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy headphones:8181
 }
-transmission.{$PROXY_SITE} {
+transmission.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy transmission:9091
 }
-jackett.{$PROXY_SITE} {
+jackett.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy jackett:9117
 }
-calibrew.{$PROXY_SITE} {
+calibrew.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy calibrew:8083
 }
-privatebin.{$PROXY_SITE} {
+privatebin.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy privatebin:8080
 }

@@ -15,10 +15,11 @@
     name: caddy
     image: 'caddy:{{ caddy_tag }}'
     env:
-      PROXY_SITE: '{{ caddy_proxy_site }}'
-      HOST_ADDRESS: '{{ caddy_host_address }}'
-      BASIC_AUTH_USER: '{{ caddy_basic_auth_user }}'
-      BASIC_AUTH_PASS: '{{ caddy_basic_auth_pass }}'
+      CADDYFILE_PROXY_SITE: '{{ caddy_caddyfile_proxy_site }}'
+      CADDYFILE_HOST_ADDRESS: '{{ caddy_caddyfile_host_address }}'
+      CADDYFILE_BASIC_AUTH_USER: '{{ caddy_caddyfile_basic_auth_user }}'
+      CADDYFILE_BASIC_AUTH_PASS: '{{ caddy_caddyfile_basic_auth_pass }}'
+      CADDYFILE_AUTH_TOKEN: '{{ caddy_caddyfile_auth_token }}'
     network:
       - caddy
     ports:
