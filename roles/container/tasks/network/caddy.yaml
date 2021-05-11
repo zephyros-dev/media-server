@@ -30,9 +30,9 @@
       - '10080:80'
       - '10443:443'
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
-      - '{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
+      - '{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:ro,z'
       - '{{ caddy_data_config }}:/config:U,z'
       - '{{ caddy_data_data }}:/data:U,z'
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ caddy_state }}'

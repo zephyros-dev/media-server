@@ -1,3 +1,8 @@
+- name: Global Media folder
+  file:
+    path: '{{ global_media }}'
+    state: directory
+
 - name: Bazarr web config
   file:
     path: '{{ bazarr_web_config }}'
@@ -18,11 +23,11 @@
       PGID: '{{ global_pgid }}'
       # UMASK_SET: 022 #optional
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ bazarr_web_config }}:/config:U,z'
       - '{{ global_media }}:/home'
     pod: bazarr
     # ports:
     #   - 6767
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ bazarr_state }}'

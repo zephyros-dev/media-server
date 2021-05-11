@@ -1,3 +1,13 @@
+- name: Global Media folder
+  file:
+    path: '{{ global_media }}'
+    state: directory
+
+- name: Transmission Download folder
+  file:
+    path: '{{ transmission_download }}'
+    state: directory
+
 - name: Radarr web config
   file:
     path: '{{ radarr_web_config }}'
@@ -21,9 +31,9 @@
     # ports:
     #   - 7878
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ radarr_web_config }}:/config:U,z'
       - '{{ global_media }}:/home'
       - '{{ transmission_download }}:/downloads'
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ radarr_state }}'

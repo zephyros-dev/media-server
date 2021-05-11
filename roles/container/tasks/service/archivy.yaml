@@ -30,13 +30,13 @@
       ELASTICSEARCH_ENABLED: '1'
       ELASTICSEARCH_URL: 'http://localhost:9200/'
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ archivy_web_data }}:/archivy/data:U,z'
       - '{{ archivy_web_config }}:/archivy/.local/share/archivy:U,z'
     pod: archivy
     # ports:
     #   - 5000
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ archivy_state }}'
 
 - name: Archivy elastic search
@@ -48,4 +48,5 @@
       discovery.type: 'single-node'
     volumes:
       - '{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z'
+    restart_policy: 'on-failure:3'
     state: '{{ archivy_state }}'

@@ -20,8 +20,8 @@
     #   - '80'
     pod: pgadmin
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ pgadmin_data }}/pgadmin:/var/lib/pgadmin'
     network: caddy
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ pgadmin_state }}'

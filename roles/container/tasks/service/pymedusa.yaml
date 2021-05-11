@@ -1,3 +1,13 @@
+- name: Global Media folder
+  file:
+    path: '{{ global_media }}'
+    state: directory
+
+- name: Transmission Download folder
+  file:
+    path: '{{ transmission_download }}'
+    state: directory
+
 - name: Pymedusa web config
   file:
     path: '{{ pymedusa_web_config }}'
@@ -15,11 +25,11 @@
     image: 'pymedusa/medusa:{{ pymedusa_tag }}'
     pod: pymedusa
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ pymedusa_web_config }}:/config:U,z'
       - '{{ global_media }}:/home'
       - '{{ transmission_download }}:/downloads'
     # ports:
     #   - 8081
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ pymedusa_state }}'

@@ -3,6 +3,11 @@
     path: '{{ calibrew_web_config }}'
     state: directory
 
+- name: Calibrew books folder
+  file:
+    path: '{{ calibrew_book }}'
+    state: directory
+
 - name: Calibrew pod
   containers.podman.podman_pod:
     name: calibrew
@@ -17,11 +22,11 @@
       PUID: '{{ global_puid }}'
       PGID: '{{ global_pgid }}'
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ calibrew_web_config }}:/config:U,z'
       - '{{ calibrew_book }}:/books'
     pod: calibrew
     # ports:
     #   - 8083
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ calibrew_state }}'

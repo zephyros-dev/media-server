@@ -12,7 +12,7 @@
   ansible.builtin.replace:
     path: './.config/systemd/user/container-startup.service'
     regexp: 'ServiceDirectory'
-    replace: '{{ global_service_path }}'
+    replace: '{{ global_container_run_path }}'
 
 - name: Run service
   ansible.builtin.systemd:

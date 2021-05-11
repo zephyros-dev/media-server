@@ -1,13 +1,11 @@
 # Root data folder
 global_data_path: '{{ vault_global_data_path }}'
-# Root config folder
-global_config_path: '{{ vault_global_config_path }}'
-# Root service folder
-global_service_path: '{{ vault_global_service_path }}'
-# Media, used in Pymedusa and Jellyfin
+# Ansible service playbook folder, for running the container playbook at control node systemd 
+global_container_run_path: '{{ vault_global_container_run_path }}'
+# Media folder, shared among Jellyfin, Pymedusa, Radarr, bazarr, headphones for hardlink
 global_media: '{{ vault_global_media }}'
-global_storage: '{{ vault_global_storage }}'
-# PID and GID mapping, use 1000 if running in root mode, or 0 if running rootless
+# PID and GID mapping for LSIO container
+# 0 means root inside the rootless container, which map to the user running the container
 global_puid: '0'
 global_pgid: '0'
 
@@ -39,19 +37,18 @@ caddy_caddyfile_auth_token: '{{ vault_caddy_caddyfile_auth_token }}'
 # Diun
 diun_tag: 'latest'
 diun_state: 'started'
-diun_discord_webhook: 'vault_diun_discord_webhook'
-diun_discord_mention: 'vault_diun_discord_mention'
+diun_discord_webhook: '{{ vault_diun_discord_webhook }}'
+diun_discord_mention: '{{ vault_diun_discord_mention }}'
 
 # Heimdall
 heimdall_tag: 'latest'
 heimdall_state: 'started'
 heimdall_data: '{{ global_data_path }}/heimdall'
 heimdall_data_config: '{{ heimdall_data }}/config'
-# heimdall_data_config: 'heimdall'
 
 # Archivy
 archivy_tag: 'latest'
-archivy_state: 'started'
+archivy_state: 'absent'
 archivy_data: '{{ global_data_path }}/archivy'
 archivy_elasticsearch: '{{ archivy_data }}/elasticsearch'
 archivy_web: '{{ archivy_data }}/web'
@@ -154,4 +151,4 @@ calibrew_book: '{{ global_media }}/Storage/Books/Books'
 privatebin_tag: 'latest'
 privatebin_state: 'started'
 privatebin_data: '{{ global_data_path }}/privatebin'
-privatebin_web_data: '{{ privatebin_data }}/data'
+privatebin_web_data: '{{ privatebin_data }}/web/data'

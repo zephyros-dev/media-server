@@ -1,3 +1,8 @@
+- name: Transmission Download folder
+  file:
+    path: '{{ transmission_download }}'
+    state: directory
+
 - name: Transmission web config
   file:
     path: '{{ transmission_web_config }}'
@@ -20,7 +25,7 @@
       USER: '{{ transmission_user }}' #optional
       PASS: '{{ transmission_password }}' #optional
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ transmission_web_config }}:/config:U,z'
       - '{{ transmission_download }}:/downloads'
       # Watch folder for auto download
@@ -30,5 +35,5 @@
     #   - 9091:9091
     #   - 51413
     #   - 51413/udp
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ transmission_state }}'

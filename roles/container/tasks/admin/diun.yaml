@@ -17,11 +17,11 @@
       DIUN_NOTIF_DISCORD_WEBHOOKURL: '{{ diun_discord_webhook }}'
       DIUN_NOTIF_DISCORD_MENTIONS: '{{ diun_discord_mention }}'
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ lookup("env","XDG_RUNTIME_DIR") }}/podman/podman.sock:/var/run/docker.sock'
     pod: diun
     labels:
       diun.enable: 'true'
       diun.watch_repo: 'true'
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ diun_state }}'

@@ -52,5 +52,5 @@
 - name: Pgadmin4
   import_tasks: 'admin/pgadmin.yaml'
 
-- name: Archivy
-  import_tasks: 'service/archivy.yaml'
+# - name: Archivy
+#   import_tasks: 'service/archivy.yaml'

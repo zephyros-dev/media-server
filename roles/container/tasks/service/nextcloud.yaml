@@ -33,10 +33,10 @@
     # ports: 
     #   - 80
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ nextcloud_web_data }}:/var/www/html:U,z'
       - '{{ nextcloud_storage_data }}:/var/www/html/data:U,z'
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ nextcloud_state }}'
 
 - name: Nextcloud Redis
@@ -46,8 +46,8 @@
     command: 'redis-server --requirepass {{ nextcloud_redis_host_password }}'
     pod: nextcloud
     volume: 
-      - '/etc/localtime:/etc/localtime:ro'
-    restart_policy: 'on-failure'
+      - '/etc/localtime:/etc/localtime:ro,z'
+    restart_policy: 'on-failure:3'
     state: '{{ nextcloud_state }}'
 
 - name: Nextcloud database
@@ -62,7 +62,7 @@
       POSTGRES_PASSWORD: '{{ nextcloud_postgres_password }}'
     pod: nextcloud
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z'
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ nextcloud_state }}'

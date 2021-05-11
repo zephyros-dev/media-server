@@ -21,7 +21,7 @@
       PGID: 'global_pgid'
       # PASSWORD:  '{{ librespeed_password }}'
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ librespeed_web_config }}:/config:U,z'
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ librespeed_state }}'

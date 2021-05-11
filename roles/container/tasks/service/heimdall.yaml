@@ -18,11 +18,11 @@
     #   PUID: '{{ global_puid }}'
     #   PGID: '{{ global_pgid }}'
     volumes:
-      - '/etc/localtime:/etc/localtime:ro'
+      - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ heimdall_data_config }}:/config:U,z'
     pod: heimdall
     # ports:
     #   - 80
     #   - 443
-    restart_policy: 'on-failure'
+    restart_policy: 'on-failure:3'
     state: '{{ heimdall_state }}'
