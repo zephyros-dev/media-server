@@ -1,12 +1,7 @@
-# - name: Heimdall config
-#   file:
-#     path: '{{ heimdall_data }}/config'
-#     state: directory
-
-- name: Heimdall config volume
-  containers.podman.podman_volume:
-    name: '{{ heimdall_data_config }}'
-    state: present
+- name: Heimdall config
+  file:
+    path: '{{ heimdall_data_config }}'
+    state: directory
 
 - name: Heimdall pod
   containers.podman.podman_pod:
@@ -24,7 +19,7 @@
     #   PGID: '{{ global_pgid }}'
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ heimdall_data_config }}:/config'
+      - '{{ heimdall_data_config }}:/config:U,z'
     pod: heimdall
     # ports:
     #   - 80

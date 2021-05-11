@@ -1,4 +1,9 @@
-- name: jackett pod
+- name: Jackett web config
+  file:
+    path: '{{ jackett_web_config }}'
+    state: directory
+
+- name: Jackett pod
   containers.podman.podman_pod:
     name: jackett
     network: caddy
@@ -13,7 +18,7 @@
       # - RUN_OPTS=run options here #optional
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ jackett_data }}/config:/config'
+      - '{{ jackett_web_config }}:/config:U,z'
       # - path to blackhole:/downloads
     pod: jackett
     # ports:

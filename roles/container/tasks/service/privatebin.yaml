@@ -1,3 +1,8 @@
+- name: Privatebin Web data
+  file:
+    path: '{{ privatebin_web_data }}'
+    state: directory
+
 - name: Privatebin pod
   containers.podman.podman_pod:
     name: privatebin
@@ -12,7 +17,7 @@
     # - '8080'
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ privatebin_data }}/data:/srv/data'
+      - '{{ privatebin_web_data }}:/srv/data:U,z'
     pod: privatebin
     restart_policy: 'on-failure'
     state: '{{ privatebin_state }}'

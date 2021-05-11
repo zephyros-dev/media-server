@@ -1,3 +1,12 @@
+- name: Jellyfin config folder
+  file:
+    path: '{{ jellyfin_web_config }}'
+    state: directory
+- name: Jellyfin cache folder
+  file:
+    path: '{{ jellyfin_web_cache }}'
+    state: directory
+
 - name: Jellyfin pod
   containers.podman.podman_pod:
     name: jellyfin
@@ -17,8 +26,8 @@
     pod: jellyfin
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ jellyfin_config }}/config:/config'
-      - '{{ jellyfin_data }}/cache:/cache'
+      - '{{ jellyfin_web_config }}:/config:U,z'
+      - '{{ jellyfin_web_cache }}:/cache:U,z'
       - '{{ global_media }}:/home'
     restart_policy: 'on-failure'
     state: '{{ jellyfin_state }}'

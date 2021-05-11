@@ -1,6 +1,6 @@
 - name: Librespeed config
   file:
-    path: '{{ librespeed_data }}/config'
+    path: '{{ librespeed_web_config }}'
     state: directory
 
 - name: Librespeed pod
@@ -19,9 +19,9 @@
     env:
       PUID: 'global_puid'
       PGID: 'global_pgid'
-      PASSWORD: 'librespeed_password'
+      # PASSWORD:  '{{ librespeed_password }}'
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ librespeed_data }}/config:/config'
+      - '{{ librespeed_web_config }}:/config:U,z'
     restart_policy: 'on-failure'
     state: '{{ librespeed_state }}'

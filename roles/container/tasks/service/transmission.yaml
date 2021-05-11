@@ -1,3 +1,8 @@
+- name: Transmission web config
+  file:
+    path: '{{ transmission_web_config }}'
+    state: directory
+
 - name: Transmission pod
   containers.podman.podman_pod:
     name: transmission
@@ -16,7 +21,7 @@
       PASS: '{{ transmission_password }}' #optional
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ transmission_data }}/config:/config'
+      - '{{ transmission_web_config }}:/config:U,z'
       - '{{ transmission_download }}:/downloads'
       # Watch folder for auto download
       # - '{{ transmission_watch }}:/watch'

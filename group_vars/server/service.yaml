@@ -33,18 +33,35 @@ caddy_caddyfile_basic_auth_user: '{{ vault_caddy_caddyfile_basic_auth_user }}'
 caddy_caddyfile_basic_auth_pass: '{{ vault_caddy_caddyfile_basic_auth_pass }}'
 caddy_caddyfile_auth_token: '{{ vault_caddy_caddyfile_auth_token }}'
 
+# Diun
+diun_tag: 'latest'
+diun_state: 'started'
+diun_discord_webhook: 'vault_diun_discord_webhook'
+diun_discord_mention: 'vault_diun_discord_mention'
+
 # Heimdall
 heimdall_tag: 'latest'
 heimdall_state: 'started'
-# heimdall_data: '{{ global_data_path }}/heimdall'
-# heimdall_data_config: '{{ heimdall_data }}/config'
-heimdall_data_config: 'heimdall'
+heimdall_data: '{{ global_data_path }}/heimdall'
+heimdall_data_config: '{{ heimdall_data }}/config'
+# heimdall_data_config: 'heimdall'
+
+# Archivy
+archivy_tag: 'latest'
+archivy_state: 'started'
+archivy_data: '{{ global_data_path }}/archivy'
+archivy_elasticsearch: '{{ archivy_data }}/elasticsearch'
+archivy_web: '{{ archivy_data }}/web'
+archivy_web_data: '{{ archivy_web }}/data'
+archivy_web_config: '{{ archivy_web }}/config'
+archivy_elasticsearch_data: '{{ archivy_elasticsearch }}/data'
 
 # Librespeed
 librespeed_tag: 'latest'
 librespeed_state: 'started'
 librespeed_data: '{{ global_data_path }}/librespeed'
-librespeed_password: '{{ vault_librespeed_password }}'
+librespeed_web_config: '{{ librespeed_data }}/web/config'
+# librespeed_password: '{{ vault_librespeed_password }}'
 
 # Syncthing
 syncthing_tag: 'latest'
@@ -80,6 +97,7 @@ nextcloud_trusted_domains: '{{ vault_nextcloud_trusted_domains }}'
 transmission_tag: 'latest'
 transmission_state: 'started'
 transmission_data: '{{ global_data_path }}/transmission'
+transmission_web_config: '{{ transmission_data }}/web/config'
 transmission_download: '{{ global_media }}/Download/torrent'
 # transmission_watch: '{{ global_media }}/Download/torrent_file'
 transmission_user: '{{ vault_transmission_user }}'
@@ -89,40 +107,48 @@ transmission_password: '{{ vault_transmission_password }}'
 jackett_tag: 'latest'
 jackett_state: 'started'
 jackett_data: '{{ global_data_path }}/jackett'
+jackett_web_config: '{{ jackett_data }}/web/config'
 
 # Jellyfin
 jellyfin_tag: 'latest'
 jellyfin_state: 'started'
-jellyfin_config: '{{ global_data_path }}/jellyfin'
 jellyfin_data: '{{ global_data_path }}/jellyfin'
+jellyfin_web_config: '{{ jellyfin_data }}/web/config'
+jellyfin_web_cache: '{{ jellyfin_data }}/web/cache'
 
 # Pymedusa
 pymedusa_tag: 'latest'
 pymedusa_state: 'started'
 pymedusa_data: '{{ global_data_path }}/pymedusa'
+pymedusa_web_config: '{{ pymedusa_data }}/web/config'
 
 # Radarr
 radarr_tag: 'latest'
 radarr_state: 'started'
 radarr_data: '{{ global_data_path }}/radarr'
+radarr_web_config: '{{ radarr_data }}/web/config'
 
 # Bazarr
 bazarr_tag: 'latest'
 bazarr_state: 'started'
 bazarr_data: '{{ global_data_path }}/bazarr'
+bazarr_web_config: '{{ bazarr_data }}/web/config'
 
 # Headphones
 headphones_tag: 'latest'
 headphones_state: 'started'
 headphones_data: '{{ global_data_path }}/headphones'
+headphones_web_config: '{{ headphones_data }}/web/config'
 
 # Calibre-web
 calibrew_tag: 'latest'
 calibrew_state: 'started'
 calibrew_data: '{{ global_data_path }}/calibrew'
+calibrew_web_config: '{{ calibrew_data }}/web/config'
 calibrew_book: '{{ global_media }}/Storage/Books/Books'
 
 # Privatebin
 privatebin_tag: 'latest'
 privatebin_state: 'started'
 privatebin_data: '{{ global_data_path }}/privatebin'
+privatebin_web_data: '{{ privatebin_data }}/data'

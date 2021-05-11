@@ -1,3 +1,8 @@
+- name: Radarr web config
+  file:
+    path: '{{ radarr_web_config }}'
+    state: directory
+
 - name: Radarr pod
   containers.podman.podman_pod:
     name: radarr
@@ -17,7 +22,7 @@
     #   - 7878
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ radarr_data }}/config:/config'
+      - '{{ radarr_web_config }}:/config:U,z'
       - '{{ global_media }}:/home'
       - '{{ transmission_download }}:/downloads'
     restart_policy: 'on-failure'

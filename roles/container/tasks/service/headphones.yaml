@@ -1,3 +1,8 @@
+- name: Headphones web config
+  file:
+    path: '{{ headphones_web_config }}'
+    state: directory
+
 - name: Headphones pod
   containers.podman.podman_pod:
     name: headphones
@@ -14,7 +19,7 @@
     #   TZ: Asia/Ho_Chi_Minh
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ headphones_data }}/config:/config'
+      - '{{ headphones_web_config }}:/config:U,z'
       - '{{ transmission_download }}:/downloads'
       - '{{ global_media }}:/home'
       # - /path/to/music:/music

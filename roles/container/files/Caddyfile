@@ -46,6 +46,10 @@ scrutiny.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy {$CADDYFILE_HOST_ADDRESS}:8080
 }
+archivy.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy archivy:5000
+}
 pgadmin.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy pgadmin:80

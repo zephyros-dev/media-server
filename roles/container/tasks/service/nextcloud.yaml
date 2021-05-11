@@ -34,8 +34,8 @@
     #   - 80
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ nextcloud_web_data }}:/var/www/html'
-      - '{{ nextcloud_storage_data }}:/var/www/html/data'
+      - '{{ nextcloud_web_data }}:/var/www/html:U,z'
+      - '{{ nextcloud_storage_data }}:/var/www/html/data:U,z'
     restart_policy: 'on-failure'
     state: '{{ nextcloud_state }}'
 
@@ -63,6 +63,6 @@
     pod: nextcloud
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ nextcloud_db_data }}:/var/lib/postgresql/data'
+      - '{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z'
     restart_policy: 'on-failure'
     state: '{{ nextcloud_state }}'

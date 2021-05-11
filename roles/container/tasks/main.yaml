@@ -4,6 +4,9 @@
 - name: Caddy
   import_tasks: 'network/caddy.yaml'
 
+- name: Diun
+  import_tasks: 'admin/diun.yaml'
+
 - name: Heimdall
   import_tasks: 'service/heimdall.yaml'
 
@@ -48,3 +51,6 @@
 
 - name: Pgadmin4
   import_tasks: 'admin/pgadmin.yaml'
+
+- name: Archivy
+  import_tasks: 'service/archivy.yaml'

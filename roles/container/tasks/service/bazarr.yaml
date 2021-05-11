@@ -1,3 +1,8 @@
+- name: Bazarr web config
+  file:
+    path: '{{ bazarr_web_config }}'
+    state: directory
+
 - name: Bazarr pod
   containers.podman.podman_pod:
     name: bazarr
@@ -13,9 +18,9 @@
       PGID: '{{ global_pgid }}'
       # UMASK_SET: 022 #optional
     volumes:
-      - '{{ bazarr_data }}/config:/config'
-      - '{{ global_media }}:/home'
       - '/etc/localtime:/etc/localtime:ro'
+      - '{{ bazarr_web_config }}:/config:U,z'
+      - '{{ global_media }}:/home'
     pod: bazarr
     # ports:
     #   - 6767

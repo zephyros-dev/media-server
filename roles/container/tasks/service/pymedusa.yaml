@@ -1,3 +1,8 @@
+- name: Pymedusa web config
+  file:
+    path: '{{ pymedusa_web_config }}'
+    state: directory
+
 - name: Pymedusa pod
   containers.podman.podman_pod:
     name: pymedusa
@@ -11,7 +16,7 @@
     pod: pymedusa
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ pymedusa_data }}/config:/config'
+      - '{{ pymedusa_web_config }}:/config:U,z'
       - '{{ global_media }}:/home'
       - '{{ transmission_download }}:/downloads'
     # ports:

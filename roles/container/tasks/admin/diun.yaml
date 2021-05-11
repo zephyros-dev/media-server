@@ -1,0 +1,27 @@
+- name: Diun pod
+  containers.podman.podman_pod:
+    name: diun
+    network: caddy
+    state: '{{ diun_state }}'
+            
+- name: Diun
+  containers.podman.podman_container:
+    name: diun-web
+    image: 'docker.io/crazymax/diun:{{ diun_tag }}'
+    env:
+      LOG_LEVEL: 'info'
+      LOG_JSON: 'false'
+      DIUN_WATCH_WORKERS: '20'
+      DIUN_WATCH_SCHEDULE: '0 */6 * * *'
+      DIUN_PROVIDERS_DOCKER: 'true'
+      DIUN_NOTIF_DISCORD_WEBHOOKURL: '{{ diun_discord_webhook }}'
+      DIUN_NOTIF_DISCORD_MENTIONS: '{{ diun_discord_mention }}'
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '{{ lookup("env","XDG_RUNTIME_DIR") }}/podman/podman.sock:/var/run/docker.sock'
+    pod: diun
+    labels:
+      diun.enable: 'true'
+      diun.watch_repo: 'true'
+    restart_policy: 'on-failure'
+    state: '{{ diun_state }}'
