@@ -1,12 +1,16 @@
 - name: Create Caddy config folder
   file:
-    path: '{{ caddy_config }}'
+    path: '{{ caddy_data_config }}'
+    state: directory
+- name: Create Caddy data folder
+  file:
+    path: '{{ caddy_data_data }}'
     state: directory
 
-- name: Update Caddyfile
+- name: Caddyfile
   copy:
     src: Caddyfile
-    dest: '{{ caddy_config }}/Caddyfile'
+    dest: '{{ caddy_data_caddyfile }}'
   notify:
   - Restart Caddy
 
@@ -27,8 +31,8 @@
       - '10443:443'
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - '{{ caddy_config }}/Caddyfile:/etc/caddy/Caddyfile:ro'
-      - '{{ caddy_config }}/config:/config'
-      - '{{ caddy_data }}/data:/data'
+      - '{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:ro'
+      - '{{ caddy_data_config }}:/config:U,z'
+      - '{{ caddy_data_data }}:/data:U,z'
     restart_policy: 'on-failure'
     state: '{{ caddy_state }}'
