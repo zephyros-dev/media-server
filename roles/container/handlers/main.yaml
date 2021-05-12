@@ -1,2 +1,5 @@
 - name: Restart Caddy
   import_tasks: caddy.yaml
+
+- name: Restart Gitea
+  import_tasks: gitea.yaml

@@ -9,7 +9,7 @@
 
 - name: Caddyfile
   copy:
-    src: Caddyfile
+    src: 'caddy/Caddyfile'
     dest: '{{ caddy_data_caddyfile }}'
   notify:
   - Restart Caddy

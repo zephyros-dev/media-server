@@ -38,6 +38,9 @@ heimdall.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy heimdall:80
 }
+gitea.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy gitea:3000
+}
 netdata.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy {$CADDYFILE_HOST_ADDRESS}:19999
