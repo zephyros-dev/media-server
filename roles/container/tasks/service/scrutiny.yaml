@@ -18,6 +18,6 @@
     pod: scrutiny
     volumes:
       - '/etc/localtime:/etc/localtime:ro,z'
-      - '/run/udev:/run/udev:ro'
+      - '/run/udev:/run/udev:ro,z'
     restart_policy: 'on-failure:3'
     state: '{{ scrutiny_state }}'
