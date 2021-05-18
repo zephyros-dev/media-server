@@ -1,0 +1,28 @@
+- name: Mumble config
+  file:
+    path: '{{ mumble_server_data }}'
+    state: directory
+
+- name: Mumble pod
+  containers.podman.podman_pod:
+    name: mumble
+    # Use host network for IPV6
+    # network: host
+    ports:
+      - '64738:64738/tcp'
+      - '64738:64738/udp'
+    state: '{{ mumble_state }}'
+
+- name: Mumble
+  containers.podman.podman_container:
+    name: mumble-server
+    image: 'derenderkeks/murmur:{{ mumble_tag }}'
+    pod: mumble
+    # Port forwards these ports
+    # ports:
+    # - 64738
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro,z'
+      - '{{ mumble_server_data }}:/data:U,z'
+    restart_policy: 'on-failure:3'
+    state: '{{ mumble_state }}'

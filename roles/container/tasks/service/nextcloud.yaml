@@ -34,8 +34,8 @@
     #   - 80
     volumes:
       - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ nextcloud_web_data }}:/var/www/html:U,z'
-      - '{{ nextcloud_storage_data }}:/var/www/html/data:U,z'
+      - '{{ nextcloud_web_data }}:/var/www/html:z'
+      - '{{ nextcloud_storage_data }}:/var/www/html/data:z'
     restart_policy: 'on-failure:3'
     state: '{{ nextcloud_state }}'
 

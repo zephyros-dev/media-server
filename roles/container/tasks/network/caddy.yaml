@@ -27,12 +27,14 @@
     network:
       - caddy
     ports:
-      - '10080:80'
-      - '10443:443'
+      - '10080:80/tcp'
+      - '10443:443/tcp'
+      - '10443:443/udp'
     volumes:
       - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:ro,z'
+      - '{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:U,ro,z'
       - '{{ caddy_data_config }}:/config:U,z'
       - '{{ caddy_data_data }}:/data:U,z'
     restart_policy: 'on-failure:3'
+    recreate: yes
     state: '{{ caddy_state }}'

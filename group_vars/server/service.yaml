@@ -46,6 +46,12 @@ heimdall_state: 'started'
 heimdall_data: '{{ global_data_path }}/heimdall'
 heimdall_data_config: '{{ heimdall_data }}/config'
 
+# Mumble
+mumble_tag: 'latest'
+mumble_state: 'absent'
+mumble_data: '{{ global_data_path }}/mumble'
+mumble_server_data: '{{ mumble_data }}/data'
+
 # Archivy
 archivy_tag: 'latest'
 archivy_state: 'absent'
@@ -70,7 +76,7 @@ syncthing_data: '{{ global_data_path }}/syncthing'
 
 # Pgadmin
 pgadmin_tag: 'latest'
-pgadmin_state: 'started'
+pgadmin_state: 'absent'
 pgadmin_data: '{{ global_data_path }}/pgadmin'
 pgadmin_email: '{{ vault_pgadmin_email }}'
 pgadmin_password: '{{ vault_pgadmin_password }}'

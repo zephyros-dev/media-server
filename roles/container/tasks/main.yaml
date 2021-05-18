@@ -55,5 +55,8 @@
 - name: Gitea
   import_tasks: 'service/gitea.yaml'
 
+- name: Mumble
+  import_tasks: 'service/mumble.yaml'
+
 # - name: Archivy
 #   import_tasks: 'service/archivy.yaml'
