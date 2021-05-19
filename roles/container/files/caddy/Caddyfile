@@ -68,12 +68,12 @@ syncthing.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy {$CADDYFILE_HOST_ADDRESS}:8384
 }
 nextcloud.{$CADDYFILE_PROXY_SITE} {
-    encode zstd
+    # encode zstd
     reverse_proxy nextcloud:80 {
         # header_up Host {http.reverse_proxy.upstream.hostporti}
         # header_up X-Forwarded-Host {host}
         header_down Strict-Transport-Security "max-age=15552000;"
-        header_down Referrer-Policy "strict-origin-when-cross-origin"
+        header_down Referrer-Policy "strict-    origin-when-cross-origin"
         header_down X-XSS-Protection "1; mode=block"
         header_down X-Content-Type-Options "nosniff"
         header_down X-Frame-Options "SAMEORIGIN"
@@ -82,7 +82,7 @@ nextcloud.{$CADDYFILE_PROXY_SITE} {
     redir /.well-known/caldav /remote.php/caldav 301
 }
 jellyfin.{$CADDYFILE_PROXY_SITE} {
-    encode zstd
+    # encode zstd
     reverse_proxy jellyfin:8096
 }
 pymedusa.{$CADDYFILE_PROXY_SITE} {
