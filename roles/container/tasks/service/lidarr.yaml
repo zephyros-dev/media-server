@@ -1,0 +1,39 @@
+- name: Global Media folder
+  file:
+    path: '{{ global_media }}'
+    state: directory
+
+- name: Transmission Download folder
+  file:
+    path: '{{ transmission_download }}'
+    state: directory
+
+- name: Lidarr web config
+  file:
+    path: '{{ lidarr_web_config }}'
+    state: directory
+
+- name: Lidarr pod
+  containers.podman.podman_pod:
+    name: lidarr
+    network: caddy
+    state: '{{ lidarr_state }}'
+        
+- name: Lidarr
+  containers.podman.podman_container:
+    name: lidarr-web
+    image: 'ghcr.io/linuxserver/lidarr:{{ lidarr_tag }}'
+    env:
+      PUID: '{{ global_puid }}'
+      PGID: '{{ global_pgid }}'
+      # - UMASK_SET=022 #optional
+    pod: lidarr
+    # ports:
+    #   - 8686
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro,z'
+      - '{{ lidarr_web_config }}:/config:U,z'
+      - '{{ global_media }}:/home'
+      - '{{ transmission_download }}:/downloads'
+    restart_policy: 'on-failure:3'
+    state: '{{ lidarr_state }}'

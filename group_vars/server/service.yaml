@@ -155,6 +155,12 @@ bazarr_state: 'started'
 bazarr_data: '{{ global_data_path }}/bazarr'
 bazarr_web_config: '{{ bazarr_data }}/web/config'
 
+# Lidarr
+lidarr_tag: 'latest'
+lidarr_state: 'started'
+lidarr_data: '{{ global_data_path }}/lidarr'
+lidarr_web_config: '{{ lidarr_data }}/web/config'
+
 # Headphones
 headphones_tag: 'latest'
 headphones_state: 'started'
