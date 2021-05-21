@@ -35,5 +35,7 @@
       - '{{ radarr_web_config }}:/config:U,z'
       - '{{ global_media }}:/home'
       - '{{ transmission_download }}:/downloads'
+    labels:
+      diun.enable: 'true'
     restart_policy: 'on-failure:3'
     state: '{{ radarr_state }}'

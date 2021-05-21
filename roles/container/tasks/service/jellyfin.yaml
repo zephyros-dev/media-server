@@ -34,4 +34,6 @@
       - '{{ jellyfin_web_cache }}:/cache:U,z'
       - '{{ global_media }}:/home'
     restart_policy: 'on-failure:3'
+    labels:
+      diun.enable: 'true'
     state: '{{ jellyfin_state }}'

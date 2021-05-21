@@ -1,7 +1,6 @@
 - name: Diun pod
   containers.podman.podman_pod:
     name: diun
-    network: caddy
     state: '{{ diun_state }}'
             
 - name: Diun

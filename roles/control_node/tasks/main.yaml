@@ -1,0 +1,2 @@
+- name: Install packages
+  import_tasks: package.yaml

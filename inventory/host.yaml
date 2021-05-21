@@ -1,6 +1,6 @@
 all:
   children:
-    server:
+    control_node:
       hosts: localhost
-    service:
+    service_node:
       hosts: localhost

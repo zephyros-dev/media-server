@@ -1,6 +1,8 @@
 [Unit]
 Description=Run container service at startup
-After=podman.socket
+Wants=network.target
+After=network-online.target
+RequiresMountsFor=$HOME/.local/share/containers/storage $XDG_RUNTIME_DIR/containers
 
 [Service]
 WorkingDirectory=ServiceDirectory

@@ -37,6 +37,8 @@
       - '{{ nextcloud_web_data }}:/var/www/html:z'
       - '{{ nextcloud_storage_data }}:/var/www/html/data:z'
     restart_policy: 'on-failure:3'
+    labels:
+      diun.enable: 'true'
     state: '{{ nextcloud_state }}'
 
 - name: Nextcloud Redis

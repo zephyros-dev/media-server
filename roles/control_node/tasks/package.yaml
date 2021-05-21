@@ -1,0 +1,40 @@
+- name: System Software
+  become: yes
+  dnf:
+    name:
+      - dnf-automatic
+      - dnf-plugin-system-upgrade
+      - rpmconf
+      - symlinks
+- name: Administration software
+  become: yes
+  dnf:
+    name:
+      - git
+      - tmux
+      - mc
+      - nmap
+      - toolbox
+    state: latest
+- name: Dev software
+  become: True
+  dnf:
+    name: 
+      - git
+      - golang
+      - ShellCheck
+    state: latest
+- name: Misc software
+  become: True
+  dnf:
+    name: 
+      - wget
+      - curl
+      - compsize
+    state: latest
+- name: Upgrade ansible
+  pip:
+    name: 
+      - ansible
+    state: latest
+    
