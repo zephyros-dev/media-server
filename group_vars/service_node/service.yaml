@@ -40,6 +40,16 @@ diun_state: 'started'
 diun_discord_webhook: '{{ vault_diun_discord_webhook }}'
 diun_discord_mention: '{{ vault_diun_discord_mention }}'
 
+# Librenms
+librenms_tag: 'latest'
+librenms_db_tag: '10.5'
+librenms_state: 'absent'
+librenms_volume: '{{ global_data_path }}/librenms'
+librenms_volume_web_data: '{{ librenms_volume }}/web/data'
+librenms_volume_db_data: '{{ librenms_volume }}/db/data'
+librenms_mysql_user: '{{ vault_librenms_mysql_user }}'
+librenms_mysql_password: '{{ vault_librenms_mysql_password }}'
+
 # Heimdall
 heimdall_tag: 'latest'
 heimdall_state: 'started'

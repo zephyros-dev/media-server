@@ -26,7 +26,6 @@
     env:
       PUID: '{{ global_puid }}'
       PGID: '{{ global_pgid }}'
-    #   TZ: Asia/Ho_Chi_Minh
     volumes:
       - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ headphones_web_config }}:/config:U,z'

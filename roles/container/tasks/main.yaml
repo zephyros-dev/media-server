@@ -7,6 +7,9 @@
 - name: Diun
   import_tasks: 'admin/diun.yaml'
 
+- name: Librenms
+  import_tasks: 'network/librenms.yaml'
+
 - name: Heimdall
   import_tasks: 'service/heimdall.yaml'
 
@@ -61,5 +64,5 @@
 - name: Mumble
   import_tasks: 'service/mumble.yaml'
 
-# - name: Archivy
-#   import_tasks: 'service/archivy.yaml'
+- name: Archivy
+  import_tasks: 'service/archivy.yaml'

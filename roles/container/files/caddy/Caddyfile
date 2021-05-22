@@ -37,6 +37,10 @@ test.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy test:80
 }
+librenms.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy librenms:8000
+}
 heimdall.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy heimdall:80

@@ -25,8 +25,8 @@
       POSTGRES_DB: '{{ nextcloud_postgres_db }}'
       POSTGRES_USER: '{{ nextcloud_postgres_user }}'
       POSTGRES_PASSWORD: '{{ nextcloud_postgres_password }}'
-      POSTGRES_HOST: '{{ nextcloud_postgres_host }}'
-      REDIS_HOST: '{{ nextcloud_redis_host }}'
+      POSTGRES_HOST: 'localhost:5432'
+      REDIS_HOST: 'localhost'
       REDIS_HOST_PASSWORD: '{{ nextcloud_redis_host_password }}'
       NEXTCLOUD_TRUTED_DOMAINS: '{{ nextcloud_trusted_domains }}'
     pod: nextcloud
