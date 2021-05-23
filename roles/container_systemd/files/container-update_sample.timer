@@ -1,0 +1,9 @@
+[Unit]
+Description=Run update by time frame
+
+[Timer]
+OnCalendar=CalendarTimer
+Persistent=true
+
+[Install]
+WantedBy=timers.target

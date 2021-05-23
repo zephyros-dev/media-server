@@ -8,10 +8,12 @@ global_media: '{{ vault_global_media }}'
 # 0 means root inside the rootless container, which map to the user running the container
 global_puid: '0'
 global_pgid: '0'
-
+# Timer for container auto update, in form of:
+# DayOfWeek Year-Month-Day Hour:Minute:Second
+global_container_update_timer: 'Sat *-*-* 18:00:00'
 global_auto_update:
   - '{{ scrutiny_image }}'
-  
+
   - '{{ caddy_image }}'
 
   - '{{ diun_image }}'

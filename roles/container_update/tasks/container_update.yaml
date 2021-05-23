@@ -1,0 +1,5 @@
+- name: Update images
+  containers.podman.podman_image:
+    name: '{{ item }}'
+    force: yes
+  loop: '{{ global_auto_update }}'

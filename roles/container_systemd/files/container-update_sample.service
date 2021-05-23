@@ -1,12 +1,12 @@
 [Unit]
-Description=Run container service at startup
+Description=Update container
 Wants=network.target
 After=network-online.target
 RequiresMountsFor=%h/.local/share/containers/storage %t/containers
 
 [Service]
 WorkingDirectory=ServiceDirectory
-ExecStart=%h/.local/bin/ansible-playbook ServiceDirectory/container.yaml
+ExecStart=%h/.local/bin/ansible-playbook container_update.yaml
 RemainAfterExit=true
 Type=oneshot
 

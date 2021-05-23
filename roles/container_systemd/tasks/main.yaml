@@ -1,0 +1,5 @@
+- name: Install startup systemd to user
+  import_tasks: startup.yaml
+
+- name: Install auto update systemd to user
+  import_tasks: update.yaml

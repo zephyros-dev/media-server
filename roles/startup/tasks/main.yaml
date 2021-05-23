@@ -1,2 +1,0 @@
-- name: Install startup systemd to user
-  import_tasks: startup.yaml
