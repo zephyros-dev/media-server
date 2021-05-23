@@ -2,11 +2,11 @@
 Description=Run container service at startup
 Wants=network.target
 After=network-online.target
-RequiresMountsFor=$HOME/.local/share/containers/storage $XDG_RUNTIME_DIR/containers
+RequiresMountsFor=%h/.local/share/containers/storage %t/containers
 
 [Service]
 WorkingDirectory=ServiceDirectory
-ExecStart=/usr/bin/ansible-playbook ServiceDirectory/container.yaml
+ExecStart=%h/.local/bin/ansible-playbook ServiceDirectory/container.yaml
 RemainAfterExit=true
 Type=oneshot
 
