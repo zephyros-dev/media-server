@@ -22,7 +22,7 @@
 - name: Pymedusa
   containers.podman.podman_container:
     name: pymedusa-web
-    image: 'pymedusa/medusa:{{ pymedusa_tag }}'
+    image: '{{ pymedusa_image }}'
     pod: pymedusa
     volumes:
       - '/etc/localtime:/etc/localtime:ro,z'

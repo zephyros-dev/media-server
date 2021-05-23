@@ -12,7 +12,7 @@
 - name: Privatebin
   containers.podman.podman_container:
     name: privatebin-web
-    image: 'privatebin/nginx-fpm-alpine:{{ privatebin_tag }}'
+    image: '{{ privatebin_image }}'
     # ports:
     # - '8080'
     volumes:

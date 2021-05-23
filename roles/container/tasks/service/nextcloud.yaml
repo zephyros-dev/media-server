@@ -20,7 +20,7 @@
 - name: Nextcloud
   containers.podman.podman_container:
     name: nextcloud-web
-    image: 'nextcloud:{{ nextcloud_tag }}'
+    image: '{{ nextcloud_web_image }}'
     env:
       POSTGRES_DB: '{{ nextcloud_postgres_db }}'
       POSTGRES_USER: '{{ nextcloud_postgres_user }}'
@@ -44,7 +44,7 @@
 - name: Nextcloud Redis
   containers.podman.podman_container:
     name: nextcloud-redis
-    image: 'redis:{{ nextcloud_redis_tag }}'
+    image: '{{ nextcloud_redis_image }}'
     command: 'redis-server --requirepass {{ nextcloud_redis_host_password }}'
     pod: nextcloud
     volume: 
@@ -55,7 +55,7 @@
 - name: Nextcloud database
   containers.podman.podman_container:
     name: nextcloud-db
-    image: 'postgres:{{ nextcloud_postgres_tag }}'
+    image: '{{ nextcloud_postgres_image }}'
     # ports: 
     #   - 5432:5432
     env:

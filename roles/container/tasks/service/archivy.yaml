@@ -24,7 +24,7 @@
 - name: Archivy
   containers.podman.podman_container:
     name: archivy-web
-    image: 'uzayg/archivy:{{ archivy_tag }}'
+    image: '{{ archivy_web_image }}'
     pod: archivy
     env:
       FLASK_DEBUG: '0'
@@ -42,7 +42,7 @@
 - name: Archivy elastic search
   containers.podman.podman_container:
     name: archivy-elasticsearch
-    image: 'elasticsearch:7.9.0'
+    image: '{{ archivy_elasticsearch_image }}'
     pod: archivy
     env:
       'discovery.type': 'single-node'

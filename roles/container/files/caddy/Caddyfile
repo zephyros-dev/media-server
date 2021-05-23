@@ -116,7 +116,6 @@ jackett.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy jackett:9117
 }
 calibrew.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
     reverse_proxy calibrew:8083
 }
 privatebin.{$CADDYFILE_PROXY_SITE} {

@@ -22,7 +22,7 @@
 - name: Lidarr
   containers.podman.podman_container:
     name: lidarr-web
-    image: 'ghcr.io/linuxserver/lidarr:{{ lidarr_tag }}'
+    image: '{{ lidarr_image }}'
     env:
       PUID: '{{ global_puid }}'
       PGID: '{{ global_pgid }}'

@@ -6,7 +6,7 @@
 - name: Syncthing
   containers.podman.podman_container:
     name: syncthing
-    image: 'syncthing/syncthing:{{ syncthing_tag }}'
+    image: '{{ syncthing_image }}'
     # Host network, should be used for local discovery
     network_mode: host
     env:

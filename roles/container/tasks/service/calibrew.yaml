@@ -17,7 +17,7 @@
 - name: Calibrew
   containers.podman.podman_container:
     name: calibrew-web
-    image: 'ghcr.io/linuxserver/calibre-web:{{ calibrew_tag }}'
+    image: '{{ calibrew_image }}'
     env:
       PUID: '{{ global_puid }}'
       PGID: '{{ global_pgid }}'

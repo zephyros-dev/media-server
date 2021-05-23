@@ -17,7 +17,7 @@
 - name: Caddy
   containers.podman.podman_container:
     name: caddy
-    image: 'caddy:{{ caddy_tag }}'
+    image: '{{ caddy_image }}'
     env:
       CADDYFILE_PROXY_SITE: '{{ caddy_caddyfile_proxy_site }}'
       CADDYFILE_HOST_ADDRESS: '{{ caddy_caddyfile_host_address }}'

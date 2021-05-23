@@ -29,7 +29,7 @@
 - name: Gitea
   containers.podman.podman_container:
     name: gitea-web
-    image: 'gitea/gitea:{{ gitea_web_tag }}'
+    image: '{{ gitea_web_image }}'
     env:
       GITEA__database__DB_TYPE: 'postgres'
       GITEA__database__HOST: 'localhost:5432'
@@ -52,7 +52,7 @@
 - name: Gitea database
   containers.podman.podman_container:
     name: gitea-db
-    image: postgres:{{ gitea_db_tag }}
+    image: '{{ gitea_db_image }}'
     pod: gitea
     env:
       POSTGRES_USER: '{{ gitea_db_user }}'

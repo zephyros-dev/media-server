@@ -12,7 +12,7 @@
 - name: Heimdall
   containers.podman.podman_container:
     name: heimdall-web
-    image: 'ghcr.io/linuxserver/heimdall:{{ heimdall_tag }}'
+    image: '{{ heimdall_image }}'
     # user: '1000:1000'
     # env:
     #   PUID: '{{ global_puid }}'

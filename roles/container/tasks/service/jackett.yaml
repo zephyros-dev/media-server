@@ -12,7 +12,7 @@
 - name: Jackett
   containers.podman.podman_container:
     name: jackett-web
-    image: 'ghcr.io/linuxserver/jackett:{{ jackett_tag }}'
+    image: '{{ jackett_image }}'
     env:
       AUTO_UPDATE: 'true' #optional
       # - RUN_OPTS=run options here #optional

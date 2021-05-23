@@ -9,6 +9,56 @@ global_media: '{{ vault_global_media }}'
 global_puid: '0'
 global_pgid: '0'
 
+global_auto_update:
+  - '{{ scrutiny_image }}'
+  
+  - '{{ caddy_image }}'
+
+  - '{{ diun_image }}'
+
+  - '{{ librenms_web_image }}'
+  - '{{ librenms_db_image }}'
+
+  - '{{ heimdall_image }}'
+
+  - '{{ mumble_image }}'
+
+  - '{{ archivy_web_image }}'
+  - '{{ archivy_elasticsearch_image }}'
+
+  - '{{ librespeed_image }}'
+
+  - '{{ syncthing_image }}'
+
+  - '{{ pgadmin_image }}'
+
+  - '{{ gitea_web_image }}'
+  - '{{ gitea_db_image }}'
+
+  - '{{ nextcloud_web_image }}'
+  - '{{ nextcloud_redis_image }}'
+  - '{{ nextcloud_postgres_image }}'
+
+  - '{{ transmission_image }}'
+
+  - '{{ jackett_image }}'
+
+  - '{{ jellyfin_image }}'
+
+  - '{{ pymedusa_image }}'
+
+  - '{{ radarr_image }}'
+
+  - '{{ bazarr_image }}'
+
+  - '{{ lidarr_image }}'
+
+  - '{{ headphones_image }}'
+
+  - '{{ calibrew_image }}'
+
+  - '{{ privatebin_image }}'
+
 # Network
 network_state: 'present'
 
@@ -16,13 +66,13 @@ network_state: 'present'
 test_state: 'absent'
 
 # Scrutiny
-scrutiny_tag: 'latest'
 scrutiny_state: 'started'
+scrutiny_image: 'analogj/scrutiny:latest'
 scrutiny_device: '{{ vault_scrutiny_device }}'
 
 # Caddy
-caddy_tag: 'latest'
 caddy_state: 'started'
+caddy_image: 'caddy:2.3.0-alpine'
 caddy_data: '{{ global_data_path }}/caddy'
 caddy_data_caddyfile: '{{ caddy_data }}/Caddyfile'
 caddy_data_config: '{{ caddy_data }}/config'
@@ -35,15 +85,15 @@ caddy_caddyfile_basic_auth_pass: '{{ vault_caddy_caddyfile_basic_auth_pass }}'
 caddy_caddyfile_auth_token: '{{ vault_caddy_caddyfile_auth_token }}'
 
 # Diun
-diun_tag: 'latest'
 diun_state: 'started'
+diun_image: 'docker.io/crazymax/diun:latest'
 diun_discord_webhook: '{{ vault_diun_discord_webhook }}'
 diun_discord_mention: '{{ vault_diun_discord_mention }}'
 
 # Librenms
-librenms_tag: 'latest'
-librenms_db_tag: '10.5'
 librenms_state: 'absent'
+librenms_web_image: 'librenms/librenms:latest'
+librenms_db_image: 'mariadb:10.5'
 librenms_volume: '{{ global_data_path }}/librenms'
 librenms_volume_web_data: '{{ librenms_volume }}/web/data'
 librenms_volume_db_data: '{{ librenms_volume }}/db/data'
@@ -51,20 +101,21 @@ librenms_mysql_user: '{{ vault_librenms_mysql_user }}'
 librenms_mysql_password: '{{ vault_librenms_mysql_password }}'
 
 # Heimdall
-heimdall_tag: 'latest'
 heimdall_state: 'started'
+heimdall_image: 'ghcr.io/linuxserver/heimdall:latest'
 heimdall_data: '{{ global_data_path }}/heimdall'
 heimdall_data_config: '{{ heimdall_data }}/config'
 
 # Mumble
-mumble_tag: 'latest'
 mumble_state: 'absent'
+mumble_image: 'derenderkeks/murmur:latest'
 mumble_data: '{{ global_data_path }}/mumble'
 mumble_server_data: '{{ mumble_data }}/data'
 
 # Archivy
-archivy_tag: 'latest'
 archivy_state: 'absent'
+archivy_web_image: 'uzayg/archivy:latest'
+archivy_elasticsearch_image: 'elasticsearch:7.9.0'
 archivy_data: '{{ global_data_path }}/archivy'
 archivy_elasticsearch: '{{ archivy_data }}/elasticsearch'
 archivy_web: '{{ archivy_data }}/web'
@@ -73,29 +124,28 @@ archivy_web_config: '{{ archivy_web }}/config'
 archivy_elasticsearch_data: '{{ archivy_elasticsearch }}/data'
 
 # Librespeed
-librespeed_tag: 'latest'
 librespeed_state: 'started'
+librespeed_image: 'ghcr.io/linuxserver/librespeed:latest'
 librespeed_data: '{{ global_data_path }}/librespeed'
 librespeed_web_config: '{{ librespeed_data }}/web/config'
 # librespeed_password: '{{ vault_librespeed_password }}'
 
 # Syncthing
-syncthing_tag: 'latest'
 syncthing_state: 'started'
+syncthing_image: 'syncthing/syncthing:latest'
 syncthing_data: '{{ global_data_path }}/syncthing'
 
 # Pgadmin
-pgadmin_tag: 'latest'
 pgadmin_state: 'absent'
+pgadmin_image: 'dpage/pgadmin4:latest'
 pgadmin_data: '{{ global_data_path }}/pgadmin'
 pgadmin_email: '{{ vault_pgadmin_email }}'
 pgadmin_password: '{{ vault_pgadmin_password }}'
 
 # Gitea
-gitea_tag: 'latest'
 gitea_state: 'absent'
-gitea_web_tag: 'latest-rootless'
-gitea_db_tag: '9.6'
+gitea_web_image: 'gitea/gitea:latest-rootless'
+gitea_db_image: 'postgres:9.6'
 gitea_db_user: '{{ vault_gitea_db_user }}'
 gitea_db_passwd: '{{ vault_gitea_db_passwd }}'
 gitea_db_name: '{{ vault_gitea_db_name }}'
@@ -107,10 +157,10 @@ gitea_web_config_file: '{{ gitea_data }}/app.ini'
 gitea_db_data: '{{ gitea_data }}/db/data'
 
 # Nextcloud
-nextcloud_tag: 'latest'
-nextcloud_redis_tag: 'alpine'
-nextcloud_postgres_tag: '13-alpine'
 nextcloud_state: 'started'
+nextcloud_web_image: 'nextcloud:latest'
+nextcloud_redis_image: 'redis:alpine'
+nextcloud_postgres_image: 'postgres:13-alpine'
 nextcloud_data: '{{ global_data_path }}/nextcloud'
 nextcloud_web_data: '{{ nextcloud_data }}/web/data'
 nextcloud_storage_data: '{{ nextcloud_data }}/web/storage'
@@ -125,8 +175,8 @@ nextcloud_redis_host_password: '{{ vault_nextcloud_redis_host_password }}'
 nextcloud_trusted_domains: '{{ vault_nextcloud_trusted_domains }}'
 
 # Transmission
-transmission_tag: 'latest'
 transmission_state: 'started'
+transmission_image: 'ghcr.io/linuxserver/transmission:latest'
 transmission_data: '{{ global_data_path }}/transmission'
 transmission_web_config: '{{ transmission_data }}/web/config'
 transmission_download: '{{ global_media }}/Download/torrent'
@@ -135,57 +185,57 @@ transmission_user: '{{ vault_transmission_user }}'
 transmission_password: '{{ vault_transmission_password }}'
 
 # Jackett
-jackett_tag: 'latest'
 jackett_state: 'started'
+jackett_image: 'ghcr.io/linuxserver/jackett:latest'
 jackett_data: '{{ global_data_path }}/jackett'
 jackett_web_config: '{{ jackett_data }}/web/config'
 
 # Jellyfin
-jellyfin_tag: 'latest'
 jellyfin_state: 'started'
+jellyfin_image: 'jellyfin/jellyfin:latest'
 jellyfin_data: '{{ global_data_path }}/jellyfin'
 jellyfin_web_config: '{{ jellyfin_data }}/web/config'
 jellyfin_web_cache: '{{ jellyfin_data }}/web/cache'
 
 # Pymedusa
-pymedusa_tag: 'latest'
 pymedusa_state: 'started'
+pymedusa_image: 'pymedusa/medusa:latest'
 pymedusa_data: '{{ global_data_path }}/pymedusa'
 pymedusa_web_config: '{{ pymedusa_data }}/web/config'
 
 # Radarr
-radarr_tag: 'latest'
 radarr_state: 'started'
+radarr_image: 'ghcr.io/linuxserver/radarr:latest'
 radarr_data: '{{ global_data_path }}/radarr'
 radarr_web_config: '{{ radarr_data }}/web/config'
 
 # Bazarr
-bazarr_tag: 'latest'
 bazarr_state: 'started'
+bazarr_image: 'ghcr.io/linuxserver/bazarr:latest'
 bazarr_data: '{{ global_data_path }}/bazarr'
 bazarr_web_config: '{{ bazarr_data }}/web/config'
 
 # Lidarr
-lidarr_tag: 'latest'
 lidarr_state: 'started'
+lidarr_image: 'ghcr.io/linuxserver/lidarr:latest'
 lidarr_data: '{{ global_data_path }}/lidarr'
 lidarr_web_config: '{{ lidarr_data }}/web/config'
 
 # Headphones
-headphones_tag: 'latest'
 headphones_state: 'started'
+headphones_image: 'ghcr.io/linuxserver/headphones:latest'
 headphones_data: '{{ global_data_path }}/headphones'
 headphones_web_config: '{{ headphones_data }}/web/config'
 
 # Calibre-web
-calibrew_tag: 'latest'
 calibrew_state: 'started'
+calibrew_image: 'ghcr.io/linuxserver/calibre-web:latest'
 calibrew_data: '{{ global_data_path }}/calibrew'
 calibrew_web_config: '{{ calibrew_data }}/web/config'
 calibrew_book: '{{ global_media }}/Storage/Books/Books'
 
 # Privatebin
-privatebin_tag: 'latest'
 privatebin_state: 'started'
+privatebin_image: 'privatebin/nginx-fpm-alpine:latest'
 privatebin_data: '{{ global_data_path }}/privatebin'
 privatebin_web_data: '{{ privatebin_data }}/web/data'

@@ -6,7 +6,7 @@
 - name: Diun
   containers.podman.podman_container:
     name: diun-web
-    image: 'docker.io/crazymax/diun:{{ diun_tag }}'
+    image: '{{ diun_image }}'
     env:
       LOG_LEVEL: 'info'
       LOG_JSON: 'false'

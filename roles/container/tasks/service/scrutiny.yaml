@@ -10,7 +10,7 @@
   become: true
   containers.podman.podman_container:
     name: scrutiny-web
-    image: 'analogj/scrutiny:{{ scrutiny_tag }}'
+    image: '{{ scrutiny_image }}'
     cap_add:
       - SYS_RAWIO
       - SYS_ADMIN

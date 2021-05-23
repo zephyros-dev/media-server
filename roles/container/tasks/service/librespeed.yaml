@@ -12,7 +12,7 @@
 - name: Librespeed
   containers.podman.podman_container:
     name: librespeed-web
-    image: 'ghcr.io/linuxserver/librespeed:{{ librespeed_tag }}'
+    image: '{{ librespeed_image }}'
     pod: librespeed
     # ports:
     # - '80:80'

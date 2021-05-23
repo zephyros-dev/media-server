@@ -16,7 +16,7 @@
 - name: Mumble
   containers.podman.podman_container:
     name: mumble-server
-    image: 'derenderkeks/murmur:{{ mumble_tag }}'
+    image: '{{ mumble_image }}'
     pod: mumble
     # Port forwards these ports
     # ports:

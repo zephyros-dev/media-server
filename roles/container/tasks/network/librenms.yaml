@@ -16,7 +16,7 @@
 - name: Librenms
   containers.podman.podman_container:
     name: librenms-web
-    image: 'librenms/librenms:{{ librenms_tag }}'
+    image: '{{ librenms_web_image }}'
     pod: librenms
     env:
       DB_HOST: 'localhost'
@@ -38,7 +38,7 @@
 - name: Librenms database
   containers.podman.podman_container:
     name: librenms-db
-    image: 'mariadb:{{ librenms_db_tag }}'
+    image: '{{ librenms_db_image }}'
     pod: librenms
     command:
       - 'mysqld'
