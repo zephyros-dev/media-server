@@ -1,0 +1,60 @@
+# Server info
+vault_ansible_user: 'user'
+vault_ansible_ssh_private_key_file: '~/.ssh/ssh_private_key_file'
+
+# Server sudo password
+vault_ansible_become_pass: 'StrongPassword'
+
+# Global service variable
+# Root data folder
+vault_global_data_path: '/data'
+# Root service folder
+vault_global_container_run_path: '/home/user/ansible_repo'
+# Media, used in Pymedusa and Jellyfin
+vault_global_media: '/media'
+vault_global_container_update_timer: '*-*-* 18:00:00'
+vault_scrutiny_device:
+  - /dev/disk/by-id/disk
+  # Nvme device only works on nvme0, doesn't work with disk by-id
+  - /dev/nvme0
+# Caddy
+vault_caddy_caddyfile_proxy_site: 'example.com'
+vault_caddy_caddyfile_host_address: '192.168.1.100'
+vault_caddy_caddyfile_basic_auth_user: 'caddy'
+# Pass spawned from roles/container/files/caddy/hash_pass.sh
+vault_caddy_caddyfile_basic_auth_pass: 'HashedPassword'
+# Token for SSO using HTTP basic auth
+vault_caddy_caddyfile_auth_token: 'LongRandomizedTokenString'
+
+# Diun
+vault_diun_discord_webhook: 'https://discord.com/api/webhooks/something'
+vault_diun_discord_mention: ''
+
+# Librenms
+vault_librenms_mysql_user: 'librenms'
+vault_librenms_mysql_password: 'StrongPassword'
+
+# Gitea
+vault_gitea_db_user: 'gitea'
+vault_gitea_db_passwd: 'StrongPassword'
+vault_gitea_db_name: 'gitea'
+
+# Transmission
+vault_transmission_user: 'transmission'
+vault_transmission_password: 'StrongPassword'
+
+# Librespeed
+# vault_librespeed_password: 'StrongPassword'
+
+# Pgadmin
+vault_pgadmin_email: 'example@mail.com'
+vault_pgadmin_password: 'StrongPassword'
+
+# Nextcloud
+vault_nextcloud_postgres_db: 'nextcloud'
+vault_nextcloud_postgres_user: 'postgres'
+vault_nextcloud_postgres_password: 'StrongPassword'
+vault_nextcloud_postgres_host: 'localhost:5432'
+vault_nextcloud_redis_host: 'localhost'
+vault_nextcloud_redis_host_password: 'StrongPassword'
+vault_nextcloud_trusted_domains: 'nextcloud.example.com'

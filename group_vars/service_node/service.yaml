@@ -10,7 +10,9 @@ global_puid: '0'
 global_pgid: '0'
 # Timer for container auto update, in form of:
 # DayOfWeek Year-Month-Day Hour:Minute:Second
-global_container_update_timer: 'Sat *-*-* 18:00:00'
+global_container_update_timer: '{{ vault_global_container_update_timer }}'
+
+# List of image to be autoupdate daily
 global_auto_update:
   - '{{ scrutiny_image }}'
 
