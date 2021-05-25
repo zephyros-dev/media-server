@@ -10,7 +10,7 @@ vault_ansible_become_pass: 'StrongPassword'
 vault_global_data_path: '/data'
 # Root service folder
 vault_global_container_run_path: '/home/user/ansible_repo'
-# Media, used in Pymedusa and Jellyfin
+# Media folder used in Pymedusa and Jellyfin
 vault_global_media: '/media'
 vault_global_container_update_timer: '*-*-* 18:00:00'
 vault_scrutiny_device:

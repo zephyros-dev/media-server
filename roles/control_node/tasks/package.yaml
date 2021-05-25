@@ -6,6 +6,7 @@
       - dnf-plugin-system-upgrade
       - rpmconf
       - symlinks
+    state: latest
 - name: Administration software
   become: yes
   dnf:

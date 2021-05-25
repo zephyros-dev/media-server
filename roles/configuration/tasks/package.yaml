@@ -1,7 +1,0 @@
-- name: Docker package
-  become: True
-  pip:
-    name: 
-      - docker
-      - docker-compose
-    state: absent
