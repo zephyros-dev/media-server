@@ -1,0 +1,4 @@
+# Scrutiny
+scrutiny_state: 'started'
+scrutiny_image: 'analogj/scrutiny:latest'
+scrutiny_device: '{{ vault_scrutiny_device }}'

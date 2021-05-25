@@ -1,0 +1,69 @@
+# Root data folder
+global_data_path: '{{ vault_global_data_path }}'
+# Ansible service playbook folder, for running the container playbook at control node systemd 
+global_container_run_path: '{{ vault_global_container_run_path }}'
+# Media folder, shared among Jellyfin, Pymedusa, Radarr, bazarr, headphones for hardlink
+global_media: '{{ vault_global_media }}'
+
+# PID and GID mapping for LSIO container
+# 0 means root inside the rootless container, which map to the user running the container
+global_puid: '0'
+global_pgid: '0'
+
+# Timer for container auto update, in form of:
+# DayOfWeek Year-Month-Day Hour:Minute:Second
+global_container_update_timer: '{{ vault_global_container_update_timer }}'
+
+# List of image to be autoupdate daily
+global_container_auto_update:
+  - '{{ scrutiny_image }}'
+
+  - '{{ caddy_image }}'
+
+  - '{{ diun_image }}'
+
+  - '{{ librenms_web_image }}'
+  - '{{ librenms_db_image }}'
+
+  - '{{ heimdall_image }}'
+
+  - '{{ mumble_image }}'
+
+  - '{{ archivy_web_image }}'
+  - '{{ archivy_elasticsearch_image }}'
+
+  - '{{ librespeed_image }}'
+
+  - '{{ syncthing_image }}'
+
+  - '{{ pgadmin_image }}'
+
+  - '{{ gitea_web_image }}'
+  - '{{ gitea_db_image }}'
+
+  - '{{ nextcloud_web_image }}'
+  - '{{ nextcloud_redis_image }}'
+  - '{{ nextcloud_postgres_image }}'
+
+  - '{{ transmission_image }}'
+
+  - '{{ jackett_image }}'
+
+  - '{{ jellyfin_image }}'
+
+  - '{{ pymedusa_image }}'
+
+  - '{{ radarr_image }}'
+
+  - '{{ bazarr_image }}'
+
+  - '{{ lidarr_image }}'
+
+  - '{{ headphones_image }}'
+
+  - '{{ calibrew_image }}'
+
+  - '{{ privatebin_image }}'
+
+# Network
+network_state: 'present'

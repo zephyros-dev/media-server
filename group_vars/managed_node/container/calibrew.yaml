@@ -1,0 +1,6 @@
+# Calibre-web
+calibrew_state: 'started'
+calibrew_image: 'ghcr.io/linuxserver/calibre-web:latest'
+calibrew_data: '{{ global_data_path }}/calibrew'
+calibrew_web_config: '{{ calibrew_data }}/web/config'
+calibrew_book: '{{ global_media }}/Storage/Books/Books'

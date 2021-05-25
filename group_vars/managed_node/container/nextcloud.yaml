@@ -1,0 +1,17 @@
+# Nextcloud
+nextcloud_state: 'started'
+nextcloud_web_image: 'nextcloud:latest'
+nextcloud_redis_image: 'redis:alpine'
+nextcloud_postgres_image: 'postgres:13-alpine'
+nextcloud_data: '{{ global_data_path }}/nextcloud'
+nextcloud_web_data: '{{ nextcloud_data }}/web/data'
+nextcloud_storage_data: '{{ nextcloud_data }}/web/storage'
+nextcloud_db_data: '{{ nextcloud_data }}/db/data'
+
+nextcloud_postgres_db: '{{ vault_nextcloud_postgres_db }}'
+nextcloud_postgres_user: '{{ vault_nextcloud_postgres_user }}'
+nextcloud_postgres_password: '{{ vault_nextcloud_postgres_password }}'
+nextcloud_postgres_host: '{{ vault_nextcloud_postgres_host }}'
+nextcloud_redis_host: '{{ vault_nextcloud_redis_host }}'
+nextcloud_redis_host_password: '{{ vault_nextcloud_redis_host_password }}'
+nextcloud_trusted_domains: '{{ vault_nextcloud_trusted_domains }}'

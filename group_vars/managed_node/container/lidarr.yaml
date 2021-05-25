@@ -1,0 +1,5 @@
+# Lidarr
+lidarr_state: 'started'
+lidarr_image: 'ghcr.io/linuxserver/lidarr:latest'
+lidarr_data: '{{ global_data_path }}/lidarr'
+lidarr_web_config: '{{ lidarr_data }}/web/config'

@@ -1,0 +1,13 @@
+# Caddy
+caddy_state: 'started'
+caddy_image: 'caddy:2.3.0-alpine'
+caddy_data: '{{ global_data_path }}/caddy'
+caddy_data_caddyfile: '{{ caddy_data }}/Caddyfile'
+caddy_data_config: '{{ caddy_data }}/config'
+caddy_data_data: '{{ caddy_data }}/data'
+
+caddy_caddyfile_proxy_site: '{{ vault_caddy_caddyfile_proxy_site }}'
+caddy_caddyfile_host_address: '{{ vault_caddy_caddyfile_host_address }}'
+caddy_caddyfile_basic_auth_user: '{{ vault_caddy_caddyfile_basic_auth_user }}'
+caddy_caddyfile_basic_auth_pass: '{{ vault_caddy_caddyfile_basic_auth_pass }}'
+caddy_caddyfile_auth_token: '{{ vault_caddy_caddyfile_auth_token }}'

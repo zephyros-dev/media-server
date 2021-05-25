@@ -1,0 +1,5 @@
+# Diun
+diun_state: 'started'
+diun_image: 'docker.io/crazymax/diun:latest'
+diun_discord_webhook: '{{ vault_diun_discord_webhook }}'
+diun_discord_mention: '{{ vault_diun_discord_mention }}'

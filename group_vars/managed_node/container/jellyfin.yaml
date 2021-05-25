@@ -1,0 +1,6 @@
+# Jellyfin
+jellyfin_state: 'started'
+jellyfin_image: 'jellyfin/jellyfin:latest'
+jellyfin_data: '{{ global_data_path }}/jellyfin'
+jellyfin_web_config: '{{ jellyfin_data }}/web/config'
+jellyfin_web_cache: '{{ jellyfin_data }}/web/cache'
