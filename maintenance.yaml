@@ -1,3 +1,0 @@
-- hosts: service_node
-  roles:
-  - maintenance

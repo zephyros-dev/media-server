@@ -1,2 +1,8 @@
 - name: Install packages
   import_tasks: package.yaml
+
+- name: Install startup systemd to user
+  import_tasks: 'container/startup.yaml'
+
+- name: Install auto update systemd to user
+  import_tasks: 'container/update.yaml'

@@ -5,7 +5,7 @@
 
 - name: Copy sample file to remote
   ansible.builtin.copy:
-    src: 'container-update_sample.service'
+    src: 'container_systemd/container-update_sample.service'
     dest: './.config/systemd/user/container-update.service'
 
 - name: Edit systemd file
@@ -16,7 +16,7 @@
 
 - name: Copy sample update timer file to remote
   ansible.builtin.copy:
-    src: 'container-update_sample.timer'
+    src: 'container_systemd/container-update_sample.timer'
     dest: './.config/systemd/user/container-update.timer'
 
 - name: Edit timer for autoupdate systemd file

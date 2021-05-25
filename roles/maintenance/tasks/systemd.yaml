@@ -1,2 +1,0 @@
-- name: Ensure lingering enabled
-  command: "loginctl enable-linger {{ ansible_user }}"

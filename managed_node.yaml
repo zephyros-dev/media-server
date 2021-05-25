@@ -1,0 +1,3 @@
+- hosts: managed_node
+  roles:
+  - managed_node

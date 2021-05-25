@@ -1,0 +1,14 @@
+- name: Setup Podman rootless
+  import_tasks: 'system/podman.yaml'
+
+- name: Setup linger systemd podman rootless
+  import_tasks: 'system/systemd.yaml'
+
+- name: Setup Virtualization
+  import_tasks: 'system/virtualization.yaml'
+
+- name: Setup Samba
+  import_tasks: 'system/samba.yaml'
+
+- name: Update all packages
+  import_tasks: 'system/update.yaml'

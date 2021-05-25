@@ -2,5 +2,5 @@ all:
   children:
     control_node:
       hosts: localhost
-    service_node:
+    managed_node:
       hosts: localhost
