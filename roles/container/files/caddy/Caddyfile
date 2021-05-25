@@ -97,13 +97,17 @@ radarr.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy radarr:7878
 }
+bazarr.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy bazarr:6767
+}
 lidarr.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy lidarr:8686
 }
-bazarr.{$CADDYFILE_PROXY_SITE} {
+readarr.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
-    reverse_proxy bazarr:6767
+    reverse_proxy readarr:8787
 }
 headphones.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth

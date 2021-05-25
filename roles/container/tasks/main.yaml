@@ -46,6 +46,9 @@
 - name: Bazarr
   import_tasks: 'service/bazarr.yaml'
 
+- name: Readarr
+  import_tasks: 'service/readarr.yaml'
+
 - name: Headphones
   import_tasks: 'service/headphones.yaml'
 
