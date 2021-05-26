@@ -40,6 +40,9 @@
 - name: Radarr
   import_tasks: 'service/radarr.yaml' 
 
+- name: sonarr
+  import_tasks: 'service/sonarr.yaml'
+
 - name: Lidarr
   import_tasks: 'service/lidarr.yaml' 
 

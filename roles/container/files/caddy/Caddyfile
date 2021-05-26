@@ -97,6 +97,10 @@ radarr.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy radarr:7878
 }
+sonarr.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy sonarr:8989
+}
 bazarr.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy bazarr:6767
