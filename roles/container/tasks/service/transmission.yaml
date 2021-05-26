@@ -12,6 +12,9 @@
   containers.podman.podman_pod:
     name: transmission
     network: caddy
+    ports:
+      - '51413:51413/tcp'
+      - '51413:51413/udp'
     state: '{{ transmission_state }}'
     
 - name: Transmission
