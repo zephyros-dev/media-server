@@ -16,54 +16,58 @@ global_container_update_timer: '{{ vault_global_container_update_timer }}'
 
 # List of image to be autoupdate daily
 global_container_auto_update:
-  - '{{ scrutiny_image }}'
-
-  - '{{ caddy_image }}'
-
-  - '{{ diun_image }}'
-
-  - '{{ librenms_web_image }}'
-  - '{{ librenms_db_image }}'
-
-  - '{{ heimdall_image }}'
-
-  - '{{ mumble_image }}'
-
   - '{{ archivy_web_image }}'
   - '{{ archivy_elasticsearch_image }}'
 
-  - '{{ librespeed_image }}'
+  - '{{ bazarr_image }}'
 
-  - '{{ syncthing_image }}'
+  - '{{ caddy_image }}'
 
-  - '{{ pgadmin_image }}'
+  - '{{ calibrew_image }}'
+
+  - '{{ diun_image }}'
 
   - '{{ gitea_web_image }}'
   - '{{ gitea_db_image }}'
 
-  - '{{ nextcloud_web_image }}'
-  - '{{ nextcloud_redis_image }}'
-  - '{{ nextcloud_postgres_image }}'
+  - '{{ headphones_image }}'
 
-  - '{{ transmission_image }}'
+  - '{{ heimdall_image }}'
 
   - '{{ jackett_image }}'
 
   - '{{ jellyfin_image }}'
 
+  - '{{ librenms_web_image }}'
+  - '{{ librenms_db_image }}'
+
+  - '{{ librespeed_image }}'
+
+  - '{{ lidarr_image }}'
+
+  - '{{ mumble_image }}'
+
+  - '{{ nextcloud_web_image }}'
+  - '{{ nextcloud_redis_image }}'
+  - '{{ nextcloud_postgres_image }}'
+
+  - '{{ pgadmin_image }}'
+
+  - '{{ privatebin_image }}'
+
   - '{{ pymedusa_image }}'
 
   - '{{ radarr_image }}'
 
-  - '{{ bazarr_image }}'
+  # - '{{ readarr_image }}'
 
-  - '{{ lidarr_image }}'
+  - '{{ scrutiny_image }}'
 
-  - '{{ headphones_image }}'
+  # - '{{ sonarr_image }}'
 
-  - '{{ calibrew_image }}'
+  - '{{ syncthing_image }}'
 
-  - '{{ privatebin_image }}'
+  - '{{ transmission_image }}'
 
 # Network
 network_state: 'present'
