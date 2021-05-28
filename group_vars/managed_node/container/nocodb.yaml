@@ -1,0 +1,9 @@
+# Nocodb
+nocodb_state: 'started'
+nocodb_web_image: 'nocodb/nocodb:latest'
+nocodb_db_image: 'postgres:13-alpine'
+nocodb_data: '{{ global_data_path }}/nocodb'
+nocodb_db_data: '{{ nocodb_data }}/db/data'
+
+nocodb_db_username: '{{ vault_nocodb_db_username }}' 
+nocodb_db_password: '{{ vault_nocodb_db_password }}'

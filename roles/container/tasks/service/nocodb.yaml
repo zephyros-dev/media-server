@@ -1,0 +1,43 @@
+- name: Nocodb data folder
+  file:
+    path: '{{ nocodb_db_data }}'
+    state: directory
+
+- name: Nocodb pod
+  containers.podman.podman_pod:
+    name: nocodb
+    network: caddy
+    ports:
+      - '8081:8080'
+    state: '{{ nocodb_state }}'
+
+- name: Nocodb DB
+  containers.podman.podman_container:
+    name: nocodb-db
+    image: '{{ nocodb_db_image }}'
+    env:
+      POSTGRES_PASSWORD: '{{ nocodb_db_password }}'
+      POSTGRES_USER: '{{ nocodb_db_username }}'
+      POSTGRES_DB: nocodb
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro,z'
+      - '{{ nocodb_db_data }}:/var/lib/postgresql/data'
+    pod: nocodb
+    restart_policy: 'on-failure:3'
+    state: '{{ nocodb_state }}'
+
+
+- name: Nocodb Web
+  containers.podman.podman_container:
+    name: nocodb-web
+    image: '{{ nocodb_web_image }}'
+    env:
+      NC_DB: 'pg://localhost:5432?u={{ nocodb_db_username }}&p={{ nocodb_db_password }}&d=nocodb'
+    # ports:
+    #   - '8080:8080'
+    #   - '8081:8081'
+    #   - '8082:8082'
+    #   - '8083:8083'
+    pod: nocodb
+    restart_policy: 'on-failure:3'
+    state: '{{ nocodb_state }}'

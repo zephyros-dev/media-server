@@ -19,6 +19,9 @@
 - name: Nextcloud
   import_tasks: 'service/nextcloud.yaml'
 
+- name: Nocodb
+  import_tasks: 'service/nocodb.yaml'
+
 - name: Librespeed
   import_tasks: 'service/librespeed.yaml'
 

@@ -85,6 +85,10 @@ nextcloud.{$CADDYFILE_PROXY_SITE} {
     redir /.well-known/carddav /remote.php/carddav 301
     redir /.well-known/caldav /remote.php/caldav 301
 }
+nocodb.{$CADDYFILE_PROXY_SITE} {
+    rewrite / /dashboard
+    reverse_proxy nocodb:8080
+}
 jellyfin.{$CADDYFILE_PROXY_SITE} {
     # encode zstd
     reverse_proxy jellyfin:8096

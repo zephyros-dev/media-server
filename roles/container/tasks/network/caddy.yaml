@@ -7,13 +7,6 @@
     path: '{{ caddy_data_data }}'
     state: directory
 
-- name: Caddyfile
-  copy:
-    src: 'caddy/Caddyfile'
-    dest: '{{ caddy_data_caddyfile }}'
-  notify:
-  - Restart Caddy
-
 - name: Caddy
   containers.podman.podman_container:
     name: caddy
@@ -37,3 +30,13 @@
       - '{{ caddy_data_data }}:/data:U,z'
     restart_policy: 'on-failure:3'
     state: '{{ caddy_state }}'
+
+- name: Caddyfile
+  copy:
+    src: 'caddy/Caddyfile'
+    dest: '{{ caddy_data_caddyfile }}'
+  notify:
+  - Restart Caddy
+
+- name: Flush handlers
+  meta: flush_handlers
