@@ -11,6 +11,8 @@
   containers.podman.podman_pod:
     name: librenms
     network: caddy
+    # ports:
+    #   - '8000:8000'
     state: '{{ librenms_state }}'
 
 - name: Librenms
@@ -48,7 +50,7 @@
       - '--collation-server=utf8mb4_unicode_ci'
     volumes:
       - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ librenms_volume_db_data }}:/var/lib/mysql'
+      - '{{ librenms_volume_db_data }}:/var/lib/mysql:U,z'
     env:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: 'librenms'

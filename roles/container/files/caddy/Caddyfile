@@ -41,6 +41,10 @@ librenms.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy librenms:8000
 }
+grafana.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy grafana:3000
+}
 heimdall.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy heimdall:80

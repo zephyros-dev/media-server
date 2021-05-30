@@ -51,8 +51,8 @@ global_container_auto_update:
   - '{{ nextcloud_redis_image }}'
   - '{{ nextcloud_postgres_image }}'
 
-  - '{{ noco_web_image }}'
-  - '{{ noco_db_image }}'
+  - '{{ nocodb_web_image }}'
+  - '{{ nocodb_db_image }}'
 
   - '{{ pgadmin_image }}'
 
