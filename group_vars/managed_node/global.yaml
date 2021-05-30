@@ -1,7 +1,5 @@
 # Root data folder
 global_data_path: '{{ vault_global_data_path }}'
-# Ansible service playbook folder, for running the container playbook at control node systemd 
-global_container_run_path: '{{ vault_global_container_run_path }}'
 # Media folder, shared among Jellyfin, Pymedusa, Radarr, bazarr, headphones for hardlink
 global_media: '{{ vault_global_media }}'
 
@@ -9,10 +7,6 @@ global_media: '{{ vault_global_media }}'
 # 0 means root inside the rootless container, which map to the user running the container
 global_puid: '0'
 global_pgid: '0'
-
-# Timer for container auto update, in form of:
-# DayOfWeek Year-Month-Day Hour:Minute:Second
-global_container_update_timer: '{{ vault_global_container_update_timer }}'
 
 # List of image to be autoupdate daily
 global_container_auto_update:

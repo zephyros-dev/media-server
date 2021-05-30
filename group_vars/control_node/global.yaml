@@ -1,2 +1,6 @@
-# Root service folder
-vault_global_container_run_path: '/path/to/ansible/run/path'
+# Ansible service playbook folder, for running the container playbook at control node systemd 
+global_container_run_path: '{{ vault_global_container_run_path }}'
+
+# Timer for container auto update, in form of:
+# DayOfWeek Year-Month-Day Hour:Minute:Second
+global_container_update_timer: '{{ vault_global_container_update_timer }}'

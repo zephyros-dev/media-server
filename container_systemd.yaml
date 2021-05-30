@@ -1,3 +1,0 @@
-- hosts: control_node
-  roles:
-  - container_systemd
