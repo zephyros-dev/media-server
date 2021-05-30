@@ -1,0 +1,3 @@
+# Librenms
+vault_librenms_mysql_user: 'librenms'
+vault_librenms_mysql_password: 'librenms'

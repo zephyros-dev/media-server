@@ -5,12 +5,12 @@ read action
 if [ $action -eq 0 ]; then
 {
     ansible-vault encrypt --vault-id container@../../inventory/container_secret \
-    ./vault.yaml
+    ./vault/*
 }
 elif [ $action -eq 1 ]; then
 {
     ansible-vault decrypt --vault-id container@../../inventory/container_secret \
-    ./vault.yaml
+    ./vault/*
 }
 else
 {

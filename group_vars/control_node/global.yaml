@@ -1,0 +1,2 @@
+# Root service folder
+vault_global_container_run_path: '/path/to/ansible/run/path'

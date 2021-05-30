@@ -1,0 +1,6 @@
+# Server info
+vault_ansible_user: 'user'
+vault_ansible_ssh_private_key_file: '~/.ssh/ssh_key_location'
+
+# Server sudo password
+vault_ansible_become_pass: 'SecretPass'

@@ -1,0 +1,3 @@
+# Nocodb
+vault_nocodb_db_username: 'nocodb' 
+vault_nocodb_db_password: 'nocodb'
