@@ -1,0 +1,10 @@
+[Unit]
+Description=Run update by time frame
+
+[Timer]
+RandomizedDelaySec=10
+OnCalendar=CalendarTimer
+Persistent=true
+
+[Install]
+WantedBy=timers.target

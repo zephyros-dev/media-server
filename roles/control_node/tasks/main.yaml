@@ -6,3 +6,6 @@
 
 - name: Install auto update systemd to user
   import_tasks: 'container/update.yaml'
+
+- name: Install auto update systemd to user
+  import_tasks: 'container/image_prune.yaml'

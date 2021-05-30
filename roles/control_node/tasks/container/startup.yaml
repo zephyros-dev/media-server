@@ -5,7 +5,7 @@
 
 - name: Copy sample file to remote
   ansible.builtin.copy:
-    src: 'container_systemd/container-startup_sample.service'
+    src: 'container_systemd/startup/container-startup_sample.service'
     dest: './.config/systemd/user/container-startup.service'
 
 - name: Edit systemd file
