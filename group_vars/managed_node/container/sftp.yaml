@@ -1,0 +1,7 @@
+# SFTP
+sftp_state: 'started'
+sftp_image: 'atmoz/sftp:alpine'
+sftp_volume_data: '{{ vault_sftp_volume_data }}'
+sftp_port: '{{ vault_sftp_port }}'
+sftp_user: '{{ vault_sftp_user }}'
+sftp_password: '{{ vault_sftp_password }}'
