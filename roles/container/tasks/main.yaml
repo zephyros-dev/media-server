@@ -27,7 +27,7 @@
 
 - name: Sfpt
   import_tasks: 'service/sftp.yaml'
-
+  
 - name: Librespeed
   import_tasks: 'service/librespeed.yaml'
 
