@@ -4,6 +4,9 @@
 - name: Caddy
   import_tasks: 'network/caddy.yaml'
 
+- name: Netshoot
+  import_tasks: 'admin/netshoot.yaml'
+
 # - name: Diun
 #   import_tasks: 'admin/diun.yaml'
 
