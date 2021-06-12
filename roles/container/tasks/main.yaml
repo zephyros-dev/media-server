@@ -7,8 +7,8 @@
 - name: Netshoot
   import_tasks: 'admin/netshoot.yaml'
 
-# - name: Diun
-#   import_tasks: 'admin/diun.yaml'
+- name: Diun
+  import_tasks: 'admin/diun.yaml'
 
 - name: Grafana
   import_tasks: 'monitor/grafana.yaml'
