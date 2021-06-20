@@ -1,3 +1,6 @@
+- name: Setup hostname
+  import_tasks: 'system/hostname.yaml'
+
 - name: Setup Podman rootless
   import_tasks: 'system/podman.yaml'
 

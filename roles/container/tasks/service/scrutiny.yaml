@@ -5,6 +5,7 @@
     ports:
       - '8080:8080'
     state: '{{ scrutiny_state }}'
+  ignore_errors: yes
 
 - name: Scrutiny
   become: true
@@ -21,3 +22,5 @@
       - '/run/udev:/run/udev:ro,z'
     restart_policy: 'on-failure:3'
     state: '{{ scrutiny_state }}'
+  ignore_errors: yes
+

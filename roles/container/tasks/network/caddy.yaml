@@ -7,11 +7,19 @@
     path: '{{ caddy_data_data }}'
     state: directory
 
+- name: Caddyfile
+  copy:
+    src: 'caddy/Caddyfile'
+    dest: '{{ caddy_data_caddyfile }}'
+  notify:
+  - Restart Caddy
+
 - name: Caddy
   containers.podman.podman_container:
     name: caddy
     image: '{{ caddy_image }}'
     env:
+      CADDYFILE_ZEROSSL_EMAIL: '{{ caddy_caddyfile_zerossl_email }}'
       CADDYFILE_PROXY_SITE: '{{ caddy_caddyfile_proxy_site }}'
       CADDYFILE_HOST_ADDRESS: '{{ caddy_caddyfile_host_address }}'
       CADDYFILE_BASIC_AUTH_USER: '{{ caddy_caddyfile_basic_auth_user }}'
@@ -20,9 +28,9 @@
     network:
       - caddy
     ports:
-      - '10080:80/tcp'
-      - '10443:443/tcp'
-      - '10443:443/udp'
+      - '80:80/tcp'
+      - '443:443/tcp'
+      - '443:443/udp'
     volumes:
       - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:U,ro,z'
@@ -31,12 +39,6 @@
     restart_policy: 'on-failure:3'
     state: '{{ caddy_state }}'
 
-- name: Caddyfile
-  copy:
-    src: 'caddy/Caddyfile'
-    dest: '{{ caddy_data_caddyfile }}'
-  notify:
-  - Restart Caddy
-
-- name: Flush handlers
-  meta: flush_handlers
+# To execute the restart immediately
+# - name: Flush handlers
+#   meta: flush_handlers

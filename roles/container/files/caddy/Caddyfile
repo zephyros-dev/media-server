@@ -1,6 +1,6 @@
-{
-    experimental_http3
-}
+# {
+#     experimental_http3
+# }
 (basic-auth) {
   basicauth / {
     {$CADDYFILE_BASIC_AUTH_USER} {$CADDYFILE_BASIC_AUTH_PASS}

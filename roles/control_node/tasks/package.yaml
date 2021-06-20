@@ -16,6 +16,7 @@
       - mc
       - nmap
       - toolbox
+      - fish
     state: latest
 - name: Dev software
   become: True

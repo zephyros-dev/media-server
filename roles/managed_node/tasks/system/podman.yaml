@@ -23,3 +23,10 @@
   copy:
     src: 'podman/registries.conf'
     dest: '~/.config/containers/registries.conf'
+
+- name: Setup privileged ports
+  sysctl:
+    name: net.ipv4.ip_unprivileged_port_start
+    value: '80'
+    sysctl_set: yes
+  become: yes
