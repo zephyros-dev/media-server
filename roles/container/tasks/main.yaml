@@ -84,3 +84,6 @@
 
 - name: Archivy
   import_tasks: 'service/archivy.yaml'
+
+- name: Navidrome
+  import_tasks: 'service/navidrome.yaml'

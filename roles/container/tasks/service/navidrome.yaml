@@ -1,0 +1,34 @@
+- name: Global Media folder
+  file:
+    path: '{{ global_media }}'
+    state: directory
+
+- name: Navidrome data
+  file:
+    path: '{{ navidrome_web_data }}'
+    state: directory
+
+- name: Navidrome pod
+  containers.podman.podman_pod:
+    name: navidrome
+    network: caddy
+    state: '{{ navidrome_state }}'
+            
+- name: Navidrome
+  containers.podman.podman_container:
+    name: navidrome-web
+    image: '{{ navidrome_image }}'
+    env:
+      ND_SCANSCHEDULE: 1h
+      ND_LOGLEVEL: info
+      ND_SESSIONTIMEOUT: 24h
+      ND_BASEURL: ''
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro,z'
+      - '{{ navidrome_web_data }}:/data:U,z'
+      - '{{ navidrome_music }}:/music:ro'
+    pod: navidrome
+    # ports:
+    #   - 4533
+    restart_policy: 'on-failure:3'
+    state: '{{ navidrome_state }}'

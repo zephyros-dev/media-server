@@ -1,0 +1,1 @@
+navidrome_music: '{{ vault_navidrome_music }}'

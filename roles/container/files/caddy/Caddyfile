@@ -134,3 +134,6 @@ calibrew.{$CADDYFILE_PROXY_SITE} {
 privatebin.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy privatebin:8080
 }
+navidrome.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy navidrome:4533
+}
