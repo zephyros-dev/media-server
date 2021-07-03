@@ -40,6 +40,7 @@
     labels:
       diun.enable: 'true'
     state: '{{ nextcloud_state }}'
+    recreate: yes
 
 - name: Nextcloud Redis
   containers.podman.podman_container:
