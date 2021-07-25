@@ -1,7 +1,0 @@
-# Caddy
-vault_caddy_caddyfile_proxy_site: 'example.com'
-vault_caddy_caddyfile_host_address: 'host_IP'
-vault_caddy_caddyfile_basic_auth_user: 'user'
-vault_caddy_caddyfile_basic_auth_pass: 'password'
-# Token is made from the caddy_hash_pass.sh
-vault_caddy_caddyfile_auth_token: 'token'

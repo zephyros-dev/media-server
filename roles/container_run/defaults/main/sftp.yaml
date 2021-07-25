@@ -1,0 +1,7 @@
+# SFTP
+sftp_state: 'started'
+sftp_image: 'atmoz/sftp:alpine'
+sftp_volume_data: 'secret'
+sftp_port: 'secret'
+sftp_user: 'secret'
+sftp_password: 'secret'

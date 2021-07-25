@@ -1,0 +1,5 @@
+# Scrutiny
+scrutiny_state: 'started'
+scrutiny_image: 'analogj/scrutiny:latest'
+scrutiny_device: 
+  - '/dev/disk/by-id/disk_id'

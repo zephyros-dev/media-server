@@ -1,6 +1,0 @@
-# Pgadmin
-pgadmin_state: 'absent'
-pgadmin_image: 'dpage/pgadmin4:latest'
-pgadmin_data: '{{ global_data_path }}/pgadmin'
-pgadmin_email: '{{ vault_pgadmin_email }}'
-pgadmin_password: '{{ vault_pgadmin_password }}'

@@ -1,0 +1,27 @@
+nextcloud_postgres_db: ENC[AES256_GCM,data:D9NrF+UcpCcy,iv:VSHl8VtUhpF2wXGYPjjtq/4Uv3I97PSHnCh1FNXgVWQ=,tag:yKlTFkKMXvPkj6WECpcHHw==,type:str]
+nextcloud_postgres_user: ENC[AES256_GCM,data:3bJyZC8fTGw=,iv:neZd+Dqw5Wu+tC/t+b2cjZORaX5tBN+ZbCcxFVyaz8g=,tag:zbt2ns5kB5wRDSw9MoBuUQ==,type:str]
+nextcloud_postgres_password: ENC[AES256_GCM,data:JWL4jdOuKgH5mAcQl7/MlqU7ztE=,iv:PlOcCHpWMZHyoYI8dExRQr7noyMwfCLCB3IGP4ONetM=,tag:hg+TFRECPA1XN6EEkycBvw==,type:str]
+nextcloud_postgres_host: ENC[AES256_GCM,data:Q3vFSEq44EU4wSJbvh8=,iv:+lOmM2Mfw6X6G9yzfHUaKL5kuAZo1Tf9m9pIjGc0Qbo=,tag:Vi2Sjdgdjb9WgnP5ESxEhA==,type:str]
+nextcloud_redis_host: ENC[AES256_GCM,data:WWWGIHOEoSZZ,iv:C6yz7c16fVkTkaJcldktOHeCnTNWev54hazsq1Yp3hc=,tag:gxh6c26nQKV09SSjDBU2Yw==,type:str]
+nextcloud_redis_host_password: ENC[AES256_GCM,data:OUwAx2iERkB4Eki/knbdRiw0sKk=,iv:TdtgWWGiTBvc79XGFQz8wZmODgEa6cOny9/xcXYYujg=,tag:FvXiTRQ9NpCfr/p63YEJ9g==,type:str]
+nextcloud_trusted_domains: ENC[AES256_GCM,data:HwZo0YytHnpdqA1y8qcNflR8AUKWVHU+8Qbkd+0aiM2AFDY/0KRIjhaF,iv:qs5XtQphvStRTyMcVmvlEAfIs6nRHP6leZkVqQX7emY=,tag:5oJvlju+r2DYdymNKcuWig==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA1TWRGK2R0UDdtYUk5aWVk
+            OFkxM3BBSG1JSGg2aXcvT05nWGRzdElRNXl3CjNCQjlkb3dBOCtIbU5tdGcvTE5v
+            UHB0RU4vS28zcFBLYUNNNkZkRGMwRlEKLS0tIE0vc3RkaWZEQUxISlRQREtFczNx
+            K2U0N2JuazZCOUpJVzhtMS9PclMvSEEK8zJ+TEnXMuGxjYWpLENP5hbKSJV7xPbR
+            xwuRJ2ffC7eXy+Jh52SVZV4hTZCNHt31XwJeNu2l7jAKxTALgIP+TA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2021-07-25T11:29:08Z"
+    mac: ENC[AES256_GCM,data:awA9B1RaijtR5LAV5+w7XdtN/QdArc54TOp/sFW0P7tZFZ4Sxli+8aGlhEBEeC9VkpK23Ii1g/K//xcGA2lxXx/oXls5x7HMt6shrfMw875wVVOvLloa/ibXjJP7IIwquyTAitPBF0KrHMEiOR5Rrc1GzdkeuionQAeKxTUvhKo=,iv:XHtLrOMk/8WhXGs1ZbGFMmzXbSdwoe/hNEPOLtoMEjo=,tag:EBBGEkLhthW7+elGVNaxjg==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.7.1

@@ -1,4 +1,0 @@
-vault_sftp_volume_data: '/path/to/share/folder'
-vault_sftp_user: 'user'
-vault_sftp_password: 'password'
-vault_sftp_port: '22'

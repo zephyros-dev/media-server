@@ -1,8 +1,0 @@
-# Nextcloud
-vault_nextcloud_postgres_db: 'nextcloud'
-vault_nextcloud_postgres_user: 'postgres'
-vault_nextcloud_postgres_password: 'nextcloud'
-vault_nextcloud_postgres_host: 'localhost:5432'
-vault_nextcloud_redis_host: 'localhost'
-vault_nextcloud_redis_host_password: 'nextcloud'
-vault_nextcloud_trusted_domains: 'nextcloud'

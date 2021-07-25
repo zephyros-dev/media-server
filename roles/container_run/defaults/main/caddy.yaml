@@ -1,0 +1,14 @@
+# Caddy
+caddy_state: 'started'
+caddy_image: 'caddy:2.4.2-alpine'
+caddy_data: '{{ global_data_path }}/caddy'
+caddy_data_caddyfile: '{{ caddy_data }}/Caddyfile'
+caddy_data_config: '{{ caddy_data }}/config'
+caddy_data_data: '{{ caddy_data }}/data'
+
+caddy_caddyfile_zerossl_email: 'secret_example@email.com'
+caddy_caddyfile_proxy_site: 'secret_example.com'
+caddy_caddyfile_host_address: 'secret_192.168.1.100'
+caddy_caddyfile_basic_auth_user: 'secret_user'
+caddy_caddyfile_basic_auth_pass: 'secret_password'
+caddy_caddyfile_auth_token: 'secret_token'

@@ -1,0 +1,28 @@
+scrutiny_device:
+    - ENC[AES256_GCM,data:aJNPeZxHQuuwrlkBMk6IQgEU4A==,iv:R1uPoKrnpusL3F7/5Pgjw80TTEtpIqMVJlLMPyCvLdc=,tag:USLW/I13pein1959o4dgQw==,type:comment]
+    - ENC[AES256_GCM,data:qU1eDzn9TDc74b1ecrQktinxMQw0JVanH/59+qIBNb1B1cPVGDm+m1+sgrht+0Ca,iv:wI8E5VHF+Wq8FI95G3gtEv7bB4dov8+rO0uHTM6rzKM=,tag:7VA1xqDb+dJ6FqbQRU+g2w==,type:str]
+    - ENC[AES256_GCM,data:Hdw5M7PwbmajnBb/Gj5hZEAGOg==,iv:NSDB49bIecu6WjlSMoD3zFLIgscq1/fg4qV4XrdwEuw=,tag:XeMFtye6oJf6BxlENCREBQ==,type:comment]
+    - ENC[AES256_GCM,data:/jqQ4e3QLFfHXRzSiZtCA1dlmJCeHjZ5d0KXEdWI1sJ9fOp6kGlWF9Gw2bgj09Kh,iv:AsQRQODp5FXy8wC/Bcg/Xxcjyf+D6fAYxl5Qid+ZNXY=,tag:Wei/p6d0BSsP7XkTvdGISA==,type:str]
+    - ENC[AES256_GCM,data:uPFlanHh3QXLnv56mn3GVCAzZQ==,iv:Kj3FyojhzzC+hbQhhiySLLkkvLcX1PUfK54F5uXrQPg=,tag:lWMs6Gtq1ZJgQM5No5bhwQ==,type:comment]
+    - ENC[AES256_GCM,data:9Bjiz4cILi1NnmVclwklz+jd4NLJ2VbL2L82M67w9NH4UOaElX3JkhyTrDdpBHOhHcO+xOLPlvAPBRjkSSytdb4=,iv:IQWJJpJr6ddzG49Qa9c/hS58DwqbhPYgH3+Z9g8PhRY=,tag:81XIHnJvQA8It8IXtIzZ6A==,type:comment]
+    - ENC[AES256_GCM,data:B1VEitIEShk1mw==,iv:IHEIPFYjfckAIDwB7BGLs5Gvy4lB7pCvpfeEPFlCdP0=,tag:PvFE/Y/hoemljUy9ZDttKA==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3ZkRSWEFxaGIwbk52c0c5
+            Q1JoZXFWNm02R0d4RjM0cVlUUzJMcXFXT0NRCnRtbjlsS2phZ3g4NjhGY2p2aWxB
+            M1hNUTl5UjdoTkhzYWVDSW93N3lNMm8KLS0tIGpOSHZ3ZXBwSTl3WE54MnNjd1p3
+            UGl0YWhEb3J2M3A1NkdEQm9LVE03UGcKEM31HxxtQWGz/FN+CT7fiBLkgngDt+up
+            y8Pc8G330dN524xkvZWYZBvBkjsLW3455IHeC2m12vPpj2bQ7Xs/qA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2021-07-25T11:23:36Z"
+    mac: ENC[AES256_GCM,data:pD33wKcmzJH/UERXYmPXZwdSXhhZI1PvTRGMBMh5P4/nPh0oZB52zZ1srMLgCfKTrIY/Pi+dYtPPzs/GaAbX9+YVpMErkE9NOCZDnPDC28KbvdKml8KZR+Lj1QPZ/1Nx6qtwEtEem/ECbMt2e/2pK/jGN2kzRDUdz7xS8DYp1Q4=,iv:BgmGv5KUqcFpZKoyJLo5sYr3ViNniFeldA3VxFZwWZU=,tag:/P3+DkXt05qcfVKeJXSLdA==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.7.1

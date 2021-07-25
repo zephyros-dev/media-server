@@ -1,4 +1,0 @@
-# Gitea
-vault_gitea_db_user: 'gitea'
-vault_gitea_db_passwd: 'gitea'
-vault_gitea_db_name: 'gitea'

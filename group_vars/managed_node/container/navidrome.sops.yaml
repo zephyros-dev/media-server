@@ -1,0 +1,21 @@
+navidrome_music: ENC[AES256_GCM,data:aNB2QpUmATnpIyrFtVWL2SlaxzYl6ErXRHBsPQ0vvia4/Ky4RlKCmsw7DXta+YQ9nH4=,iv:CpfEOJgFcWPxk+zjpIyDjCjR64ACCGL6ffUQS2QDIWk=,tag:UB0Nv/gnbJxkzWYPAI+lZg==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBrNXdBK1ZFZTR2YUllTGJQ
+            dFc1TXVOa2RrRzFSVkFPejVRVS9MMEpmczBNCkZHS1dsTXJsa2hUK1Jyc2ZNWXE1
+            cmVUeEt4QlNONjRwM0lkRUZwT0E2S1kKLS0tIHI1aUU2dDlMZ0NUbFFyWjNjSHQ5
+            cVhqdytQUEdramNLTDhtUlJEZWsrZXcKuruonnS6Oi0Wp8PdEm2UIRwSWfarpAtQ
+            kcXjQSM5J4J7I+4BI6tV7Y/nOycaAh8ulra23xk1Xo9Zv8H8YbONQw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2021-07-25T11:26:21Z"
+    mac: ENC[AES256_GCM,data:HwJM4ytWRc+kYSxa52SWnF8m/wCBBw9xlO9uIpsb94GZ75Mt9ZvHqt6LDXdzvH/FtYIUmGWw2hUMC07KZjpC1/tO5sJrVLcFRH058nMu9jYp25pnqmD6hPPhUSGsRXbUPtZ7HGWcC/5xZGo8uhHsWtqRVU7zpvc56To/Dhm2U2g=,iv:kpHlMj9lyHYOxrhB1ccFR1FPGs4LY+DplFzxQjZwf4w=,tag:Ee+UJbsG6p1G/3oh866OKQ==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.7.1

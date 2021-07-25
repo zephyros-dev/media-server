@@ -1,0 +1,22 @@
+diun_discord_webhook: ENC[AES256_GCM,data:M/Zxb+nYYOfkwkLoZClH3NFhKmcxGyZvvyzCvUMQKQEPkVt6V8fVimdJ7gwbLF3l0v4wMbLin0rfvSurDVXZRP1gT0yS+oHs53e6zihxVoDE4gm6Y63NZbdIGFSYU+cv/7ufVgkfnmpSWly53OHWworj2srKp77M,iv:xw9tsClLylu52mEIXQycJr1iInF/aJ6wB59kf+1WMOo=,tag:TmvR/yIV2oX5xQS5iQnHtQ==,type:str]
+diun_discord_mention: ""
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSZll2N0cwUnJOZnNIZnVS
+            MVpsZWdlR3dFYlVDMCs3cXVOQnpyUVAvVUc4CjZaWjV0L2RmSUJuTWVtQ05TZmQ5
+            TUFIbm1OSS9LbW9nb2J5UFF2TWhLR2sKLS0tIFhndituMDRXMzZRanpKOEsxU3hx
+            ZXhYSitldWVjRm5wb1FONmhFQzVjeHMKOYQK2enBals6/bLxQT1frslNihn95Jzd
+            yqBZjXDyjQbTL0azOUH5ljCrgGCu99Nur4kveX2pvSqn3D4K/urM4Q==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2021-07-25T11:08:32Z"
+    mac: ENC[AES256_GCM,data:0oJOwXrMzgIt1v4iwVj3O1DXroYoVEi4kFy1roBw+/c5weUqpAY5my71Z06Gmx+IKYE7bhk6ke42+ZP8PriI9ckK+qoLIrZNxDPSfGqKev6lZCFloZgcCKPcIeavwru9j6YdjptGZhurRM7EFkzyLLIzfY8i5zBkiWeskrv8bU0=,iv:SjjRfmXsqmZhqzXODXdSPzy+48gYUL+4RlEjaACnVmw=,tag:EzRmkuls4BcnGFUz8K2KMg==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.7.1
