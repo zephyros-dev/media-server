@@ -1,0 +1,14 @@
+systemd:
+  ansible:
+    service:
+      - container_run:
+        name: 'container_run'
+        systemd_description: 'Run container'
+      - container_update:
+        name: 'container_update'
+        systemd_description: 'Update container'
+    timer:
+      - container_update:
+        name: 'container_update'
+        timer_description: 'Update container timer'
+        timer: 'Sat *-*-* 18:00:00'

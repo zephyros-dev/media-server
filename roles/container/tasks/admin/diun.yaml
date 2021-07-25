@@ -2,7 +2,8 @@
   containers.podman.podman_pod:
     name: diun
     state: '{{ diun_state }}'
-            
+  ignore_errors: yes
+
 - name: Diun
   containers.podman.podman_container:
     name: diun-web
@@ -24,3 +25,4 @@
       diun.watch_repo: 'true'
     restart_policy: 'on-failure:3'
     state: '{{ diun_state }}'
+  ignore_errors: yes

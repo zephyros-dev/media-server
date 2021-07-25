@@ -1,12 +1,12 @@
 [Unit]
-Description=Update container
+Description={{ systemd_description }}
 Wants=network.target
 After=network-online.target
 RequiresMountsFor=%h/.local/share/containers/storage %t/containers
 
 [Service]
-WorkingDirectory=ServiceDirectory
-ExecStart=%h/.local/bin/ansible-playbook container_update.yaml
+WorkingDirectory={{ global_container_run_path }}
+ExecStart=%h/.local/bin/ansible-playbook {{ systemd_playbook }}.yaml
 RemainAfterExit=true
 Type=oneshot
 
