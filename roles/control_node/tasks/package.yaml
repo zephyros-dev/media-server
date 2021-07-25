@@ -18,6 +18,25 @@
       - toolbox
       - fish
     state: latest
+
+- name: Encryption software
+  become: yes
+  dnf:
+    name:
+      - age
+    state: latest
+- name: Get latest sops release
+  uri:                                                               
+    url: https://api.github.com/repos/mozilla/sops/releases/latest
+    return_content: true                                             
+  register: sops_latest
+- name: Install sops
+  become: yes
+  dnf:
+    name: '{{ sops_latest.json.assets[0].browser_download_url }}'
+    state: present
+    disable_gpg_check: yes
+
 - name: Dev software
   become: True
   dnf:

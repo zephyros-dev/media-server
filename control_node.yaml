@@ -1,3 +1,3 @@
 - hosts: control_node
   roles:
-  - control_node
+  - role: control_node
