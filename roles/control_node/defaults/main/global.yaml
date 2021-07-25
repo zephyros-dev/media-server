@@ -1,6 +1,5 @@
 # Ansible service playbook folder, for running the container playbook at control node systemd 
-global_container_run_path: '{{ vault_global_container_run_path }}'
-
+global_container_run_path: '/path/to/this/folder/in/control_node'
 # Timer for container auto update, in form of:
 # DayOfWeek Year-Month-Day Hour:Minute:Second
-global_container_update_timer: '{{ vault_global_container_update_timer }}'
+global_container_update_timer: Sat *-*-* 18:00:00

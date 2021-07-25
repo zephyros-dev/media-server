@@ -10,5 +10,5 @@
 # - name: Install auto update systemd to user
 #   import_tasks: 'container/image_prune.yaml'
 
-- name: Install sops_age key
+- name: Setup SOPS age key
   import_tasks: 'sops_age.yaml'

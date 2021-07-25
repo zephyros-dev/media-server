@@ -1,9 +1,0 @@
-# Server info
-vault_ansible_user: 'user'
-vault_ansible_ssh_private_key_file: '~/.ssh/ssh_key_location'
-
-# Server sudo password
-vault_ansible_become_pass: 'SecretPass'
-
-vault_global_container_run_path: '/path/to/this/folder/in/control_node'
-vault_global_container_update_timer: 'Sat *-*-* 18:00:00'
