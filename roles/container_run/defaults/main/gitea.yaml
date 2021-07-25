@@ -3,9 +3,9 @@ gitea_state: 'absent'
 gitea_web_image: 'gitea/gitea:latest-rootless'
 gitea_db_image: 'postgres:9.6'
 
-gitea_db_user: 'secret_user'
-gitea_db_passwd: 'secret_password'
-gitea_db_name: 'secret_db_name'
+gitea_db_user: 'secret_string'
+gitea_db_passwd: 'secret_string'
+gitea_db_name: 'secret_string'
 
 gitea_data: '{{ global_data_path }}/gitea'
 gitea_web_data: '{{ gitea_data }}/web/data'
