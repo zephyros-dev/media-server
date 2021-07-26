@@ -1,3 +1,7 @@
+- name: Import container_run role
+  import_role:
+    name: container_run
+
 - name: Update images
   containers.podman.podman_image:
     name: '{{ item }}'

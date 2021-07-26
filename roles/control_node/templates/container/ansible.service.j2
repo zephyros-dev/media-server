@@ -6,7 +6,7 @@ RequiresMountsFor=%h/.local/share/containers/storage %t/containers
 
 [Service]
 WorkingDirectory={{ global_container_run_path }}
-ExecStart=%h/.local/bin/ansible-playbook {{ systemd_playbook }}.yaml
+ExecStart={{ command }}
 RemainAfterExit=true
 Type=oneshot
 

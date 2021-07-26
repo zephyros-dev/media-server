@@ -1,17 +1,8 @@
-# - name: Install packages
-#   import_tasks: package.yaml
+- name: Install packages
+  import_tasks: package.yaml
 
 - name: Container systemd
   import_tasks: systemd.yaml
-
-# - name: Install startup systemd to user
-#   import_tasks: 'container/startup.yaml'
-
-# - name: Install auto update systemd to user
-#   import_tasks: 'container/update.yaml'
-
-# - name: Install auto update systemd to user
-#   import_tasks: 'container/image_prune.yaml'
 
 - name: Setup SOPS age key
   import_tasks: 'sops_age.yaml'

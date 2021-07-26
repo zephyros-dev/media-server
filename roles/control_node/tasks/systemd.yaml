@@ -2,10 +2,11 @@
   vars:
     - systemd_description: '{{ item.systemd_description }}'
     - systemd_playbook: '{{ item.name }}'
+    - command: '{{ item.command }}'
   ansible.builtin.template:
     src: container/ansible.service.j2
     dest: './.config/systemd/user/{{ item.name }}.service'
-  loop: '{{ systemd.ansible.service }}'
+  loop: '{{ systemd.podman.service }}'
 
 - name: Template the ansible timer
   vars:
@@ -13,7 +14,7 @@
   ansible.builtin.template:
     src: container/ansible.timer.j2
     dest: './.config/systemd/user/{{ item.name }}.timer'
-  loop: '{{ systemd.ansible.timer }}'
+  loop: '{{ systemd.podman.timer }}'
 
 - name: Run the systemd service
   ansible.builtin.systemd:
@@ -22,7 +23,7 @@
     enabled: yes
     state: started
     name: '{{ item.name }}'
-  loop: '{{ systemd.ansible.service }}'
+  loop: '{{ systemd.podman.service }}'
 
 - name: Run the systemd timer
   ansible.builtin.systemd:
@@ -31,4 +32,4 @@
     enabled: yes
     state: started
     name: '{{ item.name }}'
-  loop: '{{ systemd.ansible.timer }}'
+  loop: '{{ systemd.podman.timer }}'
