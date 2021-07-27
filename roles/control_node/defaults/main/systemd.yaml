@@ -8,7 +8,7 @@ systemd:
       - container_run:
         name: 'container_run'
         systemd_description: 'Run container service'
-        command: 'podman start --all'
+        command: 'ansible-playbook container_run.yaml'
       - image_prune:
         name: 'image_prune'
         systemd_description: 'Podman image prune service'
