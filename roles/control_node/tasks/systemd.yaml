@@ -5,31 +5,15 @@
     - command: '{{ item.command }}'
   ansible.builtin.template:
     src: container/ansible.service.j2
-    dest: './.config/systemd/user/{{ item.name }}.service'
+    dest: '/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.service'
   loop: '{{ systemd.podman.service }}'
+  notify: Run the systemd service
 
 - name: Template the ansible timer
   vars:
     - timer_description: '{{ item.timer_description }}'
   ansible.builtin.template:
     src: container/ansible.timer.j2
-    dest: './.config/systemd/user/{{ item.name }}.timer'
+    dest: '/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.timer'
   loop: '{{ systemd.podman.timer }}'
-
-- name: Run the systemd service
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    scope: user
-    enabled: yes
-    state: started
-    name: '{{ item.name }}'
-  loop: '{{ systemd.podman.service }}'
-
-- name: Run the systemd timer
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    scope: user
-    enabled: yes
-    state: started
-    name: '{{ item.name }}'
-  loop: '{{ systemd.podman.timer }}'
+  notify: Run the systemd timer

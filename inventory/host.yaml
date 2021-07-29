@@ -1,6 +1,0 @@
-all:
-  children:
-    control_node:
-      hosts: localhost
-    managed_node:
-      hosts: localhost
