@@ -24,6 +24,8 @@
     name: pymedusa-web
     image: '{{ pymedusa_image }}'
     pod: pymedusa
+    label: 
+      io.containers.autoupdate: registry
     volumes:
       - '/etc/localtime:/etc/localtime:ro,z'
       - '{{ pymedusa_web_config }}:/config:U,z'
