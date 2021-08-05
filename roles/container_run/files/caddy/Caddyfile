@@ -30,6 +30,20 @@ auth.{$CADDYFILE_PROXY_SITE} {
   # fallback
   respond "Nope"
 }
+nextcloud.{$CADDYFILE_PROXY_SITE} {
+    # encode zstd
+    reverse_proxy nextcloud:80 {
+        # header_up Host {http.reverse_proxy.upstream.hostporti}
+        # header_up X-Forwarded-Host {host}
+        header_down Strict-Transport-Security "max-age=15552000;"
+        header_down Referrer-Policy "strict-    origin-when-cross-origin"
+        header_down X-XSS-Protection "1; mode=block"
+        header_down X-Content-Type-Options "nosniff"
+        header_down X-Frame-Options "SAMEORIGIN"
+        }
+    redir /.well-known/carddav /remote.php/carddav 301
+    redir /.well-known/caldav /remote.php/caldav 301
+}
 test.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy test:80
@@ -72,26 +86,11 @@ syncthing.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy {$CADDYFILE_HOST_ADDRESS}:8384
 }
-nextcloud.{$CADDYFILE_PROXY_SITE} {
-    # encode zstd
-    reverse_proxy nextcloud:80 {
-        # header_up Host {http.reverse_proxy.upstream.hostporti}
-        # header_up X-Forwarded-Host {host}
-        header_down Strict-Transport-Security "max-age=15552000;"
-        header_down Referrer-Policy "strict-    origin-when-cross-origin"
-        header_down X-XSS-Protection "1; mode=block"
-        header_down X-Content-Type-Options "nosniff"
-        header_down X-Frame-Options "SAMEORIGIN"
-        }
-    redir /.well-known/carddav /remote.php/carddav 301
-    redir /.well-known/caldav /remote.php/caldav 301
-}
 nocodb.{$CADDYFILE_PROXY_SITE} {
     rewrite / /dashboard
     reverse_proxy nocodb:8080
 }
 jellyfin.{$CADDYFILE_PROXY_SITE} {
-    # encode zstd
     reverse_proxy jellyfin:8096
 }
 pymedusa.{$CADDYFILE_PROXY_SITE} {
@@ -121,6 +120,9 @@ readarr.{$CADDYFILE_PROXY_SITE} {
 headphones.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy headphones:8181
+}
+prowlarr.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy prowlarr:9696
 }
 transmission.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy transmission:9091

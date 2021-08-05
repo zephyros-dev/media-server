@@ -1,0 +1,4 @@
+prowlarr_state: "started"
+prowlarr_image: "hotio/prowlarr:nightly"
+prowlarr_data: "{{ global_data_path }}/prowlarr"
+prowlarr_web_config: "{{ prowlarr_data }}/web/config"

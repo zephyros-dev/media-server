@@ -1,0 +1,26 @@
+- name: Prowlarr web config
+  file:
+    path: "{{ prowlarr_web_config }}"
+    state: directory
+
+- name: Prowlarr pod
+  containers.podman.podman_pod:
+    name: prowlarr
+    network: caddy
+    state: "{{ prowlarr_state }}"
+
+- name: Prowlarr
+  containers.podman.podman_container:
+    name: prowlarr-web
+    image: "{{ prowlarr_image }}"
+    env:
+      PUID: "1000"
+      PGID: "1000"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ prowlarr_web_config }}:/config:U,z"
+    pod: prowlarr
+    # ports:
+    #   - 9696
+    restart_policy: "on-failure:3"
+    state: "{{ prowlarr_state }}"
