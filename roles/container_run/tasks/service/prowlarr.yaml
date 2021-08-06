@@ -16,6 +16,7 @@
     env:
       PUID: "1000"
       PGID: "1000"
+      UMASK: "002"
     volumes:
       - "/etc/localtime:/etc/localtime:ro,z"
       - "{{ prowlarr_web_config }}:/config:U,z"
