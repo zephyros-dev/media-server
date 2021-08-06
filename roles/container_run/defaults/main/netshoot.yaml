@@ -1,2 +1,2 @@
-netshoot_state: 'started'
-netshoot_image: 'nicolaka/netshoot'
+netshoot_state: "started"
+netshoot_image: "nicolaka/netshoot"

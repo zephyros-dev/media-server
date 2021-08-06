@@ -1,5 +1,5 @@
 collections:
-- ansible.posix
-- community.docker
-- containers.podman
-- community.libvirt
+  - ansible.posix
+  - community.docker
+  - containers.podman
+  - community.libvirt

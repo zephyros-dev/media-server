@@ -1,4 +1,3 @@
-#ENC[AES256_GCM,data:Ib032P5FU4V4,iv:SOSVSiMOZdGqrvcfsbwTq5rDUPT2wnzluqeGjoW/m0U=,tag:EZvo2dBM5lF+HhCx5HCtpA==,type:comment]
 librenms_mysql_user: ENC[AES256_GCM,data:r/M4qEeXZac=,iv:Ep+PRbFJLUbjg6bZzq8oEbE3jDazu6f7Fm4w50jYQgA=,tag:jXeFv8+ULTuS7+I9cABTqw==,type:str]
 librenms_mysql_password: ENC[AES256_GCM,data:yrN3uxCvjVeSUPLDBDnpPDsO5NJvMlIGOuKJzw==,iv:OPGjSJDx1gz2vXjKHSf17MNhSBOhdYVpJ9sPwPE0XBE=,tag:y1N4Cy6doaihN+7ia6QmmA==,type:str]
 sops:
@@ -16,8 +15,8 @@ sops:
             WVRVVGgyV0ZCVllnNTh5QWNhYzQ0ODAK+YxxjFXr7ehnvTIzLWLkhdq+m/c9muLA
             7SBVVvnOOtcMdPtQEaSg4CP4x1G0choMm3AYtV0SR9B8UOTRWx44Yw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-07-25T11:25:30Z"
-    mac: ENC[AES256_GCM,data:eXfWYf7cg/HnYSQnuD00OzuTnpMu0WyXrq3PIxB41AqGdVuk7iQ5/ejOlod+580tAsg0dLgm9keOYV8nmj6+19gqxeguANrQ9EHe+tVH3D1ncuDI1YJN+U+HiiwEszxATeLFegQBKsm7bjZdehIK+fcaM+FiAfYI1KQou4VTXbE=,iv:hiH1l2buxtRRn33d0BUYi+qjgUmVKmrseCXkYXaLueY=,tag:70hCwqxvL+03OJ4cXWhnhQ==,type:str]
+    lastmodified: "2021-08-06T12:50:24Z"
+    mac: ENC[AES256_GCM,data:aKWeixQiL9gLMhj4oFTs9TLSt0lsuHbhBGqZcsw/5z18bIBkgWWrO80RSVvSCekDvQvjb4UngkWY9PgwTChezL7zye2iNGBEi3Mu15bK1kHBQU5ijwAVX7zqflfZdoBQAGcLRmLiDWGNFMFozkGhwdg6W+LqBILY3hO5L87xDvM=,iv:gzjxtHhCvtTosJcPWE6aG+Xes5uVPcZ/jGHz1mGCjOw=,tag:7oxBpgDUSz55c5PrV0NVKw==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.7.1

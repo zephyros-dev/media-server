@@ -5,5 +5,4 @@
 
 - name: Configure Netdata
   import_tasks: configure.yml
-
 # - import_playbook: claim.yml

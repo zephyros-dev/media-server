@@ -3,23 +3,23 @@
   containers.podman.podman_pod:
     name: scrutiny
     ports:
-      - '8080:8080'
-    state: '{{ scrutiny_state }}'
+      - "8080:8080"
+    state: "{{ scrutiny_state }}"
   ignore_errors: yes
 
 - name: Scrutiny
   become: true
   containers.podman.podman_container:
     name: scrutiny-web
-    image: '{{ scrutiny_image }}'
+    image: "{{ scrutiny_image }}"
     cap_add:
       - SYS_RAWIO
       - SYS_ADMIN
-    device: '{{ scrutiny_device }}'
+    device: "{{ scrutiny_device }}"
     pod: scrutiny
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '/run/udev:/run/udev:ro,z'
-    restart_policy: 'on-failure:3'
-    state: '{{ scrutiny_state }}'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "/run/udev:/run/udev:ro,z"
+    restart_policy: "on-failure:3"
+    state: "{{ scrutiny_state }}"
   ignore_errors: yes

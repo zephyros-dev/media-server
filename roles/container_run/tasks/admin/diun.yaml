@@ -1,28 +1,28 @@
 - name: Diun pod
   containers.podman.podman_pod:
     name: diun
-    state: '{{ diun_state }}'
+    state: "{{ diun_state }}"
   ignore_errors: yes
 
 - name: Diun
   containers.podman.podman_container:
     name: diun-web
-    image: '{{ diun_image }}'
+    image: "{{ diun_image }}"
     env:
-      LOG_LEVEL: 'info'
-      LOG_JSON: 'false'
-      DIUN_WATCH_WORKERS: '20'
-      DIUN_WATCH_SCHEDULE: '0 */6 * * *'
-      DIUN_PROVIDERS_DOCKER: 'true'
-      DIUN_NOTIF_DISCORD_WEBHOOKURL: '{{ diun_discord_webhook }}'
-      DIUN_NOTIF_DISCORD_MENTIONS: '{{ diun_discord_mention }}'
+      LOG_LEVEL: "info"
+      LOG_JSON: "false"
+      DIUN_WATCH_WORKERS: "20"
+      DIUN_WATCH_SCHEDULE: "0 */6 * * *"
+      DIUN_PROVIDERS_DOCKER: "true"
+      DIUN_NOTIF_DISCORD_WEBHOOKURL: "{{ diun_discord_webhook }}"
+      DIUN_NOTIF_DISCORD_MENTIONS: "{{ diun_discord_mention }}"
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
+      - "/etc/localtime:/etc/localtime:ro,z"
       - '{{ lookup("env","XDG_RUNTIME_DIR") }}/podman/podman.sock:/var/run/docker.sock'
     pod: diun
     labels:
-      diun.enable: 'true'
-      diun.watch_repo: 'true'
-    restart_policy: 'on-failure:3'
-    state: '{{ diun_state }}'
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    restart_policy: "on-failure:3"
+    state: "{{ diun_state }}"
   ignore_errors: yes

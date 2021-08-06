@@ -1,27 +1,27 @@
 - name: Librespeed config
   file:
-    path: '{{ librespeed_web_config }}'
+    path: "{{ librespeed_web_config }}"
     state: directory
 
 - name: Librespeed pod
   containers.podman.podman_pod:
     name: librespeed
     network: caddy
-    state: '{{ librespeed_state }}'
+    state: "{{ librespeed_state }}"
 
 - name: Librespeed
   containers.podman.podman_container:
     name: librespeed-web
-    image: '{{ librespeed_image }}'
+    image: "{{ librespeed_image }}"
     pod: librespeed
     # ports:
     # - '80:80'
     env:
-      PUID: 'global_puid'
-      PGID: 'global_pgid'
+      PUID: "global_puid"
+      PGID: "global_pgid"
       # PASSWORD:  '{{ librespeed_password }}'
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ librespeed_web_config }}:/config:U,z'
-    restart_policy: 'on-failure:3'
-    state: '{{ librespeed_state }}'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ librespeed_web_config }}:/config:U,z"
+    restart_policy: "on-failure:3"
+    state: "{{ librespeed_state }}"

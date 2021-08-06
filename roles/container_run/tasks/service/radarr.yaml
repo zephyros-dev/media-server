@@ -1,41 +1,41 @@
 - name: Global Media folder
   file:
-    path: '{{ global_media }}'
+    path: "{{ global_media }}"
     state: directory
 
 - name: Transmission Download folder
   file:
-    path: '{{ transmission_download }}'
+    path: "{{ transmission_download }}"
     state: directory
 
 - name: Radarr web config
   file:
-    path: '{{ radarr_web_config }}'
+    path: "{{ radarr_web_config }}"
     state: directory
 
 - name: Radarr pod
   containers.podman.podman_pod:
     name: radarr
     network: caddy
-    state: '{{ radarr_state }}'
-        
+    state: "{{ radarr_state }}"
+
 - name: Radarr
   containers.podman.podman_container:
     name: radarr-web
-    image: '{{ radarr_image }}'
+    image: "{{ radarr_image }}"
     env:
-      PUID: '{{ global_puid }}'
-      PGID: '{{ global_pgid }}'
+      PUID: "{{ global_puid }}"
+      PGID: "{{ global_pgid }}"
       # - UMASK_SET=022 #optional
     pod: radarr
     # ports:
     #   - 7878
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ radarr_web_config }}:/config:U,z'
-      - '{{ global_media }}:/home'
-      - '{{ transmission_download }}:/downloads'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ radarr_web_config }}:/config:U,z"
+      - "{{ global_media }}:/home"
+      - "{{ transmission_download }}:/downloads"
     labels:
-      diun.enable: 'true'
-    restart_policy: 'on-failure:3'
-    state: '{{ radarr_state }}'
+      diun.enable: "true"
+    restart_policy: "on-failure:3"
+    state: "{{ radarr_state }}"

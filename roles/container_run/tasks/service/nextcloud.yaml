@@ -2,69 +2,69 @@
   containers.podman.podman_pod:
     name: nextcloud
     network: caddy
-    state: '{{ nextcloud_state }}'
+    state: "{{ nextcloud_state }}"
 
 - name: Nextcloud Web data
   file:
-    path: '{{ nextcloud_web_data }}'
+    path: "{{ nextcloud_web_data }}"
     state: directory
 - name: Nextcloud Storage
   file:
-    path: '{{ nextcloud_storage_data }}'
+    path: "{{ nextcloud_storage_data }}"
     state: directory
 - name: Nextcloud DB Data
   file:
-    path: '{{ nextcloud_db_data }}'
+    path: "{{ nextcloud_db_data }}"
     state: directory
 
 - name: Nextcloud
   containers.podman.podman_container:
     name: nextcloud-web
-    image: '{{ nextcloud_web_image }}'
+    image: "{{ nextcloud_web_image }}"
     env:
-      POSTGRES_DB: '{{ nextcloud_postgres_db }}'
-      POSTGRES_USER: '{{ nextcloud_postgres_user }}'
-      POSTGRES_PASSWORD: '{{ nextcloud_postgres_password }}'
-      POSTGRES_HOST: 'localhost:5432'
-      REDIS_HOST: 'localhost'
-      REDIS_HOST_PASSWORD: '{{ nextcloud_redis_host_password }}'
-      NEXTCLOUD_TRUTED_DOMAINS: '{{ nextcloud_trusted_domains }}'
+      POSTGRES_DB: "{{ nextcloud_postgres_db }}"
+      POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+      POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
+      POSTGRES_HOST: "localhost:5432"
+      REDIS_HOST: "localhost"
+      REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
+      NEXTCLOUD_TRUTED_DOMAINS: "{{ nextcloud_trusted_domains }}"
     pod: nextcloud
-    # ports: 
+    # ports:
     #   - 80
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ nextcloud_web_data }}:/var/www/html:z'
-      - '{{ nextcloud_storage_data }}:/var/www/html/data:z'
-    restart_policy: 'on-failure:3'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ nextcloud_web_data }}:/var/www/html:z"
+      - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
+    restart_policy: "on-failure:3"
     labels:
-      diun.enable: 'true'
-    state: '{{ nextcloud_state }}'
+      diun.enable: "true"
+    state: "{{ nextcloud_state }}"
 
 - name: Nextcloud Redis
   containers.podman.podman_container:
     name: nextcloud-redis
-    image: '{{ nextcloud_redis_image }}'
-    command: 'redis-server --requirepass {{ nextcloud_redis_host_password }}'
+    image: "{{ nextcloud_redis_image }}"
+    command: "redis-server --requirepass {{ nextcloud_redis_host_password }}"
     pod: nextcloud
-    volume: 
-      - '/etc/localtime:/etc/localtime:ro,z'
-    restart_policy: 'on-failure:3'
-    state: '{{ nextcloud_state }}'
+    volume:
+      - "/etc/localtime:/etc/localtime:ro,z"
+    restart_policy: "on-failure:3"
+    state: "{{ nextcloud_state }}"
 
 - name: Nextcloud database
   containers.podman.podman_container:
     name: nextcloud-db
-    image: '{{ nextcloud_postgres_image }}'
-    # ports: 
+    image: "{{ nextcloud_postgres_image }}"
+    # ports:
     #   - 5432:5432
     env:
-      POSTGRES_DB: '{{ nextcloud_postgres_db }}'
-      POSTGRES_USER: '{{ nextcloud_postgres_user }}'
-      POSTGRES_PASSWORD: '{{ nextcloud_postgres_password }}'
+      POSTGRES_DB: "{{ nextcloud_postgres_db }}"
+      POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+      POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
     pod: nextcloud
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z'
-    restart_policy: 'on-failure:3'
-    state: '{{ nextcloud_state }}'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
+    restart_policy: "on-failure:3"
+    state: "{{ nextcloud_state }}"

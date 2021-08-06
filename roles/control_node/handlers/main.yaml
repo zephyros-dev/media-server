@@ -4,8 +4,8 @@
     scope: user
     enabled: yes
     state: restarted
-    name: '{{ item.name }}'
-  loop: '{{ systemd.podman.service }}'
+    name: "{{ item.name }}"
+  loop: "{{ systemd.podman.service }}"
 
 - name: Run the systemd timer
   ansible.builtin.systemd:
@@ -13,5 +13,5 @@
     scope: user
     enabled: yes
     state: restarted
-    name: '{{ item.name }}'
-  loop: '{{ systemd.podman.timer }}'
+    name: "{{ item.name }}"
+  loop: "{{ systemd.podman.timer }}"

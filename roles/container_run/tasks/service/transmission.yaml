@@ -1,11 +1,11 @@
 - name: Transmission Download folder
   file:
-    path: '{{ transmission_download }}'
+    path: "{{ transmission_download }}"
     state: directory
 
 - name: Transmission web config
   file:
-    path: '{{ transmission_web_config }}'
+    path: "{{ transmission_web_config }}"
     state: directory
 
 - name: Transmission pod
@@ -13,24 +13,24 @@
     name: transmission
     network: caddy
     ports:
-      - '51413:51413/tcp'
-      - '51413:51413/udp'
-    state: '{{ transmission_state }}'
-    
+      - "51413:51413/tcp"
+      - "51413:51413/udp"
+    state: "{{ transmission_state }}"
+
 - name: Transmission
   containers.podman.podman_container:
     name: transmission-web
-    image: '{{ transmission_image }}'
+    image: "{{ transmission_image }}"
     env:
-      PUID: '{{ global_puid }}'
-      PGID: '{{ global_pgid }}'
-    #   TRANSMISSION_WEB_HOME=/combustion-release/ #optional
-      USER: '{{ transmission_user }}' #optional
-      PASS: '{{ transmission_password }}' #optional
+      PUID: "{{ global_puid }}"
+      PGID: "{{ global_pgid }}"
+      #   TRANSMISSION_WEB_HOME=/combustion-release/ #optional
+      USER: "{{ transmission_user }}" #optional
+      PASS: "{{ transmission_password }}" #optional
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ transmission_web_config }}:/config:U,z'
-      - '{{ transmission_download }}:/downloads'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ transmission_web_config }}:/config:U,z"
+      - "{{ transmission_download }}:/downloads"
       # Watch folder for auto download
       # - '{{ transmission_watch }}:/watch'
     pod: transmission
@@ -38,5 +38,5 @@
     #   - 9091:9091
     #   - 51413
     #   - 51413/udp
-    restart_policy: 'on-failure:3'
-    state: '{{ transmission_state }}'
+    restart_policy: "on-failure:3"
+    state: "{{ transmission_state }}"

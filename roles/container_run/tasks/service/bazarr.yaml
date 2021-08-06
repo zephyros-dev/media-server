@@ -1,33 +1,33 @@
 - name: Global Media folder
   file:
-    path: '{{ global_media }}'
+    path: "{{ global_media }}"
     state: directory
 
 - name: Bazarr web config
   file:
-    path: '{{ bazarr_web_config }}'
+    path: "{{ bazarr_web_config }}"
     state: directory
 
 - name: Bazarr pod
   containers.podman.podman_pod:
     name: bazarr
     network: caddy
-    state: '{{ bazarr_state }}'
-            
+    state: "{{ bazarr_state }}"
+
 - name: Bazarr
   containers.podman.podman_container:
     name: bazarr-web
-    image: '{{ bazarr_image }}'
+    image: "{{ bazarr_image }}"
     env:
-      PUID: '{{ global_puid }}'
-      PGID: '{{ global_pgid }}'
+      PUID: "{{ global_puid }}"
+      PGID: "{{ global_pgid }}"
       # UMASK_SET: 022 #optional
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ bazarr_web_config }}:/config:U,z'
-      - '{{ global_media }}:/home'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ bazarr_web_config }}:/config:U,z"
+      - "{{ global_media }}:/home"
     pod: bazarr
     # ports:
     #   - 6767
-    restart_policy: 'on-failure:3'
-    state: '{{ bazarr_state }}'
+    restart_policy: "on-failure:3"
+    state: "{{ bazarr_state }}"

@@ -1,5 +1,5 @@
 # Readarr
-readarr_state: 'absent'
-readarr_image: 'hotio/readarr:nightly'
-readarr_data: '{{ global_data_path }}/readarr'
-readarr_web_config: '{{ readarr_data }}/web/config'
+readarr_state: "absent"
+readarr_image: "hotio/readarr:nightly"
+readarr_data: "{{ global_data_path }}/readarr"
+readarr_web_config: "{{ readarr_data }}/web/config"

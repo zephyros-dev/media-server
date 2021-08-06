@@ -26,21 +26,21 @@
       - age
     state: latest
 - name: Get latest sops release
-  uri:                                                               
+  uri:
     url: https://api.github.com/repos/mozilla/sops/releases/latest
-    return_content: true                                             
+    return_content: true
   register: sops_latest
 - name: Install sops
   become: yes
   dnf:
-    name: '{{ sops_latest.json.assets[0].browser_download_url }}'
+    name: "{{ sops_latest.json.assets[0].browser_download_url }}"
     state: present
     disable_gpg_check: yes
 
 - name: Dev software
   become: True
   dnf:
-    name: 
+    name:
       - git
       - golang
       - ShellCheck
@@ -48,14 +48,13 @@
 - name: Misc software
   become: True
   dnf:
-    name: 
+    name:
       - wget
       - curl
       - compsize
     state: latest
 - name: Upgrade ansible
   pip:
-    name: 
+    name:
       - ansible
     state: latest
-    

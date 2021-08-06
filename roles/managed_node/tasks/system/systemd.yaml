@@ -1,9 +1,9 @@
-- name: 'Check if user {{ ansible_user }} is lingering'
+- name: "Check if user {{ ansible_user }} is lingering"
   stat:
-    path: '/var/lib/systemd/linger/{{ ansible_user }}'
+    path: "/var/lib/systemd/linger/{{ ansible_user }}"
   register: user_lingering
 
 - name: Enable lingering if neccessary
-  command: 'loginctl enable-linger {{ ansible_user }}'
+  command: "loginctl enable-linger {{ ansible_user }}"
   when:
     - not user_lingering.stat.exists

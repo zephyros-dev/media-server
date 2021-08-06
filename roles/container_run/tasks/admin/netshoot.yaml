@@ -1,11 +1,11 @@
 - name: Netshoot
   containers.podman.podman_container:
     name: netshoot
-    image: '{{ netshoot_image }}'
+    image: "{{ netshoot_image }}"
     interactive: yes
     privileged: yes
     tty: yes
     network:
       - caddy
-    restart_policy: 'on-failure:3'
-    state: '{{ netshoot_state }}'
+    restart_policy: "on-failure:3"
+    state: "{{ netshoot_state }}"

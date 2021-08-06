@@ -1,52 +1,52 @@
 - name: Archivy web config
   file:
-    path: '{{ archivy_web_config }}'
+    path: "{{ archivy_web_config }}"
     state: directory
 
 - name: Archivy web data
   file:
-    path: '{{ archivy_web_data }}'
+    path: "{{ archivy_web_data }}"
     state: directory
 
 - name: Archivy elasticsearch data
   file:
-    path: '{{ archivy_elasticsearch_data }}'
+    path: "{{ archivy_elasticsearch_data }}"
     state: directory
 
 - name: Archivy pod
   containers.podman.podman_pod:
     name: archivy
     network: caddy
-    ports: 
-      - '5000:5000'
-    state: '{{ archivy_state }}'
+    ports:
+      - "5000:5000"
+    state: "{{ archivy_state }}"
 
 - name: Archivy
   containers.podman.podman_container:
     name: archivy-web
-    image: '{{ archivy_web_image }}'
+    image: "{{ archivy_web_image }}"
     pod: archivy
     env:
-      FLASK_DEBUG: '0'
-      ELASTICSEARCH_ENABLED: '1'
-      ELASTICSEARCH_URL: 'http://localhost:9200/'
+      FLASK_DEBUG: "0"
+      ELASTICSEARCH_ENABLED: "1"
+      ELASTICSEARCH_URL: "http://localhost:9200/"
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ archivy_web_data }}:/archivy/data:U,z'
-      - '{{ archivy_web_config }}:/archivy/.local/share/archivy:U,z'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ archivy_web_data }}:/archivy/data:U,z"
+      - "{{ archivy_web_config }}:/archivy/.local/share/archivy:U,z"
     # ports:
     #   - 5000
-    restart_policy: 'on-failure:3'
-    state: '{{ archivy_state }}'
+    restart_policy: "on-failure:3"
+    state: "{{ archivy_state }}"
 
 - name: Archivy elastic search
   containers.podman.podman_container:
     name: archivy-elasticsearch
-    image: '{{ archivy_elasticsearch_image }}'
+    image: "{{ archivy_elasticsearch_image }}"
     pod: archivy
     env:
-      'discovery.type': 'single-node'
+      "discovery.type": "single-node"
     volumes:
-      - '{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z'
-    restart_policy: 'on-failure:3'
-    state: '{{ archivy_state }}'
+      - "{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
+    restart_policy: "on-failure:3"
+    state: "{{ archivy_state }}"

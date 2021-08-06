@@ -2,23 +2,23 @@ systemd:
   podman:
     service:
       - container_update:
-        name: 'container_update'
-        systemd_description: 'Update container service'
-        command: 'ansible-playbook container_update.yaml'
+        name: "container_update"
+        systemd_description: "Update container service"
+        command: "ansible-playbook container_update.yaml"
       - container_run:
-        name: 'container_run'
-        systemd_description: 'Run container service'
-        command: 'ansible-playbook container_run.yaml'
+        name: "container_run"
+        systemd_description: "Run container service"
+        command: "ansible-playbook container_run.yaml"
       - image_prune:
-        name: 'image_prune'
-        systemd_description: 'Podman image prune service'
-        command: 'podman image prune --force'
+        name: "image_prune"
+        systemd_description: "Podman image prune service"
+        command: "podman image prune --force"
     timer:
       - container_update:
-        name: 'container_update'
-        timer_description: 'Update container timer'
-        timer: 'Sat *-*-* 18:00:00'
+        name: "container_update"
+        timer_description: "Update container timer"
+        timer: "Sat *-*-* 18:00:00"
       - image_prune:
-        name: 'image_prune'
-        timer_description: 'Podman image prune timer'
-        timer: 'Sat *-*-* 19:00:00'
+        name: "image_prune"
+        timer_description: "Podman image prune timer"
+        timer: "Sat *-*-* 19:00:00"

@@ -1,5 +1,5 @@
 # Radarr
-radarr_state: 'started'
-radarr_image: 'ghcr.io/linuxserver/radarr:latest'
-radarr_data: '{{ global_data_path }}/radarr'
-radarr_web_config: '{{ radarr_data }}/web/config'
+radarr_state: "started"
+radarr_image: "ghcr.io/linuxserver/radarr:latest"
+radarr_data: "{{ global_data_path }}/radarr"
+radarr_web_config: "{{ radarr_data }}/web/config"

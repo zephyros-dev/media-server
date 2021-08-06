@@ -1,10 +1,10 @@
 - name: Create librenms web data folder
   file:
-    path: '{{ librenms_volume_web_data }}'
+    path: "{{ librenms_volume_web_data }}"
     state: directory
 - name: Create librenms db data folder
   file:
-    path: '{{ librenms_volume_db_data }}'
+    path: "{{ librenms_volume_db_data }}"
     state: directory
 
 - name: Librenms pod
@@ -13,42 +13,42 @@
     network: caddy
     # ports:
     #   - '8000:8000'
-    state: '{{ librenms_state }}'
+    state: "{{ librenms_state }}"
 
 - name: Librenms database
   containers.podman.podman_container:
     name: librenms-db
-    image: '{{ librenms_db_image }}'
+    image: "{{ librenms_db_image }}"
     pod: librenms
     command:
-      - 'mysqld'
-      - '--innodb-file-per-table=1'
-      - '--lower-case-table-names=0'
-      - '--character-set-server=utf8mb4'
-      - '--collation-server=utf8mb4_unicode_ci'
+      - "mysqld"
+      - "--innodb-file-per-table=1"
+      - "--lower-case-table-names=0"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ librenms_volume_db_data }}:/var/lib/mysql:U,z'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ librenms_volume_db_data }}:/var/lib/mysql:U,z"
     env:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_DATABASE: 'librenms'
-      MYSQL_USER: '{{ librenms_mysql_user }}'
-      MYSQL_PASSWORD: '{{ librenms_mysql_password }}'
-    restart_policy: 'on-failure:3'
-    state: '{{ librenms_state }}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "librenms"
+      MYSQL_USER: "{{ librenms_mysql_user }}"
+      MYSQL_PASSWORD: "{{ librenms_mysql_password }}"
+    restart_policy: "on-failure:3"
+    state: "{{ librenms_state }}"
 
 - name: Librenms
   containers.podman.podman_container:
     name: librenms-web
-    image: '{{ librenms_web_image }}'
+    image: "{{ librenms_web_image }}"
     pod: librenms
     env:
-      DB_HOST: '127.0.0.1'
-      DB_PORT: '3306'
-      DB_NAME: 'librenms'
-      DB_USER: '{{ librenms_mysql_user }}'
-      DB_PASSWORD: '{{ librenms_mysql_password }}'
-      DB_TIMEOUT: '300'
+      DB_HOST: "127.0.0.1"
+      DB_PORT: "3306"
+      DB_NAME: "librenms"
+      DB_USER: "{{ librenms_mysql_user }}"
+      DB_PASSWORD: "{{ librenms_mysql_password }}"
+      DB_TIMEOUT: "300"
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -56,6 +56,6 @@
     #   - '8000'
     volumes:
       # - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ librenms_volume_web_data }}:/data:U,z'
-    restart_policy: 'on-failure:3'
-    state: '{{ librenms_state }}'
+      - "{{ librenms_volume_web_data }}:/data:U,z"
+    restart_policy: "on-failure:3"
+    state: "{{ librenms_state }}"

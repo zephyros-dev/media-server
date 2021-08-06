@@ -1,12 +1,12 @@
 # Root data folder
-global_data_path: '/path/to/global/data'
+global_data_path: "/path/to/global/data"
 # Media folder, shared among Jellyfin, Pymedusa, Radarr, bazarr, headphones for hardlink
-global_media: '/path/to/global/media'
+global_media: "/path/to/global/media"
 
 # PID and GID mapping for LSIO container
 # 0 means root inside the rootless container, which map to the user running the container
-global_puid: '0'
-global_pgid: '0'
+global_puid: "0"
+global_pgid: "0"
 
 # Network
-network_state: 'present'
+network_state: "present"

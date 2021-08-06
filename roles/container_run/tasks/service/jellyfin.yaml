@@ -1,39 +1,39 @@
 - name: Global Media folder
   file:
-    path: '{{ global_media }}'
+    path: "{{ global_media }}"
     state: directory
 - name: Jellyfin config folder
   file:
-    path: '{{ jellyfin_web_config }}'
+    path: "{{ jellyfin_web_config }}"
     state: directory
 - name: Jellyfin cache folder
   file:
-    path: '{{ jellyfin_web_cache }}'
+    path: "{{ jellyfin_web_cache }}"
     state: directory
 
 - name: Jellyfin pod
   containers.podman.podman_pod:
     name: jellyfin
     network: caddy
-    state: '{{ jellyfin_state }}'
+    state: "{{ jellyfin_state }}"
 
 - name: Jellyfin
-# The mpv-shim config file is conf.json
+  # The mpv-shim config file is conf.json
   containers.podman.podman_container:
     name: jellyfin-web
-    image: '{{ jellyfin_image }}'
+    image: "{{ jellyfin_image }}"
     # user: 1000:1000
     # Use host network_mode for DLNA
-    # network_mode: host 
+    # network_mode: host
     # ports:
-      # - 8096
+    # - 8096
     pod: jellyfin
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ jellyfin_web_config }}:/config:U,z'
-      - '{{ jellyfin_web_cache }}:/cache:U,z'
-      - '{{ global_media }}:/home'
-    restart_policy: 'on-failure:3'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ jellyfin_web_config }}:/config:U,z"
+      - "{{ jellyfin_web_cache }}:/cache:U,z"
+      - "{{ global_media }}:/home"
+    restart_policy: "on-failure:3"
     labels:
-      diun.enable: 'true'
-    state: '{{ jellyfin_state }}'
+      diun.enable: "true"
+    state: "{{ jellyfin_state }}"

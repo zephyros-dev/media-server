@@ -1,2 +1,2 @@
 - name: Container_update
-  import_tasks: 'container_update.yaml'
+  import_tasks: "container_update.yaml"

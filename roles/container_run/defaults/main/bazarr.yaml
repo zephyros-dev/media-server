@@ -1,5 +1,5 @@
 # Bazarr
-bazarr_state: 'started'
-bazarr_image: 'ghcr.io/linuxserver/bazarr:latest'
-bazarr_data: '{{ global_data_path }}/bazarr'
-bazarr_web_config: '{{ bazarr_data }}/web/config'
+bazarr_state: "started"
+bazarr_image: "ghcr.io/linuxserver/bazarr:latest"
+bazarr_data: "{{ global_data_path }}/bazarr"
+bazarr_web_config: "{{ bazarr_data }}/web/config"

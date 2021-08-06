@@ -1,23 +1,23 @@
 - name: Privatebin Web data
   file:
-    path: '{{ privatebin_web_data }}'
+    path: "{{ privatebin_web_data }}"
     state: directory
 
 - name: Privatebin pod
   containers.podman.podman_pod:
     name: privatebin
     network: caddy
-    state: '{{ privatebin_state }}'
-    
+    state: "{{ privatebin_state }}"
+
 - name: Privatebin
   containers.podman.podman_container:
     name: privatebin-web
-    image: '{{ privatebin_image }}'
+    image: "{{ privatebin_image }}"
     # ports:
     # - '8080'
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ privatebin_web_data }}:/srv/data:U,z'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ privatebin_web_data }}:/srv/data:U,z"
     pod: privatebin
-    restart_policy: 'on-failure:3'
-    state: '{{ privatebin_state }}'
+    restart_policy: "on-failure:3"
+    state: "{{ privatebin_state }}"

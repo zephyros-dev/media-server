@@ -1,0 +1,6 @@
+*.sops.yaml diff=sopsdiffer
+.sops.yaml diff=astextplain
+*.sops.json diff=sopsdiffer
+devcontainer.json diff=json
+*.env diff=sopsdiffer
+*.sops.ini diff=sopsdiffer

@@ -1,28 +1,28 @@
 - name: Heimdall config
   file:
-    path: '{{ heimdall_data_config }}'
+    path: "{{ heimdall_data_config }}"
     state: directory
 
 - name: Heimdall pod
   containers.podman.podman_pod:
     name: heimdall
     network: caddy
-    state: '{{ heimdall_state }}'
-            
+    state: "{{ heimdall_state }}"
+
 - name: Heimdall
   containers.podman.podman_container:
     name: heimdall-web
-    image: '{{ heimdall_image }}'
+    image: "{{ heimdall_image }}"
     # user: '1000:1000'
     # env:
     #   PUID: '{{ global_puid }}'
     #   PGID: '{{ global_pgid }}'
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ heimdall_data_config }}:/config:U,z'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ heimdall_data_config }}:/config:U,z"
     pod: heimdall
     # ports:
     #   - 80
     #   - 443
-    restart_policy: 'on-failure:3'
-    state: '{{ heimdall_state }}'
+    restart_policy: "on-failure:3"
+    state: "{{ heimdall_state }}"

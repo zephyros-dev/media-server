@@ -1,23 +1,23 @@
 - name: SFTP data folder
   file:
-    path: '{{ sftp_volume_data }}'
+    path: "{{ sftp_volume_data }}"
     state: directory
 
 - name: SFTP pod
   containers.podman.podman_pod:
     name: sftp
     ports:
-      - '{{ sftp_port }}:22'
-    state: '{{ sftp_state }}'
+      - "{{ sftp_port }}:22"
+    state: "{{ sftp_state }}"
 
 - name: SFTP
   containers.podman.podman_container:
     name: sftp-container
-    image: '{{ sftp_image }}'
+    image: "{{ sftp_image }}"
     pod: sftp
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ sftp_volume_data }}:/home/{{ sftp_user }}/data:ro'
-    command: '{{ sftp_user }}:{{ sftp_password }}:::data'
-    restart_policy: 'on-failure:3'
-    state: '{{ sftp_state }}'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ sftp_volume_data }}:/home/{{ sftp_user }}/data:ro"
+    command: "{{ sftp_user }}:{{ sftp_password }}:::data"
+    restart_policy: "on-failure:3"
+    state: "{{ sftp_state }}"

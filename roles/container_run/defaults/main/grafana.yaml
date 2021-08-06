@@ -1,5 +1,5 @@
 # Grafana
-grafana_state: 'started'
-grafana_web_image: 'grafana/grafana:7.3.0'
-grafana_volume: '{{ global_data_path }}/grafana'
-grafana_volume_web_data: '{{ grafana_volume }}/web/data '
+grafana_state: "started"
+grafana_web_image: "grafana/grafana:7.3.0"
+grafana_volume: "{{ global_data_path }}/grafana"
+grafana_volume_web_data: "{{ grafana_volume }}/web/data "

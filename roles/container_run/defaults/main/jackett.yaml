@@ -1,5 +1,5 @@
 # Jackett
-jackett_state: 'started'
-jackett_image: 'ghcr.io/linuxserver/jackett:latest'
-jackett_data: '{{ global_data_path }}/jackett'
-jackett_web_config: '{{ jackett_data }}/web/config'
+jackett_state: "started"
+jackett_image: "ghcr.io/linuxserver/jackett:latest"
+jackett_data: "{{ global_data_path }}/jackett"
+jackett_web_config: "{{ jackett_data }}/web/config"

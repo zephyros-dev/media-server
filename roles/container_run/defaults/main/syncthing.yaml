@@ -1,4 +1,4 @@
 # Syncthing
-syncthing_state: 'started'
-syncthing_image: 'syncthing/syncthing:latest'
-syncthing_data: '{{ global_data_path }}/syncthing'
+syncthing_state: "started"
+syncthing_image: "syncthing/syncthing:latest"
+syncthing_data: "{{ global_data_path }}/syncthing"

@@ -1,27 +1,27 @@
 - name: Jackett web config
   file:
-    path: '{{ jackett_web_config }}'
+    path: "{{ jackett_web_config }}"
     state: directory
 
 - name: Jackett pod
   containers.podman.podman_pod:
     name: jackett
     network: caddy
-    state: '{{ jackett_state }}'
-        
+    state: "{{ jackett_state }}"
+
 - name: Jackett
   containers.podman.podman_container:
     name: jackett-web
-    image: '{{ jackett_image }}'
+    image: "{{ jackett_image }}"
     env:
-      AUTO_UPDATE: 'true' #optional
+      AUTO_UPDATE: "true" #optional
       # - RUN_OPTS=run options here #optional
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ jackett_web_config }}:/config:U,z'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ jackett_web_config }}:/config:U,z"
       # - path to blackhole:/downloads
     pod: jackett
     # ports:
     #   - 9117
-    restart_policy: 'on-failure:3'
-    state: '{{ jackett_state }}'
+    restart_policy: "on-failure:3"
+    state: "{{ jackett_state }}"

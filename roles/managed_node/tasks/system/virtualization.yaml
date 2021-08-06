@@ -1,7 +1,7 @@
 - name: Install the 'virtualization' package group
   become: True
   dnf:
-    name: '@virtualization'
+    name: "@virtualization"
     state: latest
 
 - name: Create default network for libvirt

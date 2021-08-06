@@ -1,39 +1,39 @@
 - name: Global Media folder
   file:
-    path: '{{ global_media }}'
+    path: "{{ global_media }}"
     state: directory
 
 - name: Transmission Download folder
   file:
-    path: '{{ transmission_download }}'
+    path: "{{ transmission_download }}"
     state: directory
 
 - name: Headphones web config
   file:
-    path: '{{ headphones_web_config }}'
+    path: "{{ headphones_web_config }}"
     state: directory
 
 - name: Headphones pod
   containers.podman.podman_pod:
     name: headphones
     network: caddy
-    state: '{{ headphones_state }}'
-        
+    state: "{{ headphones_state }}"
+
 - name: Headphones
   containers.podman.podman_container:
     name: headphones-web
-    image: '{{ headphones_image }}'
+    image: "{{ headphones_image }}"
     env:
-      PUID: '{{ global_puid }}'
-      PGID: '{{ global_pgid }}'
+      PUID: "{{ global_puid }}"
+      PGID: "{{ global_pgid }}"
     volumes:
-      - '/etc/localtime:/etc/localtime:ro,z'
-      - '{{ headphones_web_config }}:/config:U,z'
-      - '{{ transmission_download }}:/downloads'
-      - '{{ global_media }}:/home'
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ headphones_web_config }}:/config:U,z"
+      - "{{ transmission_download }}:/downloads"
+      - "{{ global_media }}:/home"
       # - /path/to/music:/music
     pod: headphones
     # ports:
     #   - 8181
-    restart_policy: 'on-failure:3'
-    state: '{{ headphones_state }}'
+    restart_policy: "on-failure:3"
+    state: "{{ headphones_state }}"
