@@ -19,7 +19,8 @@
       UMASK: "002"
     volumes:
       - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ prowlarr_web_config }}:/config:U,z"
+      # Remove auto mapping permission with user since the container run as root, but the prowlarr process run as user 1000
+      - "{{ prowlarr_web_config }}:/config:z"
     pod: prowlarr
     # ports:
     #   - 9696

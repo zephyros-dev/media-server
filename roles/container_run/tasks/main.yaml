@@ -16,77 +16,31 @@
 - name: Librenms
   import_tasks: "monitor/librenms.yaml"
 
-- name: Heimdall
-  import_tasks: "service/heimdall.yaml"
+- import_tasks: admin/pgadmin.yaml
 
-- name: Scrutiny
-  import_tasks: "service/scrutiny.yaml"
+- import_tasks: service/heimdall.yaml
+- import_tasks: service/scrutiny.yaml
+- import_tasks: service/nextcloud.yaml
+- import_tasks: service/nocodb.yaml
+- import_tasks: service/sftp.yaml
+- import_tasks: service/librespeed.yaml
+- import_tasks: service/syncthing.yaml
+- import_tasks: service/transmission.yaml
+- import_tasks: service/jackett.yaml
+- import_tasks: service/jellyfin.yaml
+- import_tasks: service/pymedusa.yaml
+- import_tasks: service/radarr.yaml
+- import_tasks: service/sonarr.yaml
+- import_tasks: service/lidarr.yaml
+- import_tasks: service/bazarr.yaml
+- import_tasks: service/readarr.yaml
+- import_tasks: service/headphones.yaml
+- import_tasks: service/calibrew.yaml
+- import_tasks: service/privatebin.yaml
+- import_tasks: service/gitea.yaml
+- import_tasks: service/mumble.yaml
+- import_tasks: service/archivy.yaml
+- import_tasks: service/navidrome.yaml
+- import_tasks: service/prowlarr.yaml
 
-- name: Nextcloud
-  import_tasks: "service/nextcloud.yaml"
-
-- name: Nocodb
-  import_tasks: "service/nocodb.yaml"
-
-- name: Sfpt
-  import_tasks: "service/sftp.yaml"
-
-- name: Librespeed
-  import_tasks: "service/librespeed.yaml"
-
-- name: Syncthing
-  import_tasks: "service/syncthing.yaml"
-
-- name: Transmission
-  import_tasks: "service/transmission.yaml"
-
-- name: Jackett
-  import_tasks: "service/jackett.yaml"
-
-- name: Jellyfin
-  import_tasks: "service/jellyfin.yaml"
-
-- name: Pymedusa
-  import_tasks: "service/pymedusa.yaml"
-
-- name: Radarr
-  import_tasks: "service/radarr.yaml"
-
-- name: sonarr
-  import_tasks: "service/sonarr.yaml"
-
-- name: Lidarr
-  import_tasks: "service/lidarr.yaml"
-
-- name: Bazarr
-  import_tasks: "service/bazarr.yaml"
-
-- name: Readarr
-  import_tasks: "service/readarr.yaml"
-
-- name: Headphones
-  import_tasks: "service/headphones.yaml"
-
-- name: Calibrew
-  import_tasks: "service/calibrew.yaml"
-
-- name: Privatebin
-  import_tasks: "service/privatebin.yaml"
-
-- name: Pgadmin4
-  import_tasks: "admin/pgadmin.yaml"
-
-- name: Gitea
-  import_tasks: "service/gitea.yaml"
-
-- name: Mumble
-  import_tasks: "service/mumble.yaml"
-
-- name: Archivy
-  import_tasks: "service/archivy.yaml"
-
-- name: Navidrome
-  import_tasks: "service/navidrome.yaml"
-
-- name: Prowlarr
-  import_tasks: "service/prowlarr.yaml"
+- import_tasks: podman_startup.yaml

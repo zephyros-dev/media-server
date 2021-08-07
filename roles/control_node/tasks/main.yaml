@@ -6,3 +6,6 @@
 
 - name: Setup SOPS age key
   import_tasks: sops_age.yaml
+
+- name: Setup dotfiles
+  import_tasks: dotfiles.yaml

@@ -11,12 +11,12 @@
   become: yes
   dnf:
     name:
+      - fish
       - git
-      - tmux
       - mc
       - nmap
+      - tmux
       - toolbox
-      - fish
     state: latest
 
 - name: Encryption software
@@ -25,6 +25,7 @@
     name:
       - age
     state: latest
+
 - name: Get latest sops release
   uri:
     url: https://api.github.com/repos/mozilla/sops/releases/latest
@@ -37,21 +38,33 @@
     state: present
     disable_gpg_check: yes
 
+- name: Get latest chezmoi release
+  uri:
+    url: https://api.github.com/repos/twpayne/chezmoi/releases/latest
+    return_content: true
+  register: chezmoi_latest
+- name: Install chezmoi
+  become: yes
+  dnf:
+    name: "{{ chezmoi_latest.json.assets[6].browser_download_url }}"
+    state: present
+    disable_gpg_check: yes
+
 - name: Dev software
   become: True
   dnf:
     name:
+      - ShellCheck
       - git
       - golang
-      - ShellCheck
     state: latest
 - name: Misc software
   become: True
   dnf:
     name:
-      - wget
-      - curl
       - compsize
+      - curl
+      - wget
     state: latest
 - name: Upgrade ansible
   pip:
