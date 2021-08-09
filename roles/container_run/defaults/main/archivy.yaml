@@ -1,4 +1,3 @@
-# Archivy
 archivy_state: "absent"
 archivy_web_image: "uzayg/archivy:latest"
 archivy_elasticsearch_image: "elasticsearch:7.9.0"

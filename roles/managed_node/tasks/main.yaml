@@ -13,5 +13,8 @@
 - name: Setup Samba
   import_tasks: "system/samba.yaml"
 
+- name: Install packages
+  import_tasks: "system/packages.yaml"
+
 - name: Update all packages
   import_tasks: "system/update.yaml"
