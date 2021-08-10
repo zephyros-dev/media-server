@@ -1,0 +1,26 @@
+- name: sftpgo data folder
+  file:
+    path: "{{ sftpgo_volume_data }}"
+    state: directory
+
+- name: sftpgo pod
+  containers.podman.podman_pod:
+    name: sftpgo
+    ports:
+      - "{{ sftpgo_admin_port }}:8080"
+      - "{{ sftpgo_sftp_port }}:2022"
+      - "{{ sftpgo_webdav_port }}:10080"
+    state: "{{ sftpgo_state }}"
+
+- name: sftpgo
+  containers.podman.podman_container:
+    name: sftpgo-web
+    image: "{{ sftpgo_image }}"
+    pod: sftpgo
+    env:
+      SFTPGO_WEBDAVD__BINDINGS__0__PORT: "10080"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro,z"
+      # - "{{ sftpgo_volume_data }}:/home/{{ sftp_user }}/data:ro"
+    restart_policy: "on-failure:3"
+    state: "{{ sftpgo_state }}"

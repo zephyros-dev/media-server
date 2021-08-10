@@ -1,0 +1,6 @@
+sftpgo_state: "started"
+sftpgo_image: "drakkan/sftpgo:latest"
+sftpgo_volume_data: "/path/to/data"
+sftpgo_admin_port: "18080"
+sftpgo_sftp_port: "2022"
+sftpgo_webdav_port: "10080"

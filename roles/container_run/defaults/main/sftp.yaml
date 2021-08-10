@@ -1,4 +1,3 @@
-# SFTP
 sftp_state: "started"
 sftp_image: "atmoz/sftp:alpine"
 sftp_volume_data: "/path/to/data"

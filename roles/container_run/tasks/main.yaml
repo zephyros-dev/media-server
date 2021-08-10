@@ -18,6 +18,7 @@
 
 - import_tasks: admin/pgadmin.yaml
 
+- import_tasks: service/sftpgo.yaml
 - import_tasks: service/heimdall.yaml
 - import_tasks: service/scrutiny.yaml
 - import_tasks: service/nextcloud.yaml
