@@ -1,4 +1,4 @@
-sftpgo_state: "started"
+sftpgo_state: "absent"
 sftpgo_image: "drakkan/sftpgo:latest"
 sftpgo_volume_data: "/path/to/data"
 sftpgo_admin_port: "18080"
