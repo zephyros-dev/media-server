@@ -29,6 +29,8 @@
       REDIS_HOST: "localhost"
       REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
       NEXTCLOUD_TRUTED_DOMAINS: "{{ nextcloud_trusted_domains }}"
+      # This options is needed for authentication behind reverse proxy
+      OVERWRITEPROTOCOL: "https"
     pod: nextcloud
     # ports:
     #   - 80
