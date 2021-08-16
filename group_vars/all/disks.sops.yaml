@@ -1,0 +1,26 @@
+disks:
+    storage:
+        - ata-WDC_WUH721414ALE6L4_9MGHTBUU: null
+          id: ENC[AES256_GCM,data:W5yvqNe+yBGapUwk8BffwnSt53VmeAtPWdvsvj9C6is=,iv:ruCFaZLSiHTWQhYHj/sB4SHI9R0KfGOA0cj0hh4m+pw=,tag:A0sPllczyQfQyywITHKJgQ==,type:str]
+        - ata-WDC_WUS721010ALE6L4_VCG8AZAM: null
+          id: ENC[AES256_GCM,data:xS9DFE3NnkQG9Dvah7APZNs44BSdEvAaMP4HcQGom+U=,iv:TWQ+//hfq/4ozwpAx0O93/uD0qBKLdDXlut1ceOwlFY=,tag:h7nx1FvjUz/a7w9odsaUXw==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBKNEdqcWhmK1BkTHNPcW9j
+            aCszQnVicWpNUlpIcDdPVi9QVVJQTmdiUUJzCnNMUGFzazBqOU1JSGhnUzR4eUd2
+            RE1GQWdCTW5DWWVPc01zZE5SQmZ1Z00KLS0tIFltei9LYSt2V0RnYUJHdjJBNkhU
+            cEwzOXM3a25ZYy82UFlBMEFjWjA2NGsKTJEEgh/A5m4Rf9xvFZpOLrRNBtd6zLE4
+            ajohpwNwAiMe9ikYh1w5WOy+HU3PB5XP11saZ786h8lJ9fNXSoh6Aw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2021-08-16T14:21:29Z"
+    mac: ENC[AES256_GCM,data:jhs4d8ThUsPa/H1iEA38Jj/g4D88a26cxVRFN9DUp0Q0EgRmkJ1t18r5iZJ3VNqsOweLTuJq98N1trO426XgS5CG1U++Xr7rpCiLVCpuxn8eOh/T0ndHvCCIMs7ChDJ0k6Hgvs1zY2escuC++LQhJZGXVzEI8dq8lZy0gUMmBME=,iv:XwnPvyijGFrz/ep1Ly9faRzMpURvmQmC73SLx7hkImM=,tag:m3NJ15T3T/Yi99Dfzeemsw==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.7.1

@@ -16,5 +16,10 @@
 - name: Install packages
   import_tasks: "system/packages.yaml"
 
+- name: Setup storage mounts
+  vars:
+    disk_storage: "{{ disks.storage }}"
+  include_tasks: "system/disk_storage.yaml"
+
 - name: Update all packages
   import_tasks: "system/update.yaml"
