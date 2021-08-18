@@ -21,21 +21,19 @@
 
 - name: Radarr
   containers.podman.podman_container:
-    name: radarr-web
-    image: "{{ radarr_image }}"
     env:
-      PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
-      # - UMASK_SET=022 #optional
+      PUID: "{{ global_puid }}"
+    image: "{{ radarr_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: radarr-web
     pod: radarr
-    # ports:
-    #   - 7878
+    restart_policy: on-failure:3
+    state: "{{ radarr_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
+      - /etc/localtime:/etc/localtime:ro,z
       - "{{ radarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
       - "{{ transmission_download }}:/downloads"
-    labels:
-      diun.enable: "true"
-    restart_policy: "on-failure:3"
-    state: "{{ radarr_state }}"

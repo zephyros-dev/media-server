@@ -11,13 +11,14 @@
 
 - name: Privatebin
   containers.podman.podman_container:
-    name: privatebin-web
     image: "{{ privatebin_image }}"
-    # ports:
-    # - '8080'
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ privatebin_web_data }}:/srv/data:U,z"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: privatebin-web
     pod: privatebin
-    restart_policy: "on-failure:3"
+    restart_policy: on-failure:3
     state: "{{ privatebin_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ privatebin_web_data }}:/srv/data:U,z"

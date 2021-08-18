@@ -21,17 +21,17 @@
 
 - name: Pymedusa
   containers.podman.podman_container:
-    name: pymedusa-web
     image: "{{ pymedusa_image }}"
-    pod: pymedusa
     label:
+      diun.enable: "true"
+      diun.watch_repo: "true"
       io.containers.autoupdate: registry
+    name: pymedusa-web
+    pod: pymedusa
+    restart_policy: on-failure:3
+    state: "{{ pymedusa_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
+      - /etc/localtime:/etc/localtime:ro,z
       - "{{ pymedusa_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
       - "{{ transmission_download }}:/downloads"
-    # ports:
-    #   - 8081
-    restart_policy: "on-failure:3"
-    state: "{{ pymedusa_state }}"

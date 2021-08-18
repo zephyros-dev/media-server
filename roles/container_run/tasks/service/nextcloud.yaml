@@ -19,29 +19,29 @@
 
 - name: Nextcloud
   containers.podman.podman_container:
-    name: nextcloud-web
-    image: "{{ nextcloud_web_image }}"
     env:
-      POSTGRES_DB: "{{ nextcloud_postgres_db }}"
-      POSTGRES_USER: "{{ nextcloud_postgres_user }}"
-      POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
-      POSTGRES_HOST: "localhost:5432"
-      REDIS_HOST: "localhost"
-      REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
       NEXTCLOUD_TRUTED_DOMAINS: "{{ nextcloud_trusted_domains }}"
-      # This options is needed for authentication behind reverse proxy
-      OVERWRITEPROTOCOL: "https"
-    pod: nextcloud
-    # ports:
-    #   - 80
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ nextcloud_web_data }}:/var/www/html:z"
-      - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
-    restart_policy: "on-failure:3"
+      OVERWRITEPROTOCOL: https
+      POSTGRES_DB: "{{ nextcloud_postgres_db }}"
+      POSTGRES_HOST: localhost:5432
+      POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
+      POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+      REDIS_HOST: localhost
+      REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
+    image: "{{ nextcloud_web_image }}"
     labels:
       diun.enable: "true"
+      diun.watch_repo: "true"
+    name: nextcloud-web
+    pod: nextcloud
+    restart_policy: on-failure:3
     state: "{{ nextcloud_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ nextcloud_web_data }}:/var/www/html:z"
+      - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
+    # ports:
+    #   - 80
 
 - name: Nextcloud Redis
   containers.podman.podman_container:

@@ -19,24 +19,26 @@
 
 - name: Transmission
   containers.podman.podman_container:
-    name: transmission-web
-    image: "{{ transmission_image }}"
     env:
-      PUID: "{{ global_puid }}"
+      PASS: "{{ transmission_password }}"
       PGID: "{{ global_pgid }}"
-      #   TRANSMISSION_WEB_HOME=/combustion-release/ #optional
-      USER: "{{ transmission_user }}" #optional
-      PASS: "{{ transmission_password }}" #optional
+      PUID: "{{ global_puid }}"
+      USER: "{{ transmission_user }}"
+    image: "{{ transmission_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: transmission-web
+    pod: transmission
+    restart_policy: on-failure:3
+    state: "{{ transmission_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
+      - /etc/localtime:/etc/localtime:ro,z
       - "{{ transmission_web_config }}:/config:U,z"
       - "{{ transmission_download }}:/downloads"
-      # Watch folder for auto download
-      # - '{{ transmission_watch }}:/watch'
-    pod: transmission
     # ports:
     #   - 9091:9091
     #   - 51413
     #   - 51413/udp
-    restart_policy: "on-failure:3"
-    state: "{{ transmission_state }}"
+    # Watch folder for auto download
+    # - '{{ transmission_watch }}:/watch'

@@ -20,20 +20,21 @@
 - name: Jellyfin
   # The mpv-shim config file is conf.json
   containers.podman.podman_container:
-    name: jellyfin-web
     image: "{{ jellyfin_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: jellyfin-web
+    pod: jellyfin
+    restart_policy: on-failure:3
+    state: "{{ jellyfin_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ jellyfin_web_config }}:/config:U,z"
+      - "{{ jellyfin_web_cache }}:/cache:U,z"
+      - "{{ global_media }}:/home"
     # user: 1000:1000
     # Use host network_mode for DLNA
     # network_mode: host
     # ports:
     # - 8096
-    pod: jellyfin
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ jellyfin_web_config }}:/config:U,z"
-      - "{{ jellyfin_web_cache }}:/cache:U,z"
-      - "{{ global_media }}:/home"
-    restart_policy: "on-failure:3"
-    labels:
-      diun.enable: "true"
-    state: "{{ jellyfin_state }}"

@@ -12,12 +12,15 @@
 
 - name: SFTP
   containers.podman.podman_container:
-    name: sftp-container
-    image: "{{ sftp_image }}"
-    pod: sftp
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ sftp_volume_data }}:/home/{{ sftp_user }}/data:ro"
     command: "{{ sftp_user }}:{{ sftp_password }}:::data"
-    restart_policy: "on-failure:3"
+    image: "{{ sftp_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: sftp-container
+    pod: sftp
+    restart_policy: on-failure:3
     state: "{{ sftp_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ sftp_volume_data }}:/home/{{ sftp_user }}/data:ro"

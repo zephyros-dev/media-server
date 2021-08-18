@@ -5,15 +5,17 @@
 
 - name: Syncthing
   containers.podman.podman_container:
-    name: syncthing
-    image: "{{ syncthing_image }}"
-    # Host network, should be used for local discovery
-    network_mode: host
     env:
-      PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ syncthing_data }}:/var/syncthing:U,z"
-    restart_policy: "on-failure:3"
+      PUID: "{{ global_puid }}"
+    image: "{{ syncthing_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: syncthing
+    network_mode: host
+    restart_policy: on-failure:3
     state: "{{ syncthing_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ syncthing_data }}:/var/syncthing:U,z"

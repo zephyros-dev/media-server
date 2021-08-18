@@ -11,18 +11,21 @@
 
 - name: Prowlarr
   containers.podman.podman_container:
-    name: prowlarr-web
-    image: "{{ prowlarr_image }}"
     env:
-      PUID: "1000"
       PGID: "1000"
+      PUID: "1000"
       UMASK: "002"
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      # Remove auto mapping permission with user since the container run as root, but the prowlarr process run as user 1000
-      - "{{ prowlarr_web_config }}:/config:z"
+    image: "{{ prowlarr_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: prowlarr-web
     pod: prowlarr
+    restart_policy: on-failure:3
+    state: "{{ prowlarr_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ prowlarr_web_config }}:/config:z"
     # ports:
     #   - 9696
-    restart_policy: "on-failure:3"
-    state: "{{ prowlarr_state }}"
+    # Remove auto mapping permission with user since the container run as root, but the prowlarr process run as user 1000

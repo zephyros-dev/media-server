@@ -16,18 +16,18 @@
 
 - name: Bazarr
   containers.podman.podman_container:
-    name: bazarr-web
-    image: "{{ bazarr_image }}"
     env:
-      PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
-      # UMASK_SET: 022 #optional
+      PUID: "{{ global_puid }}"
+    image: "{{ bazarr_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: bazarr-web
+    pod: bazarr
+    restart_policy: on-failure:3
+    state: "{{ bazarr_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
+      - /etc/localtime:/etc/localtime:ro,z
       - "{{ bazarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
-    pod: bazarr
-    # ports:
-    #   - 6767
-    restart_policy: "on-failure:3"
-    state: "{{ bazarr_state }}"

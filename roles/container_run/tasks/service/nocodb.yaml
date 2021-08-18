@@ -26,12 +26,13 @@
 
 - name: Nocodb Web
   containers.podman.podman_container:
-    name: nocodb-web
-    image: "{{ nocodb_web_image }}"
     env:
-      NC_DB: "pg://localhost:5432?u={{ nocodb_db_username }}&p={{ nocodb_db_password }}&d=nocodb"
-    # ports:
-    #   - '8080:8080'
+      NC_DB: pg://localhost:5432?u={{ nocodb_db_username }}&p={{ nocodb_db_password }}&d=nocodb
+    image: "{{ nocodb_web_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: nocodb-web
     pod: nocodb
-    restart_policy: "on-failure:3"
+    restart_policy: on-failure:3
     state: "{{ nocodb_state }}"

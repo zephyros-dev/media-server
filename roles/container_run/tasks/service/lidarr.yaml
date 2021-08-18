@@ -21,19 +21,19 @@
 
 - name: Lidarr
   containers.podman.podman_container:
-    name: lidarr-web
-    image: "{{ lidarr_image }}"
     env:
-      PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
-      # - UMASK_SET=022 #optional
+      PUID: "{{ global_puid }}"
+    image: "{{ lidarr_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: lidarr-web
     pod: lidarr
-    # ports:
-    #   - 8686
+    restart_policy: on-failure:3
+    state: "{{ lidarr_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
+      - /etc/localtime:/etc/localtime:ro,z
       - "{{ lidarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
       - "{{ transmission_download }}:/downloads"
-    restart_policy: "on-failure:3"
-    state: "{{ lidarr_state }}"

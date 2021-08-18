@@ -11,17 +11,20 @@
 
 - name: Librespeed
   containers.podman.podman_container:
-    name: librespeed-web
+    env:
+      PGID: global_pgid
+      PUID: global_puid
     image: "{{ librespeed_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: librespeed-web
     pod: librespeed
+    restart_policy: on-failure:3
+    state: "{{ librespeed_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ librespeed_web_config }}:/config:U,z"
     # ports:
     # - '80:80'
-    env:
-      PUID: "global_puid"
-      PGID: "global_pgid"
-      # PASSWORD:  '{{ librespeed_password }}'
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ librespeed_web_config }}:/config:U,z"
-    restart_policy: "on-failure:3"
-    state: "{{ librespeed_state }}"
+    # PASSWORD:  '{{ librespeed_password }}'
