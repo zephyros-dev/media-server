@@ -5,10 +5,6 @@ systemd:
         name: "container_update"
         systemd_description: "Update container service"
         command: "ansible-playbook container_update.yaml"
-      - container_run:
-        name: "container_run"
-        systemd_description: "Run container service"
-        command: "ansible-playbook container_run.yaml"
       - image_prune:
         name: "image_prune"
         systemd_description: "Podman image prune service"
