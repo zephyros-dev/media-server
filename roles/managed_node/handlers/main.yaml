@@ -6,12 +6,3 @@
     state: restarted
     name: "{{ item.name }}"
   loop: "{{ systemd.podman.service }}"
-
-- name: Run the systemd timer
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    scope: user
-    enabled: yes
-    state: restarted
-    name: "{{ item.name }}"
-  loop: "{{ systemd.podman.timer }}"

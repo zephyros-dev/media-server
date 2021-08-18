@@ -5,7 +5,7 @@ After=network-online.target
 RequiresMountsFor=%h/.local/share/containers/storage %t/containers
 
 [Service]
-WorkingDirectory={{ global_container_run_path }}
+WorkingDirectory={{ systemd_working_directory }}
 ExecStart={{ command }}
 RemainAfterExit=true
 Type=oneshot

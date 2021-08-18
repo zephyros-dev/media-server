@@ -13,6 +13,7 @@
     systemd_description: "{{ item.systemd_description }}"
     systemd_playbook: "{{ item.name }}"
     command: "{{ item.command }}"
+    systemd_working_directory: "{{ item.systemd_working_directory }}"
   ansible.builtin.template:
     src: container/ansible.service.j2
     dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.service"
@@ -22,9 +23,10 @@
 - name: Template the ansible timer
   vars:
     timer_description: "{{ item.systemd_description }}"
+    timer: "{{ item.timer }}"
   ansible.builtin.template:
     src: container/ansible.timer.j2
     dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.timer"
-  loop: "{{ systemd.podman.container_update }}"
+  loop: "{{ systemd.podman.service }}"
   when: item.timer is defined
   notify: Run the systemd timer
