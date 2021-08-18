@@ -21,5 +21,8 @@
     disk_storage: "{{ disks.storage }}"
   include_tasks: "system/disk_storage.yaml"
 
+- name: Setup systemd services
+  include_tasks: "system/systemd.yaml"
+
 - name: Update all packages
   import_tasks: "system/update.yaml"
