@@ -11,18 +11,18 @@
 
 - name: Heimdall
   containers.podman.podman_container:
-    name: heimdall-web
     image: "{{ heimdall_image }}"
-    # user: '1000:1000'
-    # env:
-    #   PUID: '{{ global_puid }}'
-    #   PGID: '{{ global_pgid }}'
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ heimdall_data_config }}:/config:U,z"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: registry
+    name: heimdall-web
     pod: heimdall
+    restart_policy: on-failure:3
+    state: "{{ heimdall_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ heimdall_data_config }}:/config:U,z"
     # ports:
     #   - 80
     #   - 443
-    restart_policy: "on-failure:3"
-    state: "{{ heimdall_state }}"
