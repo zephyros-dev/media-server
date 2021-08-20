@@ -139,3 +139,6 @@ privatebin.{$CADDYFILE_PROXY_SITE} {
 navidrome.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy navidrome:4533
 }
+kavita.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy kavita:5000
+}
