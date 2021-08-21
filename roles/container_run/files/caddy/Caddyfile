@@ -142,3 +142,6 @@ navidrome.{$CADDYFILE_PROXY_SITE} {
 kavita.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy kavita:5000
 }
+komga.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy komga:8080
+}

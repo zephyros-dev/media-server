@@ -1,0 +1,30 @@
+# - name: komga data
+#   file:
+#     path: "{{ komga_volume_data }}"
+#     state: directory
+- name: komga config
+  file:
+    path: "{{ komga_volume_config }}"
+    state: directory
+
+- name: komga pod
+  containers.podman.podman_pod:
+    name: komga
+    network: caddy
+    state: "{{ komga_state }}"
+
+- name: komga
+  containers.podman.podman_container:
+    image: "{{ komga_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: komga-web
+    pod: komga
+    restart_policy: on-failure:3
+    state: "{{ komga_state }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro,z"
+      # - "{{ komga_volume_data }}:/data:U,z"
+      - "{{ komga_volume_config }}:/config:U,z"
+      - "{{ global_media }}:/home"

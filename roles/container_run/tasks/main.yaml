@@ -27,6 +27,7 @@
 - import_tasks: service/jackett.yaml
 - import_tasks: service/jellyfin.yaml
 - import_tasks: service/kavita.yaml
+- import_tasks: service/komga.yaml
 - import_tasks: service/librespeed.yaml
 - import_tasks: service/lidarr.yaml
 - import_tasks: service/mumble.yaml

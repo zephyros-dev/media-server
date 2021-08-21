@@ -1,0 +1,4 @@
+komga_state: "started"
+komga_image: "gotson/komga:latest"
+komga_volume: "{{ global_data_path }}/kavita"
+komga_volume_config: "{{ kavita_volume }}/data"
