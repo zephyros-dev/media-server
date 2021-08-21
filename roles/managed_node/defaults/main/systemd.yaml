@@ -13,3 +13,9 @@ systemd:
         command: "podman image prune --force"
         timer: "Sat *-*-* 19:00:00"
         systemd_working_directory: "%h"
+      - podman_start:
+        name: "podman-start"
+        systemd_description: "Podman start all container service"
+        command: "podman start --all"
+        systemd_working_directory: "%h"
+        enable: yes

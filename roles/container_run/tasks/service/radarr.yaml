@@ -26,6 +26,7 @@
       PUID: "{{ global_puid }}"
     image: "{{ radarr_image }}"
     labels:
+      io.containers.autoupdate: registry
       diun.enable: "true"
       diun.watch_repo: "true"
     name: radarr-web
