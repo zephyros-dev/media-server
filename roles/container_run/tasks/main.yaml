@@ -20,6 +20,7 @@
 
 - import_tasks: service/archivy.yaml
 - import_tasks: service/bazarr.yaml
+- import_tasks: service/bazarr_lite.yaml
 - import_tasks: service/calibrew.yaml
 - import_tasks: service/gitea.yaml
 - import_tasks: service/headphones.yaml
@@ -38,6 +39,7 @@
 - import_tasks: service/prowlarr.yaml
 - import_tasks: service/pymedusa.yaml
 - import_tasks: service/radarr.yaml
+- import_tasks: service/radarr_lite.yaml
 - import_tasks: service/readarr.yaml
 - import_tasks: service/scrutiny.yaml
 - import_tasks: service/sftp.yaml

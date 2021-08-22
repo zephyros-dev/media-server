@@ -1,0 +1,2 @@
+bazarr_lite_data: "{{ global_data_path }}/bazarr_lite"
+bazarr_lite_web_config: "{{ bazarr_lite_data }}/web/config"

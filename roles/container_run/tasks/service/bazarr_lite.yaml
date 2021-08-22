@@ -1,0 +1,33 @@
+- name: Global Media folder
+  file:
+    path: "{{ global_media }}"
+    state: directory
+
+- name: bazarr_lite web config
+  file:
+    path: "{{ bazarr_lite_web_config }}"
+    state: directory
+
+- name: bazarr_lite pod
+  containers.podman.podman_pod:
+    name: bazarr_lite
+    network: caddy
+    state: "{{ bazarr_state }}"
+
+- name: bazarr_lite
+  containers.podman.podman_container:
+    env:
+      PGID: "{{ global_pgid }}"
+      PUID: "{{ global_puid }}"
+    image: "{{ bazarr_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: bazarr_lite-web
+    pod: bazarr_lite
+    restart_policy: on-failure:3
+    state: "{{ bazarr_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ bazarr_lite_web_config }}:/config:U,z"
+      - "{{ global_media }}:/home"
