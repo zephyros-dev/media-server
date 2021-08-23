@@ -16,6 +16,6 @@ systemd:
       - podman_start:
         name: "podman-start"
         systemd_description: "Podman start all container service"
-        command: "podman start --all"
-        systemd_working_directory: "%h"
+        command: "ansible-playbook container_run.yaml"
+        systemd_working_directory: "{{ global_container_run_path }}"
         enable: yes

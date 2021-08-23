@@ -12,7 +12,7 @@
     daemon_reload: yes
     scope: user
     enabled: yes
-    state: restarted
+    state: enable
     name: "{{ item.name }}"
   loop: "{{ systemd.podman.service }}"
   when: "{{ item.enable }}"
