@@ -23,5 +23,5 @@
       - "/etc/localtime:/etc/localtime:ro,z"
       - "{{ pgadmin_data }}/pgadmin:/var/lib/pgadmin:U,z"
     network: caddy
-    restart_policy: "on-failure:3"
+    restart_policy: "always"
     state: "{{ pgadmin_state }}"

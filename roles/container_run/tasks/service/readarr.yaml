@@ -39,5 +39,5 @@
       - "{{ transmission_download }}:/downloads"
     labels:
       diun.enable: "true"
-    restart_policy: "on-failure:3"
+    restart_policy: "always"
     state: "{{ readarr_state }}"

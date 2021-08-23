@@ -11,14 +11,31 @@
   dnf:
     name:
       - podman
-    # enablerepo: updates-testing
+    enablerepo: updates-testing
     state: latest
+  when: podman_install_beta
+
+- name: Install podman
+  become: True
+  dnf:
+    name:
+      - podman
+    state: latest
+  when: not podman_install_beta
 
 - name: Enable podman socket
   ansible.builtin.systemd:
     daemon_reload: yes
     enabled: yes
     name: podman.socket
+    scope: user
+    state: started
+
+- name: Enable podman restart service
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: podman-restart
     scope: user
     state: started
 

@@ -23,5 +23,5 @@
     pod: jackett
     # ports:
     #   - 9117
-    restart_policy: "on-failure:3"
+    restart_policy: "always"
     state: "{{ jackett_state }}"

@@ -36,7 +36,7 @@
       - "{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:U,ro,z"
       - "{{ caddy_data_config }}:/config:U,z"
       - "{{ caddy_data_data }}:/data:U,z"
-    restart_policy: "on-failure:3"
+    restart_policy: "always"
     state: "{{ caddy_state }}"
 # To execute the restart immediately
 # - name: Flush handlers

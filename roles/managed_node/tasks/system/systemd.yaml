@@ -20,6 +20,16 @@
   loop: "{{ systemd.podman.service }}"
   notify: Run the systemd service
 
+- name: Enable the systemd service
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    scope: user
+    enabled: yes
+    state: restarted
+    name: "{{ item.name }}"
+  loop: "{{ systemd.podman.service }}"
+  when: item.enable is defined
+
 - name: Template the ansible timer
   vars:
     timer_description: "{{ item.systemd_description }}"

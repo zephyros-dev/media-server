@@ -2,20 +2,26 @@ systemd:
   podman:
     service:
       - container_update:
+        command: "ansible-playbook container_update.yaml"
         name: "container-update"
         systemd_description: "Update container service"
         systemd_working_directory: "{{ global_container_run_path }}"
-        command: "ansible-playbook container_update.yaml"
         timer: "Sat *-*-* 18:00:00"
       - image_prune:
+        command: "podman image prune --force"
         name: "image-prune"
         systemd_description: "Podman image prune service"
-        command: "podman image prune --force"
+        systemd_working_directory: "%h"
         timer: "Sat *-*-* 19:00:00"
+      - podman_pod_start:
+        command: "podman pod start --all"
+        enable: yes
+        name: "podman-pod-start"
+        systemd_description: "Podman start all container service"
         systemd_working_directory: "%h"
       - podman_start:
-        name: "podman-start"
-        systemd_description: "Podman start all container service"
-        command: "ansible-playbook container_run.yaml"
-        systemd_working_directory: "{{ global_container_run_path }}"
+        command: "podman start --all"
         enable: yes
+        name: "podman-pod-start"
+        systemd_description: "Podman start all container service"
+        systemd_working_directory: "%h"
