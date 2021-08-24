@@ -8,18 +8,18 @@
     path: "{{ transmission_download }}"
     state: directory
 
-- name: radarr_lite web config
+- name: radarr_hq web config
   file:
-    path: "{{ radarr_lite_web_config }}"
+    path: "{{ radarr_hq_web_config }}"
     state: directory
 
-- name: radarr_lite pod
+- name: radarr_hq pod
   containers.podman.podman_pod:
-    name: radarr_lite
+    name: radarr_hq
     network: caddy
     state: "{{ radarr_state }}"
 
-- name: radarr_lite
+- name: radarr_hq
   containers.podman.podman_container:
     env:
       PGID: "{{ global_pgid }}"
@@ -29,12 +29,12 @@
       io.containers.autoupdate: registry
       diun.enable: "true"
       diun.watch_repo: "true"
-    name: radarr_lite-web
-    pod: radarr_lite
+    name: radarr_hq-web
+    pod: radarr_hq
     restart_policy: on-failure:3
     state: "{{ radarr_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z
-      - "{{ radarr_lite_web_config }}:/config:U,z"
+      - "{{ radarr_hq_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
       - "{{ transmission_download }}:/downloads"

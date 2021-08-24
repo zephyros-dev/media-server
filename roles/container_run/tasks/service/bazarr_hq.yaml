@@ -3,18 +3,18 @@
     path: "{{ global_media }}"
     state: directory
 
-- name: bazarr_lite web config
+- name: bazarr_hq web config
   file:
-    path: "{{ bazarr_lite_web_config }}"
+    path: "{{ bazarr_hq_web_config }}"
     state: directory
 
-- name: bazarr_lite pod
+- name: bazarr_hq pod
   containers.podman.podman_pod:
-    name: bazarr_lite
+    name: bazarr_hq
     network: caddy
     state: "{{ bazarr_state }}"
 
-- name: bazarr_lite
+- name: bazarr_hq
   containers.podman.podman_container:
     env:
       PGID: "{{ global_pgid }}"
@@ -23,11 +23,11 @@
     labels:
       diun.enable: "true"
       diun.watch_repo: "true"
-    name: bazarr_lite-web
-    pod: bazarr_lite
+    name: bazarr_hq-web
+    pod: bazarr_hq
     restart_policy: on-failure:3
     state: "{{ bazarr_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z
-      - "{{ bazarr_lite_web_config }}:/config:U,z"
+      - "{{ bazarr_hq_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"

@@ -12,3 +12,6 @@ TODO
 TODO
 # Resources
 TODO
+# Note
+- Pods options
+  - infra: no cannot be used with custom network

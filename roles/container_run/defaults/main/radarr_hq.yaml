@@ -1,0 +1,2 @@
+radarr_hq_data: "{{ global_data_path }}/radarr_hq"
+radarr_hq_web_config: "{{ radarr_hq_data }}/web/config"
