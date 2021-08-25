@@ -34,7 +34,7 @@
       MYSQL_DATABASE: "librenms"
       MYSQL_USER: "{{ librenms_mysql_user }}"
       MYSQL_PASSWORD: "{{ librenms_mysql_password }}"
-    restart_policy: "always"
+    restart_policy: "on-failure"
     state: "{{ librenms_state }}"
 
 - name: Librenms
@@ -57,5 +57,5 @@
     volumes:
       # - '/etc/localtime:/etc/localtime:ro,z'
       - "{{ librenms_volume_web_data }}:/data:U,z"
-    restart_policy: "always"
+    restart_policy: "on-failure"
     state: "{{ librenms_state }}"

@@ -14,3 +14,4 @@
     state: restarted
     name: "{{ item.name }}.timer"
   loop: "{{ systemd.podman.service }}"
+  when: item.timer is defined

@@ -46,7 +46,7 @@
     # ports:
     #   - 3000
     #   - 2222
-    restart_policy: "always"
+    restart_policy: "on-failure"
     state: "{{ gitea_state }}"
 
 - name: Gitea database
@@ -58,7 +58,7 @@
       POSTGRES_USER: "{{ gitea_db_user }}"
       POSTGRES_PASSWORD: "{{ gitea_db_passwd }}"
       POSTGRES_DB: "{{ gitea_db_name }}"
-    restart_policy: "always"
+    restart_policy: "on-failure"
     state: "{{ gitea_state }}"
     volumes:
       - "{{ gitea_db_data }}:/var/lib/postgresql/data:U,z"

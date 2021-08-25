@@ -35,5 +35,5 @@
     pod: headphones
     # ports:
     #   - 8181
-    restart_policy: "always"
+    restart_policy: "on-failure"
     state: "{{ headphones_state }}"

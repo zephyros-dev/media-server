@@ -1,9 +1,9 @@
 [Unit]
-Description={{ timer_description }}
+Description={{ template_var.systemd_description }}
 
 [Timer]
 RandomizedDelaySec=10
-OnCalendar={{ timer }}
+OnCalendar={{ template_var.timer }}
 Persistent=true
 
 [Install]

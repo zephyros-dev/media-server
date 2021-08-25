@@ -51,7 +51,7 @@
     pod: nextcloud
     volume:
       - "/etc/localtime:/etc/localtime:ro,z"
-    restart_policy: "always"
+    restart_policy: "on-failure"
     state: "{{ nextcloud_state }}"
 
 - name: Nextcloud database
@@ -68,5 +68,5 @@
     volumes:
       - "/etc/localtime:/etc/localtime:ro,z"
       - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
-    restart_policy: "always"
+    restart_policy: "on-failure"
     state: "{{ nextcloud_state }}"

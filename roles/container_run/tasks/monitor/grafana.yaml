@@ -19,5 +19,5 @@
     volumes:
       - "/etc/localtime:/etc/localtime:ro,z"
       - "{{ grafana_volume_web_data }}:/var/lib/grafana:U,z"
-    restart_policy: "always"
+    restart_policy: "on-failure"
     state: "{{ grafana_state }}"

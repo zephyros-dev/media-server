@@ -24,6 +24,6 @@
       diun.enable: "true"
       diun.watch_repo: "true"
       io.containers.autoupdate: "registry"
-    restart_policy: "always"
+    restart_policy: "on-failure"
     state: "{{ diun_state }}"
   ignore_errors: yes
