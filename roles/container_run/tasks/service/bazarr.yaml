@@ -23,6 +23,7 @@
     labels:
       diun.enable: "true"
       diun.watch_repo: "true"
+      io.containers.autoupdate: "registry"
     name: bazarr-web
     pod: bazarr
     restart_policy: on-failure:3

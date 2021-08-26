@@ -11,18 +11,22 @@
 
 - name: Nocodb DB
   containers.podman.podman_container:
-    name: nocodb-db
-    image: "{{ nocodb_db_image }}"
     env:
+      POSTGRES_DB: nocodb
       POSTGRES_PASSWORD: "{{ nocodb_db_password }}"
       POSTGRES_USER: "{{ nocodb_db_username }}"
-      POSTGRES_DB: nocodb
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ nocodb_db_data }}:/var/lib/postgresql/data"
+    image: "{{ nocodb_db_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: registry
+    name: nocodb-db
     pod: nocodb
-    restart_policy: "on-failure"
+    restart_policy: on-failure
     state: "{{ nocodb_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ nocodb_db_data }}:/var/lib/postgresql/data"
 
 - name: Nocodb Web
   containers.podman.podman_container:
@@ -32,6 +36,7 @@
     labels:
       diun.enable: "true"
       diun.watch_repo: "true"
+      io.containers.autoupdate: registry
     name: nocodb-web
     pod: nocodb
     restart_policy: on-failure:3

@@ -28,6 +28,7 @@
     labels:
       diun.enable: "true"
       diun.watch_repo: "true"
+      io.containers.autoupdate: "registry"
     name: sonarr-web
     pod: sonarr
     restart_policy: on-failure:3

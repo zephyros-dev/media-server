@@ -21,23 +21,19 @@
 
 - name: Readarr
   containers.podman.podman_container:
-    name: readarr-web
-    image: "{{ readarr_image }}"
     env:
-      # PUID: '{{ global_puid }}'
-      # PGID: '{{ global_pgid }}'
-      PUID: "1000"
       PGID: "1000"
-      # - UMASK_SET=022 #optional
+      PUID: "1000"
+    image: "{{ readarr_image }}"
+    labels:
+      diun.enable: "true"
+      io.containers.autoupdate: "registry"
+    name: readarr-web
     pod: readarr
-    # ports:
-    #   - 8787
+    restart_policy: on-failure
+    state: "{{ readarr_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
+      - /etc/localtime:/etc/localtime:ro,z
       - "{{ readarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
       - "{{ transmission_download }}:/downloads"
-    labels:
-      diun.enable: "true"
-    restart_policy: "on-failure"
-    state: "{{ readarr_state }}"

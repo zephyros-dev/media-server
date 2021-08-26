@@ -32,6 +32,7 @@
     labels:
       diun.enable: "true"
       diun.watch_repo: "true"
+      io.containers.autoupdate: registry
     name: nextcloud-web
     pod: nextcloud
     restart_policy: on-failure:3
@@ -40,33 +41,37 @@
       - /etc/localtime:/etc/localtime:ro,z
       - "{{ nextcloud_web_data }}:/var/www/html:z"
       - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
-    # ports:
-    #   - 80
 
 - name: Nextcloud Redis
   containers.podman.podman_container:
-    name: nextcloud-redis
+    command: redis-server --requirepass {{ nextcloud_redis_host_password }}
     image: "{{ nextcloud_redis_image }}"
-    command: "redis-server --requirepass {{ nextcloud_redis_host_password }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: registry
+    name: nextcloud-redis
     pod: nextcloud
-    volume:
-      - "/etc/localtime:/etc/localtime:ro,z"
-    restart_policy: "on-failure"
+    restart_policy: on-failure
     state: "{{ nextcloud_state }}"
+    volume:
+      - /etc/localtime:/etc/localtime:ro,z
 
 - name: Nextcloud database
   containers.podman.podman_container:
-    name: nextcloud-db
-    image: "{{ nextcloud_postgres_image }}"
-    # ports:
-    #   - 5432:5432
     env:
       POSTGRES_DB: "{{ nextcloud_postgres_db }}"
-      POSTGRES_USER: "{{ nextcloud_postgres_user }}"
       POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
+      POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+    image: "{{ nextcloud_postgres_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: registry
+    name: nextcloud-db
     pod: nextcloud
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
-    restart_policy: "on-failure"
+    restart_policy: on-failure
     state: "{{ nextcloud_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"

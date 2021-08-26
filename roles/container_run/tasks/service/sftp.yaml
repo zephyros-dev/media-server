@@ -17,6 +17,7 @@
     labels:
       diun.enable: "true"
       diun.watch_repo: "true"
+      io.containers.autoupdate: "registry"
     name: sftp-container
     pod: sftp
     restart_policy: on-failure:3

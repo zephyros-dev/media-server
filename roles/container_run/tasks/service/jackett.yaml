@@ -11,17 +11,15 @@
 
 - name: Jackett
   containers.podman.podman_container:
-    name: jackett-web
-    image: "{{ jackett_image }}"
     env:
-      AUTO_UPDATE: "true" #optional
-      # - RUN_OPTS=run options here #optional
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ jackett_web_config }}:/config:U,z"
-      # - path to blackhole:/downloads
+      AUTO_UPDATE: "true"
+    image: "{{ jackett_image }}"
+    labels:
+      io.containers.autoupdate: registry
+    name: jackett-web
     pod: jackett
-    # ports:
-    #   - 9117
-    restart_policy: "on-failure"
+    restart_policy: on-failure
     state: "{{ jackett_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ jackett_web_config }}:/config:U,z"

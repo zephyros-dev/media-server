@@ -18,6 +18,7 @@
     labels:
       diun.enable: "true"
       diun.watch_repo: "true"
+      io.containers.autoupdate: "registry"
     name: scrutiny-web
     pod: scrutiny
     restart_policy: on-failure:3
