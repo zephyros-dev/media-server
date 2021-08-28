@@ -1,0 +1,28 @@
+- name: Syncthing data folder
+  file:
+    path: "{{ syncthing_data }}"
+    state: directory
+
+- name: Syncthing
+  containers.podman.podman_container:
+    env:
+      PGID: "{{ global_pgid }}"
+      PUID: "{{ global_puid }}"
+    image: "{{ syncthing_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: "registry"
+    name: syncthing
+    network_mode: host
+    restart_policy: on-failure:3
+    state: "{{ syncthing_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ syncthing_data }}:/var/syncthing:U,z"
+
+- name: Install systemd
+  vars:
+    service_name: syncthing
+    service_state: "{{ syncthing_state }}"
+  import_tasks: systemd.yaml

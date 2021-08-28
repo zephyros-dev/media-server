@@ -1,0 +1,38 @@
+- name: Prowlarr web config
+  file:
+    path: "{{ prowlarr_web_config }}"
+    state: directory
+
+- name: Prowlarr pod
+  containers.podman.podman_pod:
+    name: prowlarr
+    network: caddy
+    state: "{{ prowlarr_state }}"
+
+- name: Prowlarr
+  containers.podman.podman_container:
+    env:
+      PGID: "1000"
+      PUID: "1000"
+      UMASK: "002"
+    image: "{{ prowlarr_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: registry
+    name: prowlarr-web
+    pod: prowlarr
+    restart_policy: on-failure:3
+    state: "{{ prowlarr_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ prowlarr_web_config }}:/config:z"
+    # ports:
+    #   - 9696
+    # Remove auto mapping permission with user since the container run as root, but the prowlarr process run as user 1000
+
+- name: Install systemd
+  vars:
+    service_name: prowlarr
+    service_state: "{{ prowlarr_state }}"
+  import_tasks: systemd.yaml

@@ -1,0 +1,29 @@
+- name: Create grafana web data folder
+  file:
+    path: "{{ grafana_volume_web_data }}"
+    state: directory
+
+- name: Grafana pod
+  containers.podman.podman_pod:
+    name: grafana
+    network: caddy
+    state: "{{ grafana_state }}"
+
+- name: Grafana
+  containers.podman.podman_container:
+    name: grafana-web
+    image: "{{ grafana_web_image }}"
+    pod: grafana
+    # ports:
+    #   - '3000'
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro,z"
+      - "{{ grafana_volume_web_data }}:/var/lib/grafana:U,z"
+    restart_policy: "on-failure"
+    state: "{{ grafana_state }}"
+
+- name: Install systemd
+  vars:
+    service_name: grafana
+    service_state: "{{ grafana_state }}"
+  import_tasks: systemd.yaml

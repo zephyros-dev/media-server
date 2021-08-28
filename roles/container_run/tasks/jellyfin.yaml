@@ -1,0 +1,47 @@
+- name: Global Media folder
+  file:
+    path: "{{ global_media }}"
+    state: directory
+- name: Jellyfin config folder
+  file:
+    path: "{{ jellyfin_web_config }}"
+    state: directory
+- name: Jellyfin cache folder
+  file:
+    path: "{{ jellyfin_web_cache }}"
+    state: directory
+
+- name: Jellyfin pod
+  containers.podman.podman_pod:
+    name: jellyfin
+    network: caddy
+    state: "{{ jellyfin_state }}"
+
+- name: Jellyfin
+  # The mpv-shim config file is conf.json
+  containers.podman.podman_container:
+    image: "{{ jellyfin_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: "registry"
+    name: jellyfin-web
+    pod: jellyfin
+    restart_policy: on-failure:3
+    state: "{{ jellyfin_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ jellyfin_web_config }}:/config:U,z"
+      - "{{ jellyfin_web_cache }}:/cache:U,z"
+      - "{{ global_media }}:/home"
+    # user: 1000:1000
+    # Use host network_mode for DLNA
+    # network_mode: host
+    # ports:
+    # - 8096
+
+- name: Install systemd
+  vars:
+    service_name: jellyfin
+    service_state: "{{ jellyfin_state }}"
+  import_tasks: systemd.yaml

@@ -1,0 +1,51 @@
+- name: Transmission Download folder
+  file:
+    path: "{{ transmission_download }}"
+    state: directory
+
+- name: Transmission web config
+  file:
+    path: "{{ transmission_web_config }}"
+    state: directory
+
+- name: Transmission pod
+  containers.podman.podman_pod:
+    name: transmission
+    network: caddy
+    ports:
+      - "51413:51413/tcp"
+      - "51413:51413/udp"
+    state: "{{ transmission_state }}"
+
+- name: Transmission
+  containers.podman.podman_container:
+    env:
+      PASS: "{{ transmission_password }}"
+      PGID: "{{ global_pgid }}"
+      PUID: "{{ global_puid }}"
+      USER: "{{ transmission_user }}"
+    image: "{{ transmission_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: "registry"
+    name: transmission-web
+    pod: transmission
+    restart_policy: on-failure:3
+    state: "{{ transmission_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ transmission_web_config }}:/config:U,z"
+      - "{{ transmission_download }}:/downloads"
+    # ports:
+    #   - 9091:9091
+    #   - 51413
+    #   - 51413/udp
+    # Watch folder for auto download
+    # - '{{ transmission_watch }}:/watch'
+
+- name: Install systemd
+  vars:
+    service_name: transmission
+    service_state: "{{ transmission_state }}"
+  import_tasks: systemd.yaml

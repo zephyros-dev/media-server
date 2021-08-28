@@ -1,0 +1,40 @@
+- name: Global Media folder
+  file:
+    path: "{{ global_media }}"
+    state: directory
+
+- name: bazarr_hq web config
+  file:
+    path: "{{ bazarr_hq_web_config }}"
+    state: directory
+
+- name: bazarr_hq pod
+  containers.podman.podman_pod:
+    name: bazarr_hq
+    network: caddy
+    state: "{{ bazarr_state }}"
+
+- name: bazarr_hq
+  containers.podman.podman_container:
+    env:
+      PGID: "{{ global_pgid }}"
+      PUID: "{{ global_puid }}"
+    image: "{{ bazarr_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: "registry"
+    name: bazarr_hq-web
+    pod: bazarr_hq
+    # restart_policy: on-failure:3
+    state: "{{ bazarr_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ bazarr_hq_web_config }}:/config:U,z"
+      - "{{ global_media }}:/home"
+
+- name: Install systemd
+  vars:
+    service_name: bazarr_hq
+    service_state: "{{ bazarr_state }}"
+  import_tasks: systemd.yaml

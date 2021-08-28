@@ -1,22 +1,22 @@
 systemd:
   podman:
     service:
-      - container_update:
-        command: "podman auto-update"
-        name: "container-update"
-        systemd_description: "Update container service"
-        systemd_working_directory: "%h"
-        timer: "Sat *-*-* 18:00:00"
+      # - container_update:
+      #   command: "podman auto-update"
+      #   name: "container-update"
+      #   systemd_description: "Update container service"
+      #   systemd_working_directory: "%h"
+      #   timer: "Sat *-*-* 18:00:00"
       - image_prune:
         command: "podman image prune --force"
         name: "image-prune"
         systemd_description: "Podman image prune service"
         systemd_working_directory: "%h"
         timer: "Sat *-*-* 19:00:00"
-      - podman_start:
-        pre_command: "podman pod start --all"
-        command: "podman start --all"
-        enable: yes
-        name: "podman-start"
-        systemd_description: "Podman start all container service"
-        systemd_working_directory: "%h"
+      # - podman_start:
+      #   pre_command: "podman pod start --all"
+      #   command: "podman start --all"
+      #   enable: yes
+      #   name: "podman-start"
+      #   systemd_description: "Podman start all container service"
+      #   systemd_working_directory: "%h"

@@ -1,0 +1,46 @@
+- name: Global Media folder
+  file:
+    path: "{{ global_media }}"
+    state: directory
+
+- name: Transmission Download folder
+  file:
+    path: "{{ transmission_download }}"
+    state: directory
+
+- name: radarr_hq web config
+  file:
+    path: "{{ radarr_hq_web_config }}"
+    state: directory
+
+- name: radarr_hq pod
+  containers.podman.podman_pod:
+    name: radarr_hq
+    network: caddy
+    state: "{{ radarr_state }}"
+
+- name: radarr_hq
+  containers.podman.podman_container:
+    env:
+      PGID: "{{ global_pgid }}"
+      PUID: "{{ global_puid }}"
+    image: "{{ radarr_image }}"
+    labels:
+      io.containers.autoupdate: registry
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    name: radarr_hq-web
+    pod: radarr_hq
+    restart_policy: on-failure:3
+    state: "{{ radarr_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ radarr_hq_web_config }}:/config:U,z"
+      - "{{ global_media }}:/home"
+      - "{{ transmission_download }}:/downloads"
+
+- name: Install systemd
+  vars:
+    service_name: radarr_hq
+    service_state: "{{ radarr_state }}"
+  import_tasks: systemd.yaml

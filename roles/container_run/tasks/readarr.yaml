@@ -1,0 +1,45 @@
+- name: Global Media folder
+  file:
+    path: "{{ global_media }}"
+    state: directory
+
+- name: Transmission Download folder
+  file:
+    path: "{{ transmission_download }}"
+    state: directory
+
+- name: Readarr web config
+  file:
+    path: "{{ readarr_web_config }}"
+    state: directory
+
+- name: Readarr pod
+  containers.podman.podman_pod:
+    name: readarr
+    network: caddy
+    state: "{{ readarr_state }}"
+
+- name: Readarr
+  containers.podman.podman_container:
+    env:
+      PGID: "1000"
+      PUID: "1000"
+    image: "{{ readarr_image }}"
+    labels:
+      diun.enable: "true"
+      io.containers.autoupdate: "registry"
+    name: readarr-web
+    pod: readarr
+    restart_policy: on-failure
+    state: "{{ readarr_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ readarr_web_config }}:/config:U,z"
+      - "{{ global_media }}:/home"
+      - "{{ transmission_download }}:/downloads"
+
+- name: Install systemd
+  vars:
+    service_name: readarr
+    service_state: "{{ readarr_state }}"
+  import_tasks: systemd.yaml

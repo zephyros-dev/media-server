@@ -1,2 +1,0 @@
-- name: Run podman container at startup
-  ansible.builtin.command: podman start --all
