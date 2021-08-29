@@ -1,6 +1,6 @@
 - import_tasks: network.yaml
 - import_tasks: caddy.yaml
-- import_tasks: netshoot.yaml
+# - import_tasks: netshoot.yaml
 - import_tasks: diun.yaml
 - import_tasks: grafana.yaml
 - import_tasks: librenms.yaml

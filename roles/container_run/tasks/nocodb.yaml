@@ -44,6 +44,6 @@
 
 - name: Install systemd
   vars:
-    service_name: prowlarr
-    service_state: "{{ prowlarr_state }}"
+    service_name: nocodb
+    service_state: "{{ nocodb_state }}"
   import_tasks: systemd.yaml
