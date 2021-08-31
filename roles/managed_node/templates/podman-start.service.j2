@@ -1,10 +1,11 @@
 [Unit]
 Description={{ template_var.systemd_description }}
-Wants=network.target
+Wants=network-online.target
 After=network-online.target
 RequiresMountsFor=%h/.local/share/containers/storage %t/containers
 
 [Service]
+Restart=on-failure
 WorkingDirectory={{ template_var.systemd_working_directory }}
 ExecStartPre={{ template_var.pre_command }}
 ExecStart={{ template_var.command }}
