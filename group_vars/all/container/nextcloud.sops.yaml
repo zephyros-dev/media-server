@@ -4,7 +4,6 @@ nextcloud_postgres_password: ENC[AES256_GCM,data:JWL4jdOuKgH5mAcQl7/MlqU7ztE=,iv
 nextcloud_postgres_host: ENC[AES256_GCM,data:Q3vFSEq44EU4wSJbvh8=,iv:+lOmM2Mfw6X6G9yzfHUaKL5kuAZo1Tf9m9pIjGc0Qbo=,tag:Vi2Sjdgdjb9WgnP5ESxEhA==,type:str]
 nextcloud_redis_host: ENC[AES256_GCM,data:WWWGIHOEoSZZ,iv:C6yz7c16fVkTkaJcldktOHeCnTNWev54hazsq1Yp3hc=,tag:gxh6c26nQKV09SSjDBU2Yw==,type:str]
 nextcloud_redis_host_password: ENC[AES256_GCM,data:OUwAx2iERkB4Eki/knbdRiw0sKk=,iv:TdtgWWGiTBvc79XGFQz8wZmODgEa6cOny9/xcXYYujg=,tag:FvXiTRQ9NpCfr/p63YEJ9g==,type:str]
-nextcloud_trusted_domains: ENC[AES256_GCM,data:HwZo0YytHnpdqA1y8qcNflR8AUKWVHU+8Qbkd+0aiM2AFDY/0KRIjhaF,iv:qs5XtQphvStRTyMcVmvlEAfIs6nRHP6leZkVqQX7emY=,tag:5oJvlju+r2DYdymNKcuWig==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -20,8 +19,8 @@ sops:
             K2U0N2JuazZCOUpJVzhtMS9PclMvSEEK8zJ+TEnXMuGxjYWpLENP5hbKSJV7xPbR
             xwuRJ2ffC7eXy+Jh52SVZV4hTZCNHt31XwJeNu2l7jAKxTALgIP+TA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-07-25T11:29:08Z"
-    mac: ENC[AES256_GCM,data:awA9B1RaijtR5LAV5+w7XdtN/QdArc54TOp/sFW0P7tZFZ4Sxli+8aGlhEBEeC9VkpK23Ii1g/K//xcGA2lxXx/oXls5x7HMt6shrfMw875wVVOvLloa/ibXjJP7IIwquyTAitPBF0KrHMEiOR5Rrc1GzdkeuionQAeKxTUvhKo=,iv:XHtLrOMk/8WhXGs1ZbGFMmzXbSdwoe/hNEPOLtoMEjo=,tag:EBBGEkLhthW7+elGVNaxjg==,type:str]
+    lastmodified: "2021-08-31T14:37:05Z"
+    mac: ENC[AES256_GCM,data:VeQyg/8jGoK2oLlt5Gh0p+KJ7hElDV9pKGGmUWpn7WY1y/PmYem8hfREcA+Sl0FgJmEwEN+J/X2L1eZhWEE1KnYpUuN3Hc5JOpb2AzxldNVhnq5L9NWuStP07VyU0BbanFmYMpDi1+a81159SV5c+6O2wAsIE3nFCgwVD5Wc3AM=,iv:VDjTMnV/ElyajhO8i+tq3d45hLKM2ZlMcosArHOjnDM=,tag:fcyeFCtBe0kKHRBtg/jbbQ==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.7.1

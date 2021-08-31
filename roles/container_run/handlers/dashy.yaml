@@ -1,0 +1,21 @@
+# - name: Restart dashy
+#   containers.podman.podman_container:
+#     name: dashy-web
+#     force_restart: yes
+#   # TODO: Restart only when dashy exists
+
+- name: Recreate dashy
+  containers.podman.podman_container:
+    image: "{{ dashy_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: registry
+    name: dashy-web
+    pod: dashy
+    recreate: yes
+    restart_policy: on-failure:3
+    state: "{{ dashy_state }}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ dashy_volume_config }}/conf.yml:/app/public/conf.yml:ro,z"

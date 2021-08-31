@@ -3,3 +3,6 @@
 
 - name: Restart Gitea
   import_tasks: gitea.yaml
+
+- name: Recreate dashy
+  import_tasks: dashy.yaml

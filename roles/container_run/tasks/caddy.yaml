@@ -19,12 +19,12 @@
     name: caddy
     image: "{{ caddy_image }}"
     env:
-      CADDYFILE_ZEROSSL_EMAIL: "{{ caddy_caddyfile_zerossl_email }}"
-      CADDYFILE_PROXY_SITE: "{{ caddy_caddyfile_proxy_site }}"
-      CADDYFILE_HOST_ADDRESS: "{{ caddy_caddyfile_host_address }}"
-      CADDYFILE_BASIC_AUTH_USER: "{{ caddy_caddyfile_basic_auth_user }}"
-      CADDYFILE_BASIC_AUTH_PASS: "{{ caddy_caddyfile_basic_auth_pass }}"
       CADDYFILE_AUTH_TOKEN: "{{ caddy_caddyfile_auth_token }}"
+      CADDYFILE_BASIC_AUTH_PASS: "{{ caddy_caddyfile_basic_auth_pass }}"
+      CADDYFILE_BASIC_AUTH_USER: "{{ caddy_caddyfile_basic_auth_user }}"
+      CADDYFILE_HOST_ADDRESS: "{{ caddy_caddyfile_host_address }}"
+      CADDYFILE_PROXY_SITE: "{{ server_domain }}"
+      CADDYFILE_ZEROSSL_EMAIL: "{{ caddy_caddyfile_zerossl_email }}"
     network:
       - caddy
     ports:

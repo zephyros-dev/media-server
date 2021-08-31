@@ -5,6 +5,7 @@ global_data_path: ENC[AES256_GCM,data:lvj2VuvhBgeHVJ6IduIU3+5KadJO6Mq5DTejzOymRy
 global_media: ENC[AES256_GCM,data:EPQlmpqLjikSrMiohu5DM7h9,iv:illfz9o2MxIrSw2mPlIbg2OJ3YrFENP3F3Fjk3omWB4=,tag:BertaLBlgQvdmDsRtZmqdQ==,type:str]
 global_container_run_path: ENC[AES256_GCM,data:aakqq5TEZBH+4LJ1FONVBJLlyX+npPQ1GOz9Y5db,iv:5J2aOfYr+v4KnKKEfA3ZkkgeLGtZT7p3psIGMa4VOAg=,tag:yOFhYwcpXmJ8JHGnV3uifw==,type:str]
 github_username: ENC[AES256_GCM,data:ak/XHR4uPMNUqaFz,iv:lzTT9idE+9s9UJmHIVtVVdkjk0ijqsP4P2sxTZqQIDw=,tag:guRbyuCWXxyRdN1quDWeew==,type:str]
+server_domain: ENC[AES256_GCM,data:mf6zV3iBH9WGsNHa+8r+A/LUmzr7jOA=,iv:h3s4Mzwu35KkYXpt+pByNdpXBmkpBYmfTDU5uI7wcoE=,tag:o9hV3Cs+fsk2DUhvsaH5Sw==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -20,8 +21,8 @@ sops:
             QlJIUUNEV2w3T09CdmVDdXdqSFlNRXMKo8XsfaCbK3AkPsZPzQJqjsbG6/5xvFRR
             upBwi0n/bFlhgk48ZV0Aecfv9vOgeYWW32PdgnheRvLSRIKvd1ozTQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-08-07T08:11:40Z"
-    mac: ENC[AES256_GCM,data:Vks1v/goqNaDdML22Y9RhhPZK1SzkjjQVt9/78kGv0OqSQwlg2/72+psKE8ri874fGIvtRE67t36HgO6j3A2DgkWP3C0aGEa3h5iAvB3b3xW1r8k9Iydds0Bo05XrXbuaRajIPJUrJ9iSjDtFs++1UHts1J4S8p9n1bw5cnws0I=,iv:8mXPlqbFqgK9dtXYiM9VXrKSiNCpuGoQXKtCZ1DNqQo=,tag:QDA1u/JKMFctiTJfDI9DWQ==,type:str]
+    lastmodified: "2021-08-31T13:30:37Z"
+    mac: ENC[AES256_GCM,data:VTaS3U8vUJxL1gr68AwzPiv0fup7sujxz+SucuaB7mITsfttNVYaIUF9HGaRef4bnZV3Z19V/QpwlzMSsdpFKpQBzjTIzmvtdyx40A7Afhxm6hGBg3vFyOhv/ND6rtsXqgzCBm1lTHgq/70p3yBHpOMNgWD+0r2UnYBU3KpkhnY=,iv:E+Ds5r7927Ia1DQFzD+JwNUd/O4++S+LZ3WhcghB+aY=,tag:cOjHZ+eWaTtxO/kSCVX3Mw==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.7.1

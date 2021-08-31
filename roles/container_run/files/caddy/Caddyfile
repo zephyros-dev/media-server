@@ -130,6 +130,7 @@ headphones.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy headphones:8181
 }
 prowlarr.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy prowlarr:9696
 }
 transmission.{$CADDYFILE_PROXY_SITE} {
@@ -152,4 +153,7 @@ kavita.{$CADDYFILE_PROXY_SITE} {
 }
 komga.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy komga:8080
+}
+dashy.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy dashy:80
 }

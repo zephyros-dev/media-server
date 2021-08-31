@@ -1,0 +1,4 @@
+dashy_state: started
+dashy_image: lissy93/dashy:latest
+dashy_volume: "{{ global_data_path }}/dashy"
+dashy_volume_config: "{{ dashy_volume }}/config"

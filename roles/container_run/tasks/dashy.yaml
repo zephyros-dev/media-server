@@ -1,0 +1,23 @@
+- name: Dashy config folder
+  file:
+    path: "{{ dashy_volume_config }}"
+    state: directory
+
+- name: dashy pod
+  containers.podman.podman_pod:
+    name: dashy
+    network: caddy
+    state: "{{ dashy_state }}"
+
+- name: Template dashy config
+  ansible.builtin.template:
+    src: "dashy/conf.yml.j2"
+    dest: "{{ dashy_volume_config }}/conf.yml"
+  notify:
+    - Recreate dashy
+
+- name: Install systemd
+  vars:
+    service_name: dashy
+    service_state: "{{ dashy_state }}"
+  import_tasks: systemd.yaml

@@ -1,5 +1,4 @@
 caddy_caddyfile_zerossl_email: ENC[AES256_GCM,data:6XtD2JiFPLt0RJPpHNy9aotqT/TZ6Oo=,iv:siGTC5gfvlusQ1ZYG16HTwX0kIsFFDPEhaW3CusUgWA=,tag:h+ehuCMKlMp4jm08rbV2HA==,type:str]
-caddy_caddyfile_proxy_site: ENC[AES256_GCM,data:CE+tZ3xExPUsB7G5AoDAm6AntEDlPF8=,iv:rVdlJhybXPFppLk2AT6W6gaQ9TCIUgTbRDoYL2pYanE=,tag:gFngWQwu/MxMzJoJGH/FQQ==,type:str]
 caddy_caddyfile_basic_auth_user: ENC[AES256_GCM,data:gLYXkUY=,iv:zt4QK/JMY/WSdWH/VpR6HSSJZ6UWJajMpea0N+6a1zM=,tag:EZ2mD3RmZvGhXzpN3q3lYA==,type:str]
 caddy_caddyfile_basic_auth_pass: ENC[AES256_GCM,data:J75Rcn8MLofFea0G5Y9C/SL54jFAgwJN42nN3pobXos7SbXjTdrUv9lBoJFTz9/pPKvs8pKjTgGw/bF+l4LvdN6HlufBoyxTAYqJU0MKcUQ=,iv:hgMmWnrKdA9rj6Z42l6Ax3e6xk923f/wDs4Jdh28nQg=,tag:dewI3zU4NGgkP8x3rRcP4Q==,type:str]
 sops:
@@ -17,8 +16,8 @@ sops:
             NVFTc2NXdkJWUUo1dTlwNENUOXJVT1kKSLU0kBDyViaTLoyF76jShsOd21SFNngk
             Ez1GQtVUd271ufVDYQUz+SGBh2Nch/VwkPXVmOzy434guwB6eW6LxA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-08-26T12:50:09Z"
-    mac: ENC[AES256_GCM,data:niVf4MZq5DTvhXnBQs3tyTje96Yq+qs/BKDwvyM1qDciBqXj/o5+FRh785IOVxc0w/br+E+yIH65ml91W5nxzf7KXuV24sWduzMoJC9MfbxYXywIneJUMLwoCZeYYJRHWySHfK1wWJmmrA+LcPulthDSaCUL1ul/tDcRJK38Xxw=,iv:QfB8CNq/K+BSnA+Qb8E/swtxirY2r+GnIdjQMu3/e74=,tag:vzh47fOf9aZhF72T08Kdmg==,type:str]
+    lastmodified: "2021-08-31T13:43:09Z"
+    mac: ENC[AES256_GCM,data:s2EtCqld7Gy9w0OzFxLY3rIyBN9kGn9HWrPuhFc/PKvXu5XYmTjC/jlPLmdrqCAMRaHNTpnAp/7T/ciHP9HB3TgxG+eDB0cjMyDKKV1YFfpC0JxsKVSJaZ0HOAIN3keFeBNda/nENvnjehp3lMzGTCGIeqSD3Rqvk1bjd1S37DE=,iv:jiH21MZjTR6NyH3KZm1HPyI6kxsMRh+gvN4aTyjkAUE=,tag:eXAWIMkpwCub96aFvrhjxA==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.7.1
