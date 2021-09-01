@@ -11,82 +11,126 @@ pageInfo:
       path: https://github.com/phongngthanh/podman-ansible
 appConfig:
   statusCheck: true
-  disableWebSearch: true
-#  hideComponents:
+  theme: Material
 sections:
   - name: Personal
     items:
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://nextcloud:80
         title: Nextcloud
         url: https://nextcloud.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://{{ caddy_caddyfile_host_address }}:8384
         title: Syncthing
         url: https://syncthing.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://nocodb:8080
         title: Nocodb
         url: https://nocodb.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://gitea:3000
         title: Gitea
         url: https://gitea.{{ server_domain }}
   - name: Media Consumption
     items:
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://jellyfin:8096      
         title: Jellyfin
         url: https://jellyfin.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://navidrome:4533
         title: Navidrome
         url: https://navidrome.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://calibrew:8083
         title: Calibreweb
         url: https://calibrew.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://kavita:5000
         title: Kavita
         url: https://kavita.{{ server_domain }}
   - name: Media management
     items:
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://radarr:7878
         title: Radarr
         url: https://radarr.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://bazarr:6767
         title: Bazarr
         url: https://bazarr.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://radarr_hq:7878
         title: Radarr-HQ
         url: https://radarr-hq.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://bazarr_hq:6767
         title: Bazarr-HQ
         url: https://bazarr-hq.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://pymedusa:8081
         title: Pymedusa
         url: https://pymedusa.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://prowlarr:9696
         title: Prowlarr
         url: https://prowlarr.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://lidarr:8686
         title: Lidarr
         url: https://lidarr.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://jackett:9117
         title: Jackett
         url: https://jackett.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://headphones:8181
         title: Headphones
         url: https://headphones.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://transmission:9091
         title: Transmission
         url: https://transmission.{{ server_domain }}
+        # TODO: Add Authorization header
   - name: Monitoring
     items:
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://{{ caddy_caddyfile_host_address }}:19999
         title: Netdata
         url: https://netdata.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://librespeed:80
         title: Librespeed
         url: https://librespeed.{{ server_domain }}
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://{{ caddy_caddyfile_host_address }}:8080
         title: Scrutiny
         url: https://scrutiny.{{ server_domain }}
   - name: Misc
     items:
       - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://privatebin:8080
         title: Privatebin
         url: https://privatebin.{{ server_domain }}
