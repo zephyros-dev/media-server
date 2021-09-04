@@ -39,7 +39,7 @@
       io.containers.autoupdate: registry
     name: nocodb-web
     pod: nocodb
-    restart_policy: on-failure:3
+    restart_policy: on-failure
     state: "{{ nocodb_state }}"
 
 - name: Install systemd

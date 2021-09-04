@@ -26,7 +26,7 @@
       io.containers.autoupdate: "registry"
     name: calibrew-web
     pod: calibrew
-    restart_policy: on-failure:3
+    restart_policy: on-failure
     state: "{{ calibrew_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

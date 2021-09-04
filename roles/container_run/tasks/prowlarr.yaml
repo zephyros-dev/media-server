@@ -22,7 +22,7 @@
       io.containers.autoupdate: registry
     name: prowlarr-web
     pod: prowlarr
-    restart_policy: on-failure:3
+    restart_policy: on-failure
     state: "{{ prowlarr_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

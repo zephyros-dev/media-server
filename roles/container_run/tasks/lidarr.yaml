@@ -31,7 +31,7 @@
       io.containers.autoupdate: "registry"
     name: lidarr-web
     pod: lidarr
-    restart_policy: on-failure:3
+    restart_policy: on-failure
     state: "{{ lidarr_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

@@ -14,7 +14,7 @@
     name: dashy-web
     pod: dashy
     recreate: yes
-    restart_policy: on-failure:3
+    restart_policy: on-failure
     state: "{{ dashy_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

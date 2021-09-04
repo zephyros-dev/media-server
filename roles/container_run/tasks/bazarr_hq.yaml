@@ -26,7 +26,7 @@
       io.containers.autoupdate: "registry"
     name: bazarr_hq-web
     pod: bazarr_hq
-    # restart_policy: on-failure:3
+    # restart_policy: on-failure
     state: "{{ bazarr_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

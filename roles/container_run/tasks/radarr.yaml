@@ -31,7 +31,7 @@
       diun.watch_repo: "true"
     name: radarr-web
     pod: radarr
-    restart_policy: on-failure:3
+    restart_policy: on-failure
     state: "{{ radarr_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

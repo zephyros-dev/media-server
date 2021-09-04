@@ -21,7 +21,7 @@
       io.containers.autoupdate: "registry"
     name: scrutiny-web
     pod: scrutiny
-    restart_policy: on-failure:3
+    restart_policy: on-failure
     state: "{{ scrutiny_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

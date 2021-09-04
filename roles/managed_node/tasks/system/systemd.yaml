@@ -8,17 +8,13 @@
   when:
     - not user_lingering.stat.exists
 
-- name: Template the ansible systemd service
+- name: Template the systemd service
   vars:
-    # systemd_description: "{{ item.systemd_description }}"
-    # systemd_playbook: "{{ item.name }}"
-    # command: "{{ item.command }}"
-    # systemd_working_directory: "{{ item.systemd_working_directory }}"
     template_var: "{{ item }}"
   ansible.builtin.template:
     src: "{{ item.name }}.service.j2"
     dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.service"
-  loop: "{{ systemd.podman.service }}"
+  loop: "{{ systemd.service }}"
   notify: Run the systemd service
 
 - name: Enable the systemd service
@@ -28,10 +24,10 @@
     enabled: yes
     state: restarted
     name: "{{ item.name }}"
-  loop: "{{ systemd.podman.service }}"
+  loop: "{{ systemd.service }}"
   when: item.enable is defined
 
-- name: Template the ansible timer
+- name: Template the timer
   vars:
     # timer_description: "{{ item.systemd_description }}"
     # timer: "{{ item.timer }}"
@@ -39,6 +35,6 @@
   ansible.builtin.template:
     src: "{{ item.name }}.timer.j2"
     dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.timer"
-  loop: "{{ systemd.podman.service }}"
+  loop: "{{ systemd.timer }}"
   when: item.timer is defined
   notify: Run the systemd timer

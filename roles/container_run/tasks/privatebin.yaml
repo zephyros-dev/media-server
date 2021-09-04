@@ -18,7 +18,7 @@
       io.containers.autoupdate: "registry"
     name: privatebin-web
     pod: privatebin
-    restart_policy: on-failure:3
+    restart_policy: on-failure
     state: "{{ privatebin_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

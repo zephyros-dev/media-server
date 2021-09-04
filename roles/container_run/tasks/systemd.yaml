@@ -1,50 +1,50 @@
-# - name: "Check if {{ service_name }} systemd file exists"
-#   ansible.builtin.stat:
-#     path: "~/.config/systemd/user/service-{{ service_name }}.service"
-#   register: systemd_state
+- name: "Check if {{ service_name }} systemd file exists"
+  ansible.builtin.stat:
+    path: "~/.config/systemd/user/service-{{ service_name }}.service"
+  register: systemd_state
 
-# - name: "Install {{ service_name }} systemd"
-#   ansible.builtin.command:
-#     chdir: ~/.config/systemd/user
-#     cmd: "podman generate systemd --new --files --no-header --container-prefix service --pod-prefix service {{ service_name }}"
-#   register: systemd_files
-#   when: service_state == "started" and not systemd_state.stat.exists
+- name: "Install {{ service_name }} systemd"
+  ansible.builtin.command:
+    chdir: ~/.config/systemd/user
+    cmd: "podman generate systemd --new --name --files --no-header --container-prefix service --pod-prefix service {{ service_name }}"
+  register: systemd_files
+  when: service_state == "started" and not systemd_state.stat.exists
 
-# - name: "Remove current {{ service_name }} pod"
-#   containers.podman.podman_pod:
-#     name: "{{ service_name }}"
+- name: "Remove current {{ service_name }} pod"
+  containers.podman.podman_pod:
+    name: "{{ service_name }}"
+    state: absent
+  when: service_state == "started" and not systemd_state.stat.exists
+
+- name: "Remove current {{ service_name }} container"
+  containers.podman.podman_container:
+    name: "{{ service_name }}"
+    state: absent
+  when: not systemd_state.stat.exists
+
+- name: "Enable {{ service_name }} systemd service"
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: service-{{ service_name }}
+    scope: user
+    state: started
+  when: service_state == "started"
+  # When running the systemd unit for the first time, the unit returns error. It still runs later on however.
+  ignore_errors: yes
+
+- name: "Disable {{ service_name }} systemd service"
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    enabled: no
+    name: service-{{ service_name }}
+    scope: user
+    state: stopped
+  when: service_state == "absent" and systemd_state.stat.exists
+# TODO: Remove systemd service files
+# - name: "Remove {{ service_name }} systemd files"
+#   ansible.builtin.file:
+#     path: "{{ item }}"
 #     state: absent
-#   when: service_state == "started" and not systemd_state.stat.exists
-
-# - name: "Remove current {{ service_name }} container"
-#   containers.podman.podman_container:
-#     name: "{{ service_name }}"
-#     state: absent
-#   when: not systemd_state.stat.exists
-
-# - name: "Enable {{ service_name }} systemd service"
-#   ansible.builtin.systemd:
-#     daemon_reload: yes
-#     enabled: yes
-#     name: service-{{ service_name }}
-#     scope: user
-#     state: started
-#   when: service_state == "started"
-#   # When running the systemd unit for the first time, the unit returns error. It still runs later on however.
-#   ignore_errors: yes
-
-# - name: "Disable {{ service_name }} systemd service"
-#   ansible.builtin.systemd:
-#     daemon_reload: yes
-#     enabled: no
-#     name: service-{{ service_name }}
-#     scope: user
-#     state: stopped
-#   when: service_state == "absent" and systemd_state.stat.exists
-# # TODO: Remove systemd service files
-# # - name: "Remove {{ service_name }} systemd files"
-# #   ansible.builtin.file:
-# #     path: "{{ item }}"
-# #     state: absent
-# #   loop: "{{ systemd_files.stdout_lines }}"
-# #   when: service_state == "absent" and not systemd_files
+#   loop: "{{ systemd_files.stdout_lines }}"
+#   when: service_state == "absent" and not systemd_files

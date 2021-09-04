@@ -21,7 +21,7 @@
     restart_policy: on-failure
     state: "{{ jackett_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
+      - /etc/localtime:/etc/localtime:ro
       - "{{ jackett_web_config }}:/config:U,z"
 
 - name: Install systemd

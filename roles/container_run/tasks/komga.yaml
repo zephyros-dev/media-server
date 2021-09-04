@@ -22,7 +22,7 @@
       io.containers.autoupdate: "registry"
     name: komga-web
     pod: komga
-    restart_policy: on-failure:3
+    restart_policy: on-failure
     state: "{{ komga_state }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro,z"
