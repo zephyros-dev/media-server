@@ -3,6 +3,11 @@
     path: "{{ mumble_server_data }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: mumble
+  import_tasks: systemd_stop.yaml
+
 - name: Mumble pod
   containers.podman.podman_pod:
     name: mumble

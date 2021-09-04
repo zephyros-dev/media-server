@@ -3,6 +3,11 @@
     path: "{{ prowlarr_web_config }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: prowlarr
+  import_tasks: systemd_stop.yaml
+
 - name: Prowlarr pod
   containers.podman.podman_pod:
     name: prowlarr

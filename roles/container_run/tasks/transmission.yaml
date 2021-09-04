@@ -8,6 +8,11 @@
     path: "{{ transmission_web_config }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: transmission
+  import_tasks: systemd_stop.yaml
+
 - name: Transmission pod
   containers.podman.podman_pod:
     name: transmission

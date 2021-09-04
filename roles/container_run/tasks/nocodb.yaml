@@ -3,6 +3,11 @@
     path: "{{ nocodb_db_data }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: nocodb
+  import_tasks: systemd_stop.yaml
+
 - name: Nocodb pod
   containers.podman.podman_pod:
     name: nocodb

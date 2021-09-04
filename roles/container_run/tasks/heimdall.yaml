@@ -3,6 +3,11 @@
     path: "{{ heimdall_data_config }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: heimdall
+  import_tasks: systemd_stop.yaml
+
 - name: Heimdall pod
   containers.podman.podman_pod:
     name: heimdall

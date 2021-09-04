@@ -3,6 +3,11 @@
     path: "{{ kavita_volume_data }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: kavita
+  import_tasks: systemd_stop.yaml
+
 - name: kavita pod
   containers.podman.podman_pod:
     name: kavita

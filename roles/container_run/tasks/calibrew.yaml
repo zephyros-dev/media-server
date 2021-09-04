@@ -8,6 +8,11 @@
     path: "{{ calibrew_book }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: calibrew
+  import_tasks: systemd_stop.yaml
+
 - name: Calibrew pod
   containers.podman.podman_pod:
     name: calibrew

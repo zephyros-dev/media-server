@@ -2,6 +2,7 @@
   file:
     path: "{{ caddy_data_config }}"
     state: directory
+
 - name: Create Caddy data folder
   file:
     path: "{{ caddy_data_data }}"
@@ -13,6 +14,11 @@
     dest: "{{ caddy_data_caddyfile }}"
   notify:
     - Restart Caddy
+
+- name: Stop systemd
+  vars:
+    service_name: caddy
+  import_tasks: systemd_stop.yaml
 
 - name: Caddy
   containers.podman.podman_container:

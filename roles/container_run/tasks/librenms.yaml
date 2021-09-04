@@ -7,6 +7,11 @@
     path: "{{ librenms_volume_db_data }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: librenms
+  import_tasks: systemd_stop.yaml
+
 - name: Librenms pod
   containers.podman.podman_pod:
     name: librenms

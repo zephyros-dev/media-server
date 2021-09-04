@@ -3,6 +3,11 @@
     path: "{{ pgadmin_data }}/pgadmin"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: pgadmin
+  import_tasks: systemd_stop.yaml
+
 - name: pgadmin pod
   containers.podman.podman_pod:
     name: pgadmin

@@ -21,6 +21,11 @@
       - "5000:5000"
     state: "{{ archivy_state }}"
 
+- name: Stop systemd
+  vars:
+    service_name: archivy
+  import_tasks: systemd_stop.yaml
+
 - name: Archivy
   containers.podman.podman_container:
     name: archivy-web

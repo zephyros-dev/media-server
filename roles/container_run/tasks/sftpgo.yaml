@@ -3,6 +3,11 @@
     path: "{{ sftpgo_volume_data }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: sftpgo
+  import_tasks: systemd_stop.yaml
+
 - name: sftpgo pod
   containers.podman.podman_pod:
     name: sftpgo

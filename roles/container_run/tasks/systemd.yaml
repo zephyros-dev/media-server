@@ -8,7 +8,7 @@
     chdir: ~/.config/systemd/user
     cmd: "podman generate systemd --new --name --files --no-header --container-prefix service --pod-prefix service {{ service_name }}"
   register: systemd_files
-  when: service_state == "started" and not systemd_state.stat.exists
+  when: service_state == "started"
 
 - name: "Remove current {{ service_name }} pod"
   containers.podman.podman_pod:

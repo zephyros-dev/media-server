@@ -3,6 +3,11 @@
     path: "{{ dashy_volume_config }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: dashy
+  import_tasks: systemd_stop.yaml
+
 - name: dashy pod
   containers.podman.podman_pod:
     name: dashy

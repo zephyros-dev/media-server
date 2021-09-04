@@ -1,9 +1,3 @@
-- name: Nextcloud pod
-  containers.podman.podman_pod:
-    name: nextcloud
-    network: caddy
-    state: "{{ nextcloud_state }}"
-
 - name: Nextcloud Web data
   file:
     path: "{{ nextcloud_web_data }}"
@@ -16,6 +10,17 @@
   file:
     path: "{{ nextcloud_db_data }}"
     state: directory
+
+- name: Stop systemd
+  vars:
+    service_name: nextcloud
+  import_tasks: systemd_stop.yaml
+
+- name: Nextcloud pod
+  containers.podman.podman_pod:
+    name: nextcloud
+    network: caddy
+    state: "{{ nextcloud_state }}"
 
 - name: Nextcloud
   containers.podman.podman_container:

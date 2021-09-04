@@ -3,6 +3,11 @@
     path: "{{ syncthing_data }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: syncthing
+  import_tasks: systemd_stop.yaml
+
 - name: Syncthing
   containers.podman.podman_container:
     env:

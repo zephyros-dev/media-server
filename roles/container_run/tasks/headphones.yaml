@@ -13,6 +13,11 @@
     path: "{{ headphones_web_config }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: headphones
+  import_tasks: systemd_stop.yaml
+
 - name: Headphones pod
   containers.podman.podman_pod:
     name: headphones

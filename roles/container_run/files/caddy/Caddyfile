@@ -155,5 +155,6 @@ komga.{$CADDYFILE_PROXY_SITE} {
     reverse_proxy komga:8080
 }
 dashy.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
     reverse_proxy dashy:80
 }

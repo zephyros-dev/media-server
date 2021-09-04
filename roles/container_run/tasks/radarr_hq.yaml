@@ -13,6 +13,11 @@
     path: "{{ radarr_hq_web_config }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: radarr_hq
+  import_tasks: systemd_stop.yaml
+
 - name: radarr_hq pod
   containers.podman.podman_pod:
     name: radarr_hq

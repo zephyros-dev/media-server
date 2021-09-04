@@ -11,6 +11,11 @@
     path: "{{ jellyfin_web_cache }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: jellyfin
+  import_tasks: systemd_stop.yaml
+
 - name: Jellyfin pod
   containers.podman.podman_pod:
     name: jellyfin

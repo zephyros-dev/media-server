@@ -13,6 +13,11 @@
     path: "{{ readarr_web_config }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: readarr
+  import_tasks: systemd_stop.yaml
+
 - name: Readarr pod
   containers.podman.podman_pod:
     name: readarr

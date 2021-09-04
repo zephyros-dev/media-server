@@ -3,6 +3,11 @@
     path: "{{ jackett_web_config }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: jackett
+  import_tasks: systemd_stop.yaml
+
 - name: Jackett pod
   containers.podman.podman_pod:
     name: jackett
@@ -21,7 +26,7 @@
     restart_policy: on-failure
     state: "{{ jackett_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
+      - /etc/localtime:/etc/localtime:ro,z
       - "{{ jackett_web_config }}:/config:U,z"
 
 - name: Install systemd

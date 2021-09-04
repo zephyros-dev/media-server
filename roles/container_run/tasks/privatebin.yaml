@@ -3,6 +3,11 @@
     path: "{{ privatebin_web_data }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: privatebin
+  import_tasks: systemd_stop.yaml
+
 - name: Privatebin pod
   containers.podman.podman_pod:
     name: privatebin

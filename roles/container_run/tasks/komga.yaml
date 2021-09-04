@@ -7,6 +7,11 @@
     path: "{{ komga_volume_config }}"
     state: directory
 
+- name: Stop systemd
+  vars:
+    service_name: komga
+  import_tasks: systemd_stop.yaml
+
 - name: komga pod
   containers.podman.podman_pod:
     name: komga
