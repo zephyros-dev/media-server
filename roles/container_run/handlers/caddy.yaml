@@ -1,5 +1,7 @@
-- name: Restart Caddy
-  containers.podman.podman_container:
-    name: caddy
-    force_restart: yes
-  # TODO: Restart only when caddy exists
+- name: Restart caddy
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: service-caddy
+    scope: user
+    state: started

@@ -10,7 +10,6 @@ pageInfo:
     - title: Source Code
       path: https://github.com/phongngthanh/podman-ansible
 appConfig:
-  faviconApi: local
   statusCheck: true
   theme: Material
 sections:
@@ -56,6 +55,11 @@ sections:
         statusCheckUrl: http://kavita:5000
         title: Kavita
         url: https://kavita.{{ server_domain }}
+      - icon: favicon
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://komga:8080
+        title: Komga
+        url: https://komga.{{ server_domain }}
   - name: Media management
     items:
       - icon: favicon
