@@ -16,3 +16,7 @@ TODO
 - Pods options
   - infra: no cannot be used with custom network
 - When using podman with systemd, restart-policy cannot be on-failure:3
+# Misc
+## MPV
+- [Anime4K](https://github.com/bloc97/Anime4K)
+- Apply to windows require changing path to \\
