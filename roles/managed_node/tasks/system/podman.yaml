@@ -31,14 +31,6 @@
     scope: user
     state: started
 
-# - name: Enable podman restart service
-#   ansible.builtin.systemd:
-#     daemon_reload: yes
-#     enabled: yes
-#     name: podman-restart
-#     scope: user
-#     state: started
-
 - name: Enable podman autoupdate timer
   ansible.builtin.systemd:
     daemon_reload: yes

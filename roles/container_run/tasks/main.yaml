@@ -7,6 +7,7 @@
 # - import_tasks: pgadmin.yaml
 
 - import_tasks: archivy.yaml
+  tags: archivy
 - import_tasks: bazarr.yaml
 - import_tasks: bazarr_hq.yaml
 - import_tasks: calibrew.yaml
