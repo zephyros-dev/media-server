@@ -19,6 +19,27 @@
       - toolbox
     state: latest
 
+- name: Add terraform repo
+  become: yes
+  ansible.builtin.yum_repository:
+    name: hashicorp
+    description: hashicorp
+    baseurl: https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+    gpgcheck: yes
+    gpgkey: https://rpm.releases.hashicorp.com/gpg
+
+- name: Install yum-utils
+  become: yes
+  ansible.builtin.yum:
+    name: yum-utils
+    state: latest
+
+- name: Install terraform
+  become: yes
+  ansible.builtin.yum:
+    name: terraform
+    state: latest
+
 - name: Encryption software
   become: yes
   dnf:
