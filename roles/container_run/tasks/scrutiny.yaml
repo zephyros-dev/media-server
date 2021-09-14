@@ -1,5 +1,10 @@
+- name: Stop systemd
+  vars:
+    service_name: scuritny
+  import_tasks: systemd_root_stop.yaml
+
 - name: Scrutiny pod
-  become: true
+  become: yes
   containers.podman.podman_pod:
     name: scrutiny
     ports:
@@ -8,7 +13,7 @@
   ignore_errors: yes
 
 - name: Scrutiny
-  become: true
+  become: yes
   containers.podman.podman_container:
     cap_add:
       - SYS_RAWIO
@@ -27,3 +32,10 @@
       - /etc/localtime:/etc/localtime:ro,z
       - /run/udev:/run/udev:ro,z
   ignore_errors: yes
+
+- name: Install Systemd
+  become: yes
+  vars:
+    service_name: scrutiny
+    service_state: "{{ scrutiny_state }}"
+  import_tasks: systemd_root.yaml
