@@ -29,8 +29,6 @@
 
 - name: Template the timer
   vars:
-    # timer_description: "{{ item.systemd_description }}"
-    # timer: "{{ item.timer }}"
     template_var: "{{ item }}"
   ansible.builtin.template:
     src: "{{ item.name }}.timer.j2"
