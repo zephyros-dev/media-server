@@ -1,12 +1,12 @@
 - name: "Check if {{ service_name }} systemd file exists"
   ansible.builtin.stat:
-    path: "~/.config/systemd/user/service-{{ service_name }}.service"
+    path: "~/.config/systemd/user/{{ service_name }}.service"
   register: systemd_state
 
 - name: "Install {{ service_name }} systemd"
   ansible.builtin.command:
     chdir: ~/.config/systemd/user
-    cmd: "podman generate systemd --new --name --files --no-header --container-prefix service --pod-prefix service {{ service_name }}"
+    cmd: "podman generate systemd --new --name --files --no-header --container-prefix '' --pod-prefix '' --separator '' {{ service_name }}"
   register: systemd_files
   when: service_state == "started"
 
@@ -26,7 +26,7 @@
   ansible.builtin.systemd:
     daemon_reload: yes
     enabled: yes
-    name: service-{{ service_name }}
+    name: "{{ service_name }}"
     scope: user
     state: started
   when: service_state == "started"
@@ -37,7 +37,7 @@
   ansible.builtin.systemd:
     daemon_reload: yes
     enabled: no
-    name: service-{{ service_name }}
+    name: "{{ service_name }}"
     scope: user
     state: stopped
   when: service_state == "absent" and systemd_state.stat.exists
