@@ -16,6 +16,9 @@
 - name: Install packages
   import_tasks: "system/packages.yaml"
 
+- name: Install crowdsec
+  import_tasks: "system/crowdsec.yaml"
+
 - name: Setup storage mounts
   vars:
     disk_storage: "{{ disks.storage }}"

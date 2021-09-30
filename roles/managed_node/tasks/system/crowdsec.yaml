@@ -1,0 +1,11 @@
+- name: Setup crowdsec repository
+  become: yes
+  ansible.builtin.shell: curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.rpm.sh | sudo bash
+
+- name: Install crowdsec
+  become: yes
+  dnf:
+    name:
+      - crowdsec
+      - crowdsec-firewall-bouncer-iptables
+    state: latest
