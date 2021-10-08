@@ -11,6 +11,7 @@
 - name: Nocodb pod
   containers.podman.podman_pod:
     name: nocodb
+    infra_name: nocodb-pod
     network: caddy
     state: "{{ nocodb_state }}"
 

@@ -6,6 +6,7 @@
 - name: Grafana pod
   containers.podman.podman_pod:
     name: grafana
+    infra_name: grafana-pod
     network: caddy
     state: "{{ grafana_state }}"
 

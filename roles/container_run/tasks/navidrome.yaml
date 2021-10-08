@@ -16,6 +16,7 @@
 - name: Navidrome pod
   containers.podman.podman_pod:
     name: navidrome
+    infra_name: navidrome-pod
     network: caddy
     state: "{{ navidrome_state }}"
 

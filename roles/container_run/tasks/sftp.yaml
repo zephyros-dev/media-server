@@ -11,6 +11,7 @@
 - name: SFTP pod
   containers.podman.podman_pod:
     name: sftp
+    infra_name: sftp-pod
     ports:
       - "{{ sftp_port }}:22"
     state: "{{ sftp_state }}"

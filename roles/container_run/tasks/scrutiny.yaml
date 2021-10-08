@@ -7,6 +7,7 @@
   become: yes
   containers.podman.podman_pod:
     name: scrutiny
+    infra_name: scrutiny-pod
     ports:
       - "8080:8080"
     state: "{{ scrutiny_state }}"

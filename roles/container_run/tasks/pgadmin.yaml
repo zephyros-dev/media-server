@@ -11,6 +11,7 @@
 - name: pgadmin pod
   containers.podman.podman_pod:
     name: pgadmin
+    infra_name: pgadmin-pod
     network: caddy
     state: "{{ pgadmin_state }}"
 

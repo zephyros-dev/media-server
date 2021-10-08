@@ -11,6 +11,7 @@
 - name: Jackett pod
   containers.podman.podman_pod:
     name: jackett
+    infra_name: jackett-pod
     network: caddy
     state: "{{ jackett_state }}"
 

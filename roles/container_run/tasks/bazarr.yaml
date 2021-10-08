@@ -16,6 +16,7 @@
 - name: Bazarr pod
   containers.podman.podman_pod:
     name: bazarr
+    infra_name: bazarr-pod
     network: caddy
     state: "{{ bazarr_state }}"
 

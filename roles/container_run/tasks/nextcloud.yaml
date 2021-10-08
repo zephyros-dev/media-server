@@ -19,6 +19,7 @@
 - name: Nextcloud pod
   containers.podman.podman_pod:
     name: nextcloud
+    infra_name: nextcloud-pod
     network: caddy
     state: "{{ nextcloud_state }}"
 

@@ -15,6 +15,7 @@
 - name: Librenms pod
   containers.podman.podman_pod:
     name: librenms
+    infra_name: librenms-pod
     network: caddy
     # ports:
     #   - '8000:8000'

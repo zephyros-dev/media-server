@@ -21,6 +21,7 @@
 - name: Lidarr pod
   containers.podman.podman_pod:
     name: lidarr
+    infra_name: lidarr-pod
     network: caddy
     state: "{{ lidarr_state }}"
 

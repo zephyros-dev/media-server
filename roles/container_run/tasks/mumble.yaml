@@ -11,6 +11,7 @@
 - name: Mumble pod
   containers.podman.podman_pod:
     name: mumble
+    infra_name: mumble-pod
     # Use host network for IPV6
     # network: host
     ports:

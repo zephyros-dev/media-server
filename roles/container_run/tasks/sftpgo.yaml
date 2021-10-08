@@ -11,6 +11,7 @@
 - name: sftpgo pod
   containers.podman.podman_pod:
     name: sftpgo
+    infra_name: sftpgo-pod
     ports:
       - "{{ sftpgo_admin_port }}:8080"
       - "{{ sftpgo_sftp_port }}:2022"

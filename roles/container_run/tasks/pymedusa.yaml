@@ -21,6 +21,7 @@
 - name: Pymedusa pod
   containers.podman.podman_pod:
     name: pymedusa
+    infra_name: pymedusa-pod
     network: caddy
     state: "{{ pymedusa_state }}"
 

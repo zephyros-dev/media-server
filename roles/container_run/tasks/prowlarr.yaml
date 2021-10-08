@@ -11,6 +11,7 @@
 - name: Prowlarr pod
   containers.podman.podman_pod:
     name: prowlarr
+    infra_name: prowlarr-pod
     network: caddy
     state: "{{ prowlarr_state }}"
 

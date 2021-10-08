@@ -16,6 +16,7 @@
 - name: Archivy pod
   containers.podman.podman_pod:
     name: archivy
+    infra_name: archivy-pod
     network: caddy
     ports:
       - "5000:5000"

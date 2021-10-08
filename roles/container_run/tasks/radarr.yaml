@@ -21,6 +21,7 @@
 - name: Radarr pod
   containers.podman.podman_pod:
     name: radarr
+    infra_name: radarr-pod
     network: caddy
     state: "{{ radarr_state }}"
 

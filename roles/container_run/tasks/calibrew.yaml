@@ -16,6 +16,7 @@
 - name: Calibrew pod
   containers.podman.podman_pod:
     name: calibrew
+    infra_name: calibrew-pod
     network: caddy
     state: "{{ calibrew_state }}"
 

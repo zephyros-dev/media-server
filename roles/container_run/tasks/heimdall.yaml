@@ -11,6 +11,7 @@
 - name: Heimdall pod
   containers.podman.podman_pod:
     name: heimdall
+    infra_name: heimdall-pod
     network: caddy
     state: "{{ heimdall_state }}"
 

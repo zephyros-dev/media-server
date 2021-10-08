@@ -21,6 +21,7 @@
 - name: Readarr pod
   containers.podman.podman_pod:
     name: readarr
+    infra_name: readarr-pod
     network: caddy
     state: "{{ readarr_state }}"
 

@@ -15,7 +15,8 @@
 
 - name: bazarr_hq pod
   containers.podman.podman_pod:
-    name: bazarr_hq
+    name: bazarr-hq
+    infra_name: bazarr-hq-pod
     network: caddy
     state: "{{ bazarr_state }}"
 
@@ -29,8 +30,8 @@
       diun.enable: "true"
       diun.watch_repo: "true"
       io.containers.autoupdate: "registry"
-    name: bazarr_hq-web
-    pod: bazarr_hq
+    name: bazarr-hq-web
+    pod: bazarr-hq
     restart_policy: on-failure
     state: "{{ bazarr_state }}"
     volumes:
@@ -40,6 +41,6 @@
 
 - name: Install systemd
   vars:
-    service_name: bazarr_hq
+    service_name: bazarr-hq
     service_state: "{{ bazarr_state }}"
   import_tasks: systemd.yaml

@@ -21,6 +21,7 @@
 - name: Sonarr pod
   containers.podman.podman_pod:
     name: sonarr
+    infra_name: sonarr-pod
     network: caddy
     state: "{{ sonarr_state }}"
 

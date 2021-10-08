@@ -16,6 +16,7 @@
 - name: Transmission pod
   containers.podman.podman_pod:
     name: transmission
+    infra_name: transmission-pod
     network: caddy
     ports:
       - "51413:51413/tcp"

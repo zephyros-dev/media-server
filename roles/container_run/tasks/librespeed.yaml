@@ -11,6 +11,7 @@
 - name: Librespeed pod
   containers.podman.podman_pod:
     name: librespeed
+    infra_name: librespeed-pod
     network: caddy
     state: "{{ librespeed_state }}"
 

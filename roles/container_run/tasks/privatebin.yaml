@@ -11,6 +11,7 @@
 - name: Privatebin pod
   containers.podman.podman_pod:
     name: privatebin
+    infra_name: privatebin-pod
     network: caddy
     state: "{{ privatebin_state }}"
 

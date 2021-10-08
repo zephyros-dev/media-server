@@ -19,6 +19,7 @@
 - name: Jellyfin pod
   containers.podman.podman_pod:
     name: jellyfin
+    infra_name: jellyfin-pod
     network: caddy
     state: "{{ jellyfin_state }}"
 

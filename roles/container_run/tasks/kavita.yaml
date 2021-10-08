@@ -11,6 +11,7 @@
 - name: kavita pod
   containers.podman.podman_pod:
     name: kavita
+    infra_name: kavita-pod
     network: caddy
     state: "{{ kavita_state }}"
 

@@ -11,6 +11,7 @@
 - name: dashy pod
   containers.podman.podman_pod:
     name: dashy
+    infra_name: dashy-pod
     network: caddy
     state: "{{ dashy_state }}"
 

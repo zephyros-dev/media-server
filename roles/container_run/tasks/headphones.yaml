@@ -21,6 +21,7 @@
 - name: Headphones pod
   containers.podman.podman_pod:
     name: headphones
+    infra_name: headphones-pod
     network: caddy
     state: "{{ headphones_state }}"
 
