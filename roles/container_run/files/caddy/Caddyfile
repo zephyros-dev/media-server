@@ -7,6 +7,7 @@
 (proxy-auth) {
   # if cookie not = some-token-nonsense
   @no-auth {
+    not path *favicon*
     not header_regexp mycookie Cookie myid={$CADDYFILE_AUTH_TOKEN}
     # https://github.com/caddyserver/caddy/issues/3916
   }
@@ -137,7 +138,7 @@ radarr.{$CADDYFILE_PROXY_SITE} {
 }
 radarr-hq.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
-    reverse_proxy radarr_hq:7878 {
+    reverse_proxy radarr-hq:7878 {
         import security-header
     }
 }
@@ -155,7 +156,7 @@ bazarr.{$CADDYFILE_PROXY_SITE} {
 }
 bazarr-hq.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
-    reverse_proxy bazarr_hq:6767 {
+    reverse_proxy bazarr-hq:6767 {
         import security-header
     }
 }

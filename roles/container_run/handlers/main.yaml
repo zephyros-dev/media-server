@@ -1,8 +1,10 @@
 - name: Restart Caddy
   import_tasks: caddy.yaml
+  tags: caddy
 
 - name: Restart Gitea
   import_tasks: gitea.yaml
 
 - name: Recreate dashy
   import_tasks: dashy.yaml
+  tags: dashy

@@ -8,9 +8,8 @@ pageInfo:
     - title: About
       path: /about
     - title: Source Code
-      path: https://github.com/phongngthanh/podman-ansible
+      path: https://github.com/zephyros-dev/podman-ansible
 appConfig:
-  faviconApi: local
   statusCheck: true
   theme: Material
 sections:
@@ -75,12 +74,12 @@ sections:
         url: https://bazarr.{{ server_domain }}
       - icon: favicon
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://radarr_hq:7878
+        statusCheckUrl: http://radarr-hq:7878
         title: Radarr-HQ
         url: https://radarr-hq.{{ server_domain }}
       - icon: favicon
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://bazarr_hq:6767
+        statusCheckUrl: http://bazarr-hq:6767
         title: Bazarr-HQ
         url: https://bazarr-hq.{{ server_domain }}
       - icon: favicon
@@ -133,7 +132,7 @@ sections:
         url: https://scrutiny.{{ server_domain }}
   - name: Misc
     items:
-      - icon: favicon-faviconkit
+      - icon: favicon
         statusCheckAllowInsecure: true
         statusCheckUrl: http://privatebin:8080
         title: Privatebin

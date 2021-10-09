@@ -2,6 +2,6 @@
   ansible.builtin.systemd:
     daemon_reload: yes
     enabled: yes
-    name: service-dashy
+    name: dashy
     scope: user
     state: restarted
