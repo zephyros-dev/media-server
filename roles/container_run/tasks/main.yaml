@@ -40,3 +40,4 @@
 - import_tasks: sonarr.yaml
 - import_tasks: syncthing.yaml
 - import_tasks: transmission.yaml
+  tags: transmission

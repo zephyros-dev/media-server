@@ -102,17 +102,16 @@ sections:
         statusCheckUrl: http://jackett:9117
         title: Jackett
         url: https://jackett.{{ server_domain }}
+      # - icon: favicon
+      #   statusCheckAllowInsecure: true
+      #   statusCheckUrl: http://headphones:8181
+      #   title: Headphones
+      #   url: https://headphones.{{ server_domain }}
       - icon: favicon
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://headphones:8181
-        title: Headphones
-        url: https://headphones.{{ server_domain }}
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://transmission:9091
+        statusCheckUrl: http://{{ transmission_user }}:{{ transmission_password}}@transmission:9091
         title: Transmission
         url: https://transmission.{{ server_domain }}
-        # TODO: Add Authorization header
   - name: Monitoring
     items:
       - icon: favicon
