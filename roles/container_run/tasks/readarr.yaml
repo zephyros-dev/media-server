@@ -40,7 +40,7 @@
     state: "{{ readarr_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z
-      - "{{ readarr_web_config }}:/config:U,z"
+      - "{{ readarr_web_config }}:/config:z"
       - "{{ global_media }}:/home"
       - "{{ transmission_download }}:/downloads"
 

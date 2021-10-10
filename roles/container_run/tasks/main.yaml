@@ -33,6 +33,7 @@
 - import_tasks: radarr.yaml
 - import_tasks: radarr_hq.yaml
 - import_tasks: readarr.yaml
+  tags: readarr
 - import_tasks: scrutiny.yaml
   tags: scrutiny
 - import_tasks: sftp.yaml
