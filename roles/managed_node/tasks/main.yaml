@@ -13,6 +13,9 @@
 - name: Setup Samba
   import_tasks: "system/samba.yaml"
 
+- name: Allow exe executable files
+  import_tasks: "system/exe.yaml"
+
 - name: Install packages
   import_tasks: "system/packages.yaml"
 

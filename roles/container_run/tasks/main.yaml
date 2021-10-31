@@ -30,6 +30,7 @@
 - import_tasks: privatebin.yaml
 - import_tasks: prowlarr.yaml
 - import_tasks: pymedusa.yaml
+  tags: pymedusa
 - import_tasks: radarr.yaml
 - import_tasks: radarr_hq.yaml
 - import_tasks: readarr.yaml
