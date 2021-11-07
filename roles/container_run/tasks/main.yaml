@@ -24,6 +24,7 @@
 - import_tasks: librespeed.yaml
 - import_tasks: lidarr.yaml
 - import_tasks: mumble.yaml
+  tags: mumble
 - import_tasks: navidrome.yaml
 - import_tasks: nextcloud.yaml
 - import_tasks: nocodb.yaml

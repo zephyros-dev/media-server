@@ -1,5 +1,4 @@
-# Mumble
-mumble_state: "absent"
+mumble_state: "started"
 mumble_image: "derenderkeks/murmur:latest"
 mumble_data: "{{ global_data_path }}/mumble"
 mumble_server_data: "{{ mumble_data }}/data"

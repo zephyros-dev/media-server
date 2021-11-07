@@ -33,9 +33,6 @@
     volumes:
       - /etc/localtime:/etc/localtime:ro,z
       - "{{ mumble_server_data }}:/data:U,z"
-    # Port forwards these ports
-    # ports:
-    # - 64738
 
 - name: Install systemd
   vars:
