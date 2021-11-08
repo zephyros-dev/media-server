@@ -19,6 +19,7 @@
 - import_tasks: heimdall.yaml
 - import_tasks: jackett.yaml
 - import_tasks: jellyfin.yaml
+  tags: jellyfin
 - import_tasks: kavita.yaml
 - import_tasks: komga.yaml
 - import_tasks: librespeed.yaml
