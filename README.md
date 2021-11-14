@@ -16,6 +16,16 @@ TODO
 - Pods options
   - infra: no cannot be used with custom network
 - When using podman with systemd, restart-policy cannot be on-failure:3
+# Troubleshooting
+## Nextcloud
+### Stuck in maintenance mode
+1. Run these commands
+```
+podman exec --user www-data -it nextcloud-web /bin/sh
+php occ
+php occ upgrade
+php occ maintenance:mode --off
+```
 # Misc
 ## MPV
 - [Anime4K](https://github.com/bloc97/Anime4K)
