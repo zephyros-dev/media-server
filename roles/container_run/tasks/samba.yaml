@@ -1,0 +1,33 @@
+- name: Global storage folder
+  file:
+    path: "{{ global_storage }}"
+    state: directory
+
+- name: Stop systemd
+  vars:
+    service_name: samba
+  import_tasks: systemd_stop.yaml
+
+# Used with elsework/samba. Can only use root user to map the permission to the running user
+- name: Samba
+  containers.podman.podman_container:
+    image: "{{ samba_image }}"
+    # Could be fixed with a chmod of entrypoint (?)
+    # userns: keep-id
+    labels:
+      diun.enable: "true"
+      io.containers.autoupdate: "registry"
+    name: samba
+    network: host
+    restart_policy: on-failure
+    state: "{{ samba_state }}"
+    command: '-u "0:0:root:root:{{ samba_password }}" -s "storage:/storage:rw:root"'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro,z
+      - "{{ global_storage }}:/storage"
+
+- name: Install systemd
+  vars:
+    service_name: samba
+    service_state: "{{ samba_state }}"
+  import_tasks: systemd.yaml
