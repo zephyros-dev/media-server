@@ -10,18 +10,6 @@
   register: systemd_files
   when: service_state == "started"
 
-- name: "Remove current {{ service_name }} pod"
-  containers.podman.podman_pod:
-    name: "{{ service_name }}"
-    state: absent
-  when: service_state == "started" and not systemd_state.stat.exists
-
-- name: "Remove current {{ service_name }} container"
-  containers.podman.podman_container:
-    name: "{{ service_name }}"
-    state: absent
-  when: not systemd_state.stat.exists
-
 - name: "Enable {{ service_name }} systemd service"
   ansible.builtin.systemd:
     daemon_reload: yes
@@ -29,8 +17,9 @@
     name: "{{ service_name }}"
     state: started
   when: service_state == "started"
-  # When running the systemd unit for the first time, the unit returns error. It still runs later on however.
-  ignore_errors: yes
+  register: systemd_state
+  retries: 6
+  until: systemd_state.failed == false
 
 - name: "Disable {{ service_name }} systemd service"
   ansible.builtin.systemd:
