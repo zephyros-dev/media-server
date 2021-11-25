@@ -1,12 +1,12 @@
 - name: Install the 'virtualization' package group
-  become: True
+  become: yes
   dnf:
     name: "@virtualization"
     state: latest
-
-- name: Create default network for libvirt
-  become: True
-  community.libvirt.virt_net:
-    autostart: yes
-    command: create
-    name: default
+# TODO: Error: The `lxml` module is not importable. Check the requirements
+# - name: Create default network for libvirt
+#   become: yes
+#   community.libvirt.virt_net:
+#     autostart: yes
+#     command: create
+#     name: default

@@ -1,6 +1,0 @@
-- name: Samba server
-  become: True
-  dnf:
-    name:
-      - samba
-    state: latest

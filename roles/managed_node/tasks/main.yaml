@@ -10,9 +10,6 @@
 - name: Setup Virtualization
   import_tasks: "system/virtualization.yaml"
 
-- name: Setup Samba
-  import_tasks: "system/samba.yaml"
-
 - name: Allow exe executable files
   import_tasks: "system/exe.yaml"
 
