@@ -1,22 +1,24 @@
-- name: Calibrew web config
-  file:
-    path: "{{ calibrew_web_config }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
-
-- name: Calibrew books folder
-  file:
-    path: "{{ calibrew_book }}"
-    state: directory
+  loop:
+    - "{{ calibrew_book }}"
+    - "{{ calibrew_web_config }}"
 
 - name: Stop systemd
-  vars:
-    service_name: calibrew
-  import_tasks: systemd_stop.yaml
-
-- name: Calibrew pod
-  containers.podman.podman_pod:
+  ansible.builtin.systemd:
     name: calibrew
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
+
+- name: Pod
+  containers.podman.podman_pod:
     infra_name: calibrew-pod
+    name: calibrew
     network: caddy
     state: "{{ calibrew_state }}"
 
@@ -27,17 +29,17 @@
       PUID: "{{ global_puid }}"
     image: "{{ calibrew_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: calibrew-web
     pod: calibrew
     restart_policy: on-failure
     state: "{{ calibrew_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
-      - "{{ calibrew_web_config }}:/config:U,z"
       - "{{ calibrew_book }}:/books"
+      - "{{ calibrew_web_config }}:/config:U,z"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

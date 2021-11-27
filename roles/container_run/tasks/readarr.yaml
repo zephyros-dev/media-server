@@ -1,24 +1,22 @@
-- name: Global Media folder
-  file:
-    path: "{{ global_media }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
-
-- name: Transmission Download folder
-  file:
-    path: "{{ transmission_download }}"
-    state: directory
-
-- name: Readarr web config
-  file:
-    path: "{{ readarr_web_config }}"
-    state: directory
+  loop:
+    - "{{ global_media }}"
+    - "{{ transmission_download }}"
+    - "{{ readarr_web_config }}"
 
 - name: Stop systemd
-  vars:
-    service_name: readarr
-  import_tasks: systemd_stop.yaml
+  ansible.builtin.systemd:
+    name: readarr
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
 
-- name: Readarr pod
+- name: Pod
   containers.podman.podman_pod:
     name: readarr
     infra_name: readarr-pod
@@ -32,17 +30,18 @@
       PUID: "1000"
     image: "{{ readarr_image }}"
     labels:
-      diun.enable: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: readarr-web
     pod: readarr
     restart_policy: on-failure
     state: "{{ readarr_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
-      - "{{ readarr_web_config }}:/config:z"
       - "{{ global_media }}:/home"
+      - "{{ readarr_web_config }}:/config:z"
       - "{{ transmission_download }}:/downloads"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

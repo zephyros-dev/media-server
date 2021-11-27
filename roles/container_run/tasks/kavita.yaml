@@ -1,35 +1,41 @@
-- name: kavita data
-  file:
-    path: "{{ kavita_volume_data }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ kavita_volume_data }}"
 
 - name: Stop systemd
-  vars:
-    service_name: kavita
-  import_tasks: systemd_stop.yaml
-
-- name: kavita pod
-  containers.podman.podman_pod:
+  ansible.builtin.systemd:
     name: kavita
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
+
+- name: Pod
+  containers.podman.podman_pod:
     infra_name: kavita-pod
+    name: kavita
     network: caddy
     state: "{{ kavita_state }}"
 
-- name: kavita
+- name: Kavita
   containers.podman.podman_container:
     image: "{{ kavita_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
       io.containers.autoupdate: registry
     name: kavita-web
     pod: kavita
     restart_policy: on-failure
     state: "{{ kavita_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ kavita_volume_data }}:/kavita/data:U,z"
       - "{{ global_media }}:/home"
+      - "{{ kavita_volume_data }}:/kavita/data:U,z"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

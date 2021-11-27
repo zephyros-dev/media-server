@@ -1,27 +1,25 @@
-- name: Global Media folder
-  file:
-    path: "{{ global_media }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
-
-- name: Transmission Download folder
-  file:
-    path: "{{ transmission_download }}"
-    state: directory
-
-- name: Radarr web config
-  file:
-    path: "{{ radarr_web_config }}"
-    state: directory
+  loop:
+    - "{{ global_media }}"
+    - "{{ radarr_web_config }}"
+    - "{{ transmission_download }}"
 
 - name: Stop systemd
-  vars:
-    service_name: radarr
-  import_tasks: systemd_stop.yaml
-
-- name: Radarr pod
-  containers.podman.podman_pod:
+  ansible.builtin.systemd:
     name: radarr
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
+
+- name: Pod
+  containers.podman.podman_pod:
     infra_name: radarr-pod
+    name: radarr
     network: caddy
     state: "{{ radarr_state }}"
 
@@ -33,17 +31,17 @@
     image: "{{ radarr_image }}"
     labels:
       io.containers.autoupdate: registry
-      diun.enable: "true"
-      diun.watch_repo: "true"
     name: radarr-web
     pod: radarr
     restart_policy: on-failure
     state: "{{ radarr_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
-      - "{{ radarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
+      - "{{ radarr_web_config }}:/config:U,z"
       - "{{ transmission_download }}:/downloads"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

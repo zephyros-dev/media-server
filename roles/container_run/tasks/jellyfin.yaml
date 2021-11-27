@@ -1,56 +1,56 @@
-- name: Global Media folder
-  file:
-    path: "{{ global_media }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
-- name: Jellyfin config folder
-  file:
-    path: "{{ jellyfin_web_config }}"
-    state: directory
-- name: Jellyfin cache folder
-  file:
-    path: "{{ jellyfin_web_cache }}"
-    state: directory
+  loop:
+    - "{{ global_media }}"
+    - "{{ jellyfin_web_cache }}"
+    - "{{ jellyfin_web_config }}"
 
 - name: Stop systemd
-  vars:
-    service_name: jellyfin
-  import_tasks: systemd_stop.yaml
-
-- name: Jellyfin pod
-  containers.podman.podman_pod:
+  ansible.builtin.systemd:
     name: jellyfin
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
+
+- name: Pod
+  containers.podman.podman_pod:
     infra_name: jellyfin-pod
+    name: jellyfin
     network: caddy
     state: "{{ jellyfin_state }}"
 
 - name: Jellyfin
   # The mpv-shim config file is conf.json
+  # user: 1000:1000
+  # Use host network_mode for DLNA
+  # network_mode: host
+  # ports:
+  # - 8096
   containers.podman.podman_container:
+    group_add:
+      - "998"
     image: "{{ jellyfin_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: jellyfin-web
     pod: jellyfin
     restart_policy: on-failure
-    state: "{{ jellyfin_state }}"
     security_opt:
       - unmask=/sys/dev
-    group_add:
-      - "998"
+    state: "{{ jellyfin_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ jellyfin_web_config }}:/config:U,z"
-      - "{{ jellyfin_web_cache }}:/cache:U,z"
       - "{{ global_media }}:/home"
-      - "/dev/dri/renderD128:/dev/dri/renderD128"
-      - "/dev/dri/card0:/dev/dri/card0"
-    # user: 1000:1000
-    # Use host network_mode for DLNA
-    # network_mode: host
-    # ports:
-    # - 8096
+      - "{{ jellyfin_web_cache }}:/cache:U,z"
+      - "{{ jellyfin_web_config }}:/config:U,z"
+      - /dev/dri/card0:/dev/dri/card0
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

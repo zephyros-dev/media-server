@@ -1,29 +1,29 @@
-- name: Create Caddy config folder
-  file:
-    path: "{{ caddy_data_config }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ caddy_data_config }}"
+    - "{{ caddy_data_data }}"
 
-- name: Create Caddy data folder
-  file:
-    path: "{{ caddy_data_data }}"
-    state: directory
+- name: Stop systemd
+  ansible.builtin.systemd:
+    name: caddy
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
 
 - name: Caddyfile
-  copy:
+  ansible.builtin.copy:
     src: "caddy/Caddyfile"
     dest: "{{ caddy_data_caddyfile }}"
   notify:
     - Restart Caddy
 
-- name: Stop systemd
-  vars:
-    service_name: caddy
-  import_tasks: systemd_stop.yaml
-
 - name: Caddy
   containers.podman.podman_container:
-    name: caddy
-    image: "{{ caddy_image }}"
     env:
       CADDYFILE_AUTH_TOKEN: "{{ caddy_caddyfile_auth_token }}"
       CADDYFILE_BASIC_AUTH_PASS: "{{ caddy_caddyfile_basic_auth_pass }}"
@@ -31,25 +31,40 @@
       CADDYFILE_HOST_ADDRESS: "{{ caddy_caddyfile_host_address }}"
       CADDYFILE_PROXY_SITE: "{{ server_domain }}"
       CADDYFILE_ZEROSSL_EMAIL: "{{ caddy_caddyfile_zerossl_email }}"
+    generate_systemd:
+      container_prefix: ""
+      new: true
+      path: /home/{{ ansible_user }}/.config/systemd/user
+      pod_prefix: ""
+      separator: ""
+    image: "{{ caddy_image }}"
+    name: caddy
     network:
       - caddy
     ports:
-      - "80:80/tcp"
-      - "443:443/tcp"
-      - "443:443/udp"
+      - 80:80/tcp
+      - 443:443/tcp
+      - 443:443/udp
+    restart_policy: on-failure
+    state: "{{ caddy_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
       - "{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:U,ro,z"
       - "{{ caddy_data_config }}:/config:U,z"
       - "{{ caddy_data_data }}:/data:U,z"
-    restart_policy: "on-failure"
-    state: "{{ caddy_state }}"
-# To execute the restart immediately
-# - name: Flush handlers
-#   meta: flush_handlers
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
-- name: Install systemd
-  vars:
-    service_name: caddy
-    service_state: "{{ caddy_state }}"
-  import_tasks: systemd.yaml
+# To execute the restart immediately
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Enable systemd service
+  ansible.builtin.systemd:
+    daemon_reload: true
+    enabled: true
+    name: caddy
+    scope: user
+    state: "{{ caddy_state }}"
+  register: service
+  until: service.failed == false

@@ -1,33 +1,49 @@
-- name: Syncthing data folder
-  file:
-    path: "{{ syncthing_data }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ syncthing_data }}"
 
 - name: Stop systemd
-  vars:
-    service_name: syncthing
-  import_tasks: systemd_stop.yaml
+  ansible.builtin.systemd:
+    name: syncthing
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
 
 - name: Syncthing
   containers.podman.podman_container:
     env:
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
+    generate_systemd:
+      container_prefix: ""
+      new: true
+      path: /home/{{ ansible_user }}/.config/systemd/user
+      pod_prefix: ""
+      separator: ""
     image: "{{ syncthing_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: syncthing
     network_mode: host
     restart_policy: on-failure
     state: "{{ syncthing_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
       - "{{ syncthing_data }}:/var/syncthing:U,z"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
-- name: Install systemd
-  vars:
-    service_name: syncthing
-    service_state: "{{ syncthing_state }}"
-  import_tasks: systemd.yaml
+- name: Enable systemd
+  ansible.builtin.systemd:
+    name: syncthing
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: "{{ syncthing_state }}"
+  register: service
+  until: service.failed == false

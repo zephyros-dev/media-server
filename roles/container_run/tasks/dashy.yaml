@@ -1,17 +1,23 @@
-- name: Dashy config folder
-  file:
-    path: "{{ dashy_volume_config }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ dashy_volume_config }}"
 
 - name: Stop systemd
-  vars:
-    service_name: dashy
-  import_tasks: systemd_stop.yaml
-
-- name: dashy pod
-  containers.podman.podman_pod:
+  ansible.builtin.systemd:
     name: dashy
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
+
+- name: Pod
+  containers.podman.podman_pod:
     infra_name: dashy-pod
+    name: dashy
     network: caddy
     state: "{{ dashy_state }}"
 
@@ -22,21 +28,20 @@
   notify:
     - Recreate dashy
 
-- name: dashy
+- name: Dashy
   containers.podman.podman_container:
     image: "{{ dashy_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
       io.containers.autoupdate: registry
     name: dashy-web
     pod: dashy
-    recreate: yes
     restart_policy: on-failure
     state: "{{ dashy_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
       - "{{ dashy_volume_config }}/conf.yml:/app/public/conf.yml:ro,z"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

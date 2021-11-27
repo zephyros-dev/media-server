@@ -1,12 +1,18 @@
-- name: SFTP data folder
-  file:
-    path: "{{ sftp_volume_data }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ sftp_volume_data }}"
 
 - name: Stop systemd
-  vars:
-    service_name: sftp
-  import_tasks: systemd_stop.yaml
+  ansible.builtin.systemd:
+    name: sftp
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
 
 - name: SFTP pod
   containers.podman.podman_pod:
@@ -21,19 +27,36 @@
     command: "{{ sftp_user }}:{{ sftp_password }}:::data"
     image: "{{ sftp_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: sftp-container
     pod: sftp
     restart_policy: on-failure
     state: "{{ sftp_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
       - "{{ sftp_volume_data }}:/home/{{ sftp_user }}/data:ro"
+      - /etc/localtime:/etc/localtime:ro,z
 
-- name: Install systemd
-  vars:
-    service_name: sftp
-    service_state: "{{ sftp_state }}"
-  import_tasks: systemd.yaml
+- name: "Pod systemd"
+  containers.podman.podman_pod:
+    generate_systemd:
+      container_prefix: ""
+      new: true
+      path: /home/{{ ansible_user }}/.config/systemd/user
+      pod_prefix: ""
+      separator: ""
+    infra_name: "sftp-pod"
+    name: "sftp"
+    network: caddy
+    ports:
+      - "{{ sftp_port }}:22"
+    state: "{{ sftp_state }}"
+
+- name: "Enable systemd"
+  ansible.builtin.systemd:
+    name: sftp
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: "{{ sftp_state }}"
+  register: service
+  until: service.failed == false

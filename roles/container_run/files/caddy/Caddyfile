@@ -86,7 +86,7 @@ netdata.{$CADDYFILE_PROXY_SITE} {
 }
 scrutiny.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
-    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:8080 {
+    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:18080 {
         import security-header
     }
 }

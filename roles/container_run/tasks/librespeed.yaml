@@ -1,40 +1,43 @@
-- name: Librespeed config
-  file:
-    path: "{{ librespeed_web_config }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ librespeed_web_config }}"
 
 - name: Stop systemd
-  vars:
-    service_name: librespeed
-  import_tasks: systemd_stop.yaml
-
-- name: Librespeed pod
-  containers.podman.podman_pod:
+  ansible.builtin.systemd:
     name: librespeed
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
+
+- name: Pod
+  containers.podman.podman_pod:
     infra_name: librespeed-pod
+    name: librespeed
     network: caddy
     state: "{{ librespeed_state }}"
 
 - name: Librespeed
   containers.podman.podman_container:
-    env:
-      PGID: global_pgid
-      PUID: global_puid
+    # env:
+    #   PGID: "{{ global_pgid }}"
+    #   PUID: "{{ global_puid }}"
     image: "{{ librespeed_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: librespeed-web
     pod: librespeed
     restart_policy: on-failure
     state: "{{ librespeed_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
       - "{{ librespeed_web_config }}:/config:U,z"
-    # ports:
-    # - '80:80'
-    # PASSWORD:  '{{ librespeed_password }}'
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

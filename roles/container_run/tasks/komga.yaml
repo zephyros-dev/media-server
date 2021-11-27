@@ -1,40 +1,41 @@
-# - name: komga data
-#   file:
-#     path: "{{ komga_volume_data }}"
-#     state: directory
-- name: komga config
-  file:
-    path: "{{ komga_volume_config }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ komga_volume_config }}"
 
 - name: Stop systemd
-  vars:
-    service_name: komga
-  import_tasks: systemd_stop.yaml
-
-- name: komga pod
-  containers.podman.podman_pod:
+  ansible.builtin.systemd:
     name: komga
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
+
+- name: Pod
+  containers.podman.podman_pod:
     infra_name: komga-pod
+    name: komga
     network: caddy
     state: "{{ komga_state }}"
 
-- name: komga
+- name: Komga
   containers.podman.podman_container:
     image: "{{ komga_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: komga-web
     pod: komga
     restart_policy: on-failure
     state: "{{ komga_state }}"
     volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      # - "{{ komga_volume_data }}:/data:U,z"
-      - "{{ komga_volume_config }}:/config:U,z"
       - "{{ global_media }}:/home"
+      - "{{ komga_volume_config }}:/config:U,z"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

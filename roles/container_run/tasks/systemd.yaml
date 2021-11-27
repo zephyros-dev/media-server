@@ -1,38 +1,22 @@
-- name: "Check if {{ service_name }} systemd file exists"
-  ansible.builtin.stat:
-    path: "~/.config/systemd/user/{{ service_name }}.service"
-  register: systemd_state
-
-- name: "Install {{ service_name }} systemd"
-  ansible.builtin.command:
-    chdir: ~/.config/systemd/user
-    cmd: "podman generate systemd --new --name --files --no-header --container-prefix '' --pod-prefix '' --separator '' {{ service_name }}"
-  register: systemd_files
-  when: service_state == "started"
-
-- name: "Enable {{ service_name }} systemd service"
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    enabled: yes
+- name: "Pod {{ service_name }} systemd"
+  containers.podman.podman_pod:
+    generate_systemd:
+      container_prefix: ""
+      new: true
+      path: /home/{{ ansible_user }}/.config/systemd/user
+      pod_prefix: ""
+      separator: ""
+    infra_name: "{{ service_name }}-pod"
     name: "{{ service_name }}"
+    network: caddy
+    state: "{{ service_state }}"
+
+- name: "Enable {{ service_name }} systemd"
+  ansible.builtin.systemd:
+    name: "{{ service_name }}"
+    daemon_reload: true
+    enabled: true
     scope: user
-    state: started
-  when: service_state == "started"
-  register: systemd_state
-  retries: 6
-  until: systemd_state.failed == false
-# - name: "Disable {{ service_name }} systemd service"
-#   ansible.builtin.systemd:
-#     daemon_reload: yes
-#     enabled: no
-#     name: "{{ service_name }}"
-#     scope: user
-#     state: stopped
-#   when: service_state == "absent" and systemd_state.stat.exists
-# TODO: Remove systemd service files
-# - name: "Remove {{ service_name }} systemd files"
-#   ansible.builtin.file:
-#     path: "{{ item }}"
-#     state: absent
-#   loop: "{{ systemd_files.stdout_lines }}"
-#   when: service_state == "absent" and not systemd_files
+    state: "{{ service_state }}"
+  register: service
+  until: service.failed == false

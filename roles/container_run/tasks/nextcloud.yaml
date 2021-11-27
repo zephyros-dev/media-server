@@ -1,22 +1,22 @@
-- name: Nextcloud Web data
-  file:
-    path: "{{ nextcloud_web_data }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
-- name: Nextcloud Storage
-  file:
-    path: "{{ nextcloud_storage_data }}"
-    state: directory
-- name: Nextcloud DB Data
-  file:
-    path: "{{ nextcloud_db_data }}"
-    state: directory
+  loop:
+    - "{{ nextcloud_db_data }}"
+    - "{{ nextcloud_storage_data }}"
+    - "{{ nextcloud_web_data }}"
 
 - name: Stop systemd
-  vars:
-    service_name: nextcloud
-  import_tasks: systemd_stop.yaml
+  ansible.builtin.systemd:
+    name: nextcloud
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
 
-- name: Nextcloud pod
+- name: Pod
   containers.podman.podman_pod:
     name: nextcloud
     infra_name: nextcloud-pod
@@ -36,25 +36,23 @@
       REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
     image: "{{ nextcloud_web_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
       io.containers.autoupdate: registry
     name: nextcloud-web
     pod: nextcloud
     restart_policy: on-failure
     state: "{{ nextcloud_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
-      - "{{ nextcloud_web_data }}:/var/www/html:z"
       - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
+      - "{{ nextcloud_web_data }}:/var/www/html:z"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Nextcloud Redis
   containers.podman.podman_container:
     command: redis-server --requirepass {{ nextcloud_redis_host_password }}
     image: "{{ nextcloud_redis_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
       io.containers.autoupdate: registry
     name: nextcloud-redis
     pod: nextcloud
@@ -62,6 +60,8 @@
     state: "{{ nextcloud_state }}"
     volume:
       - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Nextcloud database
   containers.podman.podman_container:
@@ -71,16 +71,16 @@
       POSTGRES_USER: "{{ nextcloud_postgres_user }}"
     image: "{{ nextcloud_postgres_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
       io.containers.autoupdate: registry
     name: nextcloud-db
     pod: nextcloud
     restart_policy: on-failure
     state: "{{ nextcloud_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
       - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

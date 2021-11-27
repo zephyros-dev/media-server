@@ -1,22 +1,24 @@
-- name: Global Media folder
-  file:
-    path: "{{ global_media }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
-
-- name: Bazarr web config
-  file:
-    path: "{{ bazarr_web_config }}"
-    state: directory
+  loop:
+    - "{{ bazarr_web_config }}"
+    - "{{ global_media }}"
 
 - name: Stop systemd
-  vars:
-    service_name: bazarr
-  import_tasks: systemd_stop.yaml
-
-- name: Bazarr pod
-  containers.podman.podman_pod:
+  ansible.builtin.systemd:
     name: bazarr
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
+
+- name: Pod
+  containers.podman.podman_pod:
     infra_name: bazarr-pod
+    name: bazarr
     network: caddy
     state: "{{ bazarr_state }}"
 
@@ -27,17 +29,17 @@
       PUID: "{{ global_puid }}"
     image: "{{ bazarr_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: bazarr-web
     pod: bazarr
     restart_policy: on-failure
     state: "{{ bazarr_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
       - "{{ bazarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:

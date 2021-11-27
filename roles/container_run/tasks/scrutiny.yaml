@@ -1,20 +1,25 @@
-- name: Stop systemd
-  vars:
-    service_name: scuritny
-  import_tasks: systemd_root_stop.yaml
+# Error when trying to run pods with sudo
 
-- name: Scrutiny pod
-  become: yes
-  containers.podman.podman_pod:
+# - name: Scrutiny pod
+#   become: true
+#   containers.podman.podman_pod:
+#     name: scrutiny
+#     infra_name: scrutiny-pod
+#     ports:
+#       - "{{ scrutiny_port }}:8080"
+#     state: "{{ scrutiny_state }}"
+
+- name: Stop systemd
+  become: true
+  ansible.builtin.systemd:
     name: scrutiny
-    infra_name: scrutiny-pod
-    ports:
-      - "8080:8080"
-    state: "{{ scrutiny_state }}"
-  ignore_errors: yes
+    daemon_reload: true
+    enabled: true
+    state: stopped
+  ignore_errors: true
 
 - name: Scrutiny
-  become: yes
+  become: true
   containers.podman.podman_container:
     cap_add:
       - SYS_RAWIO
@@ -22,21 +27,47 @@
     device: "{{ scrutiny_device }}"
     image: "{{ scrutiny_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
-    name: scrutiny-web
-    pod: scrutiny
+      io.containers.autoupdate: registry
+    name: scrutiny
+    # name: scrutiny-web
+    generate_systemd:
+      container_prefix: ""
+      new: true
+      path: /lib/systemd/system
+      pod_prefix: ""
+      separator: ""
+      # pod: scrutiny
+      ports:
+        - "{{ scrutiny_port }}:8080"
     restart_policy: on-failure
     state: "{{ scrutiny_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z
       - /run/udev:/run/udev:ro,z
-  ignore_errors: yes
+  register: container
+  until: container.failed == false
 
-- name: Install Systemd
-  become: yes
-  vars:
-    service_name: scrutiny
-    service_state: "{{ scrutiny_state }}"
-  import_tasks: systemd_root.yaml
+# - name: Pod scrutiny systemd
+#   become: true
+#   containers.podman.podman_pod:
+#     generate_systemd:
+#       container_prefix: ""
+#       new: true
+#       path: /lib/systemd/system
+#       pod_prefix: ""
+#       separator: ""
+#     infra_name: scrutiny-pod
+#     name: scrutiny
+#     ports:
+#       - "{{ scrutiny_port }}:8080"
+#     state: "{{ scrutiny_state }}"
+
+- name: Enable scrutiny systemd
+  become: true
+  ansible.builtin.systemd:
+    name: scrutiny
+    daemon_reload: true
+    enabled: true
+    state: "{{ scrutiny_state }}"
+  register: service
+  until: service.failed == false

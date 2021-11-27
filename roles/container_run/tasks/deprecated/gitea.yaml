@@ -1,19 +1,13 @@
-- name: Gitea web config
-  file:
-    path: "{{ gitea_web_config }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ gitea_db_data }}"
+    - "{{ gitea_web_config }}"
+    - "{{ gitea_web_data }}"
 
-- name: Gitea web data
-  file:
-    path: "{{ gitea_web_data }}"
-    state: directory
-
-- name: Gitea postgres
-  file:
-    path: "{{ gitea_db_data }}"
-    state: directory
-
-- name: Gitea pod
+- name: Pod
   containers.podman.podman_pod:
     name: gitea
     network: caddy

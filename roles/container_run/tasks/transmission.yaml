@@ -1,26 +1,28 @@
-- name: Transmission Download folder
-  file:
-    path: "{{ transmission_download }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
-
-- name: Transmission web config
-  file:
-    path: "{{ transmission_web_config }}"
-    state: directory
+  loop:
+    - "{{ transmission_download }}"
+    - "{{ transmission_web_config }}"
 
 - name: Stop systemd
-  vars:
-    service_name: transmission
-  import_tasks: systemd_stop.yaml
+  ansible.builtin.systemd:
+    name: transmission
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
 
 - name: Transmission pod
   containers.podman.podman_pod:
-    name: transmission
     infra_name: transmission-pod
+    name: transmission
     network: caddy
     ports:
-      - "51413:51413/tcp"
-      - "51413:51413/udp"
+      - 51413:51413/tcp
+      - 51413:51413/udp
     state: "{{ transmission_state }}"
 
 - name: Transmission
@@ -32,26 +34,40 @@
       USER: "{{ transmission_user }}"
     image: "{{ transmission_image }}"
     labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: transmission-web
     pod: transmission
     restart_policy: on-failure
     state: "{{ transmission_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
-      - "{{ transmission_web_config }}:/config:U,z"
       - "{{ transmission_download }}:/downloads"
-    # ports:
-    #   - 9091:9091
-    #   - 51413
-    #   - 51413/udp
-    # Watch folder for auto download
-    # - '{{ transmission_watch }}:/watch'
+      - "{{ transmission_web_config }}:/config:U,z"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
-- name: Install systemd
-  vars:
-    service_name: transmission
-    service_state: "{{ transmission_state }}"
-  import_tasks: systemd.yaml
+- name: "Pod systemd"
+  containers.podman.podman_pod:
+    generate_systemd:
+      container_prefix: ""
+      new: true
+      path: /home/{{ ansible_user }}/.config/systemd/user
+      pod_prefix: ""
+      separator: ""
+    infra_name: "transmission-pod"
+    name: "transmission"
+    network: caddy
+    ports:
+      - 51413:51413/tcp
+      - 51413:51413/udp
+    state: "{{ transmission_state }}"
+
+- name: "Enable systemd"
+  ansible.builtin.systemd:
+    name: transmission
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: "{{ transmission_state }}"
+  register: service
+  until: service.failed == false

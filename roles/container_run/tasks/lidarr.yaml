@@ -1,27 +1,25 @@
-- name: Global Media folder
-  file:
-    path: "{{ global_media }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
-
-- name: Transmission Download folder
-  file:
-    path: "{{ transmission_download }}"
-    state: directory
-
-- name: Lidarr web config
-  file:
-    path: "{{ lidarr_web_config }}"
-    state: directory
+  loop:
+    - "{{ global_media }}"
+    - "{{ lidarr_web_config }}"
+    - "{{ transmission_download }}"
 
 - name: Stop systemd
-  vars:
-    service_name: lidarr
-  import_tasks: systemd_stop.yaml
+  ansible.builtin.systemd:
+    name: lidarr
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
 
 - name: Lidarr pod
   containers.podman.podman_pod:
-    name: lidarr
     infra_name: lidarr-pod
+    name: lidarr
     network: caddy
     state: "{{ lidarr_state }}"
 
@@ -34,16 +32,18 @@
     labels:
       diun.enable: "true"
       diun.watch_repo: "true"
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: lidarr-web
     pod: lidarr
     restart_policy: on-failure
     state: "{{ lidarr_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
-      - "{{ lidarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
+      - "{{ lidarr_web_config }}:/config:U,z"
       - "{{ transmission_download }}:/downloads"
+      - /etc/localtime:/etc/localtime:ro,z
+  register: container
+  until: container.failed == false
 
 - name: Install systemd
   vars:
