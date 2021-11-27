@@ -5,3 +5,4 @@
     name: service-caddy
     scope: user
     state: started
+  tags: caddy

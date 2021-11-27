@@ -38,7 +38,66 @@ auth.{$CADDYFILE_PROXY_SITE} {
     header_down X-Content-Type-Options "nosniff"
     header_down X-Frame-Options "SAMEORIGIN"
 }
-
+bazarr-hq.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy bazarr-hq:6767 {
+        import security-header
+    }
+}
+bazarr.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy bazarr:6767 {
+        import security-header
+    }
+}
+calibrew.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy calibrew:8083 {
+        import security-header
+    }
+}
+dashy.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy dashy:80 {
+        import security-header
+    }
+}
+jellyfin.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy jellyfin:8096 {
+        import security-header
+    }
+}
+kavita.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy kavita:5000 {
+        import security-header
+    }
+}
+komga.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy komga:8080 {
+        import security-header
+    }
+}
+librespeed.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy librespeed:80 {
+        import security-header
+    }
+}
+lidarr.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy lidarr:8686 {
+        import security-header
+    }
+}
+navidrome.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy navidrome:4533 {
+        import security-header
+    }
+}
+netdata.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:19999 {
+        import security-header
+    }
+}
 nextcloud.{$CADDYFILE_PROXY_SITE} {
     # encode zstd
     reverse_proxy nextcloud:80 {
@@ -49,78 +108,20 @@ nextcloud.{$CADDYFILE_PROXY_SITE} {
     redir /.well-known/carddav /remote.php/carddav 301
     redir /.well-known/caldav /remote.php/caldav 301
 }
-test.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy test:80 {
-        import security-header
-    }
-}
-librenms.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy librenms:8000 {
-        import security-header
-    }
-}
-grafana.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy grafana:3000 {
-        import security-header
-    }
-}
-heimdall.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy heimdall:80 {
-        import security-header
-    }
-}
-gitea.{$CADDYFILE_PROXY_SITE} {
-    reverse_proxy gitea:3000 {
-        import security-header
-    }
-}
-netdata.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:19999 {
-        import security-header
-    }
-}
-scrutiny.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:18080 {
-        import security-header
-    }
-}
-archivy.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy archivy:5000 {
-        import security-header
-    }
-}
-pgadmin.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy pgadmin:80 {
-        import security-header
-    }
-}
-librespeed.{$CADDYFILE_PROXY_SITE} {
-    reverse_proxy librespeed:80 {
-        import security-header
-    }
-}
-syncthing.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:8384 {
-        import security-header
-    }
-}
 nocodb.{$CADDYFILE_PROXY_SITE} {
     rewrite / /dashboard
     reverse_proxy nocodb:8080 {
         import security-header
     }
 }
-jellyfin.{$CADDYFILE_PROXY_SITE} {
-    reverse_proxy jellyfin:8096 {
+privatebin.{$CADDYFILE_PROXY_SITE} {
+    reverse_proxy privatebin:8080 {
+        import security-header
+    }
+}
+prowlarr.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy prowlarr:9696 {
         import security-header
     }
 }
@@ -142,45 +143,35 @@ radarr-hq.{$CADDYFILE_PROXY_SITE} {
         import security-header
     }
 }
-sonarr.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy sonarr:8989 {
-        import security-header
-    }
-}
-bazarr.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy bazarr:6767 {
-        import security-header
-    }
-}
-bazarr-hq.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy bazarr-hq:6767 {
-        import security-header
-    }
-}
-lidarr.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy lidarr:8686 {
-        import security-header
-    }
-}
 readarr.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
     reverse_proxy readarr:8787 {
         import security-header
     }
 }
-headphones.{$CADDYFILE_PROXY_SITE} {
+scrutiny.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
-    reverse_proxy headphones:8181 {
+    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:18080 {
         import security-header
     }
 }
-prowlarr.{$CADDYFILE_PROXY_SITE} {
+{$CADDYFILE_HOST_ADDRESS} {
+    reverse_proxy https://{$CADDYFILE_HOST_ADDRESS}:9090 {
+        transport http {
+            tls_insecure_skip_verify
+            }
+        }
+    tls internal
+}
+sonarr.{$CADDYFILE_PROXY_SITE} {
     import proxy-auth
-    reverse_proxy prowlarr:9696 {
+    reverse_proxy sonarr:8989 {
+        import security-header
+    }
+}
+syncthing.{$CADDYFILE_PROXY_SITE} {
+    import proxy-auth
+    reverse_proxy {$CADDYFILE_HOST_ADDRESS}:8384 {
         import security-header
     }
 }
@@ -189,39 +180,55 @@ transmission.{$CADDYFILE_PROXY_SITE} {
         import security-header
     }
 }
-jackett.{$CADDYFILE_PROXY_SITE} {
-    reverse_proxy jackett:9117 {
-        import security-header
-    }
-}
-calibrew.{$CADDYFILE_PROXY_SITE} {
-    reverse_proxy calibrew:8083 {
-        import security-header
-    }
-}
-privatebin.{$CADDYFILE_PROXY_SITE} {
-    reverse_proxy privatebin:8080 {
-        import security-header
-    }
-}
-navidrome.{$CADDYFILE_PROXY_SITE} {
-    reverse_proxy navidrome:4533 {
-        import security-header
-    }
-}
-kavita.{$CADDYFILE_PROXY_SITE} {
-    reverse_proxy kavita:5000 {
-        import security-header
-    }
-}
-komga.{$CADDYFILE_PROXY_SITE} {
-    reverse_proxy komga:8080 {
-        import security-header
-    }
-}
-dashy.{$CADDYFILE_PROXY_SITE} {
-    import proxy-auth
-    reverse_proxy dashy:80 {
-        import security-header
-    }
-}
+# test.{$CADDYFILE_PROXY_SITE} {
+#     import proxy-auth
+#     reverse_proxy test:80 {
+#         import security-header
+#     }
+# }
+# librenms.{$CADDYFILE_PROXY_SITE} {
+#     import proxy-auth
+#     reverse_proxy librenms:8000 {
+#         import security-header
+#     }
+# }
+# grafana.{$CADDYFILE_PROXY_SITE} {
+#     import proxy-auth
+#     reverse_proxy grafana:3000 {
+#         import security-header
+#     }
+# }
+# heimdall.{$CADDYFILE_PROXY_SITE} {
+#     import proxy-auth
+#     reverse_proxy heimdall:80 {
+#         import security-header
+#     }
+# }
+# gitea.{$CADDYFILE_PROXY_SITE} {
+#     reverse_proxy gitea:3000 {
+#         import security-header
+#     }
+# }
+# archivy.{$CADDYFILE_PROXY_SITE} {
+#     import proxy-auth
+#     reverse_proxy archivy:5000 {
+#         import security-header
+#     }
+# }
+# pgadmin.{$CADDYFILE_PROXY_SITE} {
+#     import proxy-auth
+#     reverse_proxy pgadmin:80 {
+#         import security-header
+#     }
+# }
+# headphones.{$CADDYFILE_PROXY_SITE} {
+#     import proxy-auth
+#     reverse_proxy headphones:8181 {
+#         import security-header
+#     }
+# }
+# jackett.{$CADDYFILE_PROXY_SITE} {
+#     reverse_proxy jackett:9117 {
+#         import security-header
+#     }
+# }

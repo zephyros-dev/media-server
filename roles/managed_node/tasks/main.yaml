@@ -9,6 +9,7 @@
 
 - name: Setup Virtualization
   import_tasks: "system/virtualization.yaml"
+  tags: virt
 
 - name: Allow exe executable files
   import_tasks: "system/exe.yaml"

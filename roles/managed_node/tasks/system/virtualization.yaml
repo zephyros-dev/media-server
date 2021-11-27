@@ -1,12 +1,17 @@
 - name: Install the 'virtualization' package group
-  become: yes
-  dnf:
+  become: true
+  ansible.builtin.dnf:
     name: "@virtualization"
     state: latest
-# TODO: Error: The `lxml` module is not importable. Check the requirements
-# - name: Create default network for libvirt
-#   become: yes
-#   community.libvirt.virt_net:
-#     autostart: yes
-#     command: create
-#     name: default
+
+- name: Install lxml for libvirt
+  become: true
+  ansible.builtin.pip:
+    name: lxml
+
+- name: Create default network
+  become: true
+  community.libvirt.virt_net:
+    autostart: yes
+    command: create
+    name: default
