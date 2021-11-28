@@ -1,7 +1,7 @@
-caddy_caddyfile_zerossl_email: ENC[AES256_GCM,data:6XtD2JiFPLt0RJPpHNy9aotqT/TZ6Oo=,iv:siGTC5gfvlusQ1ZYG16HTwX0kIsFFDPEhaW3CusUgWA=,tag:h+ehuCMKlMp4jm08rbV2HA==,type:str]
-caddy_caddyfile_basic_auth_user: ENC[AES256_GCM,data:gLYXkUY=,iv:zt4QK/JMY/WSdWH/VpR6HSSJZ6UWJajMpea0N+6a1zM=,tag:EZ2mD3RmZvGhXzpN3q3lYA==,type:str]
-caddy_caddyfile_basic_auth_pass: ENC[AES256_GCM,data:J75Rcn8MLofFea0G5Y9C/SL54jFAgwJN42nN3pobXos7SbXjTdrUv9lBoJFTz9/pPKvs8pKjTgGw/bF+l4LvdN6HlufBoyxTAYqJU0MKcUQ=,iv:hgMmWnrKdA9rj6Z42l6Ax3e6xk923f/wDs4Jdh28nQg=,tag:dewI3zU4NGgkP8x3rRcP4Q==,type:str]
-caddy_caddyfile_host_address: ENC[AES256_GCM,data:03j6A6ca0JGLqA==,iv:fm7+Kvb0KTodxxeHWfNi9NKmmDVkNDqAQ/iJLsZSyGw=,tag:ci/kkKMfBmDo4yDplx3O2Q==,type:str]
+caddyfile_zerossl_email: ENC[AES256_GCM,data:sY2mg5BteUMSXp9haqWxChMMvnDK1i8=,iv:iTZ202WsUN/fH2U4/oSyt5ewK8n/hWnMgCIMEcO4dDA=,tag:pm9OGWJr0E/g9ew5xebGAA==,type:str]
+caddyfile_auth_user: ENC[AES256_GCM,data:TNyfWOE=,iv:DTngxkSMyrKkNpzXn4VZIqd7UXakJMkLD3FkLuntilI=,tag:1RXLxH8cXpSxewTY/pUrLA==,type:str]
+caddyfile_auth_pass: ENC[AES256_GCM,data:z63Taep6ULwCCtgQeovEzYOLuW5LdGicXtIJDqpmhZSkC7p5xMzQgt6ZYZP1SSyLldyDO1nL5M1VzVW4bWzhKxs3KNWWGAG0B2QsSCM1svQ=,iv:M9vfH+ydEN13GtZsyyVftQSkNbDADFViwX0oApkRrVQ=,tag:e+6cSGMvvBXlmKke/TfDBg==,type:str]
+caddyfile_host_address: ENC[AES256_GCM,data:dkCooik4Qg+WdQ==,iv:GVq+9vCCHWQwKdAHCl6tMDTU3n5eYT2heX1a1Y2UGwQ=,tag:fqVMwMiof+JcJsJjwnLDqg==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -17,8 +17,8 @@ sops:
             NVFTc2NXdkJWUUo1dTlwNENUOXJVT1kKSLU0kBDyViaTLoyF76jShsOd21SFNngk
             Ez1GQtVUd271ufVDYQUz+SGBh2Nch/VwkPXVmOzy434guwB6eW6LxA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-10-31T04:32:04Z"
-    mac: ENC[AES256_GCM,data:+5VxNE90/utqUVpnFdXLZyAZPJFFHwgzIJsE9G7MkqrgMxfdnYx/iEC7Gdw+/3WSsoBGf2mtyCD/EnpejiCegcOpVFBMch3OFK9xPr+ARNBgvDpw2R0dOFh9Cyfva89eszweIJyNnkqZhd6PDA74keooNi4gYzBqnC6nDMND5SM=,iv:vil7/BIJmndbHi645owAveIwP7w/A3TO+y56lW+GJ20=,tag:w8BvCJGdcqTP5C3u7QHObw==,type:str]
+    lastmodified: "2021-11-28T02:27:46Z"
+    mac: ENC[AES256_GCM,data:WeqKsbuUAbk8qmIfX+rRqH1vueAXes8HGqMdyThIOpYDgrfA8MgZ9FuifayxYOw0Rg+wGQbMPdW7PX3qYGVGXvVn+QAX/9tUpEH9TryiQhX7XuOmWuTrqcI3tr0CSjhb0yiNHW1sc8rQcze1WAxcKFuBs30oNRCLmPOlNQn0l0w=,iv:7+/R1bck6/O6oi8HLL6iQPrd1Xgj+0iR3p1cVR9qgCA=,tag:CrUhc5j0n6RDKghF56hlng==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.7.1

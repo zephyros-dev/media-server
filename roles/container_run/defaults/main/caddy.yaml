@@ -1,15 +1,15 @@
 # Caddy
-caddy_state: "started"
-caddy_image: "caddy:2.4.2-alpine"
+caddy_state: started
+caddy_image: caddy:2.4.2-alpine
 caddy_data: "{{ global_data_path }}/caddy"
 caddy_data_caddyfile: "{{ caddy_data }}/Caddyfile"
 caddy_data_config: "{{ caddy_data }}/config"
 caddy_data_data: "{{ caddy_data }}/data"
 
-caddy_caddyfile_zerossl_email: "secret_example@email.com"
-server_domain: "secret_example.com"
+caddy_caddyfile_zerossl_email: secret_example@email.com
+server_domain: secret_example.com
 # This is the address to reach the host when using podman
-caddy_caddyfile_host_address: "10.0.2.2"
-caddy_caddyfile_basic_auth_user: "secret_string"
-caddy_caddyfile_basic_auth_pass: "secret_string"
-caddy_caddyfile_auth_token: "secret_string"
+caddyfile_host_address: "10.0.2.2"
+caddyfile_auth_user: secret_string
+caddyfile_auth_pass: secret_string
+caddyfile_auth_token: secret_string

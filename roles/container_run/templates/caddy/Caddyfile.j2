@@ -1,0 +1,182 @@
+(basic-auth) {
+  basicauth / {
+    {{ caddyfile_auth_user }} {{ caddyfile_auth_pass }}
+  }
+}
+# A snippet to check if a cookie token is set. if not, store the current page as the referer and redirect to auth site
+(proxy-auth) {
+  # if cookie not = some-token-nonsense
+  @no-auth {
+    not path *favicon*
+    not header_regexp mycookie Cookie myid={{ caddyfile_auth_token }}
+    # https://github.com/caddyserver/caddy/issues/3916
+  }
+  # store current time, page and redirect to auth
+  route @no-auth {
+    header Set-Cookie "myreferer={scheme}://{host}{uri}; Domain={{ server_domain }}; Path=/; Max-Age=30; HttpOnly; SameSite=Strict; Secure"
+    redir https://auth.{{ server_domain }}
+  }
+}
+auth.{{ server_domain }} {
+  route {
+    # require authentication
+    import basic-auth
+    # upon successful auth, set a client token
+    header Set-Cookie "myid={{ caddyfile_auth_token }}; Domain={{ server_domain }}; Path=/; Max-Age=3600; HttpOnly; SameSite=Strict; Secure"
+    # delete the referer cookie
+    header +Set-Cookie "myreferer=null; Domain={{ server_domain }}; Path=/; Expires=Thu, 25 Sep 1971 12:00:00 GMT; HttpOnly; SameSite=Strict; Secure"
+    # redirect back to the original site
+    redir {http.request.cookie.myreferer}
+  }
+  # fallback
+  respond "Nope"
+}
+(security-header) {
+    header_down Strict-Transport-Security "max-age=15552000;"
+    header_down Referrer-Policy "strict-origin-when-cross-origin"
+    header_down X-XSS-Protection "1; mode=block"
+    header_down X-Content-Type-Options "nosniff"
+    header_down X-Frame-Options "SAMEORIGIN"
+}
+bazarr-hq.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy bazarr-hq:6767 {
+        import security-header
+    }
+}
+bazarr.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy bazarr:6767 {
+        import security-header
+    }
+}
+calibrew.{{ server_domain }} {
+    reverse_proxy calibrew:8083 {
+        import security-header
+    }
+}
+dashy.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy dashy:80 {
+        import security-header
+    }
+}
+jellyfin.{{ server_domain }} {
+    reverse_proxy jellyfin:8096 {
+        import security-header
+    }
+}
+kavita.{{ server_domain }} {
+    reverse_proxy kavita:5000 {
+        import security-header
+    }
+}
+komga.{{ server_domain }} {
+    reverse_proxy komga:8080 {
+        import security-header
+    }
+}
+librespeed.{{ server_domain }} {
+    reverse_proxy librespeed:80 {
+        import security-header
+    }
+}
+lidarr.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy lidarr:8686 {
+        import security-header
+    }
+}
+navidrome.{{ server_domain }} {
+    reverse_proxy navidrome:4533 {
+        import security-header
+    }
+}
+netdata.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy {{ caddyfile_host_address }}:19999 {
+        import security-header
+    }
+}
+nextcloud.{{ server_domain }} {
+    # encode zstd
+    reverse_proxy nextcloud:80 {
+        # header_up Host {http.reverse_proxy.upstream.hostporti}
+        # header_up X-Forwarded-Host {host}
+        import security-header
+        }
+    redir /.well-known/carddav /remote.php/carddav 301
+    redir /.well-known/caldav /remote.php/caldav 301
+}
+nocodb.{{ server_domain }} {
+    rewrite / /dashboard
+    reverse_proxy nocodb:8080 {
+        import security-header
+    }
+}
+privatebin.{{ server_domain }} {
+    reverse_proxy privatebin:8080 {
+        import security-header
+    }
+}
+prowlarr.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy prowlarr:9696 {
+        import security-header
+    }
+}
+pymedusa.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy pymedusa:8081 {
+        import security-header
+    }
+}
+radarr.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy radarr:7878 {
+        import security-header
+    }
+}
+radarr-hq.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy radarr-hq:7878 {
+        import security-header
+    }
+}
+readarr.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy readarr:8787 {
+        import security-header
+    }
+}
+scrutiny.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy {{ caddyfile_host_address }}:18080 {
+        import security-header
+    }
+}
+{{ caddyfile_host_address }} {
+    reverse_proxy https://{{ caddyfile_host_address }}:9090 {
+        transport http {
+            tls_insecure_skip_verify
+            }
+        }
+    tls internal
+}
+sonarr.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy sonarr:8989 {
+        import security-header
+    }
+}
+syncthing.{{ server_domain }} {
+    import proxy-auth
+    reverse_proxy {{ caddyfile_host_address }}:8384 {
+        import security-header
+    }
+}
+transmission.{{ server_domain }} {
+    reverse_proxy transmission:9091 {
+        import security-header
+    }
+}
