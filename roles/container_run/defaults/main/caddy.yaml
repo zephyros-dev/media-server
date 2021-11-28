@@ -5,8 +5,6 @@ caddy_data: "{{ global_data_path }}/caddy"
 caddy_data_caddyfile: "{{ caddy_data }}/Caddyfile"
 caddy_data_config: "{{ caddy_data }}/config"
 caddy_data_data: "{{ caddy_data }}/data"
-
-caddy_caddyfile_zerossl_email: secret_example@email.com
 server_domain: secret_example.com
 # This is the address to reach the host when using podman
 caddyfile_host_address: "10.0.2.2"

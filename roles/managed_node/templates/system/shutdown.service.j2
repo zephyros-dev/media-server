@@ -1,0 +1,12 @@
+[Unit]
+Description={{ template_var.systemd_description }}
+Wants=network.target
+After=network-online.target
+
+[Service]
+ExecStart={{ template_var.command }}
+RemainAfterExit=true
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
