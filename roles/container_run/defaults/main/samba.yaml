@@ -1,3 +1,3 @@
-samba_image: elswork/samba:latest
+samba_image: elswork/samba:3.2.7
 samba_state: started
 samba_password: secret
