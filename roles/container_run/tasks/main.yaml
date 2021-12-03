@@ -20,8 +20,8 @@
 # - import_tasks: gitea.yaml
 # - import_tasks: headphones.yaml
 # - import_tasks: heimdall.yaml
-# - import_tasks: jackett.yaml
-#   tags: jackett
+- import_tasks: jackett.yaml
+  tags: jackett
 - import_tasks: jellyfin.yaml
   tags: jellyfin
 - import_tasks: kavita.yaml

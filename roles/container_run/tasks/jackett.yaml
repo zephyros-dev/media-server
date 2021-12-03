@@ -1,17 +1,23 @@
-- name: Jackett web config
-  file:
-    path: "{{ jackett_web_config }}"
+- name: Prepare data folder
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ jackett_web_config }}"
 
 - name: Stop systemd
-  vars:
-    service_name: jackett
-  import_tasks: systemd_stop.yaml
-
-- name: Jackett pod
-  containers.podman.podman_pod:
+  ansible.builtin.systemd:
     name: jackett
+    daemon_reload: true
+    enabled: true
+    scope: user
+    state: stopped
+  ignore_errors: true
+
+- name: Pod
+  containers.podman.podman_pod:
     infra_name: jackett-pod
+    name: jackett
     network: caddy
     state: "{{ jackett_state }}"
 
