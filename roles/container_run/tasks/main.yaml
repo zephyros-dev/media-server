@@ -25,6 +25,7 @@
 - import_tasks: jellyfin.yaml
   tags: jellyfin
 - import_tasks: kavita.yaml
+  tags: kavita
 - import_tasks: komga.yaml
 - import_tasks: librespeed.yaml
 - import_tasks: lidarr.yaml
