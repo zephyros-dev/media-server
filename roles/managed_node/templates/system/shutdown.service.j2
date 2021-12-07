@@ -4,8 +4,7 @@ Wants=network.target
 After=network-online.target
 
 [Service]
-ExecStart={{ template_var.command }}
-RemainAfterExit=true
+ExecStart=shutdown
 Type=oneshot
 
 [Install]

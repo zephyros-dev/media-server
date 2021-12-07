@@ -10,6 +10,7 @@
 - name: Setup system systemd
   import_tasks: system/systemd/system.yaml
   become: true
+  tags: systemd
 
 - name: Setup Virtualization
   import_tasks: system/virtualization.yaml
