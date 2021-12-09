@@ -19,6 +19,7 @@
     env:
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
+      TZ: "{{ global_timezone }}"
     generate_systemd:
       container_prefix: ""
       new: true
@@ -34,7 +35,6 @@
     state: "{{ syncthing_state }}"
     volumes:
       - "{{ syncthing_data }}:/var/syncthing:U,z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

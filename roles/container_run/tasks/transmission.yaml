@@ -32,6 +32,7 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       USER: "{{ transmission_user }}"
+      TZ: "{{ global_timezone }}"
     image: "{{ transmission_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -42,7 +43,6 @@
     volumes:
       - "{{ transmission_download }}:/downloads"
       - "{{ transmission_web_config }}:/config:U,z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

@@ -20,6 +20,8 @@
 - name: Samba
   containers.podman.podman_container:
     command: '-u "0:0:root:root:{{ samba_password }}" -s "storage:/storage:rw:root"'
+    env:
+      TZ: "{{ global_timezone }}"
     image: "{{ samba_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -35,7 +37,6 @@
     state: "{{ samba_state }}"
     volumes:
       - "{{ global_storage }}:/storage"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

@@ -28,6 +28,7 @@
     env:
       PGID: "1000"
       PUID: "1000"
+      TZ: "{{ global_timezone }}"
     image: "{{ readarr_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -39,7 +40,6 @@
       - "{{ global_media }}:/home"
       - "{{ readarr_web_config }}:/config:z"
       - "{{ transmission_download }}:/downloads"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

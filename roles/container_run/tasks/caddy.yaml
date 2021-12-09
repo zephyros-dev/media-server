@@ -24,6 +24,8 @@
 
 - name: Caddy
   containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
     generate_systemd:
       container_prefix: ""
       new: true
@@ -44,7 +46,6 @@
       - "{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:U,ro,z"
       - "{{ caddy_data_config }}:/config:U,z"
       - "{{ caddy_data_data }}:/data:U,z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

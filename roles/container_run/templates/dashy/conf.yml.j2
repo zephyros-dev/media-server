@@ -20,7 +20,7 @@ sections:
         url: https://nextcloud.{{ server_domain }}
       - icon: favicon
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddy_caddyfile_host_address }}:8384
+        statusCheckUrl: http://{{ caddyfile_host_address }}:8384
         title: Syncthing
         url: https://syncthing.{{ server_domain }}
       - icon: favicon
@@ -121,7 +121,7 @@ sections:
     items:
       - icon: favicon
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddy_caddyfile_host_address }}:19999
+        statusCheckUrl: http://{{ caddyfile_host_address }}:19999
         title: Netdata
         url: https://netdata.{{ server_domain }}
       - icon: favicon
@@ -131,7 +131,7 @@ sections:
         url: https://librespeed.{{ server_domain }}
       - icon: favicon
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddy_caddyfile_host_address }}:8080
+        statusCheckUrl: http://{{ caddyfile_host_address }}:8080
         title: Scrutiny
         url: https://scrutiny.{{ server_domain }}
   - name: Misc

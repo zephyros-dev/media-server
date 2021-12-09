@@ -30,6 +30,8 @@
 
 - name: Dashy
   containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
     image: "{{ dashy_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -39,7 +41,6 @@
     state: "{{ dashy_state }}"
     volumes:
       - "{{ dashy_volume_config }}/conf.yml:/app/public/conf.yml:ro,z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

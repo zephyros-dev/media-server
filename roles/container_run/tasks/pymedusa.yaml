@@ -25,6 +25,8 @@
 
 - name: Pymedusa
   containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
     image: "{{ pymedusa_image }}"
     label:
       io.containers.autoupdate: registry
@@ -36,7 +38,6 @@
       - "{{ global_media }}:/home"
       - "{{ pymedusa_web_config }}:/config:U,z"
       - "{{ transmission_download }}:/downloads"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

@@ -1,19 +1,17 @@
 ---
 systemd:
   system:
-    service:
-      - name: shutdown
-        systemd_description: Shutdown system
-        timer: "*-*-* 00:00:00"
+    - name: shutdown
+      systemd_description: Shutdown system
+      timer: "*-*-* 00:00:00"
   user:
-    service:
-      - command: ansible-playbook managed_node.yaml
-        name: system-update
-        systemd_description: Update whole system
-        systemd_working_directory: "{{ global_container_run_path }}"
-        timer: Sat *-*-* 18:00:00
-      - command: podman image prune --force
-        name: image-prune
-        systemd_description: Podman image prune service
-        systemd_working_directory: "%h"
-        timer: Sat *-*-* 19:00:00
+    - command: ansible-playbook managed_node.yaml
+      name: system-update
+      systemd_description: Update whole system
+      systemd_working_directory: "{{ global_container_run_path }}"
+      timer: Sat *-*-* 18:00:00
+    - command: podman image prune --force
+      name: image-prune
+      systemd_description: Podman image prune service
+      systemd_working_directory: "%h"
+      timer: Sat *-*-* 19:00:00

@@ -34,6 +34,7 @@
       POSTGRES_USER: "{{ nextcloud_postgres_user }}"
       REDIS_HOST: localhost
       REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
+      TZ: "{{ global_timezone }}"
     image: "{{ nextcloud_web_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -44,12 +45,13 @@
     volumes:
       - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
       - "{{ nextcloud_web_data }}:/var/www/html:z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 
 - name: Nextcloud Redis
   containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
     command: redis-server --requirepass {{ nextcloud_redis_host_password }}
     image: "{{ nextcloud_redis_image }}"
     labels:
@@ -58,8 +60,6 @@
     pod: nextcloud
     restart_policy: on-failure
     state: "{{ nextcloud_state }}"
-    volume:
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 
@@ -69,6 +69,7 @@
       POSTGRES_DB: "{{ nextcloud_postgres_db }}"
       POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
       POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+      TZ: "{{ global_timezone }}"
     image: "{{ nextcloud_postgres_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -78,7 +79,6 @@
     state: "{{ nextcloud_state }}"
     volumes:
       - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

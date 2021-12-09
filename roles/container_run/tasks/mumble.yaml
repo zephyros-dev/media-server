@@ -27,6 +27,8 @@
 
 - name: Mumble
   containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
     image: "{{ mumble_image }}"
     labels:
       diun.enable: "true"
@@ -38,7 +40,6 @@
     state: "{{ mumble_state }}"
     volumes:
       - "{{ mumble_server_data }}:/data:U,z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

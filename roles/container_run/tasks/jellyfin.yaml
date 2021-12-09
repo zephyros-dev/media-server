@@ -31,6 +31,8 @@
   # ports:
   # - 8096
   containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
     group_add:
       - "998"
     image: "{{ jellyfin_image }}"
@@ -48,7 +50,6 @@
       - "{{ jellyfin_web_config }}:/config:U,z"
       - /dev/dri/card0:/dev/dri/card0
       - /dev/dri/renderD128:/dev/dri/renderD128
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

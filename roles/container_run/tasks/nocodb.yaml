@@ -27,6 +27,7 @@
       POSTGRES_DB: nocodb
       POSTGRES_PASSWORD: "{{ nocodb_db_password }}"
       POSTGRES_USER: "{{ nocodb_db_username }}"
+      TZ: "{{ global_timezone }}"
     image: "{{ nocodb_db_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -35,7 +36,6 @@
     restart_policy: on-failure
     state: "{{ nocodb_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
       - "{{ nocodb_db_data }}:/var/lib/postgresql/data"
   register: container
   until: container.failed == false

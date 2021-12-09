@@ -10,3 +10,6 @@ global_pgid: "0"
 
 # Network
 network_state: "present"
+
+# Timezone
+global_timezone: "Etc/UTC"

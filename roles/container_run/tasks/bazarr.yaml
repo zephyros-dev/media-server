@@ -27,6 +27,7 @@
     env:
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
+      TZ: "{{ global_timezone }}"
     image: "{{ bazarr_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -37,7 +38,6 @@
     volumes:
       - "{{ bazarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

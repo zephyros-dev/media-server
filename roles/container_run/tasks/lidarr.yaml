@@ -28,6 +28,7 @@
     env:
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
+      TZ: "{{ global_timezone }}"
     image: "{{ lidarr_image }}"
     labels:
       diun.enable: "true"
@@ -41,7 +42,6 @@
       - "{{ global_media }}:/home"
       - "{{ lidarr_web_config }}:/config:U,z"
       - "{{ transmission_download }}:/downloads"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

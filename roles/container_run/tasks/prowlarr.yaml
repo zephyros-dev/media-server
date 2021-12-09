@@ -30,6 +30,7 @@
       PGID: "1000"
       PUID: "1000"
       UMASK: "002"
+      TZ: "{{ global_timezone }}"
     image: "{{ prowlarr_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -39,7 +40,6 @@
     state: "{{ prowlarr_state }}"
     volumes:
       - "{{ prowlarr_web_config }}:/config:z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

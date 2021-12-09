@@ -14,7 +14,7 @@
   ansible.builtin.template:
     src: "user/{{ item.name }}.service.j2"
     dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.service"
-  loop: "{{ systemd.user.service }}"
+  loop: "{{ systemd.user }}"
 
 - name: Enable the systemd service
   ansible.builtin.systemd:
@@ -23,7 +23,7 @@
     enabled: yes
     state: restarted
     name: "{{ item.name }}"
-  loop: "{{ systemd.user.service }}"
+  loop: "{{ systemd.user }}"
   when: item.timer is not defined
 
 - name: Template the timer
@@ -32,7 +32,7 @@
   ansible.builtin.template:
     src: "user/{{ item.name }}.timer.j2"
     dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.timer"
-  loop: "{{ systemd.user.timer }}"
+  loop: "{{ systemd.user }}"
   when: item.timer is defined
 
 - name: Enable the systemd timer
@@ -44,5 +44,5 @@
     enabled: yes
     state: started
     name: "{{ item.name }}.timer"
-  loop: "{{ systemd.user.service }}"
+  loop: "{{ systemd.user }}"
   when: item.timer is defined

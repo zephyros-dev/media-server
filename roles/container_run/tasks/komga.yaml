@@ -23,6 +23,8 @@
 
 - name: Komga
   containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
     image: "{{ komga_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -33,7 +35,6 @@
     volumes:
       - "{{ global_media }}:/home"
       - "{{ komga_volume_config }}:/config:U,z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

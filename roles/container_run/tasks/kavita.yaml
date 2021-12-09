@@ -23,6 +23,8 @@
 
 - name: Kavita
   containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
     image: "{{ kavita_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -33,7 +35,6 @@
     volumes:
       - "{{ global_media }}:/home"
       - "{{ kavita_volume_data }}:/kavita/config:U,z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

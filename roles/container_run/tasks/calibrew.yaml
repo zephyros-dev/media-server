@@ -27,6 +27,7 @@
     env:
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
+      TZ: "{{ global_timezone }}"
     image: "{{ calibrew_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -37,7 +38,6 @@
     volumes:
       - "{{ calibrew_book }}:/books"
       - "{{ calibrew_web_config }}:/config:U,z"
-      - /etc/localtime:/etc/localtime:ro,z
   register: container
   until: container.failed == false
 

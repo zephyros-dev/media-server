@@ -25,6 +25,8 @@
 - name: SFTP
   containers.podman.podman_container:
     command: "{{ sftp_user }}:{{ sftp_password }}:::data"
+    env:
+      TZ: "{{ global_timezone }}"
     image: "{{ sftp_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -34,7 +36,6 @@
     state: "{{ sftp_state }}"
     volumes:
       - "{{ sftp_volume_data }}:/home/{{ sftp_user }}/data:ro"
-      - /etc/localtime:/etc/localtime:ro,z
 
 - name: "Pod systemd"
   containers.podman.podman_pod:

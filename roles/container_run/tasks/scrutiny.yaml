@@ -25,6 +25,8 @@
       - SYS_RAWIO
       - SYS_ADMIN
     device: "{{ scrutiny_device }}"
+    env:
+      TZ: "{{ global_timezone }}"
     image: "{{ scrutiny_image }}"
     labels:
       io.containers.autoupdate: registry
@@ -42,7 +44,6 @@
     restart_policy: on-failure
     state: "{{ scrutiny_state }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro,z
       - /run/udev:/run/udev:ro,z
   register: container
   until: container.failed == false
