@@ -36,10 +36,13 @@
 - import_tasks: nocodb.yaml
 - import_tasks: privatebin.yaml
 - import_tasks: prowlarr.yaml
+  tags: prowlarr
 - import_tasks: pymedusa.yaml
   tags: pymedusa
 - import_tasks: radarr.yaml
+  tags: radarr
 - import_tasks: radarr_hq.yaml
+  tags: radarr
 - import_tasks: readarr.yaml
   tags: readarr
 - import_tasks: samba.yaml
