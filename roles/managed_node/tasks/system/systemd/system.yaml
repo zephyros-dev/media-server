@@ -30,7 +30,7 @@
   ansible.builtin.systemd:
     daemon_reload: yes
     enabled: yes
-    state: started
+    state: "{{ item.state }}"
     name: "{{ item.name }}.timer"
   loop: "{{ systemd.system }}"
   when: item.timer is defined
