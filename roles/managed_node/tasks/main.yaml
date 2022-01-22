@@ -1,3 +1,7 @@
+- name: Harden ssh
+  import_tasks: system/ssh.yaml
+  when: ansible_user != "root"
+
 - name: Setup hostname
   import_tasks: system/hostname.yaml
 

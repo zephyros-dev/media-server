@@ -1,0 +1,6 @@
+- name: Harden ssh
+  import_role:
+    name: devsec.hardening.ssh_hardening
+  vars:
+    sftp_enabled: true
+  become: true
