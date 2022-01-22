@@ -34,5 +34,6 @@
 - name: Install crowdsec
   import_tasks: system/crowdsec.yaml
 
-- name: Update all packages
-  import_tasks: system/update.yaml
+- name: Automatic update packages
+  import_tasks: system/auto_update.yaml
+  become: true

@@ -1,0 +1,18 @@
+- name: Install automatic update packages
+  ansible.builtin.dnf:
+    name: dnf-automatic
+    state: latest
+
+- name: Edit timer for automatic update
+  community.general.ini_file:
+    path: /usr/lib/systemd/system/dnf-automatic-install.timer
+    section: Timer
+    option: OnCalendar
+    value: "{{ auto_update.timer }}"
+
+- name: Enable automatic update timer
+  ansible.builtin.systemd:
+    name: dnf-automatic-install.timer
+    daemon_reload: yes
+    enabled: yes
+    state: "{{ auto_update.state }}"

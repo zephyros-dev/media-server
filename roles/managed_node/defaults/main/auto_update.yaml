@@ -1,0 +1,3 @@
+auto_update:
+  timer: "*-*-* 7:00"
+  state: started
