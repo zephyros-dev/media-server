@@ -7,6 +7,11 @@
 - name: Setup user systemd
   import_tasks: system/systemd/user.yaml
 
+- name: Setup storage mounts
+  import_tasks: system/mount_disk.yaml
+  become: true
+  tags: mount
+
 - name: Setup system systemd
   import_tasks: system/systemd/system.yaml
   become: true
@@ -24,11 +29,6 @@
 
 - name: Install crowdsec
   import_tasks: system/crowdsec.yaml
-
-- name: Setup storage mounts
-  vars:
-    disk_storage: "{{ disks.storage }}"
-  include_tasks: system/disk_storage.yaml
 
 - name: Update all packages
   import_tasks: system/update.yaml

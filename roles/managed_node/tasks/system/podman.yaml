@@ -1,6 +1,6 @@
 - name: Podman
   become: True
-  dnf:
+  ansible.builtin.dnf:
     name:
       - podman-docker
       - slirp4netns
@@ -8,7 +8,7 @@
 
 - name: Podman testing repo
   become: True
-  dnf:
+  ansible.builtin.dnf:
     name:
       - podman
     enablerepo: updates-testing
@@ -17,7 +17,7 @@
 
 - name: Install podman
   become: True
-  dnf:
+  ansible.builtin.dnf:
     name:
       - podman
     state: latest
@@ -39,23 +39,8 @@
     scope: user
     state: started
 
-- name: Create container config folder
-  file:
-    path: "~/.config/containers"
-    state: directory
-
-- name: Change podman registries configuration
-  copy:
-    dest: "~/.config/containers/registries.conf"
-    src: "podman/registries.conf"
-
-- name: Add hostloop back to slirp4netns
-  copy:
-    dest: "~/.config/containers/containers.conf"
-    src: "podman/containers.conf"
-
 - name: Setup privileged ports
-  sysctl:
+  ansible.builtin.sysctl:
     name: net.ipv4.ip_unprivileged_port_start
     sysctl_set: yes
     value: "80"

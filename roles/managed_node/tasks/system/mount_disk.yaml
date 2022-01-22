@@ -1,19 +1,24 @@
 - name: Mount storage disks
-  become: yes
   ansible.posix.mount:
-    path: /mnt/disks_{{ item.id }}
+    path: /mnt/disks_storage_{{ item.id }}
     src: /dev/disk/by-id/{{ item.id }}-part1
     fstype: btrfs
     opts: compress=zstd:1
     state: mounted
-  loop: "{{ disk_storage }}"
+  loop: "{{ disks.storage.disks_list }}"
 
 - name: Mergerfs storage disk
-  become: yes
   ansible.posix.mount:
     path: /mnt/storage
-    src: /mnt/disks_*
+    src: /mnt/disks_storage_*
     fstype: fuse.mergerfs
     opts: defaults,nonempty,allow_other,use_ino,cache.files=off,moveonenospc=true,dropcacheonclose=true,minfreespace=200G,fsname=mergerfs
     state: mounted
-# TODO: Mount parity disk
+
+- name: Mount parity disks
+  ansible.posix.mount:
+    path: "/mnt/disks_parity_{{ item.id }}"
+    src: "/dev/disk/by-id/{{ item.id }}-part1"
+    fstype: ext4
+    state: mounted
+  loop: "{{ disks.parity.disks_list }}"
