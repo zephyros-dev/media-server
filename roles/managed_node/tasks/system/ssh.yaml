@@ -3,4 +3,6 @@
     name: devsec.hardening.ssh_hardening
   vars:
     sftp_enabled: true
+    ssh_allow_tcp_forwarding: 'yes'
   become: true
+
