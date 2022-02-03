@@ -14,19 +14,19 @@
     state: stopped
   ignore_errors: true
 
-# Used with elsework/samba. Can only use root user to map the permission to the running user
-# Could be fixed with a chmod of entrypoint (?)
-# userns: keep-id
 - name: Samba
   containers.podman.podman_container:
-    command: '-u "0:0:root:root:{{ samba_password }}" -s "storage:/storage:rw:root"'
-    env:
-      TZ: "{{ global_timezone }}"
-    image: "{{ samba_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: samba
+    image: "{{ samba_image }}"
     network: host
+    env:
+      WSDD2_DISABLE: 1
+      AVAHI_DISABLE: 1
+      ACCOUNT_root: "{{ samba_password }}"
+      UID_root: 0
+      GROUP_root: 0
+      SAMBA_VOLUME_CONFIG_root: "[Storage]; path=/shares/storage; valid users = root; guest ok = no; read only = no; browseable = yes"
+      SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes" # Need this option for case sensitive files. Reference: https://www.oreilly.com/openbook/samba/book/ch05_04.html
     generate_systemd:
       container_prefix: ""
       new: true
@@ -36,7 +36,7 @@
     restart_policy: on-failure
     state: "{{ samba_state }}"
     volumes:
-      - "{{ global_storage }}:/storage"
+      - "{{ global_storage }}:/shares/storage"
   register: container
   until: container.failed == false
 

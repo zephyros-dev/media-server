@@ -1,3 +1,4 @@
-samba_image: elswork/samba:3.2.7
+# samba_image: elswork/samba:latest
+samba_image: docker.io/servercontainers/samba:smbd-only-a3.15.0-s4.15.2-r0
 samba_state: started
 samba_password: secret
