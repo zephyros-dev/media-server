@@ -1,0 +1,16 @@
+- name: Komga
+  containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
+    image: "{{ komga_image }}"
+    labels:
+      io.containers.autoupdate: registry
+    name: komga-web
+    pod: komga
+    restart_policy: on-failure
+    state: "{{ komga_state }}"
+    volumes:
+      - "{{ global_media }}:/home"
+      - "{{ komga_volume_config }}:/config:U,z"
+  register: container
+  until: container.failed == false

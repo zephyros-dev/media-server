@@ -1,0 +1,14 @@
+- name: Jackett
+  containers.podman.podman_container:
+    env:
+      AUTO_UPDATE: "true"
+      TZ: "{{ global_timezone }}"
+    image: "{{ jackett_image }}"
+    labels:
+      io.containers.autoupdate: registry
+    name: jackett-web
+    pod: jackett
+    restart_policy: on-failure
+    state: "{{ jackett_state }}"
+    volumes:
+      - "{{ jackett_web_config }}:/config:U,z"

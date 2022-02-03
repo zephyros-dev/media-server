@@ -1,0 +1,18 @@
+- name: Calibrew
+  containers.podman.podman_container:
+    env:
+      PGID: "{{ global_pgid }}"
+      PUID: "{{ global_puid }}"
+      TZ: "{{ global_timezone }}"
+    image: "{{ calibrew_image }}"
+    labels:
+      io.containers.autoupdate: registry
+    name: calibrew-web
+    pod: calibrew
+    restart_policy: on-failure
+    state: "{{ calibrew_state }}"
+    volumes:
+      - "{{ calibrew_book }}:/books"
+      - "{{ calibrew_web_config }}:/config:U,z"
+  register: container
+  until: container.failed == false

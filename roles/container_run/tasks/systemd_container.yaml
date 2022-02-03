@@ -1,0 +1,57 @@
+- name: Setup podman container with systemd
+  tags:
+    - "{{ systemd_container_loop_var.key }}"
+  block:
+    - name: Prepare {{ systemd_container_loop_var.key }} folder
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+      loop: "{{ systemd_container_loop_var.value.folder }}"
+
+    - name: Stop {{ systemd_container_loop_var.key }} systemd
+      ansible.builtin.systemd:
+        name: "{{ systemd_container_loop_var.key }}"
+        daemon_reload: true
+        enabled: true
+        scope: user
+        state: stopped
+      ignore_errors: true
+
+    - name: Create {{ systemd_container_loop_var.key }} pod
+      containers.podman.podman_pod:
+        infra_name: "{{ systemd_container_loop_var.key }}-pod"
+        name: "{{ systemd_container_loop_var.key }}"
+        network: caddy
+        state: "{{ systemd_container_loop_var.value.state }}"
+      when: >
+        (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod)
+
+
+    - name: Create {{ systemd_container_loop_var.key }} container
+      import_tasks: "service/{{ systemd_container_loop_var.key }}.yaml"
+
+    - name: Create pod {{ systemd_container_loop_var.key }} systemd
+      containers.podman.podman_pod:
+        name: "{{ systemd_container_loop_var.key }}"
+        infra_name: "{{ systemd_container_loop_var.key }}-pod"
+        network: caddy
+        generate_systemd:
+          container_prefix: ""
+          new: true
+          path: /home/{{ ansible_user }}/.config/systemd/user
+          pod_prefix: ""
+          separator: ""
+        state: "{{ systemd_container_loop_var.value.state }}"
+      when: >
+        (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod)
+
+
+    - name: Enable {{ systemd_container_loop_var.key }} systemd
+      ansible.builtin.systemd:
+        name: "{{ systemd_container_loop_var.key }}"
+        daemon_reload: true
+        enabled: true
+        scope: user
+        state: "{{ systemd_container_loop_var.value.state }}"
+      register: service
+      until: service.failed == false

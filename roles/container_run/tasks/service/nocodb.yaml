@@ -1,26 +1,3 @@
-- name: Prepare data folder
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-  loop:
-    - "{{ nocodb_db_data }}"
-
-- name: Stop systemd
-  ansible.builtin.systemd:
-    name: nocodb
-    daemon_reload: true
-    enabled: true
-    scope: user
-    state: stopped
-  ignore_errors: true
-
-- name: Nocodb pod
-  containers.podman.podman_pod:
-    infra_name: nocodb-pod
-    name: nocodb
-    network: caddy
-    state: "{{ nocodb_state }}"
-
 - name: Nocodb DB
   containers.podman.podman_container:
     env:
@@ -53,9 +30,3 @@
     state: "{{ nocodb_state }}"
   register: container
   until: container.failed == false
-
-- name: Install systemd
-  vars:
-    service_name: nocodb
-    service_state: "{{ nocodb_state }}"
-  import_tasks: systemd.yaml

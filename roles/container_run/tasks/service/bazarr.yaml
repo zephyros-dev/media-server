@@ -1,0 +1,18 @@
+- name: Bazarr
+  containers.podman.podman_container:
+    env:
+      PGID: "{{ global_pgid }}"
+      PUID: "{{ global_puid }}"
+      TZ: "{{ global_timezone }}"
+    image: "{{ bazarr_image }}"
+    labels:
+      io.containers.autoupdate: registry
+    name: bazarr-web
+    pod: bazarr
+    restart_policy: on-failure
+    state: "{{ bazarr_state }}"
+    volumes:
+      - "{{ bazarr_web_config }}:/config:U,z"
+      - "{{ global_media }}:/home"
+  register: container
+  until: container.failed == false

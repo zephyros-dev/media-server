@@ -1,0 +1,15 @@
+- name: Librespeed
+  containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
+    image: "{{ librespeed_image }}"
+    labels:
+      io.containers.autoupdate: registry
+    name: librespeed-web
+    pod: librespeed
+    restart_policy: on-failure
+    state: "{{ librespeed_state }}"
+    volumes:
+      - "{{ librespeed_web_config }}:/config:U,z"
+  register: container
+  until: container.failed == false

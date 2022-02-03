@@ -1,7 +1,6 @@
 - import_tasks: network.yaml
 - import_tasks: caddy.yaml
   tags: caddy
-# - import_tasks: netshoot.yaml
 # - import_tasks: diun.yaml
 # - import_tasks: grafana.yaml
 # - import_tasks: librenms.yaml
@@ -9,50 +8,32 @@
 
 # - import_tasks: archivy.yaml
 #   tags: archivy
-- import_tasks: bazarr.yaml
-  tags: bazarr
-- import_tasks: bazarr_hq.yaml
-  tags: bazarr_hq
-- import_tasks: calibrew.yaml
-  tags: calibrew
-- import_tasks: dashy.yaml
-  tags: dashy
+
 # - import_tasks: gitea.yaml
 # - import_tasks: headphones.yaml
 # - import_tasks: heimdall.yaml
-- import_tasks: jackett.yaml
-  tags: jackett
-- import_tasks: jellyfin.yaml
-  tags: jellyfin
-- import_tasks: kavita.yaml
-  tags: kavita
-- import_tasks: komga.yaml
-- import_tasks: librespeed.yaml
-- import_tasks: lidarr.yaml
 - import_tasks: mumble.yaml
   tags: mumble
-- import_tasks: navidrome.yaml
-- import_tasks: nextcloud.yaml
-- import_tasks: nocodb.yaml
-- import_tasks: privatebin.yaml
-- import_tasks: prowlarr.yaml
-  tags: prowlarr
-- import_tasks: pymedusa.yaml
-  tags: pymedusa
-- import_tasks: radarr.yaml
-  tags: radarr
-- import_tasks: radarr_hq.yaml
-  tags: radarr
-- import_tasks: readarr.yaml
-  tags: readarr
 - import_tasks: samba.yaml
   tags: samba
 - import_tasks: scrutiny.yaml
   tags: scrutiny
 - import_tasks: sftp.yaml
 # - import_tasks: sftpgo.yaml
-- import_tasks: sonarr.yaml
-- import_tasks: syncthing.yaml
-  tags: syncthing
+# - import_tasks: sonarr.yaml
 - import_tasks: transmission.yaml
   tags: transmission
+
+- name: Run podman container with systemd
+  include_tasks: systemd_container.yaml
+  args:
+    apply:
+      tags:
+        - "{{ systemd_container_loop.key }}"
+  loop: "{{ systemd_container_service | dict2items }}"
+  loop_control:
+    loop_var: systemd_container_loop
+  vars:
+    systemd_container_loop_var: "{{ systemd_container_loop }}"
+  tags:
+    - always

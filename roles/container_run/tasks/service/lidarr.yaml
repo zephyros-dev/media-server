@@ -1,0 +1,21 @@
+- name: Lidarr
+  containers.podman.podman_container:
+    env:
+      PGID: "{{ global_pgid }}"
+      PUID: "{{ global_puid }}"
+      TZ: "{{ global_timezone }}"
+    image: "{{ lidarr_image }}"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      io.containers.autoupdate: registry
+    name: lidarr-web
+    pod: lidarr
+    restart_policy: on-failure
+    state: "{{ lidarr_state }}"
+    volumes:
+      - "{{ global_media }}:/home"
+      - "{{ lidarr_web_config }}:/config:U,z"
+      - "{{ transmission_download }}:/downloads"
+  register: container
+  until: container.failed == false

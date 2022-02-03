@@ -1,0 +1,19 @@
+- name: Radarr
+  containers.podman.podman_container:
+    env:
+      PGID: "{{ global_pgid }}"
+      PUID: "{{ global_puid }}"
+      TZ: "{{ global_timezone }}"
+    image: "{{ radarr_image }}"
+    labels:
+      io.containers.autoupdate: registry
+    name: radarr-web
+    pod: radarr
+    restart_policy: on-failure
+    state: "{{ radarr_state }}"
+    volumes:
+      - "{{ global_media }}:/home"
+      - "{{ radarr_web_config }}:/config:U,z"
+      - "{{ transmission_download }}:/downloads"
+  register: container
+  until: container.failed == false

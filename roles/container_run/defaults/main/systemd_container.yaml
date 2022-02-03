@@ -1,0 +1,100 @@
+systemd_container_service:
+  bazarr-hq:
+    folder:
+      - "{{ bazarr_hq_web_config }}"
+      - "{{ global_media }}"
+    state: "{{ bazarr_state }}"
+  bazarr:
+    folder:
+      - "{{ bazarr_web_config }}"
+      - "{{ global_media }}"
+    state: "{{ bazarr_state }}"
+  calibrew:
+    folder:
+      - "{{ calibrew_book }}"
+      - "{{ calibrew_web_config }}"
+    state: "{{ calibrew_state }}"
+  dashy:
+    folder:
+      - "{{ dashy_volume_config }}"
+    state: "{{ dashy_state }}"
+  jackett:
+    folder:
+      - "{{ jackett_web_config }}"
+    state: "{{ jackett_state }}"
+  jellyfin:
+    folder:
+      - "{{ global_media }}"
+      - "{{ jellyfin_web_cache }}"
+      - "{{ jellyfin_web_config }}"
+    state: "{{ jellyfin_state }}"
+  kavita:
+    folder:
+      - "{{ kavita_volume_data }}"
+    state: "{{ kavita_state }}"
+  komga:
+    folder:
+      - "{{ komga_volume_config }}"
+    state: "{{ komga_state }}"
+  librespeed:
+    folder:
+      - "{{ librespeed_web_config }}"
+    state: "{{ librespeed_state }}"
+  lidarr:
+    folder:
+      - "{{ global_media }}"
+      - "{{ lidarr_web_config }}"
+      - "{{ transmission_download }}"
+    state: "{{ lidarr_state }}"
+  navidrome:
+    folder:
+      - "{{ global_media }}"
+      - "{{ navidrome_web_data }}"
+    state: "{{ navidrome_state }}"
+  nextcloud:
+    folder:
+      - "{{ nextcloud_db_data }}"
+      - "{{ nextcloud_storage_data }}"
+      - "{{ nextcloud_web_data }}"
+    state: "{{ nextcloud_state }}"
+  nocodb:
+    folder:
+      - "{{ nocodb_db_data }}"
+    state: "{{ nocodb_state }}"
+  privatebin:
+    folder:
+      - "{{ privatebin_web_data }}"
+    state: "{{ privatebin_state }}"
+  prowlarr:
+    folder:
+      - "{{ prowlarr_web_config }}"
+    state: "{{ prowlarr_state }}"
+  pymedusa:
+    folder:
+      - "{{ global_media }}"
+      - "{{ pymedusa_web_config }}"
+      - "{{ transmission_download }}"
+    state: "{{ pymedusa_state }}"
+  radarr:
+    folder:
+      - "{{ global_media }}"
+      - "{{ radarr_web_config }}"
+      - "{{ transmission_download }}"
+    state: "{{ radarr_state }}"
+  radarr-hq:
+    folder:
+      - "{{ global_media }}"
+      - "{{ radarr_hq_web_config }}"
+      - "{{ transmission_download }}"
+    state: "{{ radarr_state }}"
+  readarr:
+    folder:
+      - "{{ global_media }}"
+      - "{{ transmission_download }}"
+      - "{{ readarr_web_config }}"
+    state: "{{ readarr_state }}"
+  syncthing:
+    folder:
+      - "{{ syncthing_data }}"
+    state: "{{ syncthing_state }}"
+    pod: false

@@ -1,28 +1,3 @@
-- name: Prepare data folder
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-  loop:
-    - "{{ nextcloud_db_data }}"
-    - "{{ nextcloud_storage_data }}"
-    - "{{ nextcloud_web_data }}"
-
-- name: Stop systemd
-  ansible.builtin.systemd:
-    name: nextcloud
-    daemon_reload: true
-    enabled: true
-    scope: user
-    state: stopped
-  ignore_errors: true
-
-- name: Pod
-  containers.podman.podman_pod:
-    name: nextcloud
-    infra_name: nextcloud-pod
-    network: caddy
-    state: "{{ nextcloud_state }}"
-
 - name: Nextcloud
   containers.podman.podman_container:
     env:
@@ -81,9 +56,3 @@
       - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
   register: container
   until: container.failed == false
-
-- name: Install systemd
-  vars:
-    service_name: nextcloud
-    service_state: "{{ nextcloud_state }}"
-  import_tasks: systemd.yaml
