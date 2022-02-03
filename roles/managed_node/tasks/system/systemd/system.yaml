@@ -1,36 +1,38 @@
-- name: Template system systemd service
-  vars:
-    template_var: "{{ item }}"
-  ansible.builtin.template:
-    src: "system/{{ item.name }}.service.j2"
-    dest: "/etc/systemd/system/{{ item.name }}.service"
-  loop: "{{ systemd.system }}"
+- become: true
+  block:
+    - name: Template system systemd service
+      vars:
+        template_var: "{{ item }}"
+      ansible.builtin.template:
+        src: "system/{{ item.name }}.service.j2"
+        dest: "/etc/systemd/system/{{ item.name }}.service"
+      loop: "{{ systemd.system }}"
 
-- name: Enable system systemd service
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    enabled: yes
-    state: started
-    name: "{{ item.name }}"
-  loop: "{{ systemd.system }}"
-  when: item.timer is not defined
+    - name: Enable system systemd service
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        enabled: yes
+        state: started
+        name: "{{ item.name }}"
+      loop: "{{ systemd.system }}"
+      when: item.timer is not defined
 
-- name: Template system timer
-  vars:
-    template_var: "{{ item }}"
-  ansible.builtin.template:
-    src: "system/{{ item.name }}.timer.j2"
-    dest: "/etc/systemd/system/{{ item.name }}.timer"
-  loop: "{{ systemd.system }}"
-  when: item.timer is defined
+    - name: Template system timer
+      vars:
+        template_var: "{{ item }}"
+      ansible.builtin.template:
+        src: "system/{{ item.name }}.timer.j2"
+        dest: "/etc/systemd/system/{{ item.name }}.timer"
+      loop: "{{ systemd.system }}"
+      when: item.timer is defined
 
-- name: Enable the systemd timer
-  vars:
-    template_var: "{{ item }}"
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    enabled: yes
-    state: "{{ item.state }}"
-    name: "{{ item.name }}.timer"
-  loop: "{{ systemd.system }}"
-  when: item.timer is defined
+    - name: Enable the systemd timer
+      vars:
+        template_var: "{{ item }}"
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        enabled: yes
+        state: "{{ item.state }}"
+        name: "{{ item.name }}.timer"
+      loop: "{{ systemd.system }}"
+      when: item.timer is defined
