@@ -14,12 +14,10 @@
 
 - name: Setup storage mounts
   import_tasks: system/mount_disk.yaml
-  become: true
   tags: mount
 
 - name: Setup system systemd
   import_tasks: system/systemd/system.yaml
-  become: true
   tags: systemd
 
 - name: Setup Virtualization
@@ -37,4 +35,3 @@
 
 - name: Automatic update packages
   import_tasks: system/auto_update.yaml
-  become: true
