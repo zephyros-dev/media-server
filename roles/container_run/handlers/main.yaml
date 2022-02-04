@@ -1,4 +1,4 @@
-- name: Restart Caddy
+- name: Restart caddy
   import_tasks: caddy.yaml
   tags: caddy
 

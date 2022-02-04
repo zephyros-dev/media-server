@@ -1,8 +1,7 @@
-- name: Restart caddy
+- name: Restart Caddy
   ansible.builtin.systemd:
     daemon_reload: yes
     enabled: yes
-    name: service-caddy
+    name: caddy
     scope: user
     state: started
-  tags: caddy

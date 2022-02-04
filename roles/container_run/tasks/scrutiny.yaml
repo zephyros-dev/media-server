@@ -28,8 +28,8 @@
           path: /lib/systemd/system
           pod_prefix: ""
           separator: ""
-          ports:
-            - "{{ scrutiny_port }}:8080"
+        ports:
+          - "{{ scrutiny_port }}:8080"
         restart_policy: on-failure
         state: "{{ scrutiny_state }}"
         volumes:

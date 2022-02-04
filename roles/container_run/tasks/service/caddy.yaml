@@ -3,7 +3,7 @@
     src: "caddy/Caddyfile.j2"
     dest: "{{ caddy_data_caddyfile }}"
   notify:
-    - Restart Caddy
+    - Restart caddy
 
 - name: Caddy
   containers.podman.podman_container:

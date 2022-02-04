@@ -38,60 +38,22 @@ auth.{{ server_domain }} {
     header_down X-Content-Type-Options "nosniff"
     header_down X-Frame-Options "SAMEORIGIN"
 }
-bazarr-hq.{{ server_domain }} {
+{% for key,value in systemd_container_service.items() %}
+{% if not (value.reverse_proxy_custom is defined and value.reverse_proxy_custom) %}
+{{ key }}.{{ server_domain }} {
+    {% if value.proxy_auth is defined and value.proxy_auth %}
     import proxy-auth
-    reverse_proxy bazarr-hq:6767 {
+    {% endif %}
+    {% if value.use_host_network is defined and value.use_host_network %}
+    reverse_proxy {{ caddyfile_host_address }}:{{ value.reverse_proxy_port }} {
+    {% else %}
+    reverse_proxy {{ key }}:{{ value.reverse_proxy_port }} {
+    {% endif %}
         import security-header
     }
 }
-bazarr.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy bazarr:6767 {
-        import security-header
-    }
-}
-calibrew.{{ server_domain }} {
-    reverse_proxy calibrew:8083 {
-        import security-header
-    }
-}
-dashy.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy dashy:80 {
-        import security-header
-    }
-}
-jellyfin.{{ server_domain }} {
-    reverse_proxy jellyfin:8096 {
-        import security-header
-    }
-}
-kavita.{{ server_domain }} {
-    reverse_proxy kavita:5000 {
-        import security-header
-    }
-}
-komga.{{ server_domain }} {
-    reverse_proxy komga:8080 {
-        import security-header
-    }
-}
-librespeed.{{ server_domain }} {
-    reverse_proxy librespeed:80 {
-        import security-header
-    }
-}
-lidarr.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy lidarr:8686 {
-        import security-header
-    }
-}
-navidrome.{{ server_domain }} {
-    reverse_proxy navidrome:4533 {
-        import security-header
-    }
-}
+{% endif %}
+{% endfor %}
 netdata.{{ server_domain }} {
     import proxy-auth
     reverse_proxy {{ caddyfile_host_address }}:19999 {
@@ -114,41 +76,6 @@ nocodb.{{ server_domain }} {
         import security-header
     }
 }
-privatebin.{{ server_domain }} {
-    reverse_proxy privatebin:8080 {
-        import security-header
-    }
-}
-prowlarr.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy prowlarr:9696 {
-        import security-header
-    }
-}
-pymedusa.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy pymedusa:8081 {
-        import security-header
-    }
-}
-radarr.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy radarr:7878 {
-        import security-header
-    }
-}
-radarr-hq.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy radarr-hq:7878 {
-        import security-header
-    }
-}
-readarr.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy readarr:8787 {
-        import security-header
-    }
-}
 scrutiny.{{ server_domain }} {
     import proxy-auth
     reverse_proxy {{ caddyfile_host_address }}:18080 {
@@ -162,21 +89,4 @@ scrutiny.{{ server_domain }} {
             }
         }
     tls internal
-}
-sonarr.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy sonarr:8989 {
-        import security-header
-    }
-}
-syncthing.{{ server_domain }} {
-    import proxy-auth
-    reverse_proxy {{ caddyfile_host_address }}:8384 {
-        import security-header
-    }
-}
-transmission.{{ server_domain }} {
-    reverse_proxy transmission:9091 {
-        import security-header
-    }
 }

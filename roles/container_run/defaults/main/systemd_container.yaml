@@ -5,129 +5,167 @@ systemd_container_service:
       - "{{ caddy_data_data }}"
     state: "{{ caddy_state }}"
     pod: false
+    reverse_proxy_custom: true
   bazarr-hq:
     folder:
       - "{{ bazarr_hq_web_config }}"
       - "{{ global_media }}"
     state: "{{ bazarr_state }}"
+    reverse_proxy_port: "6767"
+    proxy_auth: true
   bazarr:
     folder:
       - "{{ bazarr_web_config }}"
       - "{{ global_media }}"
     state: "{{ bazarr_state }}"
+    reverse_proxy_port: "6767"
+    proxy_auth: true
   calibrew:
     folder:
       - "{{ calibrew_book }}"
       - "{{ calibrew_web_config }}"
     state: "{{ calibrew_state }}"
+    reverse_proxy_port: "8083"
   dashy:
     folder:
       - "{{ dashy_volume_config }}"
     state: "{{ dashy_state }}"
-  jackett:
-    folder:
-      - "{{ jackett_web_config }}"
-    state: "{{ jackett_state }}"
+    reverse_proxy_port: "80"
+    proxy_auth: true
+  # jackett:
+  #   folder:
+  #     - "{{ jackett_web_config }}"
+  #   state: "{{ jackett_state }}"
+  #   reverse_proxy_port: "8083"
   jellyfin:
     folder:
       - "{{ global_media }}"
       - "{{ jellyfin_web_cache }}"
       - "{{ jellyfin_web_config }}"
     state: "{{ jellyfin_state }}"
+    reverse_proxy_port: "8096"
   kavita:
     folder:
       - "{{ kavita_volume_data }}"
     state: "{{ kavita_state }}"
+    reverse_proxy_port: "5000"
   komga:
     folder:
       - "{{ komga_volume_config }}"
     state: "{{ komga_state }}"
+    reverse_proxy_port: "8080"
   librespeed:
     folder:
       - "{{ librespeed_web_config }}"
     state: "{{ librespeed_state }}"
+    reverse_proxy_port: "80"
   lidarr:
     folder:
       - "{{ global_media }}"
       - "{{ lidarr_web_config }}"
       - "{{ transmission_download }}"
     state: "{{ lidarr_state }}"
+    reverse_proxy_port: "8686"
+    proxy_auth: true
   navidrome:
     folder:
       - "{{ global_media }}"
       - "{{ navidrome_web_data }}"
     state: "{{ navidrome_state }}"
+    reverse_proxy_port: "4533"
   nextcloud:
     folder:
       - "{{ nextcloud_db_data }}"
       - "{{ nextcloud_storage_data }}"
       - "{{ nextcloud_web_data }}"
     state: "{{ nextcloud_state }}"
+    reverse_proxy_custom: true
   nocodb:
     folder:
       - "{{ nocodb_db_data }}"
     state: "{{ nocodb_state }}"
+    reverse_proxy_custom: true
   privatebin:
     folder:
       - "{{ privatebin_web_data }}"
     state: "{{ privatebin_state }}"
+    reverse_proxy_port: "8080"
   prowlarr:
     folder:
       - "{{ prowlarr_web_config }}"
     state: "{{ prowlarr_state }}"
+    reverse_proxy_port: "9696"
+    proxy_auth: true
   pymedusa:
     folder:
       - "{{ global_media }}"
       - "{{ pymedusa_web_config }}"
       - "{{ transmission_download }}"
     state: "{{ pymedusa_state }}"
+    reverse_proxy_port: "8081"
+    proxy_auth: true
   radarr:
     folder:
       - "{{ global_media }}"
       - "{{ radarr_web_config }}"
       - "{{ transmission_download }}"
     state: "{{ radarr_state }}"
+    reverse_proxy_port: "7878"
+    proxy_auth: true
   radarr-hq:
     folder:
       - "{{ global_media }}"
       - "{{ radarr_hq_web_config }}"
       - "{{ transmission_download }}"
     state: "{{ radarr_state }}"
+    reverse_proxy_port: "7878"
+    proxy_auth: true
   readarr:
     folder:
       - "{{ global_media }}"
       - "{{ transmission_download }}"
       - "{{ readarr_web_config }}"
     state: "{{ readarr_state }}"
+    reverse_proxy_port: "8787"
+    proxy_auth: true
   samba:
     folder:
       - "{{ global_storage }}"
     state: "{{ samba_state }}"
     pod: false
+    reverse_proxy_custom: true
   sftp:
     folder:
       - "{{ sftp_volume_data }}"
     state: "{{ sftp_state }}"
     pod: false
+    reverse_proxy_custom: true
   sonarr:
     folder:
       - "{{ global_media }}"
       - "{{ sonarr_web_config }}"
       - "{{ transmission_download }}"
     state: "{{ sonarr_state }}"
+    reverse_proxy_port: "8989"
+    proxy_auth: true
   syncthing:
     folder:
       - "{{ syncthing_data }}"
     state: "{{ syncthing_state }}"
     pod: false
+    use_host_network: true
+    reverse_proxy_port: "8384"
+    proxy_auth: true
   mumble:
     folder:
       - "{{ mumble_server_data }}"
     state: "{{ mumble_state }}"
     pod: false
+    reverse_proxy_custom: true
   transmission:
     folder:
       - "{{ transmission_download }}"
       - "{{ transmission_web_config }}"
     state: "{{ transmission_state }}"
     pod: false
+    reverse_proxy_port: "9091"

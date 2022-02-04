@@ -11,6 +11,7 @@
     ports:
       - 51413:51413/tcp
       - 51413:51413/udp
+    network: caddy
     labels:
       io.containers.autoupdate: registry
     generate_systemd:

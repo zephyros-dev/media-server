@@ -12,132 +12,136 @@ pageInfo:
 appConfig:
   statusCheck: true
   theme: Material
+  iconSize: large
 sections:
   - name: Personal
     items:
-      - icon: favicon
-        title: Nextcloud
+      - title: Nextcloud
+        icon: https://nextcloud.{{ server_domain }}/core/img/favicon.ico
         url: https://nextcloud.{{ server_domain }}
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddyfile_host_address }}:8384
-        title: Syncthing
-        url: https://syncthing.{{ server_domain }}
-      - icon: favicon
+      - title: Nocodb
+        icon: https://nocodb.{{ server_domain }}/dashboard/favicon-32.png
         statusCheckAllowInsecure: true
         statusCheckUrl: http://nocodb:8080
-        title: Nocodb
         url: https://nocodb.{{ server_domain }}
-      - icon: favicon
+      - title: Syncthing
+        icon: https://syncthing.{{ server_domain }}/assets/img/favicon-default.png
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://gitea:3000
-        title: Gitea
-        url: https://gitea.{{ server_domain }}
+        statusCheckUrl: http://{{ caddyfile_host_address }}:8384
+        url: https://syncthing.{{ server_domain }}
+      # - title: Gitea
+      #   icon: favicon-local
+      #   statusCheckAllowInsecure: true
+      #   statusCheckUrl: http://gitea:3000
+      #   url: https://gitea.{{ server_domain }}
   - name: Media Consumption
     items:
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://jellyfin:8096      
-        title: Jellyfin
-        url: https://jellyfin.{{ server_domain }}
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://navidrome:4533
-        title: Navidrome
-        url: https://navidrome.{{ server_domain }}
-      - icon: favicon
+      - title: Calibreweb
+        icon: https://calibrew.{{ server_domain }}/static/favicon.ico
         statusCheckAllowInsecure: true
         statusCheckUrl: http://calibrew:8083
-        title: Calibreweb
         url: https://calibrew.{{ server_domain }}
-      - icon: favicon
+      - title: Jellyfin
+        icon: https://jellyfin.{{ server_domain }}/web/favicon.ico
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://jellyfin:8096
+        url: https://jellyfin.{{ server_domain }}
+      - title: Kavita
+        icon: https://kavita.{{ server_domain }}/assets/images/logo.png
         statusCheckAllowInsecure: true
         statusCheckUrl: http://kavita:5000
-        title: Kavita
         url: https://kavita.{{ server_domain }}
-      - icon: favicon
+      - title: Komga
+        icon: favicon-local
         statusCheckAllowInsecure: true
         statusCheckUrl: http://komga:8080
-        title: Komga
         url: https://komga.{{ server_domain }}
+      - title: Navidrome
+        icon: https://navidrome.{{ server_domain }}/app/android-chrome-192x192.png
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://navidrome:4533
+        url: https://navidrome.{{ server_domain }}
   - name: Media management
     items:
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://radarr:7878
-        title: Radarr
-        url: https://radarr.{{ server_domain }}
-      - icon: favicon
+      - title: Bazarr
+        # icon: https://bazarr.{{ server_domain }}/static/favicon.ico
+        icon: hl-bazarr
         statusCheckAllowInsecure: true
         statusCheckUrl: http://bazarr:6767
-        title: Bazarr
         url: https://bazarr.{{ server_domain }}
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://radarr-hq:7878
-        title: Radarr-HQ
-        url: https://radarr-hq.{{ server_domain }}
-      - icon: favicon
+      - title: Bazarr-HQ
+        # icon: https://bazarr-hq.{{ server_domain }}/static/favicon.ico
+        icon: hl-bazarr
         statusCheckAllowInsecure: true
         statusCheckUrl: http://bazarr-hq:6767
-        title: Bazarr-HQ
         url: https://bazarr-hq.{{ server_domain }}
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://readarr:8787
-        title: Readarr
-        url: https://readarr.{{ server_domain }}
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://pymedusa:8081
-        title: Pymedusa
-        url: https://pymedusa.{{ server_domain }}
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://prowlarr:9696
-        title: Prowlarr
-        url: https://prowlarr.{{ server_domain }}
-      - icon: favicon
+      - title: Lidarr
+        icon: favicon-local
         statusCheckAllowInsecure: true
         statusCheckUrl: http://lidarr:8686
-        title: Lidarr
         url: https://lidarr.{{ server_domain }}
-      - icon: favicon
+      - title: Prowlarr
+        icon: favicon-local
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://jackett:9117
-        title: Jackett
-        url: https://jackett.{{ server_domain }}
-      # - icon: favicon
+        statusCheckUrl: http://prowlarr:9696
+        url: https://prowlarr.{{ server_domain }}
+      - title: Pymedusa
+        icon: favicon-local
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://pymedusa:8081
+        url: https://pymedusa.{{ server_domain }}
+      - title: Radarr
+        icon: favicon-local
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://radarr:7878
+        url: https://radarr.{{ server_domain }}
+      - title: Radarr-HQ
+        icon: favicon-local
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://radarr-hq:7878
+        url: https://radarr-hq.{{ server_domain }}
+      - title: Readarr
+        icon: favicon-local
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://readarr:8787
+        url: https://readarr.{{ server_domain }}
+      # - title: Jackett
+      #   icon: favicon-local
+      #   statusCheckAllowInsecure: true
+      #   statusCheckUrl: http://jackett:9117
+      #   url: https://jackett.{{ server_domain }}
+      # - icon: favicon-local
       #   statusCheckAllowInsecure: true
       #   statusCheckUrl: http://headphones:8181
       #   title: Headphones
       #   url: https://headphones.{{ server_domain }}
-      - icon: favicon
+      - title: Transmission
+        icon: hl-transmission
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ transmission_user }}:{{ transmission_password}}@transmission:9091
-        title: Transmission
+        statusCheckUrl: http://{{ transmission_user }}:{{ transmission_password }}@transmission:9091
         url: https://transmission.{{ server_domain }}
   - name: Monitoring
     items:
-      - icon: favicon
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddyfile_host_address }}:19999
-        title: Netdata
-        url: https://netdata.{{ server_domain }}
-      - icon: favicon
+      - title: Librespeed
+        icon: favicon-local
         statusCheckAllowInsecure: true
         statusCheckUrl: http://librespeed:80
-        title: Librespeed
         url: https://librespeed.{{ server_domain }}
-      - icon: favicon
+      - title: Netdata
+        icon: hl-netdata
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddyfile_host_address }}:8080
-        title: Scrutiny
+        statusCheckUrl: http://{{ caddyfile_host_address }}:19999
+        url: https://netdata.{{ server_domain }}
+      - title: Scrutiny
+        icon: https://scrutiny.{{ server_domain }}/web/assets/images/logo/scrutiny-logo-white.svg
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://{{ caddyfile_host_address }}:18080
         url: https://scrutiny.{{ server_domain }}
   - name: Misc
     items:
-      - icon: favicon
+      # - icon: https://privatebin.{{ server_domain }}/img/icon.svg
+      - title: Privatebin
+        icon: hl-privatebin
         statusCheckAllowInsecure: true
         statusCheckUrl: http://privatebin:8080
-        title: Privatebin
         url: https://privatebin.{{ server_domain }}
