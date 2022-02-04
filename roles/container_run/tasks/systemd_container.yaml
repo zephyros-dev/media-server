@@ -24,7 +24,7 @@
         network: caddy
         state: "{{ systemd_container_loop_var.value.state }}"
       when: >
-        (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod)
+        ( (not systemd_container_loop_var.value.pod is defined)  or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")
 
 
     - name: Create {{ systemd_container_loop_var.key }} container
@@ -43,7 +43,7 @@
           separator: ""
         state: "{{ systemd_container_loop_var.value.state }}"
       when: >
-        (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod)
+        ( (not systemd_container_loop_var.value.pod is defined)  or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")
 
 
     - name: Enable {{ systemd_container_loop_var.key }} systemd
@@ -55,3 +55,4 @@
         state: "{{ systemd_container_loop_var.value.state }}"
       register: service
       until: service.failed == false
+      when: systemd_container_loop_var.value.state == "started"

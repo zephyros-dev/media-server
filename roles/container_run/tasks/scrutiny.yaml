@@ -1,74 +1,48 @@
-# Error when trying to run pods with sudo
+- become: true
+  block:
+    - name: Stop systemd
+      become: true
+      ansible.builtin.systemd:
+        name: scrutiny
+        daemon_reload: true
+        enabled: true
+        state: stopped
+      ignore_errors: true
 
-# - name: Scrutiny pod
-#   become: true
-#   containers.podman.podman_pod:
-#     name: scrutiny
-#     infra_name: scrutiny-pod
-#     ports:
-#       - "{{ scrutiny_port }}:8080"
-#     state: "{{ scrutiny_state }}"
+    - name: Scrutiny
+      become: true
+      containers.podman.podman_container:
+        name: scrutiny
+        cap_add:
+          - SYS_RAWIO
+          - SYS_ADMIN
+        device: "{{ scrutiny_device }}"
+        env:
+          TZ: "{{ global_timezone }}"
+        image: "{{ scrutiny_image }}"
+        labels:
+          io.containers.autoupdate: registry
+        generate_systemd:
+          container_prefix: ""
+          new: true
+          path: /lib/systemd/system
+          pod_prefix: ""
+          separator: ""
+          ports:
+            - "{{ scrutiny_port }}:8080"
+        restart_policy: on-failure
+        state: "{{ scrutiny_state }}"
+        volumes:
+          - /run/udev:/run/udev:ro,z
+      register: container
+      until: container.failed == false
 
-- name: Stop systemd
-  become: true
-  ansible.builtin.systemd:
-    name: scrutiny
-    daemon_reload: true
-    enabled: true
-    state: stopped
-  ignore_errors: true
-
-- name: Scrutiny
-  become: true
-  containers.podman.podman_container:
-    cap_add:
-      - SYS_RAWIO
-      - SYS_ADMIN
-    device: "{{ scrutiny_device }}"
-    env:
-      TZ: "{{ global_timezone }}"
-    image: "{{ scrutiny_image }}"
-    labels:
-      io.containers.autoupdate: registry
-    name: scrutiny
-    # name: scrutiny-web
-    generate_systemd:
-      container_prefix: ""
-      new: true
-      path: /lib/systemd/system
-      pod_prefix: ""
-      separator: ""
-      # pod: scrutiny
-      ports:
-        - "{{ scrutiny_port }}:8080"
-    restart_policy: on-failure
-    state: "{{ scrutiny_state }}"
-    volumes:
-      - /run/udev:/run/udev:ro,z
-  register: container
-  until: container.failed == false
-
-# - name: Pod scrutiny systemd
-#   become: true
-#   containers.podman.podman_pod:
-#     generate_systemd:
-#       container_prefix: ""
-#       new: true
-#       path: /lib/systemd/system
-#       pod_prefix: ""
-#       separator: ""
-#     infra_name: scrutiny-pod
-#     name: scrutiny
-#     ports:
-#       - "{{ scrutiny_port }}:8080"
-#     state: "{{ scrutiny_state }}"
-
-- name: Enable scrutiny systemd
-  become: true
-  ansible.builtin.systemd:
-    name: scrutiny
-    daemon_reload: true
-    enabled: true
-    state: "{{ scrutiny_state }}"
-  register: service
-  until: service.failed == false
+    - name: Enable scrutiny systemd
+      become: true
+      ansible.builtin.systemd:
+        name: scrutiny
+        daemon_reload: true
+        enabled: true
+        state: "{{ scrutiny_state }}"
+      register: service
+      until: service.failed == false

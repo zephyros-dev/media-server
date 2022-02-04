@@ -1,0 +1,23 @@
+- name: Mumble
+  containers.podman.podman_container:
+    name: mumble
+    image: "{{ mumble_image }}"
+    env:
+      TZ: "{{ global_timezone }}"
+    generate_systemd:
+      container_prefix: ""
+      new: true
+      path: /home/{{ ansible_user }}/.config/systemd/user
+      pod_prefix: ""
+      separator: ""
+    labels:
+      io.containers.autoupdate: "registry"
+    ports:
+      - 64738:64738/tcp
+      - 64738:64738/udp
+    restart_policy: on-failure
+    state: "{{ mumble_state }}"
+    volumes:
+      - "{{ mumble_server_data }}:/data:U,z"
+  register: container
+  until: container.failed == false

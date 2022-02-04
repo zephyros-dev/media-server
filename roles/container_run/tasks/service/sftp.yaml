@@ -1,0 +1,15 @@
+- name: SFTP
+  containers.podman.podman_container:
+    name: sftp-container
+    image: "{{ sftp_image }}"
+    env:
+      TZ: "{{ global_timezone }}"
+    ports:
+      - "{{ sftp_port }}:22"
+    command: "{{ sftp_user }}:{{ sftp_password }}:::data"
+    labels:
+      io.containers.autoupdate: registry
+    restart_policy: on-failure
+    state: "{{ sftp_state }}"
+    volumes:
+      - "{{ sftp_volume_data }}:/home/{{ sftp_user }}/data:ro"

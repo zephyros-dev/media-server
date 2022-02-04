@@ -1,4 +1,10 @@
 systemd_container_service:
+  caddy:
+    folder:
+      - "{{ caddy_data_config }}"
+      - "{{ caddy_data_data }}"
+    state: "{{ caddy_state }}"
+    pod: false
   bazarr-hq:
     folder:
       - "{{ bazarr_hq_web_config }}"
@@ -93,8 +99,35 @@ systemd_container_service:
       - "{{ transmission_download }}"
       - "{{ readarr_web_config }}"
     state: "{{ readarr_state }}"
+  samba:
+    folder:
+      - "{{ global_storage }}"
+    state: "{{ samba_state }}"
+    pod: false
+  sftp:
+    folder:
+      - "{{ sftp_volume_data }}"
+    state: "{{ sftp_state }}"
+    pod: false
+  sonarr:
+    folder:
+      - "{{ global_media }}"
+      - "{{ sonarr_web_config }}"
+      - "{{ transmission_download }}"
+    state: "{{ sonarr_state }}"
   syncthing:
     folder:
       - "{{ syncthing_data }}"
     state: "{{ syncthing_state }}"
+    pod: false
+  mumble:
+    folder:
+      - "{{ mumble_server_data }}"
+    state: "{{ mumble_state }}"
+    pod: false
+  transmission:
+    folder:
+      - "{{ transmission_download }}"
+      - "{{ transmission_web_config }}"
+    state: "{{ transmission_state }}"
     pod: false
