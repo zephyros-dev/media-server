@@ -1,0 +1,11 @@
+[Unit]
+Description={{ template_var.systemd_description }}
+
+[Service]
+WorkingDirectory={{ executable_location }}
+ExecStart=find ./ -name "*.exe" -exec chmod u+x {} \;
+RemainAfterExit=true
+Type=oneshot
+
+[Install]
+WantedBy=default.target

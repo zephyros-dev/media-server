@@ -18,3 +18,7 @@ systemd:
       systemd_working_directory: "%h"
       timer: Sat *-*-* 19:00:00
       state: started
+    - name: add-executable
+      systemd_description: Add executable permission for exe file in storage
+      timer: "*-*-* 20:00:00"
+      state: started

@@ -3,8 +3,6 @@
   # user: 1000:1000
   # Use host network_mode for DLNA
   # network_mode: host
-  # ports:
-  # - 8096
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
