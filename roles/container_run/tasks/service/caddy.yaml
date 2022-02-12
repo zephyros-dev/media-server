@@ -2,8 +2,8 @@
   ansible.builtin.template:
     src: "caddy/Caddyfile.j2"
     dest: "{{ caddy_data_caddyfile }}"
-  notify:
-    - Restart caddy
+    mode: "0600"
+  register: restart_caddy
 
 - name: Caddy
   containers.podman.podman_container:
@@ -32,6 +32,12 @@
   register: container
   until: container.failed == false
 
-# To execute the restart immediately
-- name: Flush handlers
-  meta: flush_handlers
+# Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
+- name: Restart caddy if caddyfile is changed
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: caddy
+    scope: user
+    state: restarted
+  when: restart_caddy.changed

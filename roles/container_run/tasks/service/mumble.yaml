@@ -1,3 +1,23 @@
+- name: Template mumble config file
+  ansible.builtin.template:
+    src: mumble/murmur.ini.j2
+    dest: "{{ mumble_volume_config }}/murmur.ini"
+    mode: "0600"
+
+- name: Check if valid certificates is ready
+  block:
+    - ansible.builtin.set_fact:
+        cert_available: false
+    - include_tasks:
+        file: caddy_cert_check.yaml
+        apply:
+          vars:
+            caddy_cert_domain: mumble.{{ server_domain }}
+      loop: "{{ caddy_acme_ca_list }}"
+    - name: Force tasks to fail if no valid cert is found
+      ansible.builtin.command: ls /tmp/force_tasks_fail_command
+      when: not cert_available
+
 - name: Mumble
   containers.podman.podman_container:
     name: mumble
@@ -18,6 +38,8 @@
     restart_policy: on-failure
     state: "{{ mumble_state }}"
     volumes:
-      - "{{ mumble_server_data }}:/data:U,z"
+      - "{{ mumble_volume_data }}:/data:U,z"
+      - "{{ mumble_volume_config }}/murmur.ini:/etc/murmur.ini:ro,z"
+      - "{{ caddy_cert_location }}:/certificates:ro,z"
   register: container
   until: container.failed == false

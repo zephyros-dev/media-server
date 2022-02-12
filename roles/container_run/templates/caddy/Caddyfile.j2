@@ -41,16 +41,20 @@ auth.{{ server_domain }} {
 {% for key,value in systemd_container_service.items() %}
 {% if not (value.reverse_proxy_custom is defined and value.reverse_proxy_custom) %}
 {{ key }}.{{ server_domain }} {
-    {% if value.proxy_auth is defined and value.proxy_auth %}
+{% if not value.certbot is defined or not value.certbot %}
+{% if value.proxy_auth is defined and value.proxy_auth %}
     import proxy-auth
-    {% endif %}
-    {% if value.use_host_network is defined and value.use_host_network %}
+{% endif %}
+{% if value.use_host_network is defined and value.use_host_network %}
     reverse_proxy {{ caddyfile_host_address }}:{{ value.reverse_proxy_port }} {
-    {% else %}
+{% else %}
     reverse_proxy {{ key }}:{{ value.reverse_proxy_port }} {
-    {% endif %}
-        import security-header
+{% endif %}
+    import security-header
     }
+{% else %}
+
+{% endif %}
 }
 {% endif %}
 {% endfor %}

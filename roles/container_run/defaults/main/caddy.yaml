@@ -11,3 +11,6 @@ caddyfile_host_address: "10.0.2.2"
 caddyfile_auth_user: secret_string
 caddyfile_auth_pass: secret_string
 caddyfile_auth_token: secret_string
+caddy_acme_ca_list:
+  - acme-v02.api.letsencrypt.org-directory
+  - acme.zerossl.com-v2-dv90
