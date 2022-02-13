@@ -30,10 +30,3 @@ php occ
 php occ upgrade
 php occ maintenance:mode --off
 ```
-# Misc
-## MPV
-- [Anime4K](https://github.com/bloc97/Anime4K)
-- To use with jellyfin shim on Windows:
-  - Turn on external mpv in mpv shim settings [here](https://github.com/jellyfin/jellyfin-mpv-shim#external-mpv)
-  - Change the input.conf file in mpv shim settings according to Anime4K
-  - Copy the shaders folder of Anime4K to %APPDATA%/mpv/
