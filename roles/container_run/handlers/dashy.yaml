@@ -1,7 +1,0 @@
-- name: Recreate dashy
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    enabled: yes
-    name: dashy
-    scope: user
-    state: restarted

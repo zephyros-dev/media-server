@@ -1,4 +1,5 @@
-- ansible.builtin.set_fact:
+- name: Check if {{ item }}/{{ caddy_cert_domain }} is available
+  ansible.builtin.set_fact:
     caddy_cert_location_loop: "{{ caddy_data_data }}/caddy/certificates/{{ item }}/{{ caddy_cert_domain }}"
   when: not cert_available
 - ansible.builtin.stat:

@@ -1,9 +1,3 @@
-- name: Template mumble config file
-  ansible.builtin.template:
-    src: mumble/murmur.ini.j2
-    dest: "{{ mumble_volume_config }}/murmur.ini"
-    mode: "0600"
-
 - name: Check if valid certificates is ready
   block:
     - ansible.builtin.set_fact:
