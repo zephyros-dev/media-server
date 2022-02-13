@@ -38,11 +38,11 @@ systemd_container_service:
     templates:
       - src: dashy/conf.yml.j2
         dest: "{{ dashy_volume_config }}/conf.yml"
-  # jackett:
-  #   folder:
-  #     - "{{ jackett_web_config }}"
-  #   state: "{{ jackett_state }}"
-  #   reverse_proxy_port: "8083"
+  jackett:
+    folder:
+      - "{{ jackett_web_config }}"
+    state: "{{ jackett_state }}"
+    reverse_proxy_port: "9117"
   jellyfin:
     folder:
       - "{{ global_media }}"
