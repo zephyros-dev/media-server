@@ -1,8 +1,5 @@
----
 - name: Claim the node to Netdata Cloud
   become: true
-  become_method: sudo
-
   tasks:
     - name: Claim to Netdata Cloud
       block:
@@ -36,9 +33,3 @@
           notify: Restart Netdata
           become: yes
       when: reclaim == true
-
-  handlers:
-    - name: Restart Netdata
-      service:
-        name: netdata
-        state: restarted

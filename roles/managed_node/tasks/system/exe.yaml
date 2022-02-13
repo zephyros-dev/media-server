@@ -1,2 +1,0 @@
-- name: Allow exe file to be executable
-  ansible.builtin.shell: 'find {{ executable_location }} -name "*.exe" -exec chmod u+x {} \;'

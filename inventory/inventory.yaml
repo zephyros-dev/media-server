@@ -1,0 +1,4 @@
+all:
+  children:
+    server:
+      hosts: server.lan

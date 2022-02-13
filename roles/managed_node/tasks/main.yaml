@@ -1,7 +1,6 @@
 - name: Harden ssh
   import_tasks: system/ssh.yaml
   when: ansible_user != "root"
-  tags: ssh
 
 - name: Setup hostname
   import_tasks: system/hostname.yaml
@@ -33,6 +32,10 @@
 
 - name: Install crowdsec
   import_tasks: system/crowdsec.yaml
+
+- name: Install netdata
+  import_role:
+    name: netdata
 
 - name: Automatic update packages
   import_tasks: system/auto_update.yaml

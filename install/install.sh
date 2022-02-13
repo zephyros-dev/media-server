@@ -5,4 +5,4 @@
 # For ansible enter password
 sudo dnf install -y sshpass
 # Extra package for ansible
-ansible-galaxy install -r requirements.yaml --force
+ansible-galaxy install -r requirements.yaml --force-with-deps

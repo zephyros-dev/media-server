@@ -1,0 +1,8 @@
+[global]
+  {% if ansible_hostname != "" %}
+  hostname = {{ ansible_hostname }}
+  {% endif %}
+  dbengine multihost disk space = {{ dbengine_multihost_disk_space }}
+
+[web]
+	mode = {{ web_mode }}
