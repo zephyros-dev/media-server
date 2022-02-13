@@ -31,6 +31,9 @@ auth.{{ server_domain }} {
   # fallback
   respond "Nope"
 }
+(global-config) {
+    encode gzip
+}
 (security-header) {
     header_down Strict-Transport-Security "max-age=15552000;"
     header_down Referrer-Policy "strict-origin-when-cross-origin"
@@ -42,6 +45,7 @@ auth.{{ server_domain }} {
 {% if not (value.reverse_proxy_custom is defined and value.reverse_proxy_custom) %}
 {{ key }}.{{ server_domain }} {
 {% if not value.certbot is defined or not value.certbot %}
+    import global-config
 {% if value.proxy_auth is defined and value.proxy_auth %}
     import proxy-auth
 {% endif %}
@@ -59,13 +63,14 @@ auth.{{ server_domain }} {
 {% endif %}
 {% endfor %}
 netdata.{{ server_domain }} {
+    import global-config
     import proxy-auth
     reverse_proxy {{ caddyfile_host_address }}:19999 {
         import security-header
     }
 }
 nextcloud.{{ server_domain }} {
-    # encode zstd
+    import global-config
     reverse_proxy nextcloud:80 {
         # header_up Host {http.reverse_proxy.upstream.hostporti}
         # header_up X-Forwarded-Host {host}
@@ -75,12 +80,14 @@ nextcloud.{{ server_domain }} {
     redir /.well-known/caldav /remote.php/caldav 301
 }
 nocodb.{{ server_domain }} {
+    import global-config
     rewrite / /dashboard
     reverse_proxy nocodb:8080 {
         import security-header
     }
 }
 scrutiny.{{ server_domain }} {
+    import global-config
     import proxy-auth
     reverse_proxy {{ caddyfile_host_address }}:18080 {
         import security-header
