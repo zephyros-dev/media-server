@@ -1,48 +1,50 @@
-- name: "Check if user {{ ansible_user }} is lingering"
-  stat:
-    path: "/var/lib/systemd/linger/{{ ansible_user }}"
-  register: user_lingering
+- tags: systemd_user
+  block:
+    - name: "Check if user {{ ansible_user }} is lingering"
+      stat:
+        path: "/var/lib/systemd/linger/{{ ansible_user }}"
+      register: user_lingering
 
-- name: Enable lingering if neccessary
-  command: "loginctl enable-linger {{ ansible_user }}"
-  when:
-    - not user_lingering.stat.exists
+    - name: Enable lingering if neccessary
+      command: "loginctl enable-linger {{ ansible_user }}"
+      when:
+        - not user_lingering.stat.exists
 
-- name: Template the systemd service
-  vars:
-    template_var: "{{ item }}"
-  ansible.builtin.template:
-    src: "user/{{ item.name }}.service.j2"
-    dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.service"
-  loop: "{{ systemd.user }}"
+    - name: Template the systemd service
+      vars:
+        template_var: "{{ item }}"
+      ansible.builtin.template:
+        src: "user/{{ item.name }}.service.j2"
+        dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.service"
+      loop: "{{ systemd.user }}"
 
-- name: Enable the systemd service
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    scope: user
-    enabled: yes
-    state: restarted
-    name: "{{ item.name }}"
-  loop: "{{ systemd.user }}"
-  when: item.timer is not defined
+    - name: Enable the systemd service
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        scope: user
+        enabled: yes
+        state: restarted
+        name: "{{ item.name }}"
+      loop: "{{ systemd.user }}"
+      when: item.timer is not defined
 
-- name: Template the timer
-  vars:
-    template_var: "{{ item }}"
-  ansible.builtin.template:
-    src: "user/template.timer.j2"
-    dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.timer"
-  loop: "{{ systemd.user }}"
-  when: item.timer is defined
+    - name: Template the timer
+      vars:
+        template_var: "{{ item }}"
+      ansible.builtin.template:
+        src: "user/template.timer.j2"
+        dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.timer"
+      loop: "{{ systemd.user }}"
+      when: item.timer is defined
 
-- name: Enable the systemd timer
-  vars:
-    template_var: "{{ item }}"
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    scope: user
-    enabled: yes
-    state: started
-    name: "{{ item.name }}.timer"
-  loop: "{{ systemd.user }}"
-  when: item.timer is defined
+    - name: Enable the systemd timer
+      vars:
+        template_var: "{{ item }}"
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        scope: user
+        enabled: yes
+        state: started
+        name: "{{ item.name }}.timer"
+      loop: "{{ systemd.user }}"
+      when: item.timer is defined

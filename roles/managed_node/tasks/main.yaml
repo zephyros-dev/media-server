@@ -10,7 +10,6 @@
 
 - name: Setup user systemd
   import_tasks: system/systemd/user.yaml
-  tags: systemd_user
 
 - name: Setup storage mounts
   import_tasks: system/mount_disk.yaml
@@ -23,9 +22,6 @@
 - name: Setup Virtualization
   import_tasks: system/virtualization.yaml
   tags: virt
-
-- name: Allow exe executable files
-  import_tasks: system/exe.yaml
 
 - name: Install packages
   import_tasks: system/packages.yaml
