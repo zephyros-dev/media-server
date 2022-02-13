@@ -1,6 +1,6 @@
 - name: Install mergerfs
-  become: yes
-  dnf:
+  become: true
+  ansible.builtin.dnf:
     name: "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-{{ mergerfs_version }}-1.{{ mergerfs_fedora_release }}.x86_64.rpm"
     state: present
     disable_gpg_check: yes

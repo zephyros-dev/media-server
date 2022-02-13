@@ -1,47 +1,46 @@
-- name: Podman
-  become: True
-  ansible.builtin.dnf:
-    name:
-      - podman-docker
-      - slirp4netns
-    state: latest
+- tags: podman_install
+  become: true
+  block:
+    - name: Podman
+      ansible.builtin.dnf:
+        name:
+          - podman-docker
+          - slirp4netns
+        state: latest
 
-- name: Podman testing repo
-  become: True
-  ansible.builtin.dnf:
-    name:
-      - podman
-    enablerepo: updates-testing
-    state: latest
-  when: podman_install_beta
+    # - name: Podman testing repo
+    #   ansible.builtin.dnf:
+    #     name:
+    #       - podman
+    #     enablerepo: updates-testing
+    #     state: latest
+    #   when: podman_install_beta
 
-- name: Install podman
-  become: True
-  ansible.builtin.dnf:
-    name:
-      - podman
-    state: latest
-  when: not podman_install_beta
+    - name: Install podman
+      ansible.builtin.dnf:
+        name:
+          - podman
+        state: latest
+      when: not podman_install_beta
 
-- name: Enable podman socket
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    enabled: yes
-    name: podman.socket
-    scope: user
-    state: started
+    - name: Setup privileged ports
+      ansible.builtin.sysctl:
+        name: net.ipv4.ip_unprivileged_port_start
+        sysctl_set: true
+        value: "80"
 
 - name: Enable podman autoupdate timer
   ansible.builtin.systemd:
-    daemon_reload: yes
-    enabled: yes
+    daemon_reload: true
+    enabled: true
     name: podman-auto-update.timer
     scope: user
     state: started
 
-- name: Setup privileged ports
-  ansible.builtin.sysctl:
-    name: net.ipv4.ip_unprivileged_port_start
-    sysctl_set: yes
-    value: "80"
-  become: yes
+- name: Disable podman socket
+  ansible.builtin.systemd:
+    daemon_reload: true
+    enabled: true
+    name: podman.socket
+    scope: user
+    state: started

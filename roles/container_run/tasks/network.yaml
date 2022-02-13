@@ -1,4 +1,5 @@
 - name: Create service podman network
   containers.podman.podman_network:
     name: caddy
+    # recreate: true # BUG: The gateway to outside access is broken if the network is not recreated
     state: "{{ network_state }}"

@@ -1,4 +1,0 @@
-- name: Restart Gitea
-  containers.podman.podman_container:
-    name: gitea-web
-    force_restart: yes

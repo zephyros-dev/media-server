@@ -6,6 +6,9 @@ systemd_container_service:
     state: "{{ caddy_state }}"
     pod: false
     reverse_proxy_custom: true
+    templates:
+      - src: caddy/Caddyfile.j2
+        dest: "{{ caddy_data_caddyfile }}"
   bazarr-hq:
     folder:
       - "{{ bazarr_hq_web_config }}"
@@ -32,6 +35,9 @@ systemd_container_service:
     state: "{{ dashy_state }}"
     reverse_proxy_port: "80"
     proxy_auth: true
+    templates:
+      - src: dashy/conf.yml.j2
+        dest: "{{ dashy_volume_config }}/conf.yml"
   # jackett:
   #   folder:
   #     - "{{ jackett_web_config }}"
@@ -163,6 +169,9 @@ systemd_container_service:
     state: "{{ mumble_state }}"
     pod: false
     certbot: true
+    templates:
+      - src: mumble/murmur.ini.j2
+        dest: "{{ mumble_volume_config }}/murmur.ini"
   transmission:
     folder:
       - "{{ transmission_download }}"
