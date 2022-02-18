@@ -1,5 +1,5 @@
 - name: Update all packages
-  become: True
-  dnf:
+  become: true
+  ansible.builtin.dnf:
     name: "*"
     state: latest
