@@ -11,5 +11,6 @@
     state: "{{ dashy_state }}"
     volumes:
       - "{{ dashy_volume_config }}/conf.yml:/app/public/conf.yml:ro,z"
+    user: "0:0"
   register: container
   until: container.failed == false
