@@ -17,9 +17,12 @@
       ansible.builtin.template:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
         mode: "0600"
       loop: "{{ systemd_container_loop_var.value.templates }}"
       register: restart_systemd
+      become: true
       when: systemd_container_loop_var.value.templates is defined
 
     - name: Stop {{ systemd_container_loop_var.key }} systemd

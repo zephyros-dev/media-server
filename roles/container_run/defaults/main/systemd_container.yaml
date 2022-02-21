@@ -9,6 +9,17 @@ systemd_container_service:
     templates:
       - src: caddy/Caddyfile.j2
         dest: "{{ caddy_data_caddyfile }}"
+  archivy:
+    folder:
+      - "{{ archivy_web_data }}"
+      - "{{ archivy_web_config }}"
+      - "{{ archivy_elasticsearch_data }}"
+    state: "{{ archivy_state }}"
+    templates:
+      - src: archivy/config.yml
+        dest: "{{ archivy_web_config }}/config.yml"
+    reverse_proxy_port: "5000"
+    proxy_auth: true
   bazarr-hq:
     folder:
       - "{{ bazarr_hq_web_config }}"
