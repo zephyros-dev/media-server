@@ -19,6 +19,11 @@ sections:
       - title: Nextcloud
         icon: https://nextcloud.{{ server_domain }}/core/img/favicon.ico
         url: https://nextcloud.{{ server_domain }}
+      - title: Archivy
+        icon: http://archivy.{{ server_domain }}/static/archivy.svg
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://archivy:5000
+        url: https://archivy.{{ server_domain }}
       - title: Nocodb
         icon: https://nocodb.{{ server_domain }}/dashboard/favicon-32.png
         statusCheckAllowInsecure: true
@@ -105,16 +110,11 @@ sections:
         statusCheckAllowInsecure: true
         statusCheckUrl: http://readarr:8787
         url: https://readarr.{{ server_domain }}
-      # - title: Jackett
-      #   icon: favicon-local
-      #   statusCheckAllowInsecure: true
-      #   statusCheckUrl: http://jackett:9117
-      #   url: https://jackett.{{ server_domain }}
-      # - icon: favicon-local
-      #   statusCheckAllowInsecure: true
-      #   statusCheckUrl: http://headphones:8181
-      #   title: Headphones
-      #   url: https://headphones.{{ server_domain }}
+      - title: Jackett
+        icon: favicon-local
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://jackett:9117
+        url: https://jackett.{{ server_domain }}
       - title: Transmission
         icon: hl-transmission
         statusCheckAllowInsecure: true
