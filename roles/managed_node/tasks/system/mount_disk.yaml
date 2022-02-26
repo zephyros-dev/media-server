@@ -5,7 +5,7 @@
         path: /mnt/disks_storage_{{ item.id }}
         src: /dev/disk/by-id/{{ item.id }}-part1
         fstype: btrfs
-        opts: compress=zstd:1
+        opts: subvol=/data
         state: mounted
       loop: "{{ disks.storage.disks_list }}"
 

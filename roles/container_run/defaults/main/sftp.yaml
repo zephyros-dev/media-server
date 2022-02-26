@@ -1,4 +1,4 @@
-sftp_state: "started"
+sftp_state: "stopped"
 sftp_image: "atmoz/sftp:alpine"
 sftp_volume_data: "/path/to/data"
 sftp_port: "22222"

@@ -29,9 +29,9 @@
 - name: Install crowdsec
   import_tasks: system/crowdsec.yaml
 
-- name: Install netdata
-  import_role:
-    name: netdata
+# - name: Install netdata
+#   import_role:
+#     name: netdata
 
 - name: Automatic update packages
   import_tasks: system/auto_update.yaml

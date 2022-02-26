@@ -8,11 +8,6 @@
         state: directory
       loop: "{{ systemd_container_loop_var.value.folder }}"
 
-    - name: Reset restart_systemd variable
-      ansible.builtin.set_fact:
-        restart_sytemd:
-          changed: false
-
     - name: Templates {{ systemd_container_loop_var.key }} config files
       ansible.builtin.template:
         src: "{{ item.src }}"
@@ -87,3 +82,8 @@
       register: service
       until: service.failed == false
       when: systemd_container_loop_var.value.state == "started"
+
+    - name: Reset restart_systemd variable
+      ansible.builtin.set_fact:
+        restart_sytemd:
+          changed: false

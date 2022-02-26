@@ -1,6 +1,12 @@
 - name: SFTP
   containers.podman.podman_container:
-    name: sftp-container
+    name: sftp
+    generate_systemd:
+      container_prefix: ""
+      new: true
+      path: /home/{{ ansible_user }}/.config/systemd/user
+      pod_prefix: ""
+      separator: ""
     image: "{{ sftp_image }}"
     env:
       TZ: "{{ global_timezone }}"
