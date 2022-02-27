@@ -1,6 +1,7 @@
 collections:
   - ansible.posix
-  - containers.podman
   - community.libvirt
+  - containers.podman
   - devsec.hardening
 roles:
+  - aisbergg.snapper

@@ -1,0 +1,21 @@
+{% for item in disks.parity.disks_list %}
+{{ loop.index }}-parity /mnt/disks/parity/{{ item.id }}/snapraid.parity
+{% endfor %}
+
+content /var/snapraid.content
+{% for item in disks.storage.disks_list %}
+content /mnt/disks/storage/content/{{ item.id }}/snapraid.content
+{% endfor %}
+
+{% for item in disks.storage.disks_list %}
+data d{{ loop.index }} /mnt/disks/storage/data/{{ item.id }}
+{% endfor %}
+
+# Excludes hidden files and directories
+exclude *.unrecoverable
+exclude /tmp/
+exclude /lost+found/
+exclude downloads/
+exclude appdata/
+exclude *.!sync
+exclude /.snapshots/

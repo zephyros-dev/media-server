@@ -20,6 +20,11 @@
       become: true
       when: systemd_container_loop_var.value.templates is defined
 
+    - name: Check if systemd file for container exists
+      ansible.builtin.stat:
+        path: /home/{{ ansible_user }}/.config/systemd/user/{{ systemd_container_loop_var.key }}.service
+      register: systemd_service_file_status
+
     - name: Stop {{ systemd_container_loop_var.key }} systemd
       ansible.builtin.systemd:
         name: "{{ systemd_container_loop_var.key }}"
@@ -27,7 +32,7 @@
         enabled: true
         scope: user
         state: stopped
-      ignore_errors: true
+      when: subvolume_data_status.stat.exists
 
     - name: Create {{ systemd_container_loop_var.key }} pod
       containers.podman.podman_pod:

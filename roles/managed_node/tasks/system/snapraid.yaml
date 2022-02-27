@@ -1,0 +1,25 @@
+- tags: snapraid
+  block:
+    - name: Configure snapraid
+      ansible.builtin.template:
+        src: snapraid/snapraid.conf.j2
+        dest: /etc/snapraid.conf
+    - name: Configure snapper
+      include_role:
+        name: aisbergg.snapper
+        apply:
+          become: true
+      vars:
+        snapper_timer_timeline_enabled: false
+        snapper_configs:
+          - path: /mnt/disks/storage/data/{{ snapper_loop_var.id }}
+            name: "{{ snapper_loop_var.id }}"
+            vars:
+              ALLOW_USERS: "{{ ansible_user }}"
+              ALLOW_GROUPS: "{{ ansible_user }}"
+              SYNC_ACL: true
+              TIMELINE_CREATE: false
+              TIMELINE_CLEANUP: false
+      loop: "{{ disks.storage.disks_list }}"
+      loop_control:
+        loop_var: snapper_loop_var

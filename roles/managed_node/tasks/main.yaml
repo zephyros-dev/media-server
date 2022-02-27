@@ -8,12 +8,19 @@
 - name: Setup Podman rootless
   import_tasks: system/podman.yaml
 
+- name: Install packages
+  import_tasks: system/packages.yaml
+  tags: packages
+
 - name: Setup user systemd
   import_tasks: system/systemd/user.yaml
 
 - name: Setup storage mounts
-  import_tasks: system/mount_disk.yaml
+  import_tasks: system/mount.yaml
   tags: mount
+
+- name: Setup snapraid
+  import_tasks: system/snapraid.yaml
 
 - name: Setup system systemd
   import_tasks: system/systemd/system.yaml
@@ -22,9 +29,6 @@
 - name: Setup Virtualization
   import_tasks: system/virtualization.yaml
   tags: virt
-
-- name: Install packages
-  import_tasks: system/packages.yaml
 
 - name: Install crowdsec
   import_tasks: system/crowdsec.yaml

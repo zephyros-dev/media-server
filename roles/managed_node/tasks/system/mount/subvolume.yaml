@@ -1,0 +1,18 @@
+- name: Check if {{ subvolume_loop_var }} subvolume for {{ storage_loop_var.id }} exists
+  ansible.builtin.stat:
+    path: /mnt/disks/storage/root/{{ storage_loop_var.id }}/{{ subvolume_loop_var }}
+  register: subvolume_data_status
+
+- name: Create {{ subvolume_loop_var }} subvolume for {{ storage_loop_var.id }} if not exists
+  ansible.builtin.command: btrfs subvolume create ./{{ subvolume_loop_var }}
+  args:
+    chdir: /mnt/disks/storage/root/{{ storage_loop_var.id }}
+  when: not subvolume_data_status.stat.exists
+
+- name: Mount {{ subvolume_loop_var }} subvolume for {{ storage_loop_var.id }}
+  ansible.posix.mount:
+    path: /mnt/disks/storage/{{ subvolume_loop_var }}/{{ storage_loop_var.id }}
+    src: /dev/disk/by-id/{{ storage_loop_var.id }}-part1
+    fstype: btrfs
+    opts: subvol=/{{ subvolume_loop_var }}
+    state: mounted

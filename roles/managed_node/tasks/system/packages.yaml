@@ -4,3 +4,31 @@
     name: "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-{{ mergerfs_version }}-1.{{ mergerfs_fedora_release }}.x86_64.rpm"
     state: present
     disable_gpg_check: yes
+
+- name: Install snapraid
+  become: true
+  block:
+    - name: Add repository
+      ansible.builtin.yum_repository:
+        name: copr:copr.fedorainfracloud.org:pauken:SnapRAID
+        description: Copr repo for SnapRAID owned by pauken
+        baseurl: https://download.copr.fedorainfracloud.org/results/pauken/SnapRAID/fedora-$releasever-$basearch/
+        skip_if_unavailable: true
+        gpgcheck: true
+        gpgkey: https://download.copr.fedorainfracloud.org/results/pauken/SnapRAID/pubkey.gpg
+        repo_gpgcheck: false
+        enabled: true
+    - name: Install snapraid and dependencies
+      ansible.builtin.dnf:
+        name:
+          - snapraid
+          - snapper
+        state: latest
+    - name: Install snapraid-btrfs
+      ansible.builtin.copy:
+        src: submodules/snapraid-btrfs/snapraid-btrfs
+        dest: /usr/local/bin/snapraid-btrfs
+        mode: "0755"
+    # - name: Install snapraid-btrfs-runner
+    #   ansible.builtin.copy:
+    #     src:
