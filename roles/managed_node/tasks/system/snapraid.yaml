@@ -23,3 +23,45 @@
       loop: "{{ disks.storage.disks_list }}"
       loop_control:
         loop_var: snapper_loop_var
+    - name: Setup snapraid-btrfs-runner
+      become: true
+      tags: snapraid_runner
+      block:
+        - name: Setup snapraid-btrfs-runner folder
+          ansible.builtin.file:
+            path: "{{ snapraid_runner_path }}"
+            state: directory
+        - name: Install snapraid-btrfs-runner script
+          ansible.builtin.copy:
+            src: submodules/snapraid-btrfs-runner/snapraid-btrfs-runner.py
+            dest: "{{ snapraid_runner_path }}/snapraid-btrfs-runner.py"
+        - name: Check if default config differs
+          ansible.builtin.copy:
+            src: submodules/snapraid-btrfs-runner/snapraid-btrfs-runner.conf.example
+            dest: "{{ snapraid_runner_path }}/snapraid-btrfs-runner.conf.example"
+          register: snapraid_runner_config
+        - name: Replace default config if changed
+          ansible.builtin.command: cp snapraid-btrfs-runner.conf.example snapraid-btrfs-runner.conf
+          args:
+            chdir: "{{ snapraid_runner_path }}"
+          when: snapraid_runner_config.changed
+        - name: Configure snapraid runner config
+          community.general.ini_file:
+            path: "{{ snapraid_runner_path }}/snapraid-btrfs-runner.conf"
+            section: "{{ item.section }}"
+            option: "{{ item.option }}"
+            value: "{{ item.value }}"
+          loop: "{{ snapraid_runner_configuration }}"
+        - name: Template snapraid runner systemd
+          ansible.builtin.template:
+            src: "snapraid/snapraid-runner.{{ item }}.j2"
+            dest: "/etc/systemd/system/snapraid-runner.{{ item }}"
+          loop:
+            - service
+            - timer
+        - name: Enable snapraid runner systemd timer
+          ansible.builtin.systemd:
+            daemon_reload: yes
+            enabled: yes
+            state: started
+            name: snapraid-runner.timer

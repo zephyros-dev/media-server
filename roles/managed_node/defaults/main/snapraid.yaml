@@ -1,1 +1,16 @@
 snapraid_version: "12.1"
+snapraid_runner_path: /opt/snapraid-btrfs-runner/
+snapraid_runner_configuration:
+  - section: snapraid-btrfs
+    option: executable
+    value: /usr/local/bin/snapraid-btrfs
+  - section: snapper
+    option: executable
+    value: /usr/bin/snapper
+  - section: snapraid
+    option: executable
+    value: /usr/bin/snapraid
+  - section: snapraid
+    option: config
+    value: /etc/snapraid.conf
+snapraid_runner_timer: "*-*-* 20:00:00"
