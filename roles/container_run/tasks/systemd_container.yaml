@@ -32,7 +32,7 @@
         enabled: true
         scope: user
         state: stopped
-      when: subvolume_data_status.stat.exists
+      when: systemd_service_file_status.stat.exists
 
     - name: Create {{ systemd_container_loop_var.key }} pod
       containers.podman.podman_pod:
@@ -42,7 +42,6 @@
         state: "{{ systemd_container_loop_var.value.state }}"
       when: >
         ( (not systemd_container_loop_var.value.pod is defined)  or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")
-
 
     - name: Create {{ systemd_container_loop_var.key }} container
       import_tasks: "service/{{ systemd_container_loop_var.key }}.yaml"
@@ -62,7 +61,6 @@
       when: >
         ( (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")
 
-
     # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
     - name: Restart {{ systemd_container_loop_var.key }} if config files are changed
       ansible.builtin.systemd:
@@ -75,7 +73,6 @@
       until: service.failed == false
       when: >
         (systemd_container_loop_var.value.state == "started")  and (restart_systemd.changed)
-
 
     - name: Enable {{ systemd_container_loop_var.key }} systemd
       ansible.builtin.systemd:
