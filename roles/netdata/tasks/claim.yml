@@ -12,7 +12,7 @@
         - name: Claim to Netdata Cloud
           shell: netdata-claim.sh -token={{ claim_token }} -rooms={{ claim_rooms }} -url={{ claim_url }}
           when: claimed_result.stat.exists == false
-          become: yes
+          become: true
       when: reclaim == false
 
     - name: Re-claim a node to Netdata Cloud
@@ -31,5 +31,5 @@
           shell: netdata-claim.sh -token={{ claim_token }} -rooms={{ claim_rooms }} -url={{ claim_url }} -id=$(uuidgen)
           when: uuidgen_result.stat.exists == true
           notify: Restart Netdata
-          become: yes
+          become: true
       when: reclaim == true

@@ -1,9 +1,9 @@
 - name: Setup crowdsec repository
-  become: yes
+  become: true
   ansible.builtin.shell: curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.rpm.sh | sudo bash
 
 - name: Install crowdsec
-  become: yes
+  become: true
   dnf:
     name:
       - crowdsec

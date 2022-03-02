@@ -1,15 +1,15 @@
 - name: System Software
-  become: yes
-  dnf:
+  become: true
+  ansible.builtin.dnf:
     name:
-      - dnf-automatic
-      - dnf-plugin-system-upgrade
+      - ansible.builtin.dnf-automatic
+      - ansible.builtin.dnf-plugin-system-upgrade
       - rpmconf
       - symlinks
     state: latest
 - name: Administration software
-  become: yes
-  dnf:
+  become: true
+  ansible.builtin.dnf:
     name:
       - fish
       - git
@@ -20,7 +20,7 @@
     state: latest
 
 - name: Add terraform repo
-  become: yes
+  become: true
   ansible.builtin.yum_repository:
     name: hashicorp
     description: hashicorp
@@ -29,20 +29,20 @@
     gpgkey: https://rpm.releases.hashicorp.com/gpg
 
 - name: Install yum-utils
-  become: yes
+  become: true
   ansible.builtin.yum:
     name: yum-utils
     state: latest
 
 - name: Install terraform
-  become: yes
+  become: true
   ansible.builtin.yum:
     name: terraform
     state: latest
 
 - name: Encryption software
-  become: yes
-  dnf:
+  become: true
+  ansible.builtin.dnf:
     name:
       - age
     state: latest
@@ -53,8 +53,8 @@
     return_content: true
   register: sops_latest
 - name: Install sops
-  become: yes
-  dnf:
+  become: true
+  ansible.builtin.dnf:
     name: "{{ sops_latest.json.assets[0].browser_download_url }}"
     state: present
     disable_gpg_check: yes
@@ -65,15 +65,15 @@
     return_content: true
   register: chezmoi_latest
 - name: Install chezmoi
-  become: yes
-  dnf:
+  become: true
+  ansible.builtin.dnf:
     name: "{{ chezmoi_latest.json.assets[6].browser_download_url }}"
     state: present
     disable_gpg_check: yes
 
 - name: Dev software
   become: True
-  dnf:
+  ansible.builtin.dnf:
     name:
       - ShellCheck
       - git
@@ -81,7 +81,7 @@
     state: latest
 - name: Misc software
   become: True
-  dnf:
+  ansible.builtin.dnf:
     name:
       - compsize
       - curl
