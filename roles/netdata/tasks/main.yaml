@@ -1,0 +1,10 @@
+- name: Setup netdata
+  tags: netdata
+  block:
+    - name: Install Netdata
+      import_tasks: install.yaml
+      when: netdata_state == "present"
+    # - import_tasks: claim.yaml
+    - name: Uninstall netdata
+      import_tasks: uninstall.yaml
+      when: netdata_state == "absent"

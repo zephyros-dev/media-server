@@ -26,4 +26,13 @@ dbengine_multihost_disk_space: 2048
 # there, we'll set this to `none` to disable the local dashboard. Set to
 # `static-threaded` if you want to keep it running. Read more:
 # https://learn.netdata.cloud/docs/configure/secure-nodes
-web_mode: "static-threaded"
+web_mode: static-threaded
+
+netdata_state: present
+# netdata_state: absent
+
+netdata_config:
+  - section: web
+    option: bind to
+    value: null
+    state: absent

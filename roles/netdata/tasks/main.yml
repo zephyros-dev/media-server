@@ -1,8 +1,0 @@
-- name: Install netdata
-  tags: netdata
-  block:
-    - name: Install Netdata
-      import_tasks: install.yml
-    - name: Configure Netdata
-      import_tasks: configure.yml
-  # - import_tasks: claim.yml

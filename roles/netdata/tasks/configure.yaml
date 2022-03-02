@@ -1,0 +1,18 @@
+# - name: Configure Netdata
+#   become: true
+#   ansible.builtin.template:
+#     src: netdata.conf.j2
+#     dest: /etc/netdata/netdata.conf
+#     mode: u=rw,g=r,o=r
+#   notify: Restart Netdata
+
+- name: Configure netdata
+  become: true
+  community.general.ini_file:
+    path: /etc/netdata/netdata.conf
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    state: "{{ item.state }}"
+  loop: "{{ netdata_config }}"
+  notify: Restart Netdata

@@ -1,0 +1,11 @@
+- name: Uninstall netdata
+  become: true
+  ansible.builtin.dnf:
+    name: netdata
+    state: absent
+
+- name: Remove netdata config
+  become: true
+  ansible.builtin.file:
+    path: /etc/netdata
+    state: absent
