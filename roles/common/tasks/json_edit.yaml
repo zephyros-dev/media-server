@@ -1,0 +1,23 @@
+- name: Load json file
+  ansible.builtin.slurp:
+    src: "{{ json_file_path }}"
+  register: json_file
+
+- name: Convert json
+  set_fact:
+    json_file: "{{ json_file.content|b64decode|from_json }}"
+
+- name: Edit json
+  set_fact:
+    json_file: "{{ json_file | default([]) | combine(json_edit, recursive=True) }}"
+
+- name: Write json to file
+  ansible.builtin.copy:
+    content: "{{ json_file | to_nice_json }}"
+    dest: "{{ json_file_path }}"
+
+- name: Reset variable
+  ansible.builtin.set_fact:
+    json_edit: null
+    json_file: null
+    json_file_path: null
