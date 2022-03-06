@@ -6,12 +6,6 @@ systemd:
       timer: "*-*-* 00:00:00"
       state: started
   user:
-    - command: ansible-playbook managed_node.yaml
-      name: system-update
-      systemd_description: Update whole system
-      systemd_working_directory: "{{ global_container_run_path }}"
-      timer: Sat *-*-* 18:00:00
-      state: started
     - name: podman-prune
       command: podman system prune --all --volumes
       systemd_description: Podman image prune service
