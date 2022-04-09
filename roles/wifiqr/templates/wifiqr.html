@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{ item.key }}</title>
+</head>
+
+<page size="A4"></page>
+
+<style>
+  h1 {
+    text-align: center;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  div {
+    text-align: center;
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+</style>
+
+<body>
+  <img src="qr/{{ item.key }}.png" class="center">
+  <p>
+  <h1>
+
+    Tên Wifi: <b>{{ item.key }}</b><br>
+    Mật khẩu: <b>{{ item.value.password }}</b><br>
+    {% if ' ' in item.value.password %}Lưu ý: Mật khẩu sử dụng dấu cách{% endif %}
+
+  </h1>
+  </p>
+</body>
+
+</html>

@@ -1,0 +1,4 @@
+wifiqr_wifi:
+  WifiName:
+    password: password
+wifiqr_qr_size: 768
