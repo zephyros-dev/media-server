@@ -1,17 +1,23 @@
 # Introduction
 Code for running self-hosted services using podman and ansible
-# Scope
-TODO
-# Requirement
-TODO
-# Installation
-TODO
-# Operation
-TODO
-# Security
-TODO
-# Resources
-TODO
+# Infrastructure graph
+```mermaid
+flowchart LR
+    subgraph Internet
+      Client
+      VpnClient
+    end
+    subgraph OpenwrtRouter
+      Client-->PortForward
+      VpnClient-->Wireguard
+    end
+    subgraph MediaServer
+      subgraph ContainerNetwork
+        PortForward-->Caddy
+        Caddy-->Application
+      end
+    end
+```
 # Note
 - Pods options
   - infra: no cannot be used with custom network
