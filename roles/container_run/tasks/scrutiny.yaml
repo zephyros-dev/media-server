@@ -1,7 +1,16 @@
 - become: true
   block:
+    - name: Create scrutiny volume folder
+      ansible.builtin.file:
+        path: "{{ scrutiny_volume_config }}"
+        state: directory
+
+    - name: Templates scrutiny config file
+      ansible.builtin.template:
+        src: scrutiny/scrutiny.yaml.j2
+        dest: "{{ scrutiny_volume_config }}/scrutiny.yaml"
+
     - name: Stop systemd
-      become: true
       ansible.builtin.systemd:
         name: scrutiny
         daemon_reload: true
@@ -10,7 +19,6 @@
       ignore_errors: true
 
     - name: Scrutiny
-      become: true
       containers.podman.podman_container:
         name: scrutiny
         cap_add:
@@ -34,11 +42,11 @@
         state: "{{ scrutiny_state }}"
         volumes:
           - /run/udev:/run/udev:ro,z
+          - "{{ scrutiny_volume_config }}/scrutiny.yaml:/scrutiny/config/scrutiny.yaml:ro,z"
       register: container
       until: container.failed == false
 
     - name: Enable scrutiny systemd
-      become: true
       ansible.builtin.systemd:
         name: scrutiny
         daemon_reload: true

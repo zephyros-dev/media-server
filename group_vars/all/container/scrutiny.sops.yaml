@@ -8,6 +8,8 @@ scrutiny_device:
     - ENC[AES256_GCM,data:uPFlanHh3QXLnv56mn3GVCAzZQ==,iv:Kj3FyojhzzC+hbQhhiySLLkkvLcX1PUfK54F5uXrQPg=,tag:lWMs6Gtq1ZJgQM5No5bhwQ==,type:comment]
     - ENC[AES256_GCM,data:9Bjiz4cILi1NnmVclwklz+jd4NLJ2VbL2L82M67w9NH4UOaElX3JkhyTrDdpBHOhHcO+xOLPlvAPBRjkSSytdb4=,iv:IQWJJpJr6ddzG49Qa9c/hS58DwqbhPYgH3+Z9g8PhRY=,tag:81XIHnJvQA8It8IXtIzZ6A==,type:comment]
     - ENC[AES256_GCM,data:B1VEitIEShk1mw==,iv:IHEIPFYjfckAIDwB7BGLs5Gvy4lB7pCvpfeEPFlCdP0=,tag:PvFE/Y/hoemljUy9ZDttKA==,type:str]
+scrutiny_discord_token: ENC[AES256_GCM,data:gzh3s7T1/WvM/zxSh4P6NgD6eQb2C503+sDEVpLxU35vanueQQswQaVxrNPBZ3IHM6ndJuhXSGAQ9jX9cXKKCr+W1f8=,iv:fghWhOOwYfY7QSejCpz4u7O4IP5hlPaB7v/0gN7BHfw=,tag:DVuENFjgcciSA7QLB1HlZg==,type:str]
+scrutiny_discord_channel: ENC[AES256_GCM,data:eiWf4ruYgJY9sCgXZ28hK3yg,iv:Lo14C6js6rBojKk+CXbFxPFNPaYCwClg7hWq+jx858k=,tag:U1bofUGIOvS9X6HlZ7XCkQ==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -23,8 +25,8 @@ sops:
             UGl0YWhEb3J2M3A1NkdEQm9LVE03UGcKEM31HxxtQWGz/FN+CT7fiBLkgngDt+up
             y8Pc8G330dN524xkvZWYZBvBkjsLW3455IHeC2m12vPpj2bQ7Xs/qA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2022-02-04T05:48:50Z"
-    mac: ENC[AES256_GCM,data:rI/nGSYPfjlsd/wG7DlqIa5t5Hwv+G586e4RIAPk7muKJMGy2Q1QbgL5hOGxfvPJUEumnIEQBuYhTQNSqAOB6RrkA2PX7rMaidjrn335PtPpDToU0UIjrjKbfFFEpJw9GQygf9SaspDEBAhc3olR7aFSMP2QPebQxMAK3+TXb5k=,iv:ajl8SWO8msQYVr+Kdo9sAryy1cHrV9z/WW+GlQTu6+E=,tag:9R0xcauMdLAVnA+1FbNAKQ==,type:str]
+    lastmodified: "2022-04-11T03:20:38Z"
+    mac: ENC[AES256_GCM,data:HCD7GZhk9uf8ZRiM5OiYNA5tCmw3MHlSke+RC8BeYLuKDMU12Dzja6/jm8zqpgdr0N8t644kXENoWCfUy47j1WzEH58Tmv1FkzT+ycg3xfQQcYdG3t1C2psO8YhcMFE555DbDUXwnV3CvH8lvzzyR1m79mIX2fo2IWLkmSIl6UY=,iv:Y0UrVM4Sox5VPlb9scJV4IIeu5qQUjwnKpEaDQU0JjQ=,tag:CQIjb2MCH27/yM6OFTAubw==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.7.1
