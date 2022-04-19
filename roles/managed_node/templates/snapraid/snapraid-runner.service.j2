@@ -4,7 +4,7 @@ Wants=network.target
 After=network-online.target
 
 [Service]
-ExecStart=python3 {{ snapraid_runner_path }}/snapraid-btrfs-runner.py -c {{ snapraid_runner_path }}/snapraid-btrfs-runner.conf
+ExecStart=python3 {{ snapraid_runner_path }}/snapraid-btrfs-runner.py -c {{ snapraid_runner_path }}/snapraid-btrfs-runner.conf --ignore-deletethreshold
 Type=oneshot
 
 [Install]
