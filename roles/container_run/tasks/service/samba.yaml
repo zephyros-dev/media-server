@@ -10,7 +10,7 @@
       UID_root: 0
       GROUP_root: 0
       SAMBA_VOLUME_CONFIG_root: "[Storage]; path=/shares/storage; valid users = root; guest ok = no; read only = no; browseable = yes"
-      SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes" # Need this option for case sensitive files. This breaks calibre on windows however. Reference: https://www.oreilly.com/openbook/samba/book/ch05_04.html
+      # SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes" # Need this option for case sensitive files. This breaks calibre on windows however. Reference: https://www.oreilly.com/openbook/samba/book/ch05_04.html
     generate_systemd:
       container_prefix: ""
       new: true
