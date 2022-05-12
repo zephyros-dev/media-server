@@ -30,9 +30,9 @@
   import_tasks: system/virtualization.yaml
   tags: virt
 
-- name: Install crowdsec
-  import_tasks: system/crowdsec.yaml
-  tags: crowdsec
+# - name: Install crowdsec
+#   import_tasks: system/crowdsec.yaml
+#   tags: crowdsec
 
 - name: Install netdata
   import_role:
