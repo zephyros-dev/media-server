@@ -9,3 +9,4 @@
   ansible.builtin.file:
     path: /etc/netdata
     state: absent
+# TODO: Run uninstaller script if exists
