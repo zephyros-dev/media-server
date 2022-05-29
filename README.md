@@ -2,21 +2,28 @@
 Code for running self-hosted services using podman and ansible
 # Infrastructure graph
 ```mermaid
-flowchart LR
-    subgraph Internet
-      Client
-      VpnClient
-    end
-    subgraph OpenwrtRouter
-      Client-->PortForward
-      VpnClient-->Wireguard
-    end
-    subgraph MediaServer
-      subgraph ContainerNetwork
-        PortForward-->Caddy
-        Caddy-->Application
+flowchart
+  subgraph lan-network
+    subgraph media-server
+      subgraph container-network
+        caddy -- reverse proxy --> applications
       end
+      media-server-port -- 80 and 443 --> caddy
     end
+    subgraph pc
+      windows
+    end
+  end
+  subgraph internet
+    client
+    vpn-client
+  end
+  subgraph openwrt-router
+    client --> port-forward
+    vpn-client --> wireguard
+  end
+  port-forward -- 80 and 443 --> media-server-port
+  wireguard --> lan-network
 ```
 # Note
 - Pods options
