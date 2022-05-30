@@ -1,6 +1,7 @@
 # Introduction
 Code for running self-hosted services using podman and ansible
 # Infrastructure graph
+## Networking
 ```mermaid
 flowchart
   subgraph lan-network
@@ -16,14 +17,27 @@ flowchart
   end
   subgraph internet
     client
-    vpn-client
+    wireguard-client
   end
   subgraph openwrt-router
     client --> port-forward
-    vpn-client --> wireguard
+    wireguard-client --> wireguard
   end
   port-forward -- 80 and 443 --> media-server-port
   wireguard --> lan-network
+```
+## Data
+```mermaid
+flowchart
+  subgraph media-server
+    subgraph os-disk
+    end
+    subgraph data-disk
+      storage-disk-1
+      storage-disk-2
+      parity-disk-1
+    end
+  end
 ```
 # Note
 - Pods options
