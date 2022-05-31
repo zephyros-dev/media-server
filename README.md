@@ -3,42 +3,46 @@ Code for running self-hosted services using podman and ansible
 # Infrastructure graph
 ## Networking
 ```mermaid
-flowchart
-  subgraph lan-network
-    subgraph media-server
-      subgraph container-network
+flowchart TB
+  subgraph internet
+    client
+    wireguard_client
+    dynv6_server
+  end
+  subgraph lan_network
+    subgraph media_server
+      subgraph container_network
         caddy -- reverse proxy --> applications
       end
-      media-server-port -- 80 and 443 --> caddy
+      media_server_port -- 80 and 443 --> caddy
     end
     subgraph pc
       windows
     end
   end
-  subgraph internet
-    client
-    wireguard-client
+  subgraph openwrt_router
+    client --> port_forward
+    wireguard_client --> wireguard
+    port_forward -- 80 and 443 --> media_server_port
   end
-  subgraph openwrt-router
-    client --> port-forward
-    wireguard-client --> wireguard
+  subgraph openwrt_router
+    ddns_client-- update dynamic public IPv4/IPv6 --> dynv6_server
   end
-  port-forward -- 80 and 443 --> media-server-port
-  wireguard --> lan-network
+  wireguard --> lan_network
 ```
 ## Data
 ```mermaid
-flowchart
-  subgraph media-server
-    subgraph os-disk
+flowchart TB
+  subgraph media_server
+    subgraph os_disk
     end
-    subgraph data-disk
-      subgraph storage-disk
-      storage-disk-1
-      storage-disk-2
+    subgraph data_disk
+      subgraph storage_disk
+      storage_disk_1
+      storage_disk_2
       end
-      subgraph parity-disk
-      parity-disk-1
+      subgraph parity_disk
+      parity_disk_1
       end
     end
   end
