@@ -33,9 +33,13 @@ flowchart
     subgraph os-disk
     end
     subgraph data-disk
+      subgraph storage-disk
       storage-disk-1
       storage-disk-2
+      end
+      subgraph parity-disk
       parity-disk-1
+      end
     end
   end
 ```
