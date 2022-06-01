@@ -7,6 +7,8 @@ flowchart TB
   subgraph internet
     client
     wireguard_client
+  end
+  subgraph dynv6
     dynv6_server
   end
   subgraph lan_network
@@ -26,7 +28,8 @@ flowchart TB
     port_forward -- 80 and 443 --> media_server_port
   end
   subgraph openwrt_router
-    ddns_client-- update dynamic public IPv4/IPv6 --> dynv6_server
+    ddns_client_v4-- update dynamic public IPv4 --> dynv6_server
+    ddns_client_v6 -- update dynamic public IPv6 prefix --> dynv6_server
   end
   wireguard --> lan_network
 ```
