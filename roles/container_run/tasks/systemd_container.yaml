@@ -71,8 +71,9 @@
         state: restarted
       register: service
       until: service.failed == false
-      when: >
-        (systemd_container_loop_var.value.state == "started")  and (restart_systemd.changed)
+      when:
+        - systemd_container_loop_var.value.state == "started"
+        - restart_systemd.changed
 
     - name: Enable {{ systemd_container_loop_var.key }} systemd
       ansible.builtin.systemd:
