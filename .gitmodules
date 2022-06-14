@@ -1,6 +1,8 @@
 [submodule "submodules/snapraid-btrfs"]
 	path = submodules/snapraid-btrfs
 	url = https://github.com/automorphism88/snapraid-btrfs
+	branch = master
 [submodule "submodules/snapraid-btrfs-runner"]
 	path = submodules/snapraid-btrfs-runner
 	url = https://github.com/fmoledina/snapraid-btrfs-runner
+	branch = master
