@@ -67,4 +67,7 @@ podman exec --user www-data -it nextcloud-web /bin/sh
 php occ
 php occ upgrade
 php occ maintenance:mode --off
+exit
+systemctl --user restart nextcloud
 ```
+TODO: Write script for running this
