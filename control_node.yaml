@@ -1,3 +1,4 @@
 - hosts: localhost
-  roles:
-    - role: control_node
+  tasks:
+    - import_role:
+        name: control_node

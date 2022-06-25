@@ -1,3 +1,4 @@
 - hosts: server
-  roles:
-    - container_run
+  tasks:
+    - import_role:
+        name: container_run

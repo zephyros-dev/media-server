@@ -1,5 +1,4 @@
-- hosts: localhost
+- hosts: server
   tasks:
     - import_role:
         name: managed_node
-      delegate_to: localhost
