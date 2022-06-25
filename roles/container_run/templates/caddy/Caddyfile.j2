@@ -54,7 +54,7 @@ auth.{{ server_domain }} {
 {% else %}
     reverse_proxy {{ key }}:{{ value.reverse_proxy_port }} {
 {% endif %}
-    import security-header
+        import security-header
     }
 {% else %}
 
@@ -93,7 +93,7 @@ scrutiny.{{ server_domain }} {
         import security-header
     }
 }
-{{ caddyfile_host_address }} {
+{{ caddyfile_lan_address }} {
     import global-config
     reverse_proxy https://{{ caddyfile_host_address }}:9090 {
         import security-header
