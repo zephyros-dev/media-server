@@ -21,7 +21,7 @@
       vars:
         template_var: "{{ item }}"
       ansible.builtin.template:
-        src: "system/{{ item.name }}.timer.j2"
+        src: "user/template.timer.j2"
         dest: "/etc/systemd/system/{{ item.name }}.timer"
       loop: "{{ systemd.system }}"
       when: item.timer is defined

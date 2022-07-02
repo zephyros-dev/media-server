@@ -1,6 +1,6 @@
 # Scrutiny
-scrutiny_state: "started"
-scrutiny_image: "analogj/scrutiny:latest"
+scrutiny_state: started
+scrutiny_image: ghcr.io/analogj/scrutiny:master-omnibus
 scrutiny_port: "18080"
 scrutiny_device:
   - "/dev/disk/by-id/disk_id"

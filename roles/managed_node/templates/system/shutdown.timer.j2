@@ -1,9 +1,0 @@
-[Unit]
-Description={{ template_var.systemd_description }}
-
-[Timer]
-RandomizedDelaySec=10
-OnCalendar={{ template_var.timer }}
-
-[Install]
-WantedBy=timers.target

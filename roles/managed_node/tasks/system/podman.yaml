@@ -37,6 +37,14 @@
     scope: user
     state: started
 
+- name: Enable podman autoupdate timer for root
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+    enabled: true
+    name: podman-auto-update.timer
+    state: started
+
 - name: Disable podman socket
   ansible.builtin.systemd:
     daemon_reload: true
