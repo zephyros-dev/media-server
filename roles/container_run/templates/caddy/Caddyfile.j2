@@ -103,8 +103,3 @@ scrutiny.{{ server_domain }} {
         }
     tls internal
 }
-# http endpoint for mpv shim. Issue: https://github.com/jellyfin/jellyfin-mpv-shim/issues/281
-http://jellyfin.{{ caddyfile_lan_address }} {
-    import global-config
-    reverse_proxy jellyfin:8096
-}
