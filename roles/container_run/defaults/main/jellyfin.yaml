@@ -1,4 +1,3 @@
-# Jellyfin
 jellyfin_state: "started"
 jellyfin_image: "jellyfin/jellyfin:latest"
 jellyfin_data: "{{ global_data_path }}/jellyfin"
