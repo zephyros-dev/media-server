@@ -1,0 +1,9 @@
+wol_state: started
+wol_image: aranajuan/wolweb:latest
+wol_volume: "{{ global_data_path }}/wol"
+# wol_config_devices:
+#   devices:
+#     - name:
+#       mac:
+#       ip:
+# wol_bcast_ip: "192.168.1.255"

@@ -8,7 +8,7 @@ pageInfo:
     - title: About
       path: /about
     - title: Source Code
-      path: https://github.com/zephyros-dev/podman-ansible
+      path: https://github.com/zephyros-dev/media-server
 appConfig:
   statusCheck: true
   theme: Material
@@ -140,7 +140,11 @@ sections:
         url: https://scrutiny.{{ server_domain }}
   - name: Misc
     items:
-      # - icon: https://privatebin.{{ server_domain }}/img/icon.svg
+      - title: Wake-on-lan
+        icon: mdi-desktop-classic
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://{{ caddyfile_host_address }}:8089/wolweb
+        url: https://wol.{{ server_domain }}/wolweb
       - title: Privatebin
         icon: hl-privatebin
         statusCheckAllowInsecure: true
