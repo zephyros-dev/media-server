@@ -1,191 +1,199 @@
 systemd_container_service:
-  caddy:
-    folder:
-      - "{{ caddy_data_config }}"
-      - "{{ caddy_data_data }}"
-    state: "{{ caddy_state }}"
-    pod: false
-    reverse_proxy_custom: true
-    templates:
-      - src: caddy/Caddyfile.j2
-        dest: "{{ caddy_data_caddyfile }}"
   archivy:
     folder:
       - "{{ archivy_web_data }}"
       - "{{ archivy_web_config }}"
       - "{{ archivy_elasticsearch_data }}"
+    reverse_proxy_port: "5000"
     state: "{{ archivy_state }}"
     templates:
-      - src: archivy/config.yml
-        dest: "{{ archivy_web_config }}/config.yml"
-    reverse_proxy_port: "5000"
-  bazarr-hq:
-    folder:
-      - "{{ bazarr_hq_web_config }}"
-      - "{{ global_media }}"
-    state: "{{ bazarr_state }}"
-    reverse_proxy_port: "6767"
-    proxy_auth: true
+      - dest: "{{ archivy_web_config }}/config.yml"
+        src: archivy/config.yml
   bazarr:
     folder:
       - "{{ bazarr_web_config }}"
       - "{{ global_media }}"
-    state: "{{ bazarr_state }}"
-    reverse_proxy_port: "6767"
     proxy_auth: true
+    reverse_proxy_port: "6767"
+    state: "{{ bazarr_state }}"
+  bazarr-hq:
+    folder:
+      - "{{ bazarr_hq_web_config }}"
+      - "{{ global_media }}"
+    proxy_auth: true
+    reverse_proxy_port: "6767"
+    state: "{{ bazarr_state }}"
+  caddy:
+    folder:
+      - "{{ caddy_data_config }}"
+      - "{{ caddy_data_data }}"
+    pod: false
+    reverse_proxy_custom: true
+    state: "{{ caddy_state }}"
+    templates:
+      - dest: "{{ caddy_data_caddyfile }}"
+        src: caddy/Caddyfile.j2
   calibrew:
     folder:
       - "{{ calibrew_book }}"
       - "{{ calibrew_web_config }}"
-    state: "{{ calibrew_state }}"
     reverse_proxy_port: "8083"
+    state: "{{ calibrew_state }}"
   dashy:
     folder:
       - "{{ dashy_volume_config }}"
-    state: "{{ dashy_state }}"
-    reverse_proxy_port: "80"
     proxy_auth: true
+    reverse_proxy_port: "80"
+    state: "{{ dashy_state }}"
     templates:
-      - src: dashy/conf.yml.j2
-        dest: "{{ dashy_volume_config }}/conf.yml"
+      - dest: "{{ dashy_volume_config }}/conf.yml"
+        src: dashy/conf.yml.j2
   jackett:
     folder:
       - "{{ jackett_web_config }}"
-    state: "{{ jackett_state }}"
     reverse_proxy_port: "9117"
+    state: "{{ jackett_state }}"
   jellyfin:
     folder:
       - "{{ global_media }}"
       - "{{ jellyfin_web_cache }}"
       - "{{ jellyfin_web_config }}"
-    state: "{{ jellyfin_state }}"
     reverse_proxy_port: "8096"
+    state: "{{ jellyfin_state }}"
   kavita:
     folder:
       - "{{ kavita_volume_data }}"
-    state: "{{ kavita_state }}"
     reverse_proxy_port: "5000"
+    state: "{{ kavita_state }}"
   komga:
     folder:
       - "{{ komga_volume_config }}"
-    state: "{{ komga_state }}"
     reverse_proxy_port: "8080"
+    state: "{{ komga_state }}"
   librespeed:
     folder:
       - "{{ librespeed_web_config }}"
-    state: "{{ librespeed_state }}"
     reverse_proxy_port: "80"
+    state: "{{ librespeed_state }}"
   lidarr:
     folder:
       - "{{ global_media }}"
       - "{{ lidarr_web_config }}"
       - "{{ transmission_download }}"
-    state: "{{ lidarr_state }}"
-    reverse_proxy_port: "8686"
     proxy_auth: true
+    reverse_proxy_port: "8686"
+    state: "{{ lidarr_state }}"
+  mumble:
+    certbot: true
+    folder:
+      - "{{ mumble_volume_data }}"
+      - "{{ mumble_volume_config }}"
+    pod: false
+    state: "{{ mumble_state }}"
+    templates:
+      - dest: "{{ mumble_volume_config }}/murmur.ini"
+        src: mumble/murmur.ini.j2
   navidrome:
     folder:
       - "{{ global_media }}"
       - "{{ navidrome_web_data }}"
-    state: "{{ navidrome_state }}"
     reverse_proxy_port: "4533"
+    state: "{{ navidrome_state }}"
   nextcloud:
     folder:
       - "{{ nextcloud_db_data }}"
       - "{{ nextcloud_storage_data }}"
       - "{{ nextcloud_web_data }}"
-    state: "{{ nextcloud_state }}"
     reverse_proxy_custom: true
+    state: "{{ nextcloud_state }}"
   nocodb:
     folder:
       - "{{ nocodb_db_data }}"
-    state: "{{ nocodb_state }}"
     reverse_proxy_custom: true
+    state: "{{ nocodb_state }}"
   privatebin:
     folder:
       - "{{ privatebin_web_data }}"
-    state: "{{ privatebin_state }}"
     reverse_proxy_port: "8080"
+    state: "{{ privatebin_state }}"
   prowlarr:
     folder:
       - "{{ prowlarr_web_config }}"
-    state: "{{ prowlarr_state }}"
-    reverse_proxy_port: "9696"
     proxy_auth: true
+    reverse_proxy_port: "9696"
+    state: "{{ prowlarr_state }}"
   pymedusa:
     folder:
       - "{{ global_media }}"
       - "{{ pymedusa_web_config }}"
       - "{{ transmission_download }}"
-    state: "{{ pymedusa_state }}"
-    reverse_proxy_port: "8081"
     proxy_auth: true
+    reverse_proxy_port: "8081"
+    state: "{{ pymedusa_state }}"
   radarr:
     folder:
       - "{{ global_media }}"
       - "{{ radarr_web_config }}"
       - "{{ transmission_download }}"
-    state: "{{ radarr_state }}"
-    reverse_proxy_port: "7878"
     proxy_auth: true
+    reverse_proxy_port: "7878"
+    state: "{{ radarr_state }}"
   radarr-hq:
     folder:
       - "{{ global_media }}"
       - "{{ radarr_hq_web_config }}"
       - "{{ transmission_download }}"
-    state: "{{ radarr_state }}"
-    reverse_proxy_port: "7878"
     proxy_auth: true
+    reverse_proxy_port: "7878"
+    state: "{{ radarr_state }}"
   readarr:
     folder:
       - "{{ global_media }}"
       - "{{ transmission_download }}"
       - "{{ readarr_web_config }}"
-    state: "{{ readarr_state }}"
-    reverse_proxy_port: "8787"
     proxy_auth: true
+    reverse_proxy_port: "8787"
+    state: "{{ readarr_state }}"
   samba:
     folder:
       - "{{ global_storage }}"
-    state: "{{ samba_state }}"
     pod: false
     reverse_proxy_custom: true
+    state: "{{ samba_state }}"
   sftp:
     folder:
       - "{{ sftp_volume_data }}"
-    state: "{{ sftp_state }}"
     pod: false
     reverse_proxy_custom: true
+    state: "{{ sftp_state }}"
   sonarr:
     folder:
       - "{{ global_media }}"
       - "{{ sonarr_web_config }}"
       - "{{ transmission_download }}"
-    state: "{{ sonarr_state }}"
-    reverse_proxy_port: "8989"
     proxy_auth: true
+    reverse_proxy_port: "8989"
+    state: "{{ sonarr_state }}"
   syncthing:
     folder:
       - "{{ syncthing_data }}"
-    state: "{{ syncthing_state }}"
     pod: false
-    use_host_network: true
-    reverse_proxy_port: "8384"
     proxy_auth: true
-  mumble:
-    folder:
-      - "{{ mumble_volume_data }}"
-      - "{{ mumble_volume_config }}"
-    state: "{{ mumble_state }}"
-    pod: false
-    certbot: true
-    templates:
-      - src: mumble/murmur.ini.j2
-        dest: "{{ mumble_volume_config }}/murmur.ini"
+    reverse_proxy_port: "8384"
+    state: "{{ syncthing_state }}"
+    use_host_network: true
   transmission:
     folder:
       - "{{ transmission_download }}"
       - "{{ transmission_web_config }}"
-    state: "{{ transmission_state }}"
     pod: false
     reverse_proxy_port: "9091"
+    state: "{{ transmission_state }}"
+  wol:
+    folder:
+      - "{{ wol_volume }}"
+    pod: false
+    proxy_auth: true
+    reverse_proxy_port: "8089"
+    state: "{{ wol_state }}"
+    use_host_network: true
