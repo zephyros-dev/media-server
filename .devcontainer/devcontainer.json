@@ -15,9 +15,10 @@
 	// Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
 	// "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
 	"mounts": [
+		"source=${localEnv:HOME}/.config/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind",
 		"source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
 		"source=vscode-extension,target=/home/vscode/.vscode-server/extensions,type=volume", // Cache extensions reinstall. Source: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
-		"source=ansible-cache,target=/home/vscode/.ansible,type=volume",
+		"source=ansible-cache,target=/home/vscode/.ansible,type=volume"
 	],
 	"settings": {
 		"ansible.validate.executablePath": "/usr/local/bin/ansible",
@@ -32,6 +33,7 @@
 		"vscode": {
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
+				"GitHub.vscode-pull-request-github",
 				"Grafana.vscode-jsonnet",
 				"bierner.markdown-mermaid",
 				"eamodio.gitlens",
@@ -39,6 +41,7 @@
 				"pascalreitermann93.vscode-yaml-sort",
 				"redhat.vscode-yaml",
 				"richie5um2.vscode-sort-json",
+				"signageos.signageos-vscode-sops",
 				"tyriar.sort-lines",
 				"wholroyd.jinja",
 				"yzhang.markdown-all-in-one"

@@ -16,7 +16,31 @@ RUN mkdir -p /home/${USERNAME}/.vscode-server/extensions \
 
 RUN apt update \
     && apt install -y --no-install-recommends \
-    ansible
+    curl \
+    gettext-base \
+    openssl \
+    python3-pip \
+    sshpass \
+    unzip \
+    whois \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt autoremove -y \
+    && apt clean -y
+
+# sops
+ARG SOPS_VERSION="3.7.1"
+RUN curl -L -o sops.deb "https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops_${SOPS_VERSION}_amd64.deb" \
+    && apt install -y --no-install-recommends ./sops.deb \
+    && git config --global diff.sopsdiffer.textconv "sops -d" \
+    && rm -r sops.deb \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt autoremove -y \
+    && apt clean -y
+
+# Ansible
+# ARG ANSIBLE_VERSION="6.1.0"
+# RUN pip install --no-cache-dir ansible==${ANSIBLE_VERSION}
+RUN pip install --no-cache-dir ansible
 
 RUN apt update \
     && apt install -y --no-install-recommends \

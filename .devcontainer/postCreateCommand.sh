@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo chown -R $USER:$USER ~/.local
+sudo chown -R $USER:$USER ~/.local ~/.config
