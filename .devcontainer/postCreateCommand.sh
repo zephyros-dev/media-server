@@ -1,2 +1,3 @@
 #!/bin/bash
-sudo chown -R $USER:$USER ~/.local ~/.config
+sudo chown $USER:$USER ~/.local ~/.config
+ansible-galaxy install -r requirements.yaml
