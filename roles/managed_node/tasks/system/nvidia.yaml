@@ -1,0 +1,28 @@
+- name: Get fedora version
+  ansible.builtin.command: rpm -E %fedora
+  register: fedora_version_output
+
+- become: true
+  block:
+    - name: Add rpm fusion repo non-free
+      ansible.builtin.dnf:
+        name: https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_version_output.stdout }}.noarch.rpm
+        disable_gpg_check: true
+        state: present
+    - name: Install nvidia driver
+      ansible.builtin.dnf:
+        name:
+          - akmod-nvidia
+          - xorg-x11-drv-nvidia-cuda # For cuda/nvdec/nvenc support
+        state: latest
+    - name: Add nvidia container runtime repo
+      ansible.builtin.shell:
+        cmd: curl -s -L https://nvidia.github.io/libnvidia-container/{{ nvidia_container_runtime_os }}/libnvidia-container.repo | sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+    - name: Install nvidia container runtime
+      ansible.builtin.dnf:
+        name: nvidia-container-toolkit
+        state: latest
+    # TODO
+    # - name: Add rootless support for nvidia gpu container runtime
+    # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#step-3-rootless-containers-setup
+    #   /etc/nvidia-container-runtime/config.toml

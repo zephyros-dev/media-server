@@ -30,6 +30,11 @@
   import_tasks: system/virtualization.yaml
   tags: virt
 
+# TODO: Run only if detect nvidia GPU
+- name: Setup nvidia driver
+  import_tasks: system/nvidia.yaml
+  tags: nvidia
+
 # - name: Install crowdsec
 #   import_tasks: system/crowdsec.yaml
 #   tags: crowdsec
