@@ -6,3 +6,7 @@
 	path = submodules/snapraid-btrfs-runner
 	url = https://github.com/fmoledina/snapraid-btrfs-runner
 	branch = master
+[submodule "submodules/nvidia-patch"]
+	path = submodules/nvidia-patch
+	url = https://github.com/keylase/nvidia-patch.git
+	branch = master
