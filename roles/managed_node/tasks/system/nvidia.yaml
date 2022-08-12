@@ -29,10 +29,12 @@
       ansible.builtin.dnf:
         name: nvidia-container-toolkit
         state: latest
+    # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#step-3-rootless-containers-setup
+    - name: Add rootless support for nvidia gpu container runtime
+      ansible.builtin.lineinfile:
+        path: /etc/nvidia-container-runtime/config.toml
+        regexp: ^#no-cgroups = false
+        line: no-cgroups = true
     - name: Setup nvidia limit removal script
       ansible.builtin.script:
         cmd: submodules/nvidia-patch/patch.sh
-    # TODO
-    # - name: Add rootless support for nvidia gpu container runtime
-    # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#step-3-rootless-containers-setup
-    #   /etc/nvidia-container-runtime/config.toml
