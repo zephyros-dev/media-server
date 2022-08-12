@@ -49,6 +49,11 @@ auth.{{ server_domain }} {
 {% if value.proxy_auth is defined and value.proxy_auth %}
     import proxy-auth
 {% endif %}
+{% if value.rewrite is defined %}
+{% for rule in value.rewrite %}
+    rewrite {{ rule.src }} {{ rule.dest }}
+{% endfor %}
+{% endif %}
 {% if value.use_host_network is defined and value.use_host_network %}
     reverse_proxy {{ caddyfile_host_address }}:{{ value.reverse_proxy_port }} {
 {% else %}
@@ -56,6 +61,10 @@ auth.{{ server_domain }} {
 {% endif %}
         import security-header
     }
+{% if key == 'nextcloud' %}
+    redir /.well-known/carddav /remote.php/carddav 301
+    redir /.well-known/caldav /remote.php/caldav 301
+{% endif %}
 {% else %}
 
 {% endif %}
@@ -66,23 +75,6 @@ netdata.{{ server_domain }} {
     import global-config
     import proxy-auth
     reverse_proxy {{ caddyfile_host_address }}:19999 {
-        import security-header
-    }
-}
-nextcloud.{{ server_domain }} {
-    import global-config
-    reverse_proxy nextcloud:80 {
-        # header_up Host {http.reverse_proxy.upstream.hostporti}
-        # header_up X-Forwarded-Host {host}
-        import security-header
-        }
-    redir /.well-known/carddav /remote.php/carddav 301
-    redir /.well-known/caldav /remote.php/caldav 301
-}
-nocodb.{{ server_domain }} {
-    import global-config
-    rewrite / /dashboard
-    reverse_proxy nocodb:8080 {
         import security-header
     }
 }

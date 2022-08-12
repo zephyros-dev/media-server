@@ -64,6 +64,9 @@ systemd_container_service:
     folder:
       - "{{ kavita_volume_data }}"
     reverse_proxy_port: "5000"
+    rewrite:
+      - src: /
+        dest: /login
     state: "{{ kavita_state }}"
   komga:
     folder:
@@ -104,12 +107,16 @@ systemd_container_service:
       - "{{ nextcloud_db_data }}"
       - "{{ nextcloud_storage_data }}"
       - "{{ nextcloud_web_data }}"
-    reverse_proxy_custom: true
+    # reverse_proxy_custom: true
+    reverse_proxy_port: "80"
     state: "{{ nextcloud_state }}"
   nocodb:
     folder:
       - "{{ nocodb_db_data }}"
-    reverse_proxy_custom: true
+    reverse_proxy_port: "8080"
+    rewrite:
+      - src: /
+        dest: /dashboard
     state: "{{ nocodb_state }}"
   privatebin:
     folder:
@@ -195,5 +202,8 @@ systemd_container_service:
     pod: false
     proxy_auth: true
     reverse_proxy_port: "8089"
+    rewrite:
+      - src: /
+        dest: /wolweb
     state: "{{ wol_state }}"
     use_host_network: true
