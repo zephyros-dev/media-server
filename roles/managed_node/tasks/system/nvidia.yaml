@@ -15,13 +15,15 @@
           - akmod-nvidia
           - xorg-x11-drv-nvidia-cuda # For cuda/nvdec/nvenc support
         state: latest
-    - name: Disable nvidia powerd service # https://forums.developer.nvidia.com/t/nvidia-powerd-fails-to-start-on-fedora-36-510-68-02-driver/218254
+    # https://forums.developer.nvidia.com/t/nvidia-powerd-fails-to-start-on-fedora-36-510-68-02-driver/218254
+    # Need to enable this driver since disabling it block reboot
+    - name: Enable nvidia powerd service
       ansible.builtin.systemd:
         name: nvidia-powerd
         state: stopped
         daemon_reload: true
-        masked: true
-        enabled: false
+        masked: false
+        enabled: true
     - name: Add nvidia container runtime repo
       ansible.builtin.shell:
         cmd: curl -s -L https://nvidia.github.io/libnvidia-container/{{ nvidia_container_runtime_os }}/libnvidia-container.repo | sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
