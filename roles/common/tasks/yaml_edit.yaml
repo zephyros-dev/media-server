@@ -1,0 +1,23 @@
+- name: Load yaml file
+  ansible.builtin.slurp:
+    src: "{{ yaml_file_path }}"
+  register: yaml_file
+
+- name: Convert yaml
+  ansible.builtin.set_fact:
+    yaml_file: "{{ yaml_file.content|b64decode|from_yaml }}"
+
+- name: Edit yaml
+  ansible.builtin.set_fact:
+    yaml_file: "{{ yaml_file | default([]) | combine(yaml_edit, recursive=True) }}"
+
+- name: Write yaml to file
+  ansible.builtin.copy:
+    content: "{{ yaml_file | to_nice_yaml }}"
+    dest: "{{ yaml_file_path }}"
+
+- name: Reset variable
+  ansible.builtin.set_fact:
+    yaml_edit: null
+    yaml_file: null
+    yaml_file_path: null
