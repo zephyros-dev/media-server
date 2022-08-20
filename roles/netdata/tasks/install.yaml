@@ -6,8 +6,8 @@
         dest: /kickstart.sh
         mode: +x
 
-    - name: Install Netdata
-      ansible.builtin.command: /kickstart.sh
+    # - name: Install Netdata
+    #   ansible.builtin.command: /kickstart.sh
 
     - name: Cleanup installation script
       ansible.builtin.file:

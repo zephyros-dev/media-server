@@ -4,11 +4,11 @@
   register: json_file
 
 - name: Convert json
-  set_fact:
+  ansible.builtin.set_fact:
     json_file: "{{ json_file.content|b64decode|from_json }}"
 
 - name: Edit json
-  set_fact:
+  ansible.builtin.set_fact:
     json_file: "{{ json_file | default([]) | combine(json_edit, recursive=True) }}"
 
 - name: Write json to file
