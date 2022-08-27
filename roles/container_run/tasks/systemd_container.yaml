@@ -43,6 +43,7 @@
       when: >
         ( (not systemd_container_loop_var.value.pod is defined)  or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")
 
+
     - name: Create {{ systemd_container_loop_var.key }} container
       import_tasks: "service/{{ systemd_container_loop_var.key }}.yaml"
 
@@ -57,9 +58,11 @@
           path: /home/{{ ansible_user }}/.config/systemd/user
           pod_prefix: ""
           separator: ""
+          restart_policy: on-abnormal
         state: "{{ systemd_container_loop_var.value.state }}"
       when: >
         ( (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")
+
 
     # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
     - name: Restart {{ systemd_container_loop_var.key }} if config files are changed
