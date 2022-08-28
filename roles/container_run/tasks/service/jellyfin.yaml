@@ -13,7 +13,6 @@
       io.containers.autoupdate: registry
     name: jellyfin-web
     pod: jellyfin
-    restart_policy: on-failure
     security_opt:
       - unmask=/sys/dev
     state: "{{ jellyfin_state }}"

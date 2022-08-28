@@ -29,7 +29,6 @@
     ports:
       - 64738:64738/tcp
       - 64738:64738/udp
-    restart_policy: on-failure
     state: "{{ mumble_state }}"
     volumes:
       - "{{ mumble_volume_data }}:/data:U,z"

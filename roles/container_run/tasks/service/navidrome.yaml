@@ -11,7 +11,6 @@
       io.containers.autoupdate: registry
     name: navidrome-web
     pod: navidrome
-    restart_policy: on-failure
     state: "{{ navidrome_state }}"
     volumes:
       - "{{ navidrome_music }}:/music:ro"

@@ -35,7 +35,6 @@
       io.containers.autoupdate: registry
     name: headphones-web
     pod: headphones
-    restart_policy: on-failure
     state: "{{ headphones_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

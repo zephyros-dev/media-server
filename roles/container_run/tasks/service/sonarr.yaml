@@ -9,7 +9,6 @@
       io.containers.autoupdate: registry
     name: sonarr-web
     pod: sonarr
-    restart_policy: on-failure
     state: "{{ sonarr_state }}"
     volumes:
       - "{{ global_media }}:/home"

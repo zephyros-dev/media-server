@@ -8,7 +8,6 @@
       io.containers.autoupdate: registry
     name: jackett-web
     pod: jackett
-    restart_policy: on-failure
     state: "{{ jackett_state }}"
     volumes:
       - "{{ jackett_web_config }}:/config:U,z"

@@ -9,7 +9,6 @@
       io.containers.autoupdate: registry
     name: calibrew-web
     pod: calibrew
-    restart_policy: on-failure
     state: "{{ calibrew_state }}"
     volumes:
       - "{{ calibrew_book }}:/books"

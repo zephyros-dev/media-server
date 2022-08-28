@@ -28,5 +28,4 @@
     volumes:
       - "/etc/localtime:/etc/localtime:ro,z"
       # - "{{ sftpgo_volume_data }}:/home/{{ sftp_user }}/data:ro"
-    restart_policy: "on-failure"
     state: "{{ sftpgo_state }}"

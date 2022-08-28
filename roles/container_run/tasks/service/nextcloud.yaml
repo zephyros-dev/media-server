@@ -15,7 +15,6 @@
       io.containers.autoupdate: registry
     name: nextcloud-web
     pod: nextcloud
-    restart_policy: on-failure
     state: "{{ nextcloud_state }}"
     volumes:
       - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
@@ -33,7 +32,6 @@
       io.containers.autoupdate: registry
     name: nextcloud-redis
     pod: nextcloud
-    restart_policy: on-failure
     state: "{{ nextcloud_state }}"
   register: container
   until: container.failed == false
@@ -50,7 +48,6 @@
       io.containers.autoupdate: registry
     name: nextcloud-db
     pod: nextcloud
-    restart_policy: on-failure
     state: "{{ nextcloud_state }}"
     volumes:
       - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"

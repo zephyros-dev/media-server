@@ -20,7 +20,6 @@
       path: /home/{{ ansible_user }}/.config/systemd/user
       pod_prefix: ""
       separator: ""
-    restart_policy: on-failure
     state: "{{ transmission_state }}"
     volumes:
       - "{{ transmission_download }}:/downloads"

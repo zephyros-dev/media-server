@@ -58,7 +58,7 @@
           path: /home/{{ ansible_user }}/.config/systemd/user
           pod_prefix: ""
           separator: ""
-          restart_policy: on-abnormal
+          restart_policy: always
         state: "{{ systemd_container_loop_var.value.state }}"
       when: >
         ( (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")

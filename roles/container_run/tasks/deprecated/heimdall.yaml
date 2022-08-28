@@ -24,7 +24,6 @@
       io.containers.autoupdate: registry
     name: heimdall-web
     pod: heimdall
-    restart_policy: on-failure
     state: "{{ heimdall_state }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro,z

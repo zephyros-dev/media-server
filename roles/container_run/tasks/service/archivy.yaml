@@ -15,7 +15,6 @@
       - "{{ archivy_web_config }}:/archivy/.local/share/archivy:U,z"
     # ports:
     #   - 5000
-    restart_policy: "on-failure"
     state: "{{ archivy_state }}"
 
 - name: Archivy elastic search
@@ -27,7 +26,6 @@
       "discovery.type": "single-node"
     volumes:
       - "{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
-    restart_policy: "on-failure"
     state: "{{ archivy_state }}"
 
 - name: Create archivy admin user

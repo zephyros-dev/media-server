@@ -11,7 +11,6 @@
       io.containers.autoupdate: registry
     name: lidarr-web
     pod: lidarr
-    restart_policy: on-failure
     state: "{{ lidarr_state }}"
     volumes:
       - "{{ global_media }}:/home"

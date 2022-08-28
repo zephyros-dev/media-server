@@ -1,5 +1,11 @@
+- name: Check if network exists
+  containers.podman.podman_network_info:
+    name: caddy
+  register: network
+  ignore_errors: true
+
 - name: Create service podman network
   containers.podman.podman_network:
     name: caddy
-    # recreate: true # BUG: The gateway to outside access is broken if the network is not recreated
     state: "{{ network_state }}"
+  when: network.failed
