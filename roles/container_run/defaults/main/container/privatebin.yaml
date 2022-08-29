@@ -1,5 +1,4 @@
-# Privatebin
-privatebin_state: "started"
-privatebin_image: "docker.io/privatebin/nginx-fpm-alpine:latest"
+privatebin_state: started
+privatebin_image: docker.io/privatebin/nginx-fpm-alpine:latest
 privatebin_data: "{{ global_data_path }}/privatebin"
 privatebin_web_data: "{{ privatebin_data }}/web/data"

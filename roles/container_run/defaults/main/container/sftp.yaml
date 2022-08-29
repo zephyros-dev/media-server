@@ -1,6 +1,6 @@
-sftp_state: "stopped"
-sftp_image: "atmoz/sftp:alpine"
+sftp_state: absent
+sftp_image: atmoz/sftp:alpine
 sftp_volume_data: "/path/to/data"
 sftp_port: "22222"
-sftp_user: "secret_string"
-sftp_password: "secret_string"
+sftp_user: secret
+sftp_password: secret

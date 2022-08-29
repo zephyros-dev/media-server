@@ -1,4 +1,3 @@
-# Transmission
 transmission_state: "started"
 transmission_image: "ghcr.io/linuxserver/transmission:latest"
 transmission_data: "{{ global_data_path }}/transmission"

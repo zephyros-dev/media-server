@@ -3,4 +3,4 @@ mumble_image: mattikus/murmur:latest
 mumble_volume: "{{ global_data_path }}/mumble"
 mumble_volume_data: "{{ mumble_volume }}/data"
 mumble_volume_config: "{{ mumble_volume }}/config"
-mumble_password: password
+# mumble_password:

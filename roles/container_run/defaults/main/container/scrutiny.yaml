@@ -6,5 +6,5 @@ scrutiny_device:
   - "/dev/disk/by-id/disk_id"
 scrutiny_volume: "{{ global_data_path }}/scrutiny"
 scrutiny_volume_config: "{{ scrutiny_volume }}/config"
-scrutiny_discord_token:
-scrutiny_discord_channel:
+# scrutiny_discord_token:
+# scrutiny_discord_channel:

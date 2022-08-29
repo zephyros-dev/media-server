@@ -107,7 +107,6 @@ systemd_container_service:
       - "{{ nextcloud_db_data }}"
       - "{{ nextcloud_storage_data }}"
       - "{{ nextcloud_web_data }}"
-    # reverse_proxy_custom: true
     reverse_proxy_port: "80"
     state: "{{ nextcloud_state }}"
   nocodb:

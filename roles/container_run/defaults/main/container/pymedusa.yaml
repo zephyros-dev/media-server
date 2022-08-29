@@ -1,5 +1,4 @@
-# Pymedusa
-pymedusa_state: "started"
-pymedusa_image: "docker.io/pymedusa/medusa:master"
+pymedusa_state: started
+pymedusa_image: docker.io/pymedusa/medusa:master
 pymedusa_data: "{{ global_data_path }}/pymedusa"
 pymedusa_web_config: "{{ pymedusa_data }}/web/config"

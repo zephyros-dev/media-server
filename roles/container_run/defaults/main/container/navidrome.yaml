@@ -1,4 +1,4 @@
-navidrome_state: "started"
+navidrome_state: started
 navidrome_image: "deluan/navidrome:latest"
 navidrome_data: "{{ global_data_path }}/navidrome"
 navidrome_web_data: "{{ navidrome_data }}/data"
