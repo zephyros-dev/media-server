@@ -1,6 +1,7 @@
 caddyfile_zerossl_email: ENC[AES256_GCM,data:sY2mg5BteUMSXp9haqWxChMMvnDK1i8=,iv:iTZ202WsUN/fH2U4/oSyt5ewK8n/hWnMgCIMEcO4dDA=,tag:pm9OGWJr0E/g9ew5xebGAA==,type:str]
 caddyfile_auth_user: ENC[AES256_GCM,data:TNyfWOE=,iv:DTngxkSMyrKkNpzXn4VZIqd7UXakJMkLD3FkLuntilI=,tag:1RXLxH8cXpSxewTY/pUrLA==,type:str]
 caddyfile_auth_pass: ENC[AES256_GCM,data:z63Taep6ULwCCtgQeovEzYOLuW5LdGicXtIJDqpmhZSkC7p5xMzQgt6ZYZP1SSyLldyDO1nL5M1VzVW4bWzhKxs3KNWWGAG0B2QsSCM1svQ=,iv:M9vfH+ydEN13GtZsyyVftQSkNbDADFViwX0oApkRrVQ=,tag:e+6cSGMvvBXlmKke/TfDBg==,type:str]
+caddyfile_auth_token: ENC[AES256_GCM,data:lbCVkD+zmMsnV8WqBunPfl65KZls/ewh1CsfhQXAOeoqlkde,iv:xHFMphw5Sho/MYmwgfnWJnZRgmHrfU+qziHn+SYRqgA=,tag:JO8FtxbGYeHeJjPFYHNNog==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -16,8 +17,8 @@ sops:
             NVFTc2NXdkJWUUo1dTlwNENUOXJVT1kKSLU0kBDyViaTLoyF76jShsOd21SFNngk
             Ez1GQtVUd271ufVDYQUz+SGBh2Nch/VwkPXVmOzy434guwB6eW6LxA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2022-07-23T04:04:51Z"
-    mac: ENC[AES256_GCM,data:b2/u+aBIbusYqKGbm7Yo4+BwsloHz96UL9RxUOYyNIPmOy/chfB+yNtehgaTKNX/S23wYS57n1vOB9GfvxcoKeMWLM91S50LOGTRCZZ9qGEpOAEk0cJAWqn8AmEILoAcl6k/OBCleXc2AYMoZEUz4xoAFOa7nCehqWgIynVIIiU=,iv:+2PzNOXTdCbs/zzMFXNGAmDSMW0slVCt+jk6tQgGyNk=,tag:z+goCJYr+PNzo7u67WjIKw==,type:str]
+    lastmodified: "2022-09-01T17:27:08Z"
+    mac: ENC[AES256_GCM,data:weyvh/5NbeEyoG5Wa/O8DyJDPkBdI8Zehle6Ad43CmgupBSZEXiwO6ZHvkm7DirZPVxHttXN00T7iZz3JrweTRClHi2c9Ap01qtSW5J1pKlPuThe9RuMbAFfkjd87302bnOLssmwJjhi092Kv4ZmEdbmklL9ghhZceruMyBOU/0=,iv:CDO8RSqdSbAw7d7t5EujeNOXSQ7xREY3Pq64uYJJXCI=,tag:CZEvGl3VwB6sXDortCIvfQ==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.7.1

@@ -71,3 +71,8 @@ exit
 systemctl --user restart nextcloud
 ```
 TODO: Write script for running this
+## Podman container stuck in deadlock and cannot be removed
+1. Run
+```
+podman system renumber
+```
