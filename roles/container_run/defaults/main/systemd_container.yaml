@@ -16,13 +16,6 @@ systemd_container_service:
     proxy_auth: true
     reverse_proxy_port: "6767"
     state: "{{ bazarr_state }}"
-  bazarr-hq:
-    folder:
-      - "{{ bazarr_hq_web_config }}"
-      - "{{ global_media }}"
-    proxy_auth: true
-    reverse_proxy_port: "6767"
-    state: "{{ bazarr_state }}"
   caddy:
     folder:
       - "{{ caddy_data_config }}"
@@ -140,14 +133,6 @@ systemd_container_service:
     folder:
       - "{{ global_media }}"
       - "{{ radarr_web_config }}"
-      - "{{ transmission_download }}"
-    proxy_auth: true
-    reverse_proxy_port: "7878"
-    state: "{{ radarr_state }}"
-  radarr-hq:
-    folder:
-      - "{{ global_media }}"
-      - "{{ radarr_hq_web_config }}"
       - "{{ transmission_download }}"
     proxy_auth: true
     reverse_proxy_port: "7878"
