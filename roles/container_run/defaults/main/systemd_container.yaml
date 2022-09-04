@@ -157,14 +157,14 @@ systemd_container_service:
     pod: false
     reverse_proxy_custom: true
     state: "{{ sftp_state }}"
-  sonarr:
-    folder:
-      - "{{ global_media }}"
-      - "{{ sonarr_web_config }}"
-      - "{{ transmission_download }}"
-    proxy_auth: true
-    reverse_proxy_port: "8989"
-    state: "{{ sonarr_state }}"
+  # sonarr:
+  #   folder:
+  #     - "{{ global_media }}"
+  #     - "{{ sonarr_web_config }}"
+  #     - "{{ transmission_download }}"
+  #   proxy_auth: true
+  #   reverse_proxy_port: "8989"
+  #   state: "{{ sonarr_state }}"
   syncthing:
     folder:
       - "{{ syncthing_data }}"
