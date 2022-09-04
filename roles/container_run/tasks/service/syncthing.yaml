@@ -15,6 +15,7 @@
       io.containers.autoupdate: registry
     name: syncthing
     network_mode: host
+    restart_policy: on-failure
     state: "{{ syncthing_state }}"
     volumes:
       - "{{ syncthing_data }}:/var/syncthing:U,z"

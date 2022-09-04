@@ -7,6 +7,7 @@
       io.containers.autoupdate: registry
     name: librespeed-web
     pod: librespeed
+    restart_policy: on-failure
     state: "{{ librespeed_state }}"
     volumes:
       - "{{ librespeed_web_config }}:/config:U,z"

@@ -10,6 +10,7 @@
       io.containers.autoupdate: registry
     name: nocodb-db
     pod: nocodb
+    restart_policy: on-failure
     state: "{{ nocodb_state }}"
     volumes:
       - "{{ nocodb_db_data }}:/var/lib/postgresql/data"
@@ -25,6 +26,7 @@
       io.containers.autoupdate: registry
     name: nocodb-web
     pod: nocodb
+    restart_policy: on-failure
     state: "{{ nocodb_state }}"
   register: container
   until: container.failed == false

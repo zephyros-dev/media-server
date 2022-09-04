@@ -7,9 +7,10 @@
       io.containers.autoupdate: registry
     name: dashy-web
     pod: dashy
+    restart_policy: on-failure
     state: "{{ dashy_state }}"
+    user: "0:0"
     volumes:
       - "{{ dashy_volume_config }}/conf.yml:/app/public/conf.yml:ro,z"
-    user: "0:0"
   register: container
   until: container.failed == false

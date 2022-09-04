@@ -16,6 +16,7 @@
       - 80:80/tcp
       - 443:443/tcp
       - 443:443/udp
+    restart_policy: on-failure
     state: "{{ caddy_state }}"
     volumes:
       - "{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:U,ro,z"

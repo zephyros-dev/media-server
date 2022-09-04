@@ -4,13 +4,14 @@
     env:
       PGID: "1000"
       PUID: "1000"
-      UMASK: "002"
       TZ: "{{ global_timezone }}"
+      UMASK: "002"
     image: "{{ prowlarr_image }}"
     labels:
       io.containers.autoupdate: registry
     name: prowlarr-web
     pod: prowlarr
+    restart_policy: on-failure
     state: "{{ prowlarr_state }}"
     volumes:
       - "{{ prowlarr_web_config }}:/config:z"

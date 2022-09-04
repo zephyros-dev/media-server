@@ -2,5 +2,5 @@ sftp_state: absent
 sftp_image: atmoz/sftp:alpine
 sftp_volume_data: "/path/to/data"
 sftp_port: "22222"
-sftp_user: secret
-sftp_password: secret
+# sftp_user:
+# sftp_password:

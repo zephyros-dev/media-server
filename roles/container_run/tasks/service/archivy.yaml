@@ -1,32 +1,32 @@
 - name: Archivy
   containers.podman.podman_container:
-    name: archivy-web
-    image: "{{ archivy_web_image }}"
-    pod: archivy
     env:
-      FLASK_DEBUG: "0"
       ELASTICSEARCH_ENABLED: "1"
-      ELASTICSEARCH_URL: "http://localhost:9200/"
-      TZ: "{{ global_timezone }}"
-      PUID: 0
+      ELASTICSEARCH_URL: http://localhost:9200/
+      FLASK_DEBUG: "0"
       PGID: 0
+      PUID: 0
+      TZ: "{{ global_timezone }}"
+    image: "{{ archivy_web_image }}"
+    name: archivy-web
+    pod: archivy
+    restart_policy: on-failure
+    state: "{{ archivy_state }}"
     volumes:
       - "{{ archivy_web_data }}:/archivy/data:U,z"
       - "{{ archivy_web_config }}:/archivy/.local/share/archivy:U,z"
-    # ports:
-    #   - 5000
-    state: "{{ archivy_state }}"
 
 - name: Archivy elastic search
   containers.podman.podman_container:
-    name: archivy-elasticsearch
-    image: "{{ archivy_elasticsearch_image }}"
-    pod: archivy
     env:
-      "discovery.type": "single-node"
+      discovery.type: single-node
+    image: "{{ archivy_elasticsearch_image }}"
+    name: archivy-elasticsearch
+    pod: archivy
+    restart_policy: on-failure
+    state: "{{ archivy_state }}"
     volumes:
       - "{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
-    state: "{{ archivy_state }}"
 
 - name: Create archivy admin user
   ansible.builtin.command:

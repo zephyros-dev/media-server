@@ -20,22 +20,22 @@
 
     - name: Scrutiny
       containers.podman.podman_container:
-        name: scrutiny
         cap_add:
           - SYS_RAWIO
           - SYS_ADMIN
         device: "{{ scrutiny_device }}"
         env:
           TZ: "{{ global_timezone }}"
-        image: "{{ scrutiny_image }}"
-        labels:
-          io.containers.autoupdate: registry
         generate_systemd:
           container_prefix: ""
           new: true
           path: /lib/systemd/system
           pod_prefix: ""
           separator: ""
+        image: "{{ scrutiny_image }}"
+        labels:
+          io.containers.autoupdate: registry
+        name: scrutiny
         ports:
           - "{{ scrutiny_port }}:8080"
         restart_policy: on-failure

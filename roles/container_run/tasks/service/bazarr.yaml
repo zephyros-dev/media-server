@@ -9,6 +9,7 @@
       io.containers.autoupdate: registry
     name: bazarr-web
     pod: bazarr
+    restart_policy: on-failure
     state: "{{ bazarr_state }}"
     volumes:
       - "{{ bazarr_web_config }}:/config:U,z"

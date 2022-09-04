@@ -4,9 +4,10 @@
       TZ: "{{ global_timezone }}"
     image: "{{ privatebin_image }}"
     labels:
-      io.containers.autoupdate: "registry"
+      io.containers.autoupdate: registry
     name: privatebin-web
     pod: privatebin
+    restart_policy: on-failure
     state: "{{ privatebin_state }}"
     volumes:
       - "{{ privatebin_web_data }}:/srv/data:U,z"

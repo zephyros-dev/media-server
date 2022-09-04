@@ -1,22 +1,23 @@
 - name: Samba
+  # SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes" # Need this option for case sensitive files. This breaks calibre on windows however. Reference: https://www.oreilly.com/openbook/samba/book/ch05_04.html
   containers.podman.podman_container:
-    name: samba
-    image: "{{ samba_image }}"
-    network: host
     env:
-      WSDD2_DISABLE: 1
-      AVAHI_DISABLE: 1
       ACCOUNT_root: "{{ samba_password }}"
-      UID_root: 0
+      AVAHI_DISABLE: 1
       GROUP_root: 0
       SAMBA_VOLUME_CONFIG_root: "[Storage]; path=/shares/storage; valid users = root; guest ok = no; read only = no; browseable = yes"
-      # SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes" # Need this option for case sensitive files. This breaks calibre on windows however. Reference: https://www.oreilly.com/openbook/samba/book/ch05_04.html
+      UID_root: 0
+      WSDD2_DISABLE: 1
     generate_systemd:
       container_prefix: ""
       new: true
       path: /home/{{ ansible_user }}/.config/systemd/user
       pod_prefix: ""
       separator: ""
+    image: "{{ samba_image }}"
+    name: samba
+    network: host
+    restart_policy: on-failure
     state: "{{ samba_state }}"
     volumes:
       - "{{ global_storage }}:/shares/storage"

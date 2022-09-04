@@ -15,6 +15,7 @@
       io.containers.autoupdate: registry
     name: nextcloud-web
     pod: nextcloud
+    restart_policy: on-failure
     state: "{{ nextcloud_state }}"
     volumes:
       - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
@@ -24,14 +25,15 @@
 
 - name: Nextcloud Redis
   containers.podman.podman_container:
+    command: redis-server --requirepass {{ nextcloud_redis_host_password }}
     env:
       TZ: "{{ global_timezone }}"
-    command: redis-server --requirepass {{ nextcloud_redis_host_password }}
     image: "{{ nextcloud_redis_image }}"
     labels:
       io.containers.autoupdate: registry
     name: nextcloud-redis
     pod: nextcloud
+    restart_policy: on-failure
     state: "{{ nextcloud_state }}"
   register: container
   until: container.failed == false
@@ -48,6 +50,7 @@
       io.containers.autoupdate: registry
     name: nextcloud-db
     pod: nextcloud
+    restart_policy: on-failure
     state: "{{ nextcloud_state }}"
     volumes:
       - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"

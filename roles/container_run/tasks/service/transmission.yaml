@@ -1,25 +1,26 @@
 - name: Transmission
   containers.podman.podman_container:
-    name: transmission
-    image: "{{ transmission_image }}"
     env:
       PASS: "{{ transmission_password }}"
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
-      USER: "{{ transmission_user }}"
       TZ: "{{ global_timezone }}"
-    ports:
-      - 51413:51413/tcp
-      - 51413:51413/udp
-    network: caddy
-    labels:
-      io.containers.autoupdate: registry
+      USER: "{{ transmission_user }}"
     generate_systemd:
       container_prefix: ""
       new: true
       path: /home/{{ ansible_user }}/.config/systemd/user
       pod_prefix: ""
       separator: ""
+    image: "{{ transmission_image }}"
+    labels:
+      io.containers.autoupdate: registry
+    name: transmission
+    network: caddy
+    ports:
+      - 51413:51413/tcp
+      - 51413:51413/udp
+    restart_policy: on-failure
     state: "{{ transmission_state }}"
     volumes:
       - "{{ transmission_download }}:/downloads"

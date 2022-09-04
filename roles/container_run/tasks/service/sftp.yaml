@@ -1,6 +1,8 @@
 - name: SFTP
   containers.podman.podman_container:
-    name: sftp
+    command: "{{ sftp_user }}:{{ sftp_password }}:::data"
+    env:
+      TZ: "{{ global_timezone }}"
     generate_systemd:
       container_prefix: ""
       new: true
@@ -8,13 +10,12 @@
       pod_prefix: ""
       separator: ""
     image: "{{ sftp_image }}"
-    env:
-      TZ: "{{ global_timezone }}"
-    ports:
-      - "{{ sftp_port }}:22"
-    command: "{{ sftp_user }}:{{ sftp_password }}:::data"
     labels:
       io.containers.autoupdate: registry
+    name: sftp
+    ports:
+      - "{{ sftp_port }}:22"
+    restart_policy: on-failure
     state: "{{ sftp_state }}"
     volumes:
       - "{{ sftp_volume_data }}:/home/{{ sftp_user }}/data:ro"
