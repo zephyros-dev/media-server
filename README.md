@@ -61,16 +61,10 @@ ansible-playbook partition --check
 # Troubleshooting
 ## Nextcloud
 ### Stuck in maintenance mode
-1. Run these commands
+1. Rebuild nextcloud
 ```
-podman exec --user www-data -it nextcloud-web /bin/sh
-php occ
-php occ upgrade
-php occ maintenance:mode --off
-exit
-systemctl --user restart nextcloud
+ansible-playbook container_run.yaml --tags nextcloud
 ```
-TODO: Write script for running this
 ## Podman container stuck in deadlock and cannot be removed
 1. Run
 ```
