@@ -56,3 +56,12 @@
       - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
   register: container
   until: container.failed == false
+
+- name: Nextcloud update
+  block:
+    - name: Ugrade nextcloud
+      ansible.builtin.command:
+        cmd: podman exec --user www-data -it nextcloud-web {{ item }}
+      loop:
+        - php occ upgrade
+        - php occ maintenance:mode --off
