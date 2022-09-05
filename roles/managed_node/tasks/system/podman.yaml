@@ -8,22 +8,13 @@
           - slirp4netns
         state: latest
 
-    # - name: Podman testing repo
-    #   ansible.builtin.dnf:
-    #     name:
-    #       - podman
-    #     enablerepo: updates-testing
-    #     state: latest
-    #   when: podman_install_beta
-
     - name: Install podman
       ansible.builtin.dnf:
         name:
           - podman
         state: latest
-      when: not podman_install_beta
 
-    - name: Setup privileged ports
+    - name: Setup privileged ports for rootless podman
       ansible.builtin.sysctl:
         name: net.ipv4.ip_unprivileged_port_start
         sysctl_set: true
@@ -45,10 +36,29 @@
     name: podman-auto-update.timer
     state: started
 
-- name: Disable podman socket
+- name: Enable podman socket
   ansible.builtin.systemd:
     daemon_reload: true
     enabled: true
     name: podman.socket
     scope: user
     state: started
+
+- name: Edit podman configuration
+  community.general.ini_file:
+    path: /home/{{ ansible_user }}/.config/containers/containers.conf
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop: "{{ podman_configuration }}"
+
+# Remove lock file before renumbering. Reference: https://github.com/containers/podman/issues/9164
+- name: Remove libpod rootless lock
+  ansible.builtin.file:
+    path: /dev/shm/libpod_rootless_lock_{{ ansible_effective_group_id }}
+    state: absent
+
+# Reference: https://docs.podman.io/en/latest/markdown/podman-system-renumber.1.html
+- name: Renumber podman locks
+  ansible.builtin.command:
+    cmd: podman system renumber

@@ -5,8 +5,9 @@
 - name: Setup hostname
   import_tasks: system/hostname.yaml
 
-- name: Setup Podman rootless
+- name: Setup Podman
   import_tasks: system/podman.yaml
+  tags: podman
 
 - name: Install packages
   import_tasks: system/packages.yaml

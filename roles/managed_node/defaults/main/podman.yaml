@@ -1,0 +1,5 @@
+podman_configuration:
+  # Change num_locks for using more containers. Reference: https://github.com/containers/common/blob/main/docs/containers.conf.5.md
+  - section: engine
+    option: num_locks
+    value: 4096
