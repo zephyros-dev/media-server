@@ -102,14 +102,14 @@ systemd_container_service:
       - "{{ nextcloud_web_data }}"
     reverse_proxy_port: "80"
     state: "{{ nextcloud_state }}"
-  nocodb:
-    folder:
-      - "{{ nocodb_db_data }}"
-    reverse_proxy_port: "8080"
-    rewrite:
-      - src: /
-        dest: /dashboard
-    state: "{{ nocodb_state }}"
+  # nocodb:
+  #   folder:
+  #     - "{{ nocodb_db_data }}"
+  #   reverse_proxy_port: "8080"
+  #   rewrite:
+  #     - src: /
+  #       dest: /dashboard
+  #   state: "{{ nocodb_state }}"
   privatebin:
     folder:
       - "{{ privatebin_web_data }}"
