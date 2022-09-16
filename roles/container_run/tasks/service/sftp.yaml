@@ -15,7 +15,6 @@
     name: sftp
     ports:
       - "{{ sftp_port }}:22"
-    restart_policy: on-failure
     state: "{{ sftp_state }}"
     volumes:
       - "{{ sftp_volume_data }}:/home/{{ sftp_user }}/data:ro"

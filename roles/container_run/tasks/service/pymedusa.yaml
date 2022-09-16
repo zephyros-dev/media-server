@@ -7,7 +7,6 @@
       io.containers.autoupdate: registry
     name: pymedusa-web
     pod: pymedusa
-    restart_policy: on-failure
     state: "{{ pymedusa_state }}"
     volumes:
       - "{{ global_media }}:/home"

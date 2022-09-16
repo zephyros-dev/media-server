@@ -9,7 +9,6 @@
       io.containers.autoupdate: registry
     name: readarr-web
     pod: readarr
-    restart_policy: on-failure
     state: "{{ readarr_state }}"
     volumes:
       - "{{ global_media }}:/home"

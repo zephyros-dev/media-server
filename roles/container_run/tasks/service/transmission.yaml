@@ -20,7 +20,6 @@
     ports:
       - 51413:51413/tcp
       - 51413:51413/udp
-    restart_policy: on-failure
     state: "{{ transmission_state }}"
     volumes:
       - "{{ transmission_download }}:/downloads"

@@ -17,7 +17,6 @@
     image: "{{ samba_image }}"
     name: samba
     network: host
-    restart_policy: on-failure
     state: "{{ samba_state }}"
     volumes:
       - "{{ global_storage }}:/shares/storage"

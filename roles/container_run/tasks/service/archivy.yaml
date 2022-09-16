@@ -10,7 +10,6 @@
     image: "{{ archivy_web_image }}"
     name: archivy-web
     pod: archivy
-    restart_policy: on-failure
     state: "{{ archivy_state }}"
     volumes:
       - "{{ archivy_web_data }}:/archivy/data:U,z"
@@ -23,7 +22,6 @@
     image: "{{ archivy_elasticsearch_image }}"
     name: archivy-elasticsearch
     pod: archivy
-    restart_policy: on-failure
     state: "{{ archivy_state }}"
     volumes:
       - "{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
