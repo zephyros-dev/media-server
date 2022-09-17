@@ -7,10 +7,14 @@ systemd:
       state: started
   user:
     - name: podman-prune
-      command: podman system prune --all --volumes
+      command: podman system prune --all --volumes --force
       systemd_description: Podman image prune service
-      systemd_working_directory: "%h"
       timer: Sat *-*-* 19:00:00
+      state: started
+    - name: podman-renumber
+      command: podman system renumber
+      systemd_description: Daily podman locks prune
+      timer: "*-*-* 20:00:00"
       state: started
     - name: add-executable
       systemd_description: Add executable permission for exe file in storage
