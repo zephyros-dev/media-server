@@ -43,22 +43,3 @@
     name: podman.socket
     scope: user
     state: started
-
-- name: Edit podman configuration
-  community.general.ini_file:
-    path: /home/{{ ansible_user }}/.config/containers/containers.conf
-    section: "{{ item.section }}"
-    option: "{{ item.option }}"
-    value: "{{ item.value }}"
-  loop: "{{ podman_configuration }}"
-
-# Remove lock file before renumbering. Reference: https://github.com/containers/podman/issues/9164
-- name: Remove libpod rootless lock
-  ansible.builtin.file:
-    path: /dev/shm/libpod_rootless_lock_{{ ansible_effective_group_id }}
-    state: absent
-
-# Reference: https://docs.podman.io/en/latest/markdown/podman-system-renumber.1.html
-- name: Renumber podman locks
-  ansible.builtin.command:
-    cmd: podman system renumber
