@@ -51,9 +51,6 @@ flowchart TB
   end
 ```
 # Note
-- Pods options
-  - infra: no cannot be used with custom network
-- When using podman with systemd, restart-policy cannot be on-failure:3
 - Always run partition playbook with --check first
 ```
 ansible-playbook partition --check
@@ -64,9 +61,4 @@ ansible-playbook partition --check
 1. Rebuild nextcloud
 ```
 ansible-playbook container_run.yaml --tags nextcloud
-```
-## Podman container stuck in deadlock and cannot be removed
-1. Run
-```
-podman system renumber
 ```
