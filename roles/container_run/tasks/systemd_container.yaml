@@ -1,6 +1,7 @@
 - name: Setup podman container with systemd
   tags:
     - "{{ systemd_container_loop_var.key }}"
+  when: systemd_container_loop_var.value.state == "started"
   block:
     - name: Prepare {{ systemd_container_loop_var.key }} folder
       ansible.builtin.file:

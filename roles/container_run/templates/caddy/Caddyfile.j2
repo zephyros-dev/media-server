@@ -42,6 +42,7 @@ auth.{{ server_domain }} {
     header_down X-Frame-Options "SAMEORIGIN"
 }
 {% for key,value in systemd_container_service.items() %}
+{% if value.state == 'started' %}
 {% if not (value.reverse_proxy_custom is defined and value.reverse_proxy_custom) %}
 {{ key }}.{{ server_domain }} {
 {% if not value.certbot is defined or not value.certbot %}
@@ -69,6 +70,7 @@ auth.{{ server_domain }} {
 
 {% endif %}
 }
+{% endif %}
 {% endif %}
 {% endfor %}
 netdata.{{ server_domain }} {

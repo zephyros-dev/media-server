@@ -1,4 +1,4 @@
-nocodb_state: started
+nocodb_state: absent
 nocodb_web_image: nocodb/nocodb:latest
 nocodb_db_image: postgres:13-alpine
 nocodb_data: "{{ global_data_path }}/nocodb"
