@@ -9,5 +9,3 @@
     user: "0:0"
     volumes:
       - "{{ dashy_volume_config }}/conf.yml:/app/public/conf.yml:ro,z"
-  register: container
-  until: container.failed == false

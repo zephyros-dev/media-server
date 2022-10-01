@@ -17,8 +17,6 @@
     volumes:
       - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
       - "{{ nextcloud_web_data }}:/var/www/html:z"
-  register: container
-  until: container.failed == false
 
 - name: Nextcloud Redis
   containers.podman.podman_container:
@@ -29,8 +27,6 @@
     name: nextcloud-redis
     pod: nextcloud
     state: "{{ nextcloud_state }}"
-  register: container
-  until: container.failed == false
 
 - name: Nextcloud database
   containers.podman.podman_container:
@@ -45,8 +41,6 @@
     state: "{{ nextcloud_state }}"
     volumes:
       - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
-  register: container
-  until: container.failed == false
 
 - name: Nextcloud update
   block:

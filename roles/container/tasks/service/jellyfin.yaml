@@ -16,5 +16,3 @@
       - "{{ jellyfin_web_config }}:/config:U,z"
       - /dev/dri/card0:/dev/dri/card0
       - /dev/dri/renderD128:/dev/dri/renderD128
-  register: container
-  until: container.failed == false

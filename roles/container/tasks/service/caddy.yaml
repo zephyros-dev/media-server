@@ -21,5 +21,3 @@
       - "{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:U,ro,z"
       - "{{ caddy_data_config }}:/config:U,z"
       - "{{ caddy_data_data }}:/data:U,z"
-  register: container
-  until: container.failed == false

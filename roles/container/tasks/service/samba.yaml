@@ -20,5 +20,3 @@
     state: "{{ samba_state }}"
     volumes:
       - "{{ global_storage }}:/shares/storage"
-  register: container
-  until: container.failed == false

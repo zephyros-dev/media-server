@@ -8,5 +8,3 @@
     state: "{{ privatebin_state }}"
     volumes:
       - "{{ privatebin_web_data }}:/srv/data:U,z"
-  register: container
-  until: container.failed == false

@@ -22,5 +22,3 @@
     volumes:
       - "{{ transmission_download }}:/downloads"
       - "{{ transmission_web_config }}:/config:U,z"
-  register: container
-  until: container.failed == false

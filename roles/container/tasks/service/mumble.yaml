@@ -35,5 +35,3 @@
       - "{{ mumble_volume_data }}:/data:U,z"
       - "{{ mumble_volume_config }}/murmur.ini:/etc/murmur.ini:ro,z"
       - "{{ caddy_cert_location }}:/certificates:ro,z"
-  register: container
-  until: container.failed == false

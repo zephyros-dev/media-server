@@ -11,8 +11,6 @@
     state: "{{ nocodb_state }}"
     volumes:
       - "{{ nocodb_db_data }}:/var/lib/postgresql/data"
-  register: container
-  until: container.failed == false
 
 - name: Nocodb Web
   containers.podman.podman_container:

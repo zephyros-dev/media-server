@@ -11,5 +11,3 @@
     volumes:
       - "{{ bazarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"
-  register: container
-  until: container.failed == false

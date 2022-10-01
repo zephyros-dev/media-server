@@ -11,5 +11,3 @@
     volumes:
       - "{{ calibrew_book }}:/books"
       - "{{ calibrew_web_config }}:/config:U,z"
-  register: container
-  until: container.failed == false

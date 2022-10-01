@@ -9,5 +9,3 @@
     volumes:
       - "{{ global_media }}:/home"
       - "{{ komga_volume_config }}:/config:U,z"
-  register: container
-  until: container.failed == false

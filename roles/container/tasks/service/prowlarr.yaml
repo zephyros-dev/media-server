@@ -12,5 +12,3 @@
     state: "{{ prowlarr_state }}"
     volumes:
       - "{{ prowlarr_web_config }}:/config:z"
-  register: container
-  until: container.failed == false

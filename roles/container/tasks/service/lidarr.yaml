@@ -16,5 +16,3 @@
       - "{{ global_media }}:/home"
       - "{{ lidarr_web_config }}:/config:U,z"
       - "{{ transmission_download }}:/downloads"
-  register: container
-  until: container.failed == false

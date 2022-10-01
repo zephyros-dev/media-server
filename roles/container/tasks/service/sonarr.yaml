@@ -12,5 +12,3 @@
       - "{{ global_media }}:/home"
       - "{{ sonarr_web_config }}:/config:U,z"
       - "{{ transmission_download }}:/downloads"
-  register: container
-  until: container.failed == false

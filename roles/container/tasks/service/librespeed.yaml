@@ -8,5 +8,3 @@
     state: "{{ librespeed_state }}"
     volumes:
       - "{{ librespeed_web_config }}:/config:U,z"
-  register: container
-  until: container.failed == false

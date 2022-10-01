@@ -16,5 +16,3 @@
     state: "{{ syncthing_state }}"
     volumes:
       - "{{ syncthing_data }}:/var/syncthing:U,z"
-  register: container
-  until: container.failed == false

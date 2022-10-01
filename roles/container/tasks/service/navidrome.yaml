@@ -13,5 +13,3 @@
     volumes:
       - "{{ navidrome_music }}:/music:ro"
       - "{{ navidrome_web_data }}:/data:U,z"
-  register: container
-  until: container.failed == false

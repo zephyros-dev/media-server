@@ -9,5 +9,3 @@
     volumes:
       - "{{ global_media }}:/home"
       - "{{ kavita_volume_data }}:/kavita/config:U,z"
-  register: container
-  until: container.failed == false
