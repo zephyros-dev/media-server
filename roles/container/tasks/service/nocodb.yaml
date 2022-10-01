@@ -6,8 +6,6 @@
       POSTGRES_USER: "{{ nocodb_db_username }}"
       TZ: "{{ global_timezone }}"
     image: "{{ nocodb_db_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: nocodb-db
     pod: nocodb
     state: "{{ nocodb_state }}"
@@ -21,8 +19,6 @@
     env:
       NC_DB: pg://localhost:5432?u={{ nocodb_db_username }}&p={{ nocodb_db_password }}&d=nocodb
     image: "{{ nocodb_web_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: nocodb-web
     pod: nocodb
     state: "{{ nocodb_state }}"

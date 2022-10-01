@@ -3,8 +3,6 @@
     env:
       TZ: "{{ global_timezone }}"
     image: "{{ librespeed_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: librespeed-web
     pod: librespeed
     state: "{{ librespeed_state }}"

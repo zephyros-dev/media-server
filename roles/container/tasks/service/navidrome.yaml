@@ -7,8 +7,6 @@
       ND_SESSIONTIMEOUT: 24h
       TZ: "{{ global_timezone }}"
     image: "{{ navidrome_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: navidrome-web
     pod: navidrome
     state: "{{ navidrome_state }}"

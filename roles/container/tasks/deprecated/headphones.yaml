@@ -31,8 +31,6 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
     image: "{{ headphones_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: headphones-web
     pod: headphones
     state: "{{ headphones_state }}"

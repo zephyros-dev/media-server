@@ -3,8 +3,6 @@
     env:
       TZ: "{{ global_timezone }}"
     image: "{{ privatebin_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: privatebin-web
     pod: privatebin
     state: "{{ privatebin_state }}"

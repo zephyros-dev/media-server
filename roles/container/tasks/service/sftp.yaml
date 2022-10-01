@@ -10,8 +10,6 @@
       pod_prefix: ""
       separator: ""
     image: "{{ sftp_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: sftp
     ports:
       - "{{ sftp_port }}:22"

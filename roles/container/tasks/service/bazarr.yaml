@@ -5,8 +5,6 @@
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
     image: "{{ bazarr_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: bazarr-web
     pod: bazarr
     state: "{{ bazarr_state }}"

@@ -11,6 +11,9 @@
       infra_name: "{{ systemd_container_loop_var.key }}-pod"
       network: caddy
       state: "{{ systemd_container_loop_var.value.state }}"
+    containers.podman.podman_container:
+      labels:
+        io.containers.autoupdate: registry
   block:
     - name: Prepare {{ systemd_container_loop_var.key }} folder
       ansible.builtin.file:

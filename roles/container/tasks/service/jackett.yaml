@@ -4,8 +4,6 @@
       AUTO_UPDATE: "true"
       TZ: "{{ global_timezone }}"
     image: "{{ jackett_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: jackett-web
     pod: jackett
     state: "{{ jackett_state }}"

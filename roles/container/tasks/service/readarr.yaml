@@ -5,8 +5,6 @@
       PUID: "1000"
       TZ: "{{ global_timezone }}"
     image: "{{ readarr_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: readarr-web
     pod: readarr
     state: "{{ readarr_state }}"

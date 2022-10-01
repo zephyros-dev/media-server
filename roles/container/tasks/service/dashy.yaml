@@ -3,8 +3,6 @@
     env:
       TZ: "{{ global_timezone }}"
     image: "{{ dashy_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: dashy-web
     pod: dashy
     state: "{{ dashy_state }}"

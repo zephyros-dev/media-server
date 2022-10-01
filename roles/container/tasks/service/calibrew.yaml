@@ -5,8 +5,6 @@
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
     image: "{{ calibrew_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: calibrew-web
     pod: calibrew
     state: "{{ calibrew_state }}"

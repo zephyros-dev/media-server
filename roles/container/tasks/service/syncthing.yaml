@@ -11,8 +11,6 @@
       pod_prefix: ""
       separator: ""
     image: "{{ syncthing_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: syncthing
     network_mode: host
     state: "{{ syncthing_state }}"

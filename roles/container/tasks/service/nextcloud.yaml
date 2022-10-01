@@ -11,8 +11,6 @@
       REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
       TZ: "{{ global_timezone }}"
     image: "{{ nextcloud_web_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: nextcloud-web
     pod: nextcloud
     state: "{{ nextcloud_state }}"
@@ -28,8 +26,6 @@
     env:
       TZ: "{{ global_timezone }}"
     image: "{{ nextcloud_redis_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: nextcloud-redis
     pod: nextcloud
     state: "{{ nextcloud_state }}"
@@ -44,8 +40,6 @@
       POSTGRES_USER: "{{ nextcloud_postgres_user }}"
       TZ: "{{ global_timezone }}"
     image: "{{ nextcloud_postgres_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: nextcloud-db
     pod: nextcloud
     state: "{{ nextcloud_state }}"

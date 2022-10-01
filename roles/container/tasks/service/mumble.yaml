@@ -23,8 +23,6 @@
       pod_prefix: ""
       separator: ""
     image: "{{ mumble_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: mumble
     ports:
       - 64738:64738/tcp

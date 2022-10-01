@@ -5,8 +5,6 @@
     group_add:
       - "998"
     image: "{{ jellyfin_image }}"
-    labels:
-      io.containers.autoupdate: registry
     name: jellyfin-web
     pod: jellyfin
     security_opt:
