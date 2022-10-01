@@ -1,19 +1,5 @@
-- name: Check if valid certificates is ready
-  block:
-    - name: Initialize certificates variables
-      ansible.builtin.set_fact:
-        cert_available: false
-    - name: Check if certificates is available
-      include_tasks:
-        file: caddy_cert_check.yaml
-        apply:
-          vars:
-            caddy_cert_domain: mumble.{{ server_domain }}
-      loop: "{{ caddy_acme_ca_list }}"
-    - name: Force tasks to fail if no valid cert is found
-      ansible.builtin.fail:
-        msg: No valid certificates is found
-      when: not cert_available
+- name: Check if certificates is ready
+  ansible.builtin.import_tasks: caddy_cert_check/main.yaml
 
 - name: Mumble
   containers.podman.podman_container:
