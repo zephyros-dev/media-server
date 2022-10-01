@@ -1,33 +1,34 @@
-- name: Archivy
-  containers.podman.podman_container:
-    env:
-      ELASTICSEARCH_ENABLED: "1"
-      ELASTICSEARCH_URL: http://localhost:9200/
-      FLASK_DEBUG: "0"
-      PGID: 0
-      PUID: 0
-      TZ: "{{ global_timezone }}"
-    image: "{{ archivy_web_image }}"
-    name: archivy-web
-    pod: archivy
-    state: "{{ archivy_state }}"
-    volumes:
-      - "{{ archivy_web_data }}:/archivy/data:U,z"
-      - "{{ archivy_web_config }}:/archivy/.local/share/archivy:U,z"
+- module_defaults:
+    containers.podman.podman_container:
+      pod: archivy
+      state: "{{ archivy_state }}"
+  block:
+    - name: Archivy
+      containers.podman.podman_container:
+        env:
+          ELASTICSEARCH_ENABLED: "1"
+          ELASTICSEARCH_URL: http://localhost:9200/
+          FLASK_DEBUG: "0"
+          PGID: 0
+          PUID: 0
+          TZ: "{{ global_timezone }}"
+        image: "{{ archivy_web_image }}"
+        name: archivy-web
+        volumes:
+          - "{{ archivy_web_data }}:/archivy/data:U,z"
+          - "{{ archivy_web_config }}:/archivy/.local/share/archivy:U,z"
 
-- name: Archivy elastic search
-  containers.podman.podman_container:
-    env:
-      discovery.type: single-node
-    image: "{{ archivy_elasticsearch_image }}"
-    name: archivy-elasticsearch
-    pod: archivy
-    state: "{{ archivy_state }}"
-    volumes:
-      - "{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
+    - name: Archivy elastic search
+      containers.podman.podman_container:
+        env:
+          discovery.type: single-node
+        image: "{{ archivy_elasticsearch_image }}"
+        name: archivy-elasticsearch
+        volumes:
+          - "{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
 
-- name: Create archivy admin user
-  ansible.builtin.command:
-    cmd: podman exec -it archivy-web archivy create-admin {{ archivy_admin_username }} --password {{ archivy_admin_password }}
-  register: command_result
-  failed_when: "'FAILED' in command_result.stderr"
+    - name: Create archivy admin user
+      ansible.builtin.command:
+        cmd: podman exec -it archivy-web archivy create-admin {{ archivy_admin_username }} --password {{ archivy_admin_password }}
+      register: command_result
+      failed_when: "'FAILED' in command_result.stderr"

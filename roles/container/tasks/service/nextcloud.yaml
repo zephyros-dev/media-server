@@ -1,49 +1,46 @@
-- name: Nextcloud
-  containers.podman.podman_container:
-    env:
-      NEXTCLOUD_TRUTED_DOMAINS: "{{ nextcloud_trusted_domains }}"
-      OVERWRITEPROTOCOL: https
-      POSTGRES_DB: "{{ nextcloud_postgres_db }}"
-      POSTGRES_HOST: localhost:5432
-      POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
-      POSTGRES_USER: "{{ nextcloud_postgres_user }}"
-      REDIS_HOST: localhost
-      REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
-      TZ: "{{ global_timezone }}"
-    image: "{{ nextcloud_web_image }}"
-    name: nextcloud-web
-    pod: nextcloud
-    state: "{{ nextcloud_state }}"
-    volumes:
-      - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
-      - "{{ nextcloud_web_data }}:/var/www/html:z"
-
-- name: Nextcloud Redis
-  containers.podman.podman_container:
-    command: redis-server --requirepass {{ nextcloud_redis_host_password }}
-    env:
-      TZ: "{{ global_timezone }}"
-    image: "{{ nextcloud_redis_image }}"
-    name: nextcloud-redis
-    pod: nextcloud
-    state: "{{ nextcloud_state }}"
-
-- name: Nextcloud database
-  containers.podman.podman_container:
-    env:
-      POSTGRES_DB: "{{ nextcloud_postgres_db }}"
-      POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
-      POSTGRES_USER: "{{ nextcloud_postgres_user }}"
-      TZ: "{{ global_timezone }}"
-    image: "{{ nextcloud_postgres_image }}"
-    name: nextcloud-db
-    pod: nextcloud
-    state: "{{ nextcloud_state }}"
-    volumes:
-      - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
-
-- name: Nextcloud update
+- module_defaults:
+    containers.podman.podman_container:
+      pod: nextcloud
+      state: "{{ nextcloud_state }}"
   block:
+    - name: Nextcloud
+      containers.podman.podman_container:
+        env:
+          NEXTCLOUD_TRUTED_DOMAINS: "{{ nextcloud_trusted_domains }}"
+          OVERWRITEPROTOCOL: https
+          POSTGRES_DB: "{{ nextcloud_postgres_db }}"
+          POSTGRES_HOST: localhost:5432
+          POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
+          POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+          REDIS_HOST: localhost
+          REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
+          TZ: "{{ global_timezone }}"
+        image: "{{ nextcloud_web_image }}"
+        name: nextcloud-web
+        volumes:
+          - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
+          - "{{ nextcloud_web_data }}:/var/www/html:z"
+
+    - name: Nextcloud Redis
+      containers.podman.podman_container:
+        command: redis-server --requirepass {{ nextcloud_redis_host_password }}
+        env:
+          TZ: "{{ global_timezone }}"
+        image: "{{ nextcloud_redis_image }}"
+        name: nextcloud-redis
+
+    - name: Nextcloud database
+      containers.podman.podman_container:
+        env:
+          POSTGRES_DB: "{{ nextcloud_postgres_db }}"
+          POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
+          POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+          TZ: "{{ global_timezone }}"
+        image: "{{ nextcloud_postgres_image }}"
+        name: nextcloud-db
+        volumes:
+          - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
+
     - name: Ugrade nextcloud
       ansible.builtin.command:
         cmd: podman exec --user www-data -it nextcloud-web {{ item }}

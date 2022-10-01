@@ -1,24 +1,24 @@
-- name: Nocodb DB
-  containers.podman.podman_container:
-    env:
-      POSTGRES_DB: nocodb
-      POSTGRES_PASSWORD: "{{ nocodb_db_password }}"
-      POSTGRES_USER: "{{ nocodb_db_username }}"
-      TZ: "{{ global_timezone }}"
-    image: "{{ nocodb_db_image }}"
-    name: nocodb-db
-    pod: nocodb
-    state: "{{ nocodb_state }}"
-    volumes:
-      - "{{ nocodb_db_data }}:/var/lib/postgresql/data"
+- module_defaults:
+    containers.podman.podman_container:
+      pod: nocodb
+      state: "{{ nocodb_state }}"
+  block:
+    - name: Nocodb DB
+      containers.podman.podman_container:
+        env:
+          POSTGRES_DB: nocodb
+          POSTGRES_PASSWORD: "{{ nocodb_db_password }}"
+          POSTGRES_USER: "{{ nocodb_db_username }}"
+          TZ: "{{ global_timezone }}"
+        image: "{{ nocodb_db_image }}"
+        name: nocodb-db
+        volumes:
+          - "{{ nocodb_db_data }}:/var/lib/postgresql/data"
 
-- name: Nocodb Web
-  containers.podman.podman_container:
-    env:
-      NC_DB: pg://localhost:5432?u={{ nocodb_db_username }}&p={{ nocodb_db_password }}&d=nocodb
-    image: "{{ nocodb_web_image }}"
-    name: nocodb-web
-    pod: nocodb
-    state: "{{ nocodb_state }}"
-  register: container
-  until: container.failed == false
+    - name: Nocodb Web
+      containers.podman.podman_container:
+        env:
+          NC_DB: pg://localhost:5432?u={{ nocodb_db_username }}&p={{ nocodb_db_password }}&d=nocodb
+        image: "{{ nocodb_web_image }}"
+        name: nocodb-web
+        pod: nocodb
