@@ -1,5 +1,5 @@
 # Headphones
 headphones_state: "absent"
 headphones_image: "ghcr.io/linuxserver/headphones:latest"
-headphones_data: "{{ global_data_path }}/headphones"
+headphones_data: "{{ global_volume_path }}/headphones"
 headphones_web_config: "{{ headphones_data }}/web/config"

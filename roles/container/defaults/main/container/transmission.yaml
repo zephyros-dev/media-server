@@ -1,6 +1,6 @@
 transmission_state: "started"
 transmission_image: "ghcr.io/linuxserver/transmission:latest"
-transmission_data: "{{ global_data_path }}/transmission"
+transmission_data: "{{ global_volume_path }}/transmission"
 transmission_web_config: "{{ transmission_data }}/web/config"
 transmission_download: "{{ global_media }}/Download/torrent"
 # transmission_watch: '{{ global_media }}/Download/torrent_file'

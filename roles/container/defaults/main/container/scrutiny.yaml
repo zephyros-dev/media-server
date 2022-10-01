@@ -4,7 +4,7 @@ scrutiny_image: ghcr.io/analogj/scrutiny:master-omnibus
 scrutiny_port: "18080"
 scrutiny_device:
   - "/dev/disk/by-id/disk_id"
-scrutiny_volume: "{{ global_data_path }}/scrutiny"
+scrutiny_volume: "{{ global_volume_path }}/scrutiny"
 scrutiny_volume_config: "{{ scrutiny_volume }}/config"
 # scrutiny_discord_token:
 # scrutiny_discord_channel:

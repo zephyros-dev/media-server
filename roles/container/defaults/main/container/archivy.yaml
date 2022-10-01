@@ -1,7 +1,7 @@
 archivy_state: started
 archivy_web_image: uzayg/archivy:latest
 archivy_elasticsearch_image: elasticsearch:7.9.0
-archivy_data: "{{ global_data_path }}/archivy"
+archivy_data: "{{ global_volume_path }}/archivy"
 archivy_elasticsearch: "{{ archivy_data }}/elasticsearch"
 archivy_web: "{{ archivy_data }}/web"
 archivy_web_data: "{{ archivy_web }}/data"

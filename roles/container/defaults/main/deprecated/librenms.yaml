@@ -2,7 +2,7 @@
 librenms_state: "absent"
 librenms_web_image: "librenms/librenms:latest"
 librenms_db_image: "mariadb:10.5"
-librenms_volume: "{{ global_data_path }}/librenms"
+librenms_volume: "{{ global_volume_path }}/librenms"
 librenms_volume_web_data: "{{ librenms_volume }}/web/data"
 librenms_volume_db_data: "{{ librenms_volume }}/db/data"
 librenms_mysql_user: "secret_string"

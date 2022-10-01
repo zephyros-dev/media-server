@@ -1,6 +1,6 @@
 caddy_state: started
 caddy_image: caddy:alpine
-caddy_data: "{{ global_data_path }}/caddy"
+caddy_data: "{{ global_volume_path }}/caddy"
 caddy_data_caddyfile: "{{ caddy_data }}/Caddyfile"
 caddy_data_config: "{{ caddy_data }}/config"
 caddy_data_data: "{{ caddy_data }}/data"

@@ -1,4 +1,4 @@
 librespeed_state: started
 librespeed_image: ghcr.io/linuxserver/librespeed:latest
-librespeed_data: "{{ global_data_path }}/librespeed"
+librespeed_data: "{{ global_volume_path }}/librespeed"
 librespeed_web_config: "{{ librespeed_data }}/web/config"

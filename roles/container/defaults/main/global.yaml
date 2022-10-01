@@ -1,5 +1,6 @@
-# Root data folder
-global_data_path: "/path/to/global/data"
+# Root volume folder
+global_volume_path: "/path/to/global/volume"
+
 # Media folder, shared among Jellyfin, Pymedusa, Radarr, bazarr, headphones for hardlink
 global_media: "/path/to/global/media"
 

@@ -1,7 +1,7 @@
 nocodb_state: absent
 nocodb_web_image: nocodb/nocodb:latest
 nocodb_db_image: postgres:13-alpine
-nocodb_data: "{{ global_data_path }}/nocodb"
+nocodb_data: "{{ global_volume_path }}/nocodb"
 nocodb_db_data: "{{ nocodb_data }}/db/data"
 # nocodb_db_username:
 # nocodb_db_password:

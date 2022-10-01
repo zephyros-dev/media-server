@@ -7,7 +7,7 @@ gitea_db_user: "secret_string"
 gitea_db_passwd: "secret_string"
 gitea_db_name: "secret_string"
 
-gitea_data: "{{ global_data_path }}/gitea"
+gitea_data: "{{ global_volume_path }}/gitea"
 gitea_web_data: "{{ gitea_data }}/web/data"
 gitea_web_config: "{{ gitea_data }}/web/config"
 gitea_web_config_file: "{{ gitea_data }}/app.ini"

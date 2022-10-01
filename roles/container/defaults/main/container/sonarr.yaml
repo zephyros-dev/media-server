@@ -1,4 +1,4 @@
 sonarr_state: absent
 sonarr_image: ghcr.io/linuxserver/sonarr:latest
-sonarr_data: "{{ global_data_path }}/sonarr"
+sonarr_data: "{{ global_volume_path }}/sonarr"
 sonarr_web_config: "{{ sonarr_data }}/web/config"
