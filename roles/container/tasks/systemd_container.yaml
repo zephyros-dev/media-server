@@ -2,6 +2,15 @@
   tags:
     - "{{ systemd_container_loop_var.key }}"
   when: systemd_container_loop_var.value.state == "started"
+  module_defaults:
+    ansible.builtin.systemd:
+      name: "{{ systemd_container_loop_var.key }}"
+      scope: user
+    containers.podman.podman_pod:
+      name: "{{ systemd_container_loop_var.key }}"
+      infra_name: "{{ systemd_container_loop_var.key }}-pod"
+      network: caddy
+      state: "{{ systemd_container_loop_var.value.state }}"
   block:
     - name: Prepare {{ systemd_container_loop_var.key }} folder
       ansible.builtin.file:
@@ -28,19 +37,11 @@
 
     - name: Stop {{ systemd_container_loop_var.key }} systemd
       ansible.builtin.systemd:
-        name: "{{ systemd_container_loop_var.key }}"
-        daemon_reload: true
-        enabled: true
-        scope: user
         state: stopped
       when: systemd_service_file_status.stat.exists
 
     - name: Create {{ systemd_container_loop_var.key }} pod
       containers.podman.podman_pod:
-        infra_name: "{{ systemd_container_loop_var.key }}-pod"
-        name: "{{ systemd_container_loop_var.key }}"
-        network: caddy
-        state: "{{ systemd_container_loop_var.value.state }}"
       when: >
         ( (not systemd_container_loop_var.value.pod is defined)  or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")
 
@@ -50,16 +51,12 @@
 
     - name: Create pod {{ systemd_container_loop_var.key }} systemd
       containers.podman.podman_pod:
-        name: "{{ systemd_container_loop_var.key }}"
-        infra_name: "{{ systemd_container_loop_var.key }}-pod"
-        network: caddy
         generate_systemd:
           container_prefix: ""
           new: true
           path: /home/{{ ansible_user }}/.config/systemd/user
           pod_prefix: ""
           separator: ""
-        state: "{{ systemd_container_loop_var.value.state }}"
       when: >
         ( (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")
 
@@ -67,10 +64,6 @@
     # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
     - name: Restart {{ systemd_container_loop_var.key }} if config files are changed
       ansible.builtin.systemd:
-        name: "{{ systemd_container_loop_var.key }}"
-        daemon_reload: true
-        enabled: true
-        scope: user
         state: restarted
       register: service
       until: service.failed == false
@@ -80,10 +73,7 @@
 
     - name: Enable {{ systemd_container_loop_var.key }} systemd
       ansible.builtin.systemd:
-        name: "{{ systemd_container_loop_var.key }}"
-        daemon_reload: true
         enabled: true
-        scope: user
         state: "{{ systemd_container_loop_var.value.state }}"
       register: service
       until: service.failed == false
