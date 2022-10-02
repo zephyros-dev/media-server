@@ -5,6 +5,7 @@
   module_defaults:
     ansible.builtin.systemd:
       name: "{{ systemd_container_loop_var.key }}"
+      daemon_reload: true
       scope: user
     containers.podman.podman_pod:
       name: "{{ systemd_container_loop_var.key }}"
@@ -45,6 +46,7 @@
 
     - name: Create {{ systemd_container_loop_var.key }} pod
       containers.podman.podman_pod:
+        recreate: true
       when: >
         ( (not systemd_container_loop_var.value.pod is defined)  or (systemd_container_loop_var.value.pod) ) and  (systemd_container_loop_var.value.state == "started")
 
