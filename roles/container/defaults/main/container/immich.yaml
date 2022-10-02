@@ -1,0 +1,8 @@
+immich_state: started
+immich_volume: "{{ global_volume_path }}/immich"
+immich_volume_upload: "{{ immich_volume }}/upload"
+immich_volume_database: "{{ immich_volume }}/database"
+immich_database_db: immich
+immich_database_user: immich
+# immich_database_password:
+# immich_jwt_secret:

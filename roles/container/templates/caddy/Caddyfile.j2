@@ -73,6 +73,16 @@ auth.{{ server_domain }} {
 {% endif %}
 {% endif %}
 {% endfor %}
+immich.{{ server_domain }} {
+    import global-config
+    handle /api* {
+        uri strip_prefix /api
+        reverse_proxy immich:3001
+    }
+    handle {
+        reverse_proxy immich:3000
+    }
+}
 netdata.{{ server_domain }} {
     import global-config
     import proxy-auth

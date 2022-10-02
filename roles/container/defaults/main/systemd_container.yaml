@@ -41,6 +41,13 @@ systemd_container_service:
     templates:
       - dest: "{{ dashy_volume_config }}/conf.yml"
         src: dashy/conf.yml.j2
+  immich:
+    folder:
+      - "{{ immich_volume_upload }}"
+      - "{{ immich_volume_database }}"
+    reverse_proxy_port: "8080"
+    reverse_proxy_custom: true
+    state: "{{ immich_state }}"
   jackett:
     folder:
       - "{{ jackett_web_config }}"
