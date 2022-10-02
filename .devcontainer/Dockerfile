@@ -9,13 +9,14 @@ RUN mkdir -p /home/${USERNAME}/.vscode-server/extensions \
 RUN apt update \
     && apt install -y --no-install-recommends \
     curl \
+    fish \
     gettext-base \
     openssl \
     python3-pip \
     sshpass \
+    tmux \
     unzip \
     whois \
-    tmux \
     && rm -rf /var/lib/apt/lists/* \
     && apt autoremove -y \
     && apt clean -y
