@@ -1,5 +1,7 @@
 - name: Install mergerfs
   become: true
+  tags:
+    - mergerfs
   ansible.builtin.dnf:
     name: "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-{{ mergerfs_version }}-1.{{ mergerfs_fedora_release }}.x86_64.rpm"
     state: present
@@ -29,6 +31,3 @@
         src: submodules/snapraid-btrfs/snapraid-btrfs
         dest: /usr/local/bin/snapraid-btrfs
         mode: "0755"
-    # - name: Install snapraid-btrfs-runner
-    #   ansible.builtin.copy:
-    #     src:
