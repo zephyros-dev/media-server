@@ -1,0 +1,87 @@
+- name: Immich component
+  module_defaults:
+    containers.podman.podman_container:
+      labels:
+        io.containers.autoupdate: registry
+      pod: immich
+      state: "{{ immich_state }}"
+  block:
+    - name: Server
+      containers.podman.podman_container:
+        name: immich-server
+        image: altran1502/immich-server:release
+        command:
+          - "/bin/sh"
+          - "./start-server.sh"
+        volumes:
+          - "{{ immich_volume_upload }}:/usr/src/app/upload"
+        env:
+          DB_DATABASE_NAME: "{{ immich_database_db }}"
+          DB_HOSTNAME: localhost
+          DB_PASSWORD: "{{ immich_database_password }}"
+          DB_USERNAME: "{{ immich_database_user }}"
+          JWT_SECRET: "{{ immich_jwt_secret }}"
+          NODE_ENV: production
+          REDIS_HOSTNAME: localhost
+          TZ: "{{ global_timezone }}"
+
+    - name: Microservices
+      containers.podman.podman_container:
+        name: immich-microservices
+        image: altran1502/immich-server:release
+        command:
+          - "/bin/sh"
+          - "./start-microservices.sh"
+        volume:
+          - "{{ immich_volume_upload }}:/usr/src/app/upload"
+        env:
+          DB_DATABASE_NAME: "{{ immich_database_db }}"
+          DB_HOSTNAME: localhost
+          DB_PASSWORD: "{{ immich_database_password }}"
+          DB_USERNAME: "{{ immich_database_user }}"
+          JWT_SECRET: "{{ immich_jwt_secret }}"
+          NODE_ENV: production
+          REDIS_HOSTNAME: localhost
+          TZ: "{{ global_timezone }}"
+
+    - name: Machine learning
+      containers.podman.podman_container:
+        name: immich-machine-learning
+        image: altran1502/immich-machine-learning:release
+        command:
+          - "/bin/sh"
+          - "./entrypoint.sh"
+        volumes:
+          - "{{ immich_volume_upload }}:/usr/src/app/upload"
+        env:
+          NODE_ENV: production
+          TZ: "{{ global_timezone }}"
+
+    - name: Web
+      containers.podman.podman_container:
+        name: immich-web
+        image: altran1502/immich-web:release
+        command:
+          - "/bin/sh"
+          - "./entrypoint.sh"
+        env:
+          TZ: "{{ global_timezone }}"
+
+    - name: Redis
+      containers.podman.podman_container:
+        name: immich-redis
+        image: redis:6.2
+        env:
+          TZ: "{{ global_timezone }}"
+
+    - name: Database
+      containers.podman.podman_container:
+        name: immich-database
+        image: postgres:14
+        env:
+          POSTGRES_DB: "{{ immich_database_db }}"
+          POSTGRES_PASSWORD: "{{ immich_database_password }}"
+          POSTGRES_USER: "{{ immich_database_user }}"
+          TZ: "{{ global_timezone }}"
+        volumes:
+          - "{{ immich_volume_database }}:/var/lib/postgresql/data"
