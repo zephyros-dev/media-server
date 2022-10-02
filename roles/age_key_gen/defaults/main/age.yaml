@@ -1,0 +1,2 @@
+age_path: '{{ lookup("env","HOME") }}/.config/sops/age'
+age_key_path: "{{ age_path }}/keys.txt"
