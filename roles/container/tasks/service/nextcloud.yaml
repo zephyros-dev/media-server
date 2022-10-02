@@ -1,5 +1,7 @@
 - module_defaults:
     containers.podman.podman_container:
+      labels:
+        io.containers.autoupdate: registry
       pod: nextcloud
       state: "{{ nextcloud_state }}"
   block:
