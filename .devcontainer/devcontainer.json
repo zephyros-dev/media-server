@@ -23,14 +23,15 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"GitHub.vscode-pull-request-github",
-				"Grafana.vscode-jsonnet",
 				"bierner.markdown-mermaid",
 				"eamodio.gitlens",
+				"GitHub.vscode-pull-request-github",
+				"Grafana.vscode-jsonnet",
 				"ms-azuretools.vscode-docker",
 				"pascalreitermann93.vscode-yaml-sort",
-				"redhat.vscode-yaml",
+				"redhat.ansible",
 				"richie5um2.vscode-sort-json",
+				"samuelcolvin.jinjahtml",
 				"signageos.signageos-vscode-sops",
 				"tyriar.sort-lines",
 				"wholroyd.jinja",
