@@ -32,3 +32,6 @@ RUN curl -L -o sops.deb "https://github.com/mozilla/sops/releases/download/v${SO
 
 ARG ANSIBLE_VERSION
 RUN pip install --no-cache-dir ansible=="${ANSIBLE_VERSION}"
+
+ARG ANSIBLE_LINT_VERSION
+RUN pip install --no-cache-dir ansible-lint=="${ANSIBLE_LINT_VERSION}"
