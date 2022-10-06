@@ -3,9 +3,10 @@
   tags:
     - mergerfs
   ansible.builtin.dnf:
-    name: "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-{{ mergerfs_version }}-1.{{ mergerfs_fedora_release }}.x86_64.rpm"
+    name: |
+      "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-{{ mergerfs_version }}-1.{{ mergerfs_fedora_release }}.x86_64.rpm"
     state: present
-    disable_gpg_check: yes
+    disable_gpg_check: true
 
 - name: Install snapraid
   become: true
@@ -31,3 +32,12 @@
         src: submodules/snapraid-btrfs/snapraid-btrfs
         dest: /usr/local/bin/snapraid-btrfs
         mode: "0755"
+
+- name: Install fd
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - fd-find
+    state: latest
+  tags:
+    - fd

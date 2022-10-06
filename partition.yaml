@@ -1,4 +1,6 @@
-- hosts: server
+- name: Partition the server
+  hosts: server
   tasks:
-    - import_role:
+    - name: Run partition
+      ansible.builtin.import_role:
         name: partition
