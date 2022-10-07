@@ -1,0 +1,6 @@
+- name: Remove empty directory from storage video folder
+  ansible.builtin.command:
+    chdir: /mnt/disks/storage/data/{{ item.id }}/{{ global_path_to_storage_video }}
+    cmd: fd --type empty --exec rm -r
+  register: remove_output
+  until: remove_output.stdout_lines == []
