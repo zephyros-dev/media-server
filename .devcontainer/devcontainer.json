@@ -15,7 +15,6 @@
 		"source=ansible-cache,target=/home/vscode/.ansible,type=volume"
 	],
 	"settings": {
-		"ansible.validate.executablePath": "/usr/local/bin/ansible",
 		"editor.formatOnSave": true,
 		"editor.codeActionsOnSave": {
 			"source.fixAll.sortJSON": true
