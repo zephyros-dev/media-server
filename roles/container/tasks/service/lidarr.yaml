@@ -5,10 +5,6 @@
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
     image: "{{ lidarr_image }}"
-    labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: registry
     name: lidarr-web
     pod: lidarr
     state: "{{ lidarr_state }}"

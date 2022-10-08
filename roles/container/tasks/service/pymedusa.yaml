@@ -3,8 +3,6 @@
     env:
       TZ: "{{ global_timezone }}"
     image: "{{ pymedusa_image }}"
-    label:
-      io.containers.autoupdate: registry
     name: pymedusa-web
     pod: pymedusa
     state: "{{ pymedusa_state }}"

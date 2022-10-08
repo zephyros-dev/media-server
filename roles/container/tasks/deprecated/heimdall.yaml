@@ -18,10 +18,6 @@
 - name: Heimdall
   containers.podman.podman_container:
     image: "{{ heimdall_image }}"
-    labels:
-      diun.enable: "true"
-      diun.watch_repo: "true"
-      io.containers.autoupdate: registry
     name: heimdall-web
     pod: heimdall
     state: "{{ heimdall_state }}"
