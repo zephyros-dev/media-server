@@ -4,7 +4,7 @@
 		"dockerfile": "Dockerfile",
 		"args": {
 			"ANSIBLE_VERSION": "6.4.0",
-			"ANSIBLE_LINT_VERSION": "6.7.0",
+			"ANSIBLE_LINT_VERSION": "6.8.0",
 			"SOPS_VERSION": "3.7.1"
 		}
 	},
@@ -23,10 +23,11 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"bierner.markdown-mermaid",
-				"eamodio.gitlens",
 				"GitHub.vscode-pull-request-github",
 				"Grafana.vscode-jsonnet",
+				"bierner.markdown-mermaid",
+				"eamodio.gitlens",
+				"mhutchie.git-graph",
 				"ms-azuretools.vscode-docker",
 				"pascalreitermann93.vscode-yaml-sort",
 				"redhat.ansible",
