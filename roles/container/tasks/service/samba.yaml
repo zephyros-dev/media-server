@@ -6,7 +6,10 @@
       AVAHI_DISABLE: 1
       GROUP_root: 0
       SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes"
-      SAMBA_VOLUME_CONFIG_root: "[Storage]; path=/shares/storage; valid users = root; guest ok = no; read only = no; browseable = yes"
+      SAMBA_VOLUME_CONFIG_disks: |
+        [Disks]; path=/shares/disks; valid users = root; guest ok = no; read only = no; browseable = yes;
+      SAMBA_VOLUME_CONFIG_storage: |
+        [Storage]; path=/shares/storage; valid users = root; guest ok = no; read only = no; browseable = yes;
       UID_root: 0
       WSDD2_DISABLE: 1
     generate_systemd:
@@ -21,3 +24,4 @@
     state: "{{ samba_state }}"
     volumes:
       - "{{ global_storage }}:/shares/storage"
+      - "{{ global_disks_data }}:/shares/disks"
