@@ -58,11 +58,13 @@ ansible-playbook partition --check
 # Troubleshooting
 ## Pymedusa
 ### Pymedusa failed create hardlink
-- This is due to mergerfs not having the destination folder on the same disk as the downloaded folder
-To fix:
-1. Run postprocess so that the folder is created on the shared drive pool
-2. Run the mkdir service to synchronize the folder to all drive in the pool (TODO)
-3. Rerun the postprocessing
+- Check [this](roles/pymedusa/README.md)
+### Check failed to hardlink file
+- Run this command in the Video folder
+```
+find . -type f -links 1 ! -name "*.srt" -print
+```
+<!-- TODO: Write a scheduled monitoring for this -->
 ## Nextcloud
 ### Stuck in maintenance mode
 1. Rebuild nextcloud
