@@ -5,6 +5,7 @@
       ACCOUNT_root: "{{ samba_password }}"
       AVAHI_DISABLE: 1
       GROUP_root: 0
+      SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes"
       SAMBA_VOLUME_CONFIG_root: "[Storage]; path=/shares/storage; valid users = root; guest ok = no; read only = no; browseable = yes"
       UID_root: 0
       WSDD2_DISABLE: 1
