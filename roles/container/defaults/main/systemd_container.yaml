@@ -104,9 +104,9 @@ systemd_container_service:
     state: "{{ navidrome_state }}"
   nextcloud:
     folder:
-      - "{{ nextcloud_db_data }}"
-      - "{{ nextcloud_storage_data }}"
-      - "{{ nextcloud_web_data }}"
+      - "{{ nextcloud_volume_db_data }}"
+      - "{{ nextcloud_volume_web_storage }}"
+      - "{{ nextcloud_volume_web_data }}"
     reverse_proxy_port: "80"
     state: "{{ nextcloud_state }}"
   nocodb:

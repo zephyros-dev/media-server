@@ -1,4 +1,5 @@
-- module_defaults:
+- name: Nextcloud pod
+  module_defaults:
     containers.podman.podman_container:
       labels:
         io.containers.autoupdate: registry
@@ -20,8 +21,9 @@
         image: "{{ nextcloud_web_image }}"
         name: nextcloud-web
         volumes:
-          - "{{ nextcloud_storage_data }}:/var/www/html/data:z"
-          - "{{ nextcloud_web_data }}:/var/www/html:z"
+          - "{{ nextcloud_volume_web_storage }}:/var/www/html/data:z"
+          - "{{ nextcloud_volume_web_data }}:/var/www/html:z"
+      when: nextcloud_db_action == "none"
 
     - name: Nextcloud Redis
       containers.podman.podman_container:
@@ -30,6 +32,20 @@
           TZ: "{{ global_timezone }}"
         image: "{{ nextcloud_redis_image }}"
         name: nextcloud-redis
+      when: nextcloud_db_action == "none"
+
+    - name: Clean current database
+      when: nextcloud_db_action == "import"
+      block:
+        - name: Remove current database
+          become: true
+          ansible.builtin.file:
+            path: "{{ nextcloud_volume_db_data }}"
+            state: absent
+        - name: Create empty database folder
+          ansible.builtin.file:
+            path: "{{ nextcloud_volume_db_data }}"
+            state: directory
 
     - name: Nextcloud database
       containers.podman.podman_container:
@@ -41,7 +57,7 @@
         image: "{{ nextcloud_postgres_image }}"
         name: nextcloud-db
         volumes:
-          - "{{ nextcloud_db_data }}:/var/lib/postgresql/data:U,z"
+          - "{{ nextcloud_volume_db_data }}:/var/lib/postgresql/data:U,z"
 
     - name: Ugrade nextcloud
       ansible.builtin.command:
@@ -49,3 +65,36 @@
       loop:
         - php occ upgrade
         - php occ maintenance:mode --off
+      when: nextcloud_db_action == "none"
+
+- name: Nextcloud database export
+  when: nextcloud_db_action == "export"
+  block:
+    - name: Make backup nextcloud volume folder
+      ansible.builtin.file:
+        path: "{{ nextcloud_volume }}/db_bak"
+        state: directory
+    - name: Backup nextcloud volume
+      become: true
+      ansible.builtin.command:
+        chdir: "{{ nextcloud_volume }}"
+        cmd: cp -ra {{ nextcloud_volume_db_data }} ./db_bak/{{ ansible_date_time.iso8601_basic_short }}
+    - name: Create nextcloud db dump
+      ansible.builtin.shell:
+        chdir: "{{ nextcloud_volume }}"
+        cmd: podman exec nextcloud-db pg_dumpall -U {{ nextcloud_postgres_user }} > dump.sql
+    - name: Remove nextcloud container
+      containers.podman.podman_container:
+        name: nextcloud-db
+        state: absent
+
+- name: Nextcloud database import
+  when: nextcloud_db_action == "import"
+  block:
+    - name: Import db into nextcloud
+      ansible.builtin.shell:
+        chdir: "{{ nextcloud_volume }}"
+        cmd: podman exec -i nextcloud-db psql -U {{ nextcloud_postgres_user }} < dump.sql
+      register: import_output
+      until: import_output.rc == 0
+      retries: 10
