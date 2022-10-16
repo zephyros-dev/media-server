@@ -1,4 +1,11 @@
 - name: Make empty folder in video for post-processing with hardlink on disks {{ item.id }}
   ansible.builtin.command:
-    chdir: "{{ global_media_storage_video }}"
-    cmd: fd --type directory --exec mkdir -p /mnt/disks/storage/data/{{ item.id }}/{{ global_path_to_storage_video }}/{}
+    chdir: "{{ loop_var_mkdir.src }}"
+    cmd: fd --type directory --exec mkdir -p /mnt/disks/storage/data/{{ item.id }}/{{ loop_var_mkdir.dest }}/{}
+  loop:
+    - src: "{{ global_media_storage_video }}"
+      dest: "{{ global_path_to_storage_video }}"
+    - src: "{{ global_medusa }}"
+      dest: "{{ global_path_to_medusa }}"
+  loop_control:
+    loop_var: loop_var_mkdir
