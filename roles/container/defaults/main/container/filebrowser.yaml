@@ -1,0 +1,2 @@
+filebrowser_state: started
+filebrowser_volume: "{{ global_volume_path }}/filebrowser"

@@ -16,14 +16,19 @@ appConfig:
 sections:
   - name: Personal
     items:
-      - title: Nextcloud
-        icon: https://nextcloud.{{ server_domain }}/core/img/favicon.ico
-        url: https://nextcloud.{{ server_domain }}
       - title: Archivy
         icon: https://archivy.{{ server_domain }}/static/archivy.svg
         statusCheckAllowInsecure: true
         statusCheckUrl: http://archivy:5000
         url: https://archivy.{{ server_domain }}
+      - title: Immich
+        icon: https://immich.{{ server_domain }}/favicon.png
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://immich:3000
+        url: https://immich.{{ server_domain }}
+      - title: Nextcloud
+        icon: https://nextcloud.{{ server_domain }}/core/img/favicon.ico
+        url: https://nextcloud.{{ server_domain }}
       # - title: Nocodb
       #   icon: https://nocodb.{{ server_domain }}/dashboard/favicon-32.png
       #   statusCheckAllowInsecure: true
@@ -34,6 +39,11 @@ sections:
         statusCheckAllowInsecure: true
         statusCheckUrl: http://{{ caddyfile_host_address }}:8384
         url: https://syncthing.{{ server_domain }}
+      - title: Wake-on-lan
+        icon: mdi-desktop-classic
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://{{ caddyfile_host_address }}:8089/wolweb
+        url: https://wol.{{ server_domain }}
       # - title: Gitea
       #   icon: favicon-local
       #   statusCheckAllowInsecure: true
@@ -127,20 +137,15 @@ sections:
         statusCheckAllowInsecure: true
         statusCheckUrl: http://{{ caddyfile_host_address }}:18080
         url: https://scrutiny.{{ server_domain }}
-  - name: Misc
+  - name: Public
     items:
-      - title: Wake-on-lan
-        icon: mdi-desktop-classic
+      - title: Filebrowser
+        icon: hl-filebrowser
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddyfile_host_address }}:8089/wolweb
-        url: https://wol.{{ server_domain }}
+        statusCheckUrl: http://filebrowser:80
+        url: https://filebrowser.{{ server_domain }}
       - title: Privatebin
         icon: hl-privatebin
         statusCheckAllowInsecure: true
         statusCheckUrl: http://privatebin:8080
         url: https://privatebin.{{ server_domain }}
-      - title: Immich
-        icon: https://immich.{{ server_domain }}/favicon.png
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://immich:3000
-        url: https://immich.{{ server_domain }}
