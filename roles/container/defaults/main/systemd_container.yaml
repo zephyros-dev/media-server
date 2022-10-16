@@ -26,6 +26,14 @@ systemd_container_service:
     templates:
       - dest: "{{ caddy_data_caddyfile }}"
         src: caddy/Caddyfile.j2
+  calibre:
+    folder:
+      - "{{ calibre_book }}s"
+      - "{{ calibre_volume_config }}"
+    reverse_proxy_port: "8080"
+    pod: false
+    reverse_proxy_custom: true
+    state: "{{ calibre_state }}"
   calibrew:
     folder:
       - "{{ calibrew_book }}"

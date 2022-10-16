@@ -1,0 +1,24 @@
+# Not working
+- name: Calibre
+  containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
+    image: "{{ calibre_image }}"
+    # name: calibre-web
+    # pod: calibre
+    name: calibre
+    generate_systemd:
+      container_prefix: ""
+      new: true
+      path: /home/{{ ansible_user }}/.config/systemd/user
+      pod_prefix: ""
+      separator: ""
+    security_opt:
+      - seccomp=unconfined
+    ports:
+      - "28080:8080"
+      - "28081:8081"
+    state: "{{ calibre_state }}"
+    # volumes:
+    #   - "{{ calibre_book }}:/books"
+    #   - "{{ calibre_volume_config }}:/config:U,z"
