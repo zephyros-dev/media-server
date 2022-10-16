@@ -1,0 +1,21 @@
+- name: Create empty file for filebrowser
+  ansible.builtin.copy:
+    content: ""
+    dest: "{{ item }}"
+    force: false
+  loop:
+    - "{{ filebrowser_volume }}/database.db"
+    - "{{ filebrowser_volume }}/.filebrowser.json"
+
+- name: filebrowser
+  containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
+    image: filebrowser/filebrowser
+    name: filebrowser-web
+    pod: filebrowser
+    state: "{{ filebrowser_state }}"
+    volumes:
+      - "{{ global_media }}:/srv:ro"
+      - "{{ filebrowser_volume }}/database.db:/database.db:U,z"
+      - "{{ filebrowser_volume }}/.filebrowser.json:/.filebroser.json:U,z"

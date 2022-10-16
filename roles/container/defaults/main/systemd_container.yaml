@@ -49,6 +49,11 @@ systemd_container_service:
     templates:
       - dest: "{{ dashy_volume_config }}/conf.yml"
         src: dashy/conf.yml.j2
+  filebrowser:
+    folder:
+      - "{{ filebrowser_volume }}"
+    reverse_proxy_port: "80"
+    state: "{{ filebrowser_state }}"
   immich:
     folder:
       - "{{ immich_volume_upload }}"
