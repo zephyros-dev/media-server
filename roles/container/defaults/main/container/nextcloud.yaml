@@ -1,11 +1,11 @@
 nextcloud_state: started
 nextcloud_web_image: nextcloud:latest
 nextcloud_redis_image: redis:alpine
-nextcloud_postgres_image: postgres:13-alpine
-nextcloud_data: "{{ global_volume_path }}/nextcloud"
-nextcloud_web_data: "{{ nextcloud_data }}/web/data"
-nextcloud_storage_data: "{{ nextcloud_data }}/web/storage"
-nextcloud_db_data: "{{ nextcloud_data }}/db/data"
+nextcloud_postgres_image: postgres:14-alpine
+nextcloud_volume: "{{ global_volume_path }}/nextcloud"
+nextcloud_volume_web_data: "{{ nextcloud_volume }}/web/data"
+nextcloud_volume_web_storage: "{{ nextcloud_volume }}/web/storage"
+nextcloud_volume_db_data: "{{ nextcloud_volume }}/db/data"
 
 # nextcloud_postgres_db:
 # nextcloud_postgres_user:
@@ -14,3 +14,9 @@ nextcloud_postgres_host: localhost
 nextcloud_redis_host: localhost
 # nextcloud_redis_host_password:
 nextcloud_trusted_domains: nextcloud.{{ server_domain }}
+# Setup for upgrading the database
+# none: run normally
+# export: only run the db container, export db to sql file and backup the db volume folder
+# import: only run db container, import the sql file
+# Upgrade procedure: set to export, upgrade db image version, set to import, set to none
+nextcloud_db_action: none
