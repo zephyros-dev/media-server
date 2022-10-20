@@ -4,7 +4,7 @@
     - mergerfs
   ansible.builtin.dnf:
     name: |
-      "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-{{ mergerfs_version }}-1.{{ mergerfs_fedora_release }}.x86_64.rpm"
+      https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-{{ mergerfs_version }}-1.{{ mergerfs_fedora_release }}.x86_64.rpm
     state: present
     disable_gpg_check: true
 
@@ -15,7 +15,7 @@
       ansible.builtin.yum_repository:
         name: copr:copr.fedorainfracloud.org:pauken:SnapRAID
         description: Copr repo for SnapRAID owned by pauken
-        baseurl: https://download.copr.fedorainfracloud.org/results/pauken/SnapRAID/fedora-$releasever-$basearch/
+        baseurl: https://download.copr.fedorainfracloud.org/results/pauken/SnapRAID/fedora-35-$basearch/
         skip_if_unavailable: true
         gpgcheck: true
         gpgkey: https://download.copr.fedorainfracloud.org/results/pauken/SnapRAID/pubkey.gpg
