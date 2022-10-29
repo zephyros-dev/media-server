@@ -1,3 +1,7 @@
+- name: Setup networking
+  ansible.builtin.import_tasks: system/network.yaml
+  tags: network
+
 - name: Harden ssh
   import_tasks: system/ssh.yaml
   when: ansible_user != "root"
