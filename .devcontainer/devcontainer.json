@@ -58,7 +58,7 @@
 		"--userns=keep-id"
 	],
 	"initializeCommand": "./.devcontainer/initializeCommand.sh",
-	"postCreateCommand": "ansible-playbook .devcontainer/playbook.yaml",
+	"postAttachCommand": "ansible-playbook .devcontainer/playbook.yaml",
 	"remoteUser": "vscode",
 	"containerUser": "vscode"
 }
