@@ -1,4 +1,5 @@
-- delegate_to: localhost
+- name: Create WifiQR
+  delegate_to: localhost
   block:
     - name: Clean wifiQR folder
       ansible.builtin.file:
@@ -10,15 +11,18 @@
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
+        mode: "0755"
       loop:
         - wifiqr/qr
     - name: Create wifiqr
       ansible.builtin.command:
         chdir: wifiqr
         cmd: wifiqr --ssid "{{ item.key }}" --key "{{ item.value.password }}" --output qr/{{ item.key }}.png --size {{ wifiqr_qr_size }}
+      changed_when: false
       loop: "{{ wifiqr_wifi | dict2items }}"
     - name: Template wifiqr documents
       ansible.builtin.template:
         src: wifiqr.html
         dest: wifiqr/{{ item.key }}.html
+        mode: "0644"
       loop: "{{ wifiqr_wifi | dict2items }}"

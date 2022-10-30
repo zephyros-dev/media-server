@@ -3,9 +3,13 @@
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
-			"ANSIBLE_VERSION": "6.4.0",
 			"ANSIBLE_LINT_VERSION": "6.8.0",
-			"SOPS_VERSION": "3.7.1"
+			"ANSIBLE_VERSION": "6.5.0",
+			"PRECOMMIT_CONVENTIONAL_COMMIT": "2.1.1",
+			"PRECOMMIT_HOOK_VERSION": "4.3.0",
+			"PRECOMMIT_VERSION": "2.20.0",
+			"SOPS_VERSION": "3.7.3",
+			"USERNAME": "vscode"
 		}
 	},
 	"mounts": [
@@ -13,14 +17,8 @@
 		"source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
 		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
 		"source=ansible-cache,target=/home/vscode/.ansible,type=volume",
-		"source=vscode-extension,target=/home/vscode/.vscode-server/extensions,type=volume" // Cache extensions reinstall. Source: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
+		"source=vscode-extension,target=/home/vscode/.vscode-server/extensions,type=volume,U=true" // Cache extensions reinstall. Source: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
 	],
-	"settings": {
-		"editor.formatOnSave": true,
-		"editor.codeActionsOnSave": {
-			"source.fixAll.sortJSON": true
-		}
-	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -28,6 +26,7 @@
 				"Grafana.vscode-jsonnet",
 				"bierner.markdown-mermaid",
 				"eamodio.gitlens",
+				"esbenp.prettier-vscode",
 				"mhutchie.git-graph",
 				"ms-azuretools.vscode-docker",
 				"pascalreitermann93.vscode-yaml-sort",
@@ -38,18 +37,28 @@
 				"tyriar.sort-lines",
 				"wholroyd.jinja",
 				"yzhang.markdown-all-in-one"
-			]
+			],
+			"settings": {
+				"files.associations": {
+					"**/handlers/**/*.yaml": "ansible",
+					"**/tasks/**/*.yaml": "ansible"
+				},
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.formatOnSave": true,
+				"editor.codeActionsOnSave": {
+					"source.fixAll.sortJSON": true
+				}
+			}
 		}
 	},
 	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:1": {
-			"version": "latest"
-		}
+		"ghcr.io/devcontainers/features/docker-in-docker:1": {}
 	},
 	"runArgs": [
 		"--userns=keep-id"
 	],
-	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
+	"initializeCommand": "./.devcontainer/initializeCommand.sh",
+	"postCreateCommand": "ansible-playbook .devcontainer/playbook.yaml",
 	"remoteUser": "vscode",
 	"containerUser": "vscode"
 }

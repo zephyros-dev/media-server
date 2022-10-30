@@ -1,8 +1,8 @@
-- name: Check certificates for {{ item }} CA
+- name: Check certificates for CA {{ item }}
   ansible.builtin.set_fact:
     caddy_cert_location_loop: "{{ caddy_data_data }}/caddy/certificates/{{ item }}/{{ caddy_cert_domain }}"
   when: not cert_available
-- name: Check if {{ item }}/{{ caddy_cert_domain }} is available
+- name: Check if folder is available {{ item + '/' + caddy_cert_domain }}
   ansible.builtin.stat:
     path: "{{ caddy_cert_location_loop }}/{{ caddy_cert_domain }}.crt"
   register: caddy_cert_status
@@ -16,7 +16,7 @@
       stat:
         exists: false
   when: not caddy_cert_status.stat.exists is defined
-- name: Found certificates for {{ item }}/{{ caddy_cert_domain }}
+- name: Found certificates for {{ item + '/' + caddy_cert_domain }}
   ansible.builtin.set_fact:
     caddy_cert_location: "{{ caddy_data_data }}/caddy/certificates/{{ item }}/{{ caddy_cert_domain }}"
     cert_available: true

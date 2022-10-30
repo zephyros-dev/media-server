@@ -4,7 +4,7 @@
       ansible.builtin.set_fact:
         cert_available: false
     - name: Check if certificates is available
-      include_tasks:
+      ansible.builtin.include_tasks:
         file: ca_loop.yaml
         apply:
           vars:

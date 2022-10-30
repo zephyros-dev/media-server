@@ -5,7 +5,7 @@
 
 - name: Convert json
   ansible.builtin.set_fact:
-    json_file: "{{ json_file.content|b64decode|from_json }}"
+    json_file: "{{ json_file.content | b64decode | from_json }}"
 
 - name: Edit json
   ansible.builtin.set_fact:
@@ -15,6 +15,7 @@
   ansible.builtin.copy:
     content: "{{ json_file | to_nice_json }}"
     dest: "{{ json_file_path }}"
+    mode: "0644"
 
 - name: Reset variable
   ansible.builtin.set_fact:

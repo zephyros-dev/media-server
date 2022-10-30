@@ -3,49 +3,49 @@
   tags: network
 
 - name: Harden ssh
-  import_tasks: system/ssh.yaml
+  ansible.builtin.import_tasks: system/ssh.yaml
   when: ansible_user != "root"
 
 - name: Setup hostname
-  import_tasks: system/hostname.yaml
+  ansible.builtin.import_tasks: system/hostname.yaml
 
 - name: Setup Podman
-  import_tasks: system/podman.yaml
+  ansible.builtin.import_tasks: system/podman.yaml
   tags: podman
 
 - name: Install packages
-  import_tasks: system/packages.yaml
+  ansible.builtin.import_tasks: system/packages.yaml
   tags: packages
 
 - name: Setup user systemd
-  import_tasks: system/systemd/user.yaml
+  ansible.builtin.import_tasks: system/systemd/user.yaml
 
 - name: Setup storage mounts
-  import_tasks: system/mount.yaml
+  ansible.builtin.import_tasks: system/mount.yaml
   tags: mount
 
 - name: Setup snapraid
-  import_tasks: system/snapraid.yaml
+  ansible.builtin.import_tasks: system/snapraid.yaml
 
 - name: Setup system systemd
-  import_tasks: system/systemd/system.yaml
+  ansible.builtin.import_tasks: system/systemd/system.yaml
   tags: systemd
 
 - name: Setup Virtualization
-  import_tasks: system/virtualization.yaml
+  ansible.builtin.import_tasks: system/virtualization.yaml
   tags: virt
 
 # TODO: Run only if detect nvidia GPU
 - name: Setup nvidia driver
-  import_tasks: system/nvidia.yaml
+  ansible.builtin.import_tasks: system/nvidia.yaml
   tags: nvidia
 
 # - name: Install crowdsec
-#   import_tasks: system/crowdsec.yaml
+#   ansible.builtin.import_tasks: system/crowdsec.yaml
 #   tags: crowdsec
 
 - name: Install netdata
-  import_role:
+  ansible.builtin.import_role:
     name: netdata
 
 - name: Miscellaneous settings
@@ -53,4 +53,4 @@
   tags: misc
 
 - name: Automatic update packages
-  import_tasks: system/auto_update.yaml
+  ansible.builtin.import_tasks: system/auto_update.yaml

@@ -1,4 +1,5 @@
-- become: true
+- name: Setup netdata
+  become: true
   block:
     - name: Download the installation script
       ansible.builtin.get_url:
@@ -6,8 +7,9 @@
         dest: /kickstart.sh
         mode: +x
 
-    # - name: Install Netdata
-    #   ansible.builtin.command: /kickstart.sh
+    - name: Install Netdata
+      changed_when: false
+      ansible.builtin.command: /kickstart.sh
 
     - name: Cleanup installation script
       ansible.builtin.file:
@@ -15,4 +17,4 @@
         state: absent
 
     - name: Configure Netdata
-      import_tasks: configure.yaml
+      ansible.builtin.import_tasks: configure.yaml

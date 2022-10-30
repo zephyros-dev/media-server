@@ -2,11 +2,13 @@
   ansible.builtin.command:
     chdir: /mnt/disks/storage/data/{{ item.id }}/{{ global_path_to_storage_video }}
     cmd: fd --type empty
+  changed_when: false
   register: remove_output
 - name: Remove empty folder in {{ item.id }}
   ansible.builtin.command:
     chdir: /mnt/disks/storage/data/{{ item.id }}/{{ global_path_to_storage_video }}
     cmd: fd --type empty --exec rm -r
+  changed_when: false
 # TODO: When this is implemented, just need to add until to one command https://github.com/sharkdp/fd/pull/1068
 - name: Rerun the tasks until all the empty folders are deleted
   ansible.builtin.include_tasks: rmdir.yaml

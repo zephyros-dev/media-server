@@ -1,8 +1,11 @@
 - name: Get fedora version
-  ansible.builtin.command: rpm -E %fedora
+  ansible.builtin.command: # noqa: command-instead-of-module
+    cmd: rpm -E %fedora
+  changed_when: false
   register: fedora_version_output
 
-- become: true
+- name: Setup nvidia driver
+  become: true
   block:
     - name: Add rpm fusion repo non-free
       ansible.builtin.dnf:
@@ -25,8 +28,10 @@
         masked: false
         enabled: true
     - name: Add nvidia container runtime repo
-      ansible.builtin.shell:
-        cmd: curl -s -L https://nvidia.github.io/libnvidia-container/{{ nvidia_container_runtime_os }}/libnvidia-container.repo | sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+      ansible.builtin.get_url:
+        url: https://nvidia.github.io/libnvidia-container/{{ nvidia_container_runtime_os }}/libnvidia-container.repo
+        dest: /etc/yum.repos.d/nvidia-container-toolkit.repo
+        mode: "0644"
     - name: Install nvidia container runtime
       ansible.builtin.dnf:
         name: nvidia-container-toolkit

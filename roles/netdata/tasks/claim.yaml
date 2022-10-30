@@ -1,35 +1,35 @@
 - name: Claim the node to Netdata Cloud
   become: true
-  tasks:
+  block:
     - name: Claim to Netdata Cloud
+      when: reclaim
       block:
         - name: Check if node is already claimed
-          # This check is used to prevent errors in the following task to claim the node to Netdata Cloud.
-          stat:
+          ansible.builtin.stat:
             path: /var/lib/netdata/cloud.d/claimed_id
           register: claimed_result
-
         - name: Claim to Netdata Cloud
-          shell: netdata-claim.sh -token={{ claim_token }} -rooms={{ claim_rooms }} -url={{ claim_url }}
-          when: claimed_result.stat.exists == false
           become: true
-      when: reclaim == false
+          ansible.builtin.command:
+            cmd: netdata-claim.sh -token={{ claim_token }} -rooms={{ claim_rooms }} -url={{ claim_url }}
+          when: not claimed_result.stat.exists
 
     - name: Re-claim a node to Netdata Cloud
+      when: reclaim
       block:
         - name: Ensure `uuidgen` is installed
-          stat:
+          ansible.builtin.stat:
             path: /usr/bin/uuidgen
           register: uuidgen_result
 
         - name: Fail if `uuidgen` is not installed
-          fail:
+          ansible.builtin.fail:
             msg: The system needs `uuidgen` installed to enable re-claiming.
-          when: uuidgen_result.stat.exists == false
+          when: not uuidgen_result.stat.exists
 
         - name: Reclaim the node with `-id=`
-          shell: netdata-claim.sh -token={{ claim_token }} -rooms={{ claim_rooms }} -url={{ claim_url }} -id=$(uuidgen)
-          when: uuidgen_result.stat.exists == true
+          ansible.builtin.command:
+            cmd: netdata-claim.sh -token={{ claim_token }} -rooms={{ claim_rooms }} -url={{ claim_url }} -id=$(uuidgen)
+          when: uuidgen_result.stat.exists
           notify: Restart Netdata
           become: true
-      when: reclaim == true

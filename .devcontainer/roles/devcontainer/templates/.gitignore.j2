@@ -1,0 +1,11 @@
+{% for lines in gitignore_template %}
+{{ lines }}
+{% endfor %}
+
+### Custom ###
+# Ignore wifiqr generated code
+wifiqr/*
+# Ignore decrypted file
+*.decrypted*
+# Ignore tmp file
+*tmp

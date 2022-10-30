@@ -1,0 +1,6 @@
+- name: Setup repository
+  hosts: localhost
+  tasks:
+    - name: Setup devcontainer
+      ansible.builtin.import_role:
+        name: devcontainer

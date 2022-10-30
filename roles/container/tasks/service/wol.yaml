@@ -1,9 +1,10 @@
-- name: wol-web configurations
+- name: Wol-web configurations
   ansible.builtin.copy:
     content: "{{ wol_config_devices | to_nice_json }}"
     dest: "{{ wol_volume }}/devices.json"
+    mode: "0600"
 
-- name: wol-web
+- name: Wol-web
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"

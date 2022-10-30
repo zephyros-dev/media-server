@@ -1,20 +1,3 @@
-- name: Pgadmin data
-  file:
-    path: "{{ pgadmin_data }}/pgadmin"
-    state: directory
-
-- name: Stop systemd
-  vars:
-    service_name: pgadmin
-  import_tasks: systemd_stop.yaml
-
-- name: pgadmin pod
-  containers.podman.podman_pod:
-    name: pgadmin
-    infra_name: pgadmin-pod
-    network: caddy
-    state: "{{ pgadmin_state }}"
-
 - name: Pgadmin
   containers.podman.podman_container:
     name: pgadmin-web
@@ -22,8 +5,6 @@
     env:
       PGADMIN_DEFAULT_EMAIL: "{{ pgadmin_email }}"
       PGADMIN_DEFAULT_PASSWORD: "{{ pgadmin_password }}"
-    # ports:
-    #   - '80'
     pod: pgadmin
     volumes:
       - "/etc/localtime:/etc/localtime:ro,z"

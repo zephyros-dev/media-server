@@ -1,14 +1,17 @@
-- become: true
+- name: Setup scrutiny
+  become: true
   block:
     - name: Create scrutiny volume folder
       ansible.builtin.file:
         path: "{{ scrutiny_volume_config }}"
         state: directory
+        mode: "0755"
 
     - name: Templates scrutiny config file
       ansible.builtin.template:
         src: scrutiny/scrutiny.yaml.j2
         dest: "{{ scrutiny_volume_config }}/scrutiny.yaml"
+        mode: "0755"
 
     - name: Stop systemd
       ansible.builtin.systemd:
@@ -16,7 +19,6 @@
         daemon_reload: true
         enabled: true
         state: stopped
-      ignore_errors: true
 
     - name: Scrutiny
       containers.podman.podman_container:

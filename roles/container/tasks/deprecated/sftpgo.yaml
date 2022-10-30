@@ -1,24 +1,4 @@
-- name: sftpgo data folder
-  file:
-    path: "{{ sftpgo_volume_data }}"
-    state: directory
-
-- name: Stop systemd
-  vars:
-    service_name: sftpgo
-  import_tasks: systemd_stop.yaml
-
-- name: sftpgo pod
-  containers.podman.podman_pod:
-    name: sftpgo
-    infra_name: sftpgo-pod
-    ports:
-      - "{{ sftpgo_admin_port }}:8080"
-      - "{{ sftpgo_sftp_port }}:2022"
-      - "{{ sftpgo_webdav_port }}:10080"
-    state: "{{ sftpgo_state }}"
-
-- name: sftpgo
+- name: Container sftpgo
   containers.podman.podman_container:
     name: sftpgo-web
     image: "{{ sftpgo_image }}"

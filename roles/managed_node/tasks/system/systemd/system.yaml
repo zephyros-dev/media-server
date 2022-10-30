@@ -1,4 +1,5 @@
-- become: true
+- name: Setup system
+  become: true
   block:
     - name: Template system systemd service
       vars:
@@ -6,12 +7,13 @@
       ansible.builtin.template:
         src: "system/{{ item.name }}.service.j2"
         dest: "/etc/systemd/system/{{ item.name }}.service"
+        mode: "0600"
       loop: "{{ systemd.system }}"
 
     - name: Enable system systemd service
       ansible.builtin.systemd:
-        daemon_reload: yes
-        enabled: yes
+        daemon_reload: true
+        enabled: true
         state: started
         name: "{{ item.name }}"
       loop: "{{ systemd.system }}"
@@ -23,6 +25,7 @@
       ansible.builtin.template:
         src: "user/template.timer.j2"
         dest: "/etc/systemd/system/{{ item.name }}.timer"
+        mode: "0600"
       loop: "{{ systemd.system }}"
       when: item.timer is defined
 
@@ -30,8 +33,8 @@
       vars:
         template_var: "{{ item }}"
       ansible.builtin.systemd:
-        daemon_reload: yes
-        enabled: yes
+        daemon_reload: true
+        enabled: true
         state: "{{ item.state }}"
         name: "{{ item.name }}.timer"
       loop: "{{ systemd.system }}"

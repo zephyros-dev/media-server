@@ -1,3 +1,11 @@
+- name: Setup the yaml file if not exists
+  ansible.builtin.copy:
+    dest: "{{ yaml_file_path }}"
+    content: |
+      ---
+    force: false
+    mode: "0644"
+
 - name: Load yaml file
   ansible.builtin.slurp:
     src: "{{ yaml_file_path }}"
@@ -5,19 +13,14 @@
 
 - name: Convert yaml
   ansible.builtin.set_fact:
-    yaml_file: "{{ yaml_file.content|b64decode|from_yaml }}"
+    yaml_file: "{{ yaml_file.content | b64decode | from_yaml_all | list }}"
 
 - name: Edit yaml
   ansible.builtin.set_fact:
-    yaml_file: "{{ yaml_file | default([]) | combine(yaml_edit, recursive=True) }}"
+    yaml_file: "{{ yaml_file | default([]) | combine(yaml_edit, recursive=true, list_merge='append_rp') }}"
 
 - name: Write yaml to file
   ansible.builtin.copy:
-    content: "{{ yaml_file | to_nice_yaml }}"
+    content: "{{ yaml_file | to_nice_yaml(sort_keys=false, indent=2, width=1337) }}"
     dest: "{{ yaml_file_path }}"
-
-- name: Reset variable
-  ansible.builtin.set_fact:
-    yaml_edit: null
-    yaml_file: null
-    yaml_file_path: null
+    mode: "0644"

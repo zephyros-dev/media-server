@@ -1,9 +1,3 @@
-- name: Diun pod
-  containers.podman.podman_pod:
-    name: diun
-    state: "{{ diun_state }}"
-  ignore_errors: yes
-
 - name: Diun
   containers.podman.podman_container:
     name: diun-web
@@ -18,11 +12,10 @@
       DIUN_NOTIF_DISCORD_MENTIONS: "{{ diun_discord_mention }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro,z"
-      - '{{ lookup("env","XDG_RUNTIME_DIR") }}/podman/podman.sock:/var/run/docker.sock'
+      - '{{ lookup("env", "XDG_RUNTIME_DIR") }}/podman/podman.sock:/var/run/docker.sock'
     pod: diun
     labels:
       diun.enable: "true"
       diun.watch_repo: "true"
       io.containers.autoupdate: "registry"
     state: "{{ diun_state }}"
-  ignore_errors: yes

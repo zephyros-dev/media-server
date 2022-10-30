@@ -12,6 +12,6 @@
 - name: Create default network
   become: true
   community.libvirt.virt_net:
-    autostart: yes
+    autostart: true
     command: create
     name: default

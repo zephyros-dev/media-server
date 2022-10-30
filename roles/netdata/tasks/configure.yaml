@@ -6,6 +6,7 @@
     option: "{{ item.option }}"
     value: "{{ item.value }}"
     state: "{{ item.state }}"
+    mode: "0644"
   loop: "{{ netdata_config }}"
   notify: Restart Netdata
 
@@ -20,9 +21,8 @@
   become: true
   when: nvidia_smi_state.stat.exists
   block:
-    - ansible.builtin.set_fact:
-        netdata_root: /opt/netdata
     - name: Copy default python monitor configuration
+      changed_when: false
       ansible.builtin.command:
         chdir: "{{ netdata_root }}/usr/lib/netdata/conf.d"
         cmd: cp python.d.conf {{ netdata_root }}/etc/netdata/python.d.conf

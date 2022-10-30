@@ -2,6 +2,7 @@
   ansible.builtin.command:
     chdir: "{{ loop_var_mkdir.src }}"
     cmd: fd --type directory --exec mkdir -p /mnt/disks/storage/data/{{ item.id }}/{{ loop_var_mkdir.dest }}/{}
+  changed_when: false
   loop:
     - src: "{{ global_media_storage_video }}"
       dest: "{{ global_path_to_storage_video }}"

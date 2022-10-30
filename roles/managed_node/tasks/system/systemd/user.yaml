@@ -1,12 +1,13 @@
-- tags: systemd_user
+- name: Setup systemd for user
+  tags: systemd_user
   block:
-    - name: "Check if user {{ ansible_user }} is lingering"
-      stat:
+    - name: Check if user is lingering {{ ansible_user }}
+      ansible.builtin.stat:
         path: "/var/lib/systemd/linger/{{ ansible_user }}"
       register: user_lingering
 
     - name: Enable lingering if neccessary
-      command: "loginctl enable-linger {{ ansible_user }}"
+      ansible.builtin.command: "loginctl enable-linger {{ ansible_user }}"
       when:
         - not user_lingering.stat.exists
 
@@ -15,14 +16,15 @@
         template_var: "{{ item }}"
       ansible.builtin.template:
         src: "user/{{ item.name }}.service.j2"
-        dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.service"
+        dest: /home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.service
+        mode: "0600"
       loop: "{{ systemd.user }}"
 
     - name: Enable the systemd service
       ansible.builtin.systemd:
-        daemon_reload: yes
+        daemon_reload: true
         scope: user
-        enabled: yes
+        enabled: true
         state: restarted
         name: "{{ item.name }}"
       loop: "{{ systemd.user }}"
@@ -33,7 +35,8 @@
         template_var: "{{ item }}"
       ansible.builtin.template:
         src: "user/template.timer.j2"
-        dest: "/home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.timer"
+        dest: /home/{{ ansible_user }}/.config/systemd/user/{{ item.name }}.timer
+        mode: "0600"
       loop: "{{ systemd.user }}"
       when: item.timer is defined
 
@@ -41,9 +44,9 @@
       vars:
         template_var: "{{ item }}"
       ansible.builtin.systemd:
-        daemon_reload: yes
+        daemon_reload: true
         scope: user
-        enabled: yes
+        enabled: true
         state: started
         name: "{{ item.name }}.timer"
       loop: "{{ systemd.user }}"

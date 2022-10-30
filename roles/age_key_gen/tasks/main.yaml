@@ -5,10 +5,13 @@
 
 - name: Create sops age key folder if not exists
   ansible.builtin.file:
-    path: "{{ age_path  }}"
+    path: "{{ age_path }}"
     state: directory
+    mode: "0700"
   when: not keys.stat.exists
 
 - name: Create age key if not exists
-  ansible.builtin.command: "age-keygen -o {{ age_key_path }}"
+  changed_when: false
+  ansible.builtin.command:
+    cmd: "age-keygen -o {{ age_key_path }}"
   when: not keys.stat.exists

@@ -1,9 +1,13 @@
-- import_tasks: network.yaml
-- import_tasks: scrutiny.yaml
+- name: Setup network
+  ansible.builtin.import_tasks: network.yaml
+
+- name: Setup scrutiny
+  ansible.builtin.import_tasks: scrutiny.yaml
   tags: scrutiny
 
 - name: Run podman container with systemd
-  include_tasks: systemd_container.yaml
+  ansible.builtin.include_tasks:
+    file: systemd_container.yaml
   args:
     apply:
       tags:

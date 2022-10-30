@@ -1,4 +1,4 @@
-- name: Create a new {{ patition_loop_var.value.fs_type }} primary partition for {{ patition_loop_var.key }} disks
+- name: Create a new primary partition for disks {{ "parition" + patition_loop_var.value.fs_type + "disk" + patition_loop_var.key }}
   community.general.parted:
     device: /dev/disk/by-id/{{ disks_list_loop_var.id }}
     number: 1
@@ -9,7 +9,7 @@
   loop_control:
     loop_var: disks_list_loop_var
 
-- name: Make filesystem for the {{ patition_loop_var.key }} disks
+- name: Make filesystem for disks {{ patition_loop_var.key }}
   community.general.filesystem:
     fstype: "{{ patition_loop_var.value.fs_type }}"
     dev: /dev/disk/by-id/{{ disks_list_loop_var.id }}-part1

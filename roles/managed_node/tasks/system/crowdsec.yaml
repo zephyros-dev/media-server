@@ -1,11 +1,24 @@
-- name: Setup crowdsec repository
-  become: true
-  ansible.builtin.shell: curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.rpm.sh | sudo bash
+- name: Setup crowdsec
+  block:
+    - name: Setup crowdsec repository
+      ansible.builtin.get_url:
+        url: https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.rpm.sh
+        dest: /crowdsec.sh
+        mode: +x
 
-- name: Install crowdsec
-  become: true
-  dnf:
-    name:
-      - crowdsec
-      - crowdsec-firewall-bouncer-iptables
-    state: latest
+    - name: Setup crowdsec repository
+      changed_when: false
+      ansible.builtin.command:
+        cmd: /crowdsec.sh
+
+    - name: Remove install script
+      ansible.builtin.file:
+        path: /crowdsec.sh
+        state: absent
+
+    - name: Install crowdsec
+      ansible.builtin.dnf:
+        name:
+          - crowdsec
+          - crowdsec-firewall-bouncer-iptables
+        state: latest

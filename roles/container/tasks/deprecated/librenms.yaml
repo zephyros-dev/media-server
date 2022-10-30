@@ -1,26 +1,3 @@
-- name: Create librenms web data folder
-  file:
-    path: "{{ librenms_volume_web_data }}"
-    state: directory
-- name: Create librenms db data folder
-  file:
-    path: "{{ librenms_volume_db_data }}"
-    state: directory
-
-- name: Stop systemd
-  vars:
-    service_name: librenms
-  import_tasks: systemd_stop.yaml
-
-- name: Librenms pod
-  containers.podman.podman_pod:
-    name: librenms
-    infra_name: librenms-pod
-    network: caddy
-    # ports:
-    #   - '8000:8000'
-    state: "{{ librenms_state }}"
-
 - name: Librenms database
   containers.podman.podman_container:
     name: librenms-db
@@ -63,9 +40,3 @@
       # - '/etc/localtime:/etc/localtime:ro,z'
       - "{{ librenms_volume_web_data }}:/data:U,z"
     state: "{{ librenms_state }}"
-
-- name: Install systemd
-  vars:
-    service_name: librenms
-    service_state: "{{ librenms_state }}"
-  import_tasks: systemd.yaml

@@ -1,4 +1,5 @@
-- module_defaults:
+- name: Setup nocodb
+  module_defaults:
     containers.podman.podman_container:
       labels:
         io.containers.autoupdate: registry

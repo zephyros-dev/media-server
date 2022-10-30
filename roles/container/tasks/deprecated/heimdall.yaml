@@ -1,20 +1,3 @@
-- name: Heimdall config
-  file:
-    path: "{{ heimdall_data_config }}"
-    state: directory
-
-- name: Stop systemd
-  vars:
-    service_name: heimdall
-  import_tasks: systemd_stop.yaml
-
-- name: Heimdall pod
-  containers.podman.podman_pod:
-    name: heimdall
-    infra_name: heimdall-pod
-    network: caddy
-    state: "{{ heimdall_state }}"
-
 - name: Heimdall
   containers.podman.podman_container:
     image: "{{ heimdall_image }}"
@@ -24,12 +7,3 @@
     volumes:
       - /etc/localtime:/etc/localtime:ro,z
       - "{{ heimdall_data_config }}:/config:U,z"
-    # ports:
-    #   - 80
-    #   - 443
-
-- name: Install systemd
-  vars:
-    service_name: heimdall
-    service_state: "{{ heimdall_state }}"
-  import_tasks: systemd.yaml

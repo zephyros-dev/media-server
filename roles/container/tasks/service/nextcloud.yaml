@@ -46,6 +46,7 @@
           ansible.builtin.file:
             path: "{{ nextcloud_volume_db_data }}"
             state: directory
+            mode: "0755"
 
     - name: Nextcloud database
       containers.podman.podman_container:
@@ -74,8 +75,10 @@
       ansible.builtin.file:
         path: "{{ nextcloud_volume }}/db_bak"
         state: directory
+        mode: "0755"
     - name: Backup nextcloud volume
       become: true
+      changed_when: false
       ansible.builtin.command:
         chdir: "{{ nextcloud_volume }}"
         cmd: cp -ra {{ nextcloud_volume_db_data }} ./db_bak/{{ ansible_date_time.iso8601_basic_short }}
@@ -83,6 +86,7 @@
       ansible.builtin.shell:
         chdir: "{{ nextcloud_volume }}"
         cmd: podman exec nextcloud-db pg_dumpall -U {{ nextcloud_postgres_user }} > dump.sql
+      changed_when: false
     - name: Remove nextcloud container
       containers.podman.podman_container:
         name: nextcloud-db
@@ -98,3 +102,4 @@
       register: import_output
       until: import_output.rc == 0
       retries: 10
+      changed_when: false

@@ -1,11 +1,19 @@
 FROM mcr.microsoft.com/vscode/devcontainers/base
 
-ARG USERNAME=vscode
+ARG CANON_ARCH='dpkg --print-architecture'
 
-RUN mkdir -p /home/${USERNAME}/.vscode-server/extensions \
-    && chown -R ${USERNAME} \
-    /home/${USERNAME}/.vscode-server
+ARG PRECOMMIT_HOOK_VERSION
+ENV PRECOMMIT_HOOK_VERSION ${PRECOMMIT_HOOK_VERSION}
 
+ARG PRECOMMIT_CONVENTIONAL_COMMIT
+ENV PRECOMMIT_CONVENTIONAL_COMMIT ${PRECOMMIT_CONVENTIONAL_COMMIT}
+
+ARG USERNAME
+
+USER ${USERNAME}
+RUN mkdir -p ~/.vscode-server
+
+USER root
 RUN apt update \
     && apt install -y --no-install-recommends \
     curl \
@@ -22,7 +30,7 @@ RUN apt update \
     && apt clean -y
 
 ARG SOPS_VERSION
-RUN curl -L -o sops.deb "https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops_${SOPS_VERSION}_amd64.deb" \
+RUN curl -Lo sops.deb https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops_${SOPS_VERSION}_$(eval ${CANON_ARCH}).deb \
     && apt install -y --no-install-recommends ./sops.deb \
     && git config --global diff.sopsdiffer.textconv "sops -d" \
     && rm -r sops.deb \
@@ -31,7 +39,11 @@ RUN curl -L -o sops.deb "https://github.com/mozilla/sops/releases/download/v${SO
     && apt clean -y
 
 ARG ANSIBLE_VERSION
-RUN pip install --no-cache-dir ansible=="${ANSIBLE_VERSION}"
+RUN pip install --no-cache-dir ansible==${ANSIBLE_VERSION}
 
 ARG ANSIBLE_LINT_VERSION
-RUN pip install --no-cache-dir ansible-lint=="${ANSIBLE_LINT_VERSION}"
+ENV ANSIBLE_LINT_VERSION ${ANSIBLE_LINT_VERSION}
+RUN pip install --no-cache-dir ansible-lint==${ANSIBLE_LINT_VERSION}
+
+ARG PRECOMMIT_VERSION
+RUN pip install --no-cache-dir pre-commit==${PRECOMMIT_VERSION}

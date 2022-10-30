@@ -1,7 +1,9 @@
-- become: true
+- name: Setup mount
+  become: true
   block:
     - name: Manage storage disks
-      include_tasks: mount/storage.yaml
+      ansible.builtin.include_tasks:
+        file: mount/storage.yaml
       loop: "{{ disks.storage.disks_list }}"
       loop_control:
         loop_var: storage_loop_var

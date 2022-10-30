@@ -1,4 +1,5 @@
-- become: true
+- name: Setup auto update dnf
+  become: true
   block:
     - name: Install automatic update packages
       ansible.builtin.dnf:
@@ -11,10 +12,11 @@
         section: Timer
         option: OnCalendar
         value: "{{ auto_update.timer }}"
+        mode: "0600"
 
     - name: Enable automatic update timer
       ansible.builtin.systemd:
         name: dnf-automatic-install.timer
-        daemon_reload: yes
-        enabled: yes
+        daemon_reload: true
+        enabled: true
         state: "{{ auto_update.state }}"

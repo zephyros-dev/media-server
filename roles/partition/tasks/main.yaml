@@ -1,5 +1,5 @@
 - name: Create partition for drives
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: partition.yaml
     apply:
       become: true

@@ -1,0 +1,5 @@
+gitignore_list:
+  - dotenv
+  - intellij+all
+  - macOS
+  - VisualStudioCode

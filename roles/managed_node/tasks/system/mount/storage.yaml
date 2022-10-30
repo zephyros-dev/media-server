@@ -6,7 +6,8 @@
     state: mounted
 
 - name: Manage storage subvolume
-  include_tasks: subvolume.yaml
+  ansible.builtin.include_tasks:
+    file: subvolume.yaml
   loop:
     - data
     - content

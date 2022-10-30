@@ -1,11 +1,13 @@
-- tags: snapraid
+- name: Setup snapraid
+  tags: snapraid
   block:
     - name: Configure snapraid
       ansible.builtin.template:
         src: snapraid/snapraid.conf.j2
         dest: /etc/snapraid.conf
+        mode: "0600"
     - name: Configure snapper
-      include_role:
+      ansible.builtin.include_role:
         name: aisbergg.snapper
         apply:
           become: true
@@ -15,8 +17,8 @@
           - path: /mnt/disks/storage/data/{{ snapper_loop_var.id }}
             name: "{{ snapper_loop_var.id }}"
             vars:
-              ALLOW_USERS: "{{ ansible_user }}"
-              ALLOW_GROUPS: "{{ ansible_user }}"
+              ALLOW_USERS: "{{ ansible_env.USER }}"
+              ALLOW_GROUPS: "{{ ansible_env.USER }}"
               SYNC_ACL: true
               TIMELINE_CREATE: false
               TIMELINE_CLEANUP: false
@@ -31,17 +33,21 @@
           ansible.builtin.file:
             path: "{{ snapraid_runner_path }}"
             state: directory
+            mode: "0755"
         - name: Install snapraid-btrfs-runner script
           ansible.builtin.copy:
             src: submodules/snapraid-btrfs-runner/snapraid-btrfs-runner.py
             dest: "{{ snapraid_runner_path }}/snapraid-btrfs-runner.py"
+            mode: "0700"
         - name: Check if default config differs
           ansible.builtin.copy:
             src: submodules/snapraid-btrfs-runner/snapraid-btrfs-runner.conf.example
             dest: "{{ snapraid_runner_path }}/snapraid-btrfs-runner.conf.example"
+            mode: "0600"
           register: snapraid_runner_config
         - name: Replace default config if changed
-          ansible.builtin.command: cp snapraid-btrfs-runner.conf.example snapraid-btrfs-runner.conf
+          ansible.builtin.command:
+            cmd: cp snapraid-btrfs-runner.conf.example snapraid-btrfs-runner.conf
           args:
             chdir: "{{ snapraid_runner_path }}"
           when: snapraid_runner_config.changed
@@ -51,17 +57,19 @@
             section: "{{ item.section }}"
             option: "{{ item.option }}"
             value: "{{ item.value }}"
+            mode: "0600"
           loop: "{{ snapraid_runner_configuration }}"
         - name: Template snapraid runner systemd
           ansible.builtin.template:
             src: "snapraid/snapraid-runner.{{ item }}.j2"
             dest: "/etc/systemd/system/snapraid-runner.{{ item }}"
+            mode: "0600"
           loop:
             - service
             - timer
         - name: Enable snapraid runner systemd timer
           ansible.builtin.systemd:
-            daemon_reload: yes
-            enabled: yes
+            daemon_reload: true
+            enabled: true
             state: started
             name: snapraid-runner.timer
