@@ -1,64 +1,62 @@
 {
-	"name": "Infra",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"args": {
-			"ANSIBLE_LINT_VERSION": "6.8.0",
-			"ANSIBLE_VERSION": "6.5.0",
-			"PRECOMMIT_CONVENTIONAL_COMMIT": "2.1.1",
-			"PRECOMMIT_HOOK_VERSION": "4.3.0",
-			"PRECOMMIT_VERSION": "2.20.0",
-			"SOPS_VERSION": "3.7.3",
-			"USERNAME": "vscode"
-		}
-	},
-	"mounts": [
-		"source=${localEnv:HOME}/.config/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind",
-		"source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
-		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
-		"source=ansible-cache,target=/home/vscode/.ansible,type=volume",
-		"source=vscode-extension,target=/home/vscode/.vscode-server/extensions,type=volume,U=true" // Cache extensions reinstall. Source: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
-	],
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"GitHub.vscode-pull-request-github",
-				"Grafana.vscode-jsonnet",
-				"bierner.markdown-mermaid",
-				"eamodio.gitlens",
-				"esbenp.prettier-vscode",
-				"mhutchie.git-graph",
-				"ms-azuretools.vscode-docker",
-				"pascalreitermann93.vscode-yaml-sort",
-				"redhat.ansible",
-				"richie5um2.vscode-sort-json",
-				"samuelcolvin.jinjahtml",
-				"signageos.signageos-vscode-sops",
-				"tyriar.sort-lines",
-				"wholroyd.jinja",
-				"yzhang.markdown-all-in-one"
-			],
-			"settings": {
-				"files.associations": {
-					"**/handlers/**/*.yaml": "ansible",
-					"**/tasks/**/*.yaml": "ansible"
-				},
-				"editor.defaultFormatter": "esbenp.prettier-vscode",
-				"editor.formatOnSave": true,
-				"editor.codeActionsOnSave": {
-					"source.fixAll.sortJSON": true
-				}
-			}
-		}
-	},
-	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:1": {}
-	},
-	"runArgs": [
-		"--userns=keep-id"
-	],
-	"initializeCommand": "./.devcontainer/initializeCommand.sh",
-	"postAttachCommand": "ansible-playbook .devcontainer/playbook.yaml",
-	"remoteUser": "vscode",
-	"containerUser": "vscode"
+  "build": {
+    "args": {
+      "ANSIBLE_LINT_VERSION": "6.8.0",
+      "ANSIBLE_VERSION": "6.5.0",
+      "PRECOMMIT_CONVENTIONAL_COMMIT": "2.1.1",
+      "PRECOMMIT_HOOK_VERSION": "4.3.0",
+      "PRECOMMIT_VERSION": "2.20.0",
+      "SOPS_VERSION": "3.7.3",
+      "USERNAME": "vscode"
+    },
+    "dockerfile": "Dockerfile"
+  },
+  "containerUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.vscode-pull-request-github",
+        "Grafana.vscode-jsonnet",
+        "bierner.markdown-mermaid",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "mhutchie.git-graph",
+        "ms-azuretools.vscode-docker",
+        "pascalreitermann93.vscode-yaml-sort",
+        "redhat.ansible",
+        "richie5um2.vscode-sort-json",
+        "samuelcolvin.jinjahtml",
+        "signageos.signageos-vscode-sops",
+        "tyriar.sort-lines",
+        "wholroyd.jinja",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "editor.codeActionsOnSave": {
+          "source.fixAll.sortJSON": true
+        },
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "files.associations": {
+          "**/handlers/**/*.yaml": "ansible",
+          "**/tasks/**/*.yaml": "ansible"
+        }
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:1": {}
+  },
+  "initializeCommand": "./.devcontainer/initializeCommand.sh",
+  "mounts": [
+    "source=${localEnv:HOME}/.config/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind",
+    "source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
+    "source=ansible-cache,target=/home/vscode/.ansible,type=volume",
+    "source=vscode-extension,target=/home/vscode/.vscode-server/extensions,type=volume,U=true" // Cache extensions reinstall. Source: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
+  ],
+  "name": "Infra",
+  "postAttachCommand": "ansible-playbook .devcontainer/playbook.yaml",
+  "remoteUser": "vscode",
+  "runArgs": ["--userns=keep-id"]
 }
