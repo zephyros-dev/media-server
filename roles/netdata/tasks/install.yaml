@@ -9,7 +9,8 @@
 
     - name: Install Netdata
       changed_when: false
-      ansible.builtin.command: /kickstart.sh
+      ansible.builtin.shell:
+        cmd: /kickstart.sh
 
     - name: Cleanup installation script
       ansible.builtin.file:
