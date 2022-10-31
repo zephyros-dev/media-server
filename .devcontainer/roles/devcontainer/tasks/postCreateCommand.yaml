@@ -1,0 +1,17 @@
+- name: Fix permission for bind mounted folder
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+    mode: "0755"
+    state: directory
+  loop:
+    - "{{ ansible_user_dir }}/.ansible"
+    - "{{ ansible_user_dir }}/.cache"
+    - "{{ ansible_user_dir }}/.config"
+    - "{{ ansible_user_dir }}/.cache/molecule"
+    - "{{ ansible_user_dir }}/.cache/pre-commit"
+    - "{{ ansible_user_dir }}/.local"
+    - "{{ ansible_user_dir }}/.local/share"
+    - "{{ ansible_user_dir }}/.local/share/fish"
