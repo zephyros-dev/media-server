@@ -16,11 +16,11 @@
       labels:
         io.containers.autoupdate: registry
   block:
-    - name: Prepare folder {{ systemd_container_loop_var.key }}
+    # Use the rules here since we just want to create the folder if not exists
+    - name: Prepare folder {{ systemd_container_loop_var.key }} # noqa risky-file-permissions
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
-        mode: "0755"
       loop: "{{ systemd_container_loop_var.value.folder }}"
       when: systemd_container_loop_var.value.folder is defined
 
@@ -28,8 +28,8 @@
       ansible.builtin.template:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
         mode: "0600"
       loop: "{{ systemd_container_loop_var.value.templates }}"
       register: restart_systemd
@@ -38,7 +38,7 @@
 
     - name: Check if systemd file for container exists
       ansible.builtin.stat:
-        path: /home/{{ ansible_user }}/.config/systemd/user/{{ systemd_container_loop_var.key }}.service
+        path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_container_loop_var.key }}.service"
       register: systemd_service_file_status
 
     - name: Stop systemd {{ systemd_container_loop_var.key }}
@@ -59,7 +59,7 @@
         generate_systemd:
           container_prefix: ""
           new: true
-          path: /home/{{ ansible_user }}/.config/systemd/user
+          path: "{{ ansible_user_dir }}/.config/systemd/user"
           pod_prefix: ""
           separator: ""
       when: (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod)
@@ -97,7 +97,7 @@
   block:
     - name: Check if systemd file for container exists
       ansible.builtin.stat:
-        path: /home/{{ ansible_user }}/.config/systemd/user/{{ systemd_container_loop_var.key }}.service
+        path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_container_loop_var.key }}.service"
       register: systemd_service_file_status
 
     - name: Stop systemd {{ systemd_container_loop_var.key }}

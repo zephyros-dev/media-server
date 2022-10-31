@@ -10,7 +10,7 @@
     generate_systemd:
       container_prefix: ""
       new: true
-      path: /home/{{ ansible_user }}/.config/systemd/user
+      path: "{{ ansible_user_dir }}/.config/systemd/user"
       pod_prefix: ""
       separator: ""
     security_opt:
