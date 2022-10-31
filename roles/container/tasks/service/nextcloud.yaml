@@ -25,6 +25,11 @@
           - "{{ nextcloud_volume_web_data }}:/var/www/html:z"
       when: nextcloud_db_action == "none"
 
+    - name: Nextcloud chown
+      ansible.builtin.command:
+        cmd: podman exec -it nextcloud-web chown -R www-data:www-data ./
+      changed_when: false
+
     - name: Nextcloud Redis
       containers.podman.podman_container:
         command: redis-server --requirepass {{ nextcloud_redis_host_password }}
@@ -66,6 +71,7 @@
       loop:
         - php occ upgrade
         - php occ maintenance:mode --off
+      changed_when: false
       when: nextcloud_db_action == "none"
 
 - name: Nextcloud database export
