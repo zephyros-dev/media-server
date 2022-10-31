@@ -54,3 +54,4 @@
 
 - name: Automatic update packages
   ansible.builtin.import_tasks: system/auto_update.yaml
+  tags: auto_update
