@@ -39,7 +39,7 @@
         - name: Setup ansiblelint
           ansible.builtin.template:
             src: .ansible-lint.j2
-            dest: ../.ansiblelint
+            dest: ../.ansible-lint
             mode: "0644"
         - name: Check if requirements file exists
           ansible.builtin.stat:
