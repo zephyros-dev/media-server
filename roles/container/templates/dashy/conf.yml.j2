@@ -51,6 +51,12 @@ sections:
       #   url: https://gitea.{{ server_domain }}
   - name: Media Consumption
     items:
+      - title: Calibre
+        icon: hl-calibre
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://calibre:8081
+        url: https://calibre-content.{{ server_domain }}
+        statusCheckAcceptCodes: "401"
       - title: Calibreweb
         icon: https://calibrew.{{ server_domain }}/static/favicon.ico
         statusCheckAllowInsecure: true
@@ -66,7 +72,7 @@ sections:
         statusCheckAllowInsecure: true
         statusCheckUrl: http://kavita:5000
         # Kavita has problem with firefox, dev refused to fix though, need to use workaround. Reference: https://github.com/Kareadita/Kavita/issues/1292
-        url: https://kavita.{{ server_domain }}/login
+        url: https://kavita.{{ server_domain }}
       # - title: Komga
       #   icon: favicon-local
       #   statusCheckAllowInsecure: true
@@ -80,11 +86,15 @@ sections:
   - name: Media management
     items:
       - title: Bazarr
-        # icon: https://bazarr.{{ server_domain }}/static/favicon.ico
         icon: hl-bazarr
         statusCheckAllowInsecure: true
         statusCheckUrl: http://bazarr:6767
         url: https://bazarr.{{ server_domain }}
+      - title: Calibre
+        icon: hl-calibre
+        statusCheckAllowInsecure: true
+        statusCheckUrl: http://calibre:8080
+        url: https://calibre.{{ server_domain }}
       - title: Lidarr
         icon: favicon-local
         statusCheckAllowInsecure: true
@@ -118,7 +128,8 @@ sections:
       - title: Transmission
         icon: hl-transmission
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ transmission_user }}:{{ transmission_password }}@transmission:9091
+        statusCheckUrl: http://transmission:9091
+        statusCheckAcceptCodes: "401"
         url: https://transmission.{{ server_domain }}
   - name: Monitoring
     items:

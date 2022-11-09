@@ -73,6 +73,19 @@ auth.{{ server_domain }} {
 {% endif %}
 {% endif %}
 {% endfor %}
+calibre.{{ server_domain }} {
+    import global-config
+    import proxy-auth
+    reverse_proxy calibre:8080 {
+        import security-header
+    }
+}
+calibre-content.{{ server_domain }} {
+    import global-config
+    reverse_proxy calibre:8081 {
+        import security-header
+    }
+}
 immich.{{ server_domain }} {
     import global-config
     handle /api* {
