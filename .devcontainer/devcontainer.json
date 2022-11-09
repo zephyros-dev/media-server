@@ -63,6 +63,9 @@
     "source=ansible-cache,target=/home/vscode/.ansible,type=volume",
     "source=vscode-extension,target=/home/vscode/.vscode-server/extensions,type=volume,U=true" // Cache extensions reinstall. Source: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
   ],
+  "remoteEnv": {
+    "EDITOR": "code --wait"
+  },
   "name": "Infra",
   "postStartCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postStartCommand",
   "postCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postCreateCommand",
