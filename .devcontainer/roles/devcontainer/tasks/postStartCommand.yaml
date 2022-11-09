@@ -1,8 +1,3 @@
-- name: Set vscode as default editor
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_user_dir }}/.bashrc"
-    line: export EDITOR='code --wait'
-
 - name: Setup precommit
   block:
     - name: Setup precommit hook

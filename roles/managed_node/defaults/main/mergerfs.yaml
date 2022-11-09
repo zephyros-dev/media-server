@@ -1,2 +1,11 @@
 mergerfs_version: "2.33.5"
 mergerfs_fedora_release: fc36
+mergerfs_options:
+  - allow_other
+  - category.create=mfs
+  - defaults
+  - dropcacheonclose=true
+  - fsname=mergerfs
+  - moveonenospc=true
+  - nonempty
+  - use_ino,cache.files=off

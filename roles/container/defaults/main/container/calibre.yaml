@@ -1,5 +1,5 @@
-calibre_state: absent
-calibre_image: lscr.io/linuxserver/calibre:latest
+calibre_state: started
+calibre_image: lscr.io/linuxserver/calibre
 calibre_volume: "{{ global_volume_path }}/calibre"
 calibre_volume_config: "{{ calibre_volume }}/config"
 calibre_book: "{{ global_media }}/Storage/Books"

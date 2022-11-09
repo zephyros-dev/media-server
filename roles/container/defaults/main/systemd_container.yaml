@@ -30,8 +30,6 @@ systemd_container_service:
     folder:
       - "{{ calibre_book }}s"
       - "{{ calibre_volume_config }}"
-    reverse_proxy_port: "8080"
-    pod: false
     reverse_proxy_custom: true
     state: "{{ calibre_state }}"
   calibrew:
