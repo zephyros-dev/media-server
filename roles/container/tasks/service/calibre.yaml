@@ -8,7 +8,8 @@
     name: calibre-web
     pod: calibre
     state: "{{ calibre_state }}"
-    volumes:
+    device:
       - /dev/dri/renderD128:/dev/dri/renderD128
+    volumes:
       - "{{ calibre_book }}:/books"
       - "{{ calibre_volume_config }}:/config:U,z"

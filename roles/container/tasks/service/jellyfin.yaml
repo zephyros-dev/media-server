@@ -10,9 +10,10 @@
     security_opt:
       - unmask=/sys/dev
     state: "{{ jellyfin_state }}"
+    device:
+      - /dev/dri/card0:/dev/dri/card0
+      - /dev/dri/renderD128:/dev/dri/renderD128
     volumes:
       - "{{ global_media }}:/home"
       - "{{ jellyfin_web_cache }}:/cache:U,z"
       - "{{ jellyfin_web_config }}:/config:U,z"
-      - /dev/dri/card0:/dev/dri/card0
-      - /dev/dri/renderD128:/dev/dri/renderD128
