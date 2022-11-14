@@ -47,3 +47,9 @@ RUN pip install --no-cache-dir ansible-lint==${ANSIBLE_LINT_VERSION}
 
 ARG PRECOMMIT_VERSION
 RUN pip install --no-cache-dir pre-commit==${PRECOMMIT_VERSION}
+
+ARG BLACK_VERSION
+RUN pip install --no-cache-dir black==${BLACK_VERSION}
+
+ARG TRANSMISSION_RPC_VERSION
+RUN pip install --no-cache-dir transmission-rpc==${TRANSMISSION_RPC_VERSION}

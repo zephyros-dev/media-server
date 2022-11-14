@@ -1,0 +1,3 @@
+transmission_migrate_old_path:
+transmission_migrate_new_path:
+transmission_migrate_dry_run: "True"

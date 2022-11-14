@@ -20,5 +20,5 @@
       - 51413:51413/udp
     state: "{{ transmission_state }}"
     volumes:
-      - "{{ transmission_download }}:/downloads"
+      - "{{ global_media }}:/home"
       - "{{ transmission_web_config }}:/config:U,z"
