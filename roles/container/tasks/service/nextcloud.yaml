@@ -18,7 +18,7 @@
           REDIS_HOST: localhost
           REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
           TZ: "{{ global_timezone }}"
-        image: "{{ nextcloud_web_image }}"
+        image: docker.io/nextcloud
         name: nextcloud-web
         volumes:
           - "{{ nextcloud_volume_web_storage }}:/var/www/html/data:z"
@@ -35,7 +35,7 @@
         command: redis-server --requirepass {{ nextcloud_redis_host_password }}
         env:
           TZ: "{{ global_timezone }}"
-        image: "{{ nextcloud_redis_image }}"
+        image: docker.io/redis:alpine
         name: nextcloud-redis
       when: nextcloud_db_action == "none"
 
@@ -60,7 +60,7 @@
           POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
           POSTGRES_USER: "{{ nextcloud_postgres_user }}"
           TZ: "{{ global_timezone }}"
-        image: "{{ nextcloud_postgres_image }}"
+        image: docker.io/postgres:14-alpine
         name: nextcloud-db
         volumes:
           - "{{ nextcloud_volume_db_data }}:/var/lib/postgresql/data:U,z"

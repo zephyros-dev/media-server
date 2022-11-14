@@ -12,7 +12,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: filebrowser/filebrowser
+    image: docker.io/filebrowser/filebrowser
     name: filebrowser-web
     pod: filebrowser
     state: "{{ filebrowser_state }}"

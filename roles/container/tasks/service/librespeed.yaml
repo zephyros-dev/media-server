@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: "{{ librespeed_image }}"
+    image: lscr.io/linuxserver/librespeed
     name: librespeed-web
     pod: librespeed
     state: "{{ librespeed_state }}"

@@ -6,7 +6,7 @@
       ND_SCANSCHEDULE: 1h
       ND_SESSIONTIMEOUT: 24h
       TZ: "{{ global_timezone }}"
-    image: "{{ navidrome_image }}"
+    image: docker.io/deluan/navidrome
     name: navidrome-web
     pod: navidrome
     state: "{{ navidrome_state }}"

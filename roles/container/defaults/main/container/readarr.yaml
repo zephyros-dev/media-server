@@ -1,5 +1,3 @@
-# Readarr
 readarr_state: started
-readarr_image: cr.hotio.dev/hotio/readarr:nightly
 readarr_data: "{{ global_volume_path }}/readarr"
 readarr_web_config: "{{ readarr_data }}/web/config"

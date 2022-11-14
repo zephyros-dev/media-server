@@ -4,7 +4,7 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
-    image: "{{ calibrew_image }}"
+    image: lscr.io/linuxserver/calibre-web
     name: calibrew-web
     pod: calibrew
     state: "{{ calibrew_state }}"

@@ -17,7 +17,7 @@
       path: "{{ ansible_user_dir }}/.config/systemd/user"
       pod_prefix: ""
       separator: ""
-    image: "{{ samba_image }}"
+    image: docker.io/servercontainers/samba:smbd-only-latest
     name: samba
     network: host
     state: "{{ samba_state }}"

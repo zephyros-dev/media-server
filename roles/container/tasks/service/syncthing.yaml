@@ -10,7 +10,7 @@
       path: "{{ ansible_user_dir }}/.config/systemd/user"
       pod_prefix: ""
       separator: ""
-    image: "{{ syncthing_image }}"
+    image: docker.io/syncthing/syncthing
     name: syncthing
     network_mode: host
     state: "{{ syncthing_state }}"

@@ -1,7 +1,4 @@
 nextcloud_state: started
-nextcloud_web_image: nextcloud:latest
-nextcloud_redis_image: redis:alpine
-nextcloud_postgres_image: postgres:14-alpine
 nextcloud_volume: "{{ global_volume_path }}/nextcloud"
 nextcloud_volume_web_data: "{{ nextcloud_volume }}/web/data"
 nextcloud_volume_web_storage: "{{ nextcloud_volume }}/web/storage"

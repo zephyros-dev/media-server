@@ -6,7 +6,7 @@
       PUID: "1000"
       TZ: "{{ global_timezone }}"
       UMASK: "002"
-    image: "{{ prowlarr_image }}"
+    image: cr.hotio.dev/hotio/prowlarr:nightly
     name: prowlarr-web
     pod: prowlarr
     state: "{{ prowlarr_state }}"

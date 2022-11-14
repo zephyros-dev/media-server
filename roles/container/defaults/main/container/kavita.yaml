@@ -1,4 +1,3 @@
 kavita_state: started
-kavita_image: kizaing/kavita:latest
 kavita_volume: "{{ global_volume_path }}/kavita"
 kavita_volume_data: "{{ kavita_volume }}/data"

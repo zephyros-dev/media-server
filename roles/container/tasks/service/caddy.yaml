@@ -8,7 +8,7 @@
       path: "{{ ansible_user_dir }}/.config/systemd/user"
       pod_prefix: ""
       separator: ""
-    image: "{{ caddy_image }}"
+    image: docker.io/caddy:alpine
     name: caddy
     network:
       - caddy

@@ -15,7 +15,7 @@
           PGID: 0
           PUID: 0
           TZ: "{{ global_timezone }}"
-        image: "{{ archivy_web_image }}"
+        image: docker.io/uzayg/archivy
         name: archivy-web
         volumes:
           - "{{ archivy_web_data }}:/archivy/data:U,z"
@@ -25,7 +25,7 @@
       containers.podman.podman_container:
         env:
           discovery.type: single-node
-        image: "{{ archivy_elasticsearch_image }}"
+        image: docker.io/elasticsearch:7.9.0
         name: archivy-elasticsearch
         volumes:
           - "{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
