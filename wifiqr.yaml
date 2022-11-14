@@ -1,5 +1,7 @@
-- hosts: localhost
+- name: Create QR code for wifi
+  hosts: localhost
   connection: local
   tasks:
-    - import_role:
+    - name: Create QR code for wifi
+      ansible.builtin.import_role:
         name: wifiqr
