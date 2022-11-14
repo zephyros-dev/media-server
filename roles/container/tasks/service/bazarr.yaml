@@ -4,10 +4,10 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
-    image: "{{ bazarr_image }}"
+    image: lscr.io/linuxserver/bazarr
     name: bazarr-web
     pod: bazarr
-    state: "{{ bazarr_state }}"
+    state: started
     volumes:
       - "{{ bazarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"

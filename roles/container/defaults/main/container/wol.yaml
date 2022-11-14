@@ -1,5 +1,4 @@
 wol_state: started
-wol_image: aranajuan/wolweb:latest
 wol_volume: "{{ global_volume_path }}/wol"
 # wol_config_devices:
 #   devices:

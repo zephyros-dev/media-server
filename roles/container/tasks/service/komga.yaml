@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: "{{ komga_image }}"
+    image: docker.io/gotson/komga
     name: komga-web
     pod: komga
     state: "{{ komga_state }}"

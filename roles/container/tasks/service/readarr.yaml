@@ -4,7 +4,7 @@
       PGID: "1000"
       PUID: "1000"
       TZ: "{{ global_timezone }}"
-    image: "{{ readarr_image }}"
+    image: cr.hotio.dev/hotio/readarr:nightly
     name: readarr-web
     pod: readarr
     state: "{{ readarr_state }}"

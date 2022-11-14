@@ -1,3 +1,2 @@
 syncthing_state: started
-syncthing_image: syncthing/syncthing:latest
 syncthing_data: "{{ global_volume_path }}/syncthing"

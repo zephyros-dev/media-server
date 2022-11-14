@@ -13,7 +13,7 @@
           POSTGRES_PASSWORD: "{{ nocodb_db_password }}"
           POSTGRES_USER: "{{ nocodb_db_username }}"
           TZ: "{{ global_timezone }}"
-        image: "{{ nocodb_db_image }}"
+        image: docker.io/postgres:13-alpine
         name: nocodb-db
         volumes:
           - "{{ nocodb_db_data }}:/var/lib/postgresql/data"
@@ -22,6 +22,6 @@
       containers.podman.podman_container:
         env:
           NC_DB: pg://localhost:5432?u={{ nocodb_db_username }}&p={{ nocodb_db_password }}&d=nocodb
-        image: "{{ nocodb_web_image }}"
+        image: docker.io/nocodb/nocodb
         name: nocodb-web
         pod: nocodb

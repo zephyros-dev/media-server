@@ -15,7 +15,7 @@
       path: "{{ ansible_user_dir }}/.config/systemd/user"
       pod_prefix: ""
       separator: ""
-    image: "{{ wol_image }}"
+    image: docker.io/aranajuan/wolweb
     name: wol
     network: host
     state: "{{ wol_state }}"
