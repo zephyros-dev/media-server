@@ -3,10 +3,12 @@
     "args": {
       "ANSIBLE_LINT_VERSION": "6.8.6",
       "ANSIBLE_VERSION": "6.5.0",
+      "BLACK_VERSION": "22.10.0",
       "PRECOMMIT_CONVENTIONAL_COMMIT": "2.1.1",
       "PRECOMMIT_HOOK_VERSION": "4.3.0",
       "PRECOMMIT_VERSION": "2.20.0",
       "SOPS_VERSION": "3.7.3",
+      "TRANSMISSION_RPC_VERSION": "3.4.0",
       "USERNAME": "vscode"
     },
     "dockerfile": "Dockerfile"
@@ -32,23 +34,25 @@
         "yzhang.markdown-all-in-one"
       ],
       "settings": {
-        "editor.codeActionsOnSave": {
-          "source.fixAll.sortJSON": true
-        },
-        "[yaml]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
         "[json]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
         "[jsonc]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
+        "[yaml]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "editor.codeActionsOnSave": {
+          "source.fixAll.sortJSON": true
+        },
         "editor.formatOnSave": true,
         "files.associations": {
           "**/handlers/**/*.yaml": "ansible",
           "**/tasks/**/*.yaml": "ansible"
-        }
+        },
+        "python.formatting.provider": "black",
+        "sops.creationEnabled": true
       }
     }
   },
@@ -63,12 +67,12 @@
     "source=ansible-cache,target=/home/vscode/.ansible,type=volume",
     "source=vscode-extension,target=/home/vscode/.vscode-server/extensions,type=volume,U=true" // Cache extensions reinstall. Source: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
   ],
+  "name": "Infra",
+  "postCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postCreateCommand",
+  "postStartCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postStartCommand",
   "remoteEnv": {
     "EDITOR": "code --wait"
   },
-  "name": "Infra",
-  "postStartCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postStartCommand",
-  "postCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postCreateCommand",
   "remoteUser": "vscode",
   "runArgs": ["--userns=keep-id"]
 }
