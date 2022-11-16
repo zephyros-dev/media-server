@@ -1,3 +1,10 @@
 transmission_migrate_old_path:
 transmission_migrate_new_path:
-transmission_migrate_dry_run: "True"
+transmission_migrate_dry_run: true
+transmission_migrate_cmd: >-
+  transmission_migrate.py
+  --host transmission.{{ server_domain }}
+  --username {{ transmission_user }}
+  --password {{ transmission_password }}
+  --old-path {{ transmission_migrate_old_path }}
+  --new-path {{ transmission_migrate_new_path }}

@@ -1,15 +1,19 @@
 - name: Migrate transmission root folder for all torrent
-  ansible.builtin.script:
-    cmd: >
-      transmission_migrate.py
-      --host "transmission.{{ server_domain }}"
-      --username "{{ transmission_user }}"
-      --password  "{{ transmission_password }}"
-      --old-path "{{ transmission_migrate_old_path }}"
-      --new-path "{{ transmission_migrate_new_path }}"
-      --dry-run "{{ transmission_migrate_dry_run }}"
-    executable: python3
-  register: migrate_output
+  module_defaults:
+    ansible.builtin.script:
+      executable: python3
+  block:
+    - name: Dry run
+      ansible.builtin.script:
+        cmd: "{{ transmission_migrate_cmd }} --dry-run"
+      when: transmission_migrate_dry_run
+      register: migrate_output
+
+    - name: Real run
+      ansible.builtin.script:
+        cmd: "{{ transmission_migrate_cmd }}"
+      when: not transmission_migrate_dry_run
+      register: migrate_output
 
 - name: Output of stdout
   ansible.builtin.debug:
