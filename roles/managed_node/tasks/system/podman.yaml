@@ -2,17 +2,12 @@
   tags: podman_install
   become: true
   block:
-    - name: Podman
-      ansible.builtin.dnf:
-        name:
-          - podman-docker
-          - slirp4netns
-        state: latest
-
     - name: Install podman
       ansible.builtin.dnf:
         name:
           - podman
+          - podman-docker
+          - slirp4netns
         state: latest
 
     - name: Setup privileged ports for rootless podman
