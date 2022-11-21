@@ -1,7 +1,7 @@
 {
   "build": {
     "args": {
-      "ANSIBLE_LINT_VERSION": "6.8.6",
+      "ANSIBLE_LINT_VERSION": "6.8.7",
       "ANSIBLE_VERSION": "6.5.0",
       "BLACK_VERSION": "22.10.0",
       "PRECOMMIT_CONVENTIONAL_COMMIT": "2.1.1",
