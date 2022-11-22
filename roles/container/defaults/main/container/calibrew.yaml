@@ -1,4 +1,4 @@
 calibrew_state: started
 calibrew_data: "{{ global_volume_path }}/calibrew"
 calibrew_web_config: "{{ calibrew_data }}/web/config"
-calibrew_book: "{{ global_media }}/Storage/Books"
+calibrew_book: "{{ calibre_book }}"
