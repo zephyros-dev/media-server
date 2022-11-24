@@ -1,12 +1,4 @@
-# Need manual check for network creation because it detect states wrongly due to podman network v4. Reference: https://github.com/containers/ansible-podman-collections/issues/429
-- name: Check if network exists
-  containers.podman.podman_network_info:
-    name: caddy
-  register: network
-  ignore_errors: true
-
 - name: Create service podman network
   containers.podman.podman_network:
     name: caddy
     state: "{{ network_state }}"
-  when: network.failed
