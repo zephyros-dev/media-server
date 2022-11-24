@@ -4,7 +4,7 @@ systemd_container_service:
       - "{{ archivy_web_data }}"
       - "{{ archivy_web_config }}"
       - "{{ archivy_elasticsearch_data }}"
-    reverse_proxy_port: "5000"
+    caddy_proxy_port: "5000"
     state: "{{ archivy_state }}"
     templates:
       - dest: "{{ archivy_web_config }}/config.yml"
@@ -13,15 +13,15 @@ systemd_container_service:
     folder:
       - "{{ bazarr_web_config }}"
       - "{{ global_media }}"
-    proxy_auth: true
-    reverse_proxy_port: "6767"
+    caddy_sso: true
+    caddy_proxy_port: "6767"
     state: "{{ bazarr_state }}"
   caddy:
     folder:
       - "{{ caddy_data_config }}"
       - "{{ caddy_data_data }}"
     pod: false
-    reverse_proxy_custom: true
+    caddy_proxy_custom: true
     state: "{{ caddy_state }}"
     templates:
       - dest: "{{ caddy_data_caddyfile }}"
@@ -30,19 +30,19 @@ systemd_container_service:
     folder:
       - "{{ calibre_book }}"
       - "{{ calibre_volume_config }}"
-    reverse_proxy_custom: true
+    caddy_proxy_custom: true
     state: "{{ calibre_state }}"
   calibrew:
     folder:
       - "{{ calibrew_book }}"
       - "{{ calibrew_web_config }}"
-    reverse_proxy_port: "8083"
+    caddy_proxy_port: "8083"
     state: "{{ calibrew_state }}"
   dashy:
     folder:
       - "{{ dashy_volume_config }}"
-    proxy_auth: true
-    reverse_proxy_port: "80"
+    caddy_sso: true
+    caddy_proxy_port: "80"
     state: "{{ dashy_state }}"
     templates:
       - dest: "{{ dashy_volume_config }}/conf.yml"
@@ -50,52 +50,52 @@ systemd_container_service:
   filebrowser:
     folder:
       - "{{ filebrowser_volume }}"
-    reverse_proxy_port: "80"
+    caddy_proxy_port: "80"
     state: "{{ filebrowser_state }}"
   immich:
     folder:
       - "{{ immich_volume_upload }}"
       - "{{ immich_volume_database }}"
-    reverse_proxy_port: "8080"
-    reverse_proxy_custom: true
+    caddy_proxy_port: "8080"
+    caddy_proxy_custom: true
     state: "{{ immich_state }}"
   jackett:
     folder:
       - "{{ jackett_web_config }}"
-    reverse_proxy_port: "9117"
+    caddy_proxy_port: "9117"
     state: "{{ jackett_state }}"
   jellyfin:
     folder:
       - "{{ global_media }}"
       - "{{ jellyfin_web_cache }}"
       - "{{ jellyfin_web_config }}"
-    reverse_proxy_port: "8096"
+    caddy_proxy_port: "8096"
     state: "{{ jellyfin_state }}"
   kavita:
     folder:
       - "{{ kavita_volume_data }}"
-    reverse_proxy_port: "5000"
-    rewrite:
+    caddy_proxy_port: "5000"
+    caddy_rewrite:
       - src: /
         dest: /login
     state: "{{ kavita_state }}"
   komga:
     folder:
       - "{{ komga_volume_config }}"
-    reverse_proxy_port: "8080"
+    caddy_proxy_port: "8080"
     state: "{{ komga_state }}"
   librespeed:
     folder:
       - "{{ librespeed_web_config }}"
-    reverse_proxy_port: "80"
+    caddy_proxy_port: "80"
     state: "{{ librespeed_state }}"
   lidarr:
     folder:
       - "{{ global_media }}"
       - "{{ lidarr_web_config }}"
       - "{{ transmission_download }}"
-    proxy_auth: true
-    reverse_proxy_port: "8686"
+    caddy_sso: true
+    caddy_proxy_port: "8686"
     state: "{{ lidarr_state }}"
   mumble:
     certbot: true
@@ -111,101 +111,101 @@ systemd_container_service:
     folder:
       - "{{ global_media }}"
       - "{{ navidrome_web_data }}"
-    reverse_proxy_port: "4533"
+    caddy_proxy_port: "4533"
     state: "{{ navidrome_state }}"
   nextcloud:
     folder:
       - "{{ nextcloud_volume_db_data }}"
       - "{{ nextcloud_volume_web_storage }}"
       - "{{ nextcloud_volume_web_data }}"
-    reverse_proxy_port: "80"
+    caddy_proxy_port: "80"
     state: "{{ nextcloud_state }}"
   nocodb:
     folder:
       - "{{ nocodb_db_data }}"
-    reverse_proxy_port: "8080"
-    rewrite:
+    caddy_proxy_port: "8080"
+    caddy_rewrite:
       - src: /
         dest: /dashboard
     state: "{{ nocodb_state }}"
   privatebin:
     folder:
       - "{{ privatebin_web_data }}"
-    reverse_proxy_port: "8080"
+    caddy_proxy_port: "8080"
     state: "{{ privatebin_state }}"
   prowlarr:
     folder:
       - "{{ prowlarr_web_config }}"
-    proxy_auth: true
-    reverse_proxy_port: "9696"
+    caddy_sso: true
+    caddy_proxy_port: "9696"
     state: "{{ prowlarr_state }}"
   pymedusa:
     folder:
       - "{{ global_media }}"
       - "{{ pymedusa_web_config }}"
       - "{{ transmission_download }}"
-    proxy_auth: true
-    reverse_proxy_port: "8081"
+    caddy_sso: true
+    caddy_proxy_port: "8081"
     state: "{{ pymedusa_state }}"
   radarr:
     folder:
       - "{{ global_media }}"
       - "{{ radarr_web_config }}"
       - "{{ transmission_download }}"
-    proxy_auth: true
-    reverse_proxy_port: "7878"
+    caddy_sso: true
+    caddy_proxy_port: "7878"
     state: "{{ radarr_state }}"
   readarr:
     folder:
       - "{{ global_media }}"
       - "{{ transmission_download }}"
       - "{{ readarr_web_config }}"
-    proxy_auth: true
-    reverse_proxy_port: "8787"
+    caddy_sso: true
+    caddy_proxy_port: "8787"
     state: "{{ readarr_state }}"
   samba:
     folder:
       - "{{ global_storage }}"
     pod: false
-    reverse_proxy_custom: true
+    caddy_proxy_custom: true
     state: "{{ samba_state }}"
   sftp:
     folder:
       - "{{ sftp_volume_data }}"
     pod: false
-    reverse_proxy_custom: true
+    caddy_proxy_custom: true
     state: "{{ sftp_state }}"
   sonarr:
     folder:
       - "{{ global_media }}"
       - "{{ sonarr_web_config }}"
       - "{{ transmission_download }}"
-    proxy_auth: true
-    reverse_proxy_port: "8989"
+    caddy_sso: true
+    caddy_proxy_port: "8989"
     state: "{{ sonarr_state }}"
   syncthing:
     folder:
       - "{{ syncthing_data }}"
     pod: false
-    proxy_auth: true
-    reverse_proxy_port: "8384"
+    caddy_sso: true
+    caddy_proxy_port: "8384"
     state: "{{ syncthing_state }}"
-    use_host_network: true
+    caddy_host_network: true
   transmission:
     folder:
       - "{{ transmission_download }}"
       - "{{ transmission_web_config }}"
     pod: false
-    reverse_proxy_port: "9091"
+    caddy_proxy_port: "9091"
     state: "{{ transmission_state }}"
   wol:
     folder:
       - "{{ wol_volume }}"
     pod: false
-    proxy_auth: true
-    reverse_proxy_port: "8089"
-    rewrite:
+    caddy_sso: true
+    caddy_proxy_port: "8089"
+    caddy_rewrite:
       - src: /
         dest: /wolweb
     state: "{{ wol_state }}"
-    use_host_network: true
+    caddy_host_network: true

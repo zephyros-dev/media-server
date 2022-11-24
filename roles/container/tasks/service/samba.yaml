@@ -11,12 +11,6 @@
       SAMBA_VOLUME_CONFIG_storage: "[Storage]; path=/shares/storage; {{ samba_shares_settings }}"
       UID_root: 0
       WSDD2_DISABLE: 1
-    generate_systemd:
-      container_prefix: ""
-      new: true
-      path: "{{ ansible_user_dir }}/.config/systemd/user"
-      pod_prefix: ""
-      separator: ""
     image: docker.io/servercontainers/samba:smbd-only-latest
     name: samba
     network: host

@@ -1,106 +1,107 @@
-- name: Setup podman container with systemd
+- name: Setup systemd container
   tags:
     - "{{ systemd_container_loop_var.key }}"
-  when: systemd_container_loop_var.value.state == "started"
-  module_defaults:
-    ansible.builtin.systemd:
-      name: "{{ systemd_container_loop_var.key }}"
-      daemon_reload: true
-      scope: user
-    containers.podman.podman_pod:
-      name: "{{ systemd_container_loop_var.key }}"
-      infra_name: "{{ systemd_container_loop_var.key }}-pod"
-      network: caddy
-      state: "{{ systemd_container_loop_var.value.state }}"
-    containers.podman.podman_container:
-      labels:
-        io.containers.autoupdate: registry
   block:
-    # Use the rules here since we just want to create the folder if not exists
-    - name: Prepare folder {{ systemd_container_loop_var.key }} # noqa risky-file-permissions
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: directory
-      loop: "{{ systemd_container_loop_var.value.folder }}"
-      when: systemd_container_loop_var.value.folder is defined
-
-    - name: Templates config files  {{ systemd_container_loop_var.key }}
-      ansible.builtin.template:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        owner: "{{ ansible_env.USER }}"
-        group: "{{ ansible_env.USER }}"
-        mode: "0600"
-      loop: "{{ systemd_container_loop_var.value.templates }}"
-      register: restart_systemd
-      become: true
-      when: systemd_container_loop_var.value.templates is defined
-
-    - name: Check if systemd file for container exists
-      ansible.builtin.stat:
-        path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_container_loop_var.key }}.service"
-      register: systemd_service_file_status
-
-    - name: Stop systemd {{ systemd_container_loop_var.key }}
-      ansible.builtin.systemd:
-        state: stopped
-      when: systemd_service_file_status.stat.exists
-
-    - name: Create pod {{ systemd_container_loop_var.key }}
-      containers.podman.podman_pod:
-        recreate: true
-      when: (not systemd_container_loop_var.value.pod is defined)  or (systemd_container_loop_var.value.pod)
-
-    - name: Create container {{ systemd_container_loop_var.key }}
-      ansible.builtin.import_tasks: "service/{{ systemd_container_loop_var.key }}.yaml"
-
-    - name: Create pod systemd {{ systemd_container_loop_var.key }}
-      containers.podman.podman_pod:
-        generate_systemd:
-          container_prefix: ""
-          new: true
-          path: "{{ ansible_user_dir }}/.config/systemd/user"
-          pod_prefix: ""
-          separator: ""
-      when: (not systemd_container_loop_var.value.pod is defined) or (systemd_container_loop_var.value.pod)
-
-    # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
-    - name: Restart if config files are changed {{ systemd_container_loop_var.key }}
-      ansible.builtin.systemd:
-        state: restarted
-      register: service
-      until: service.failed == false
-      when:
-        - restart_systemd.changed
-
-    - name: Enable systemd {{ systemd_container_loop_var.key }}
-      ansible.builtin.systemd:
-        enabled: true
-        state: "{{ systemd_container_loop_var.value.state }}"
-      register: service
-      until: service.failed == false
-
-    - name: Reset restart_systemd variable
+    - name: Setup default value
       ansible.builtin.set_fact:
-        restart_sytemd:
-          changed: false
+        # systemd_container_loop_var.key: "{{ systemd_container_loop_var.key }}"
+        caddy_host_network: "{{ systemd_container_loop_var.value.caddy_host_network | default(false) }}"
+        caddy_proxy_custom: "{{ systemd_container_loop_var.value.caddy_proxy_custom | default(false) }}"
+        caddy_proxy_port: "{{ systemd_container_loop_var.value.caddy_proxy_port | default('') }}"
+        caddy_rewrite: "{{ systemd_container_loop_var.value.caddy_rewrite | default([]) }}"
+        caddy_sso: "{{ systemd_container_loop_var.value.caddy_sso | default(false) }}"
+        folder: "{{ systemd_container_loop_var.value.folder | default([]) }}"
+        pod: "{{ systemd_container_loop_var.value.pod | default('true') }}"
+        state: "{{ systemd_container_loop_var.value.state }}"
+        templates: "{{ systemd_container_loop_var.value.templates | default([]) }}"
 
-- name: Stop podman container
-  tags:
-    - "{{ systemd_container_loop_var.key }}"
-  when: systemd_container_loop_var.value.state == "absent"
-  module_defaults:
-    ansible.builtin.systemd:
-      name: "{{ systemd_container_loop_var.key }}"
-      daemon_reload: true
-      scope: user
-  block:
-    - name: Check if systemd file for container exists
-      ansible.builtin.stat:
-        path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_container_loop_var.key }}.service"
-      register: systemd_service_file_status
+    - name: Setup podman container with systemd
+      when: state == "started"
+      module_defaults:
+        ansible.builtin.systemd:
+          name: "{{ systemd_container_loop_var.key }}"
+          daemon_reload: true
+          scope: user
+        containers.podman.podman_pod:
+          name: "{{ systemd_container_loop_var.key }}"
+          infra_name: "{{ systemd_container_loop_var.key }}-pod"
+          network: caddy
+          state: "{{ state }}"
+        containers.podman.podman_container:
+          labels:
+            io.containers.autoupdate: registry
+      block:
+        # Use the rules here since we just want to create the folder if not exists
+        - name: Prepare folder {{ systemd_container_loop_var.key }} # noqa risky-file-permissions
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: directory
+          loop: "{{ folder }}"
+        - name: Templates config files {{ systemd_container_loop_var.key }}
+          ansible.builtin.template:
+            src: "{{ item.src }}"
+            dest: "{{ item.dest }}"
+            owner: "{{ ansible_env.USER }}"
+            group: "{{ ansible_env.USER }}"
+            mode: "0600"
+          loop: "{{ templates }}"
+          register: restart_systemd
+          become: true
+          when: templates is defined
+        - name: Check if systemd file for container exists
+          ansible.builtin.stat:
+            path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_container_loop_var.key }}.service"
+          register: systemd_service_file_status
+        - name: Stop systemd {{ systemd_container_loop_var.key }}
+          ansible.builtin.systemd:
+            state: stopped
+          when: systemd_service_file_status.stat.exists
+        - name: Create pod {{ systemd_container_loop_var.key }}
+          containers.podman.podman_pod:
+            recreate: true
+          when: (not pod is defined)  or (pod)
+        - name: Create container {{ systemd_container_loop_var.key }}
+          ansible.builtin.import_tasks: "service/{{ systemd_container_loop_var.key }}.yaml"
+        - name: Create systemd service file for {{ systemd_container_loop_var.key }}
+          containers.podman.podman_generate_systemd:
+            container_prefix: ""
+            dest: "{{ ansible_user_dir }}/.config/systemd/user/"
+            name: "{{ systemd_container_loop_var.key }}"
+            new: true
+            pod_prefix: ""
+            separator: ""
+        # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
+        - name: Restart if config files are changed {{ systemd_container_loop_var.key }}
+          ansible.builtin.systemd:
+            state: restarted
+          register: service
+          until: service.failed == false
+          when:
+            - restart_systemd.changed
+        - name: Enable systemd {{ systemd_container_loop_var.key }}
+          ansible.builtin.systemd:
+            enabled: true
+            state: "{{ state }}"
+          register: service
+          until: service.failed == false
+        - name: Reset restart_systemd variable
+          ansible.builtin.set_fact:
+            restart_sytemd:
+              changed: false
 
-    - name: Stop systemd {{ systemd_container_loop_var.key }}
-      ansible.builtin.systemd:
-        state: stopped
-      when: systemd_service_file_status.stat.exists
+    - name: Stop podman container
+      when: state == "absent"
+      module_defaults:
+        ansible.builtin.systemd:
+          name: "{{ systemd_container_loop_var.key }}"
+          daemon_reload: true
+          scope: user
+      block:
+        - name: Check if systemd file for container exists
+          ansible.builtin.stat:
+            path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_container_loop_var.key }}.service"
+          register: systemd_service_file_status
+        - name: Stop systemd {{ systemd_container_loop_var.key }}
+          ansible.builtin.systemd:
+            state: stopped
+          when: systemd_service_file_status.stat.exists

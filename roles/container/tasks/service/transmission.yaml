@@ -6,12 +6,6 @@
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
       USER: "{{ transmission_user }}"
-    generate_systemd:
-      container_prefix: ""
-      new: true
-      path: "{{ ansible_user_dir }}/.config/systemd/user"
-      pod_prefix: ""
-      separator: ""
     image: lscr.io/linuxserver/transmission:latest
     name: transmission
     network: caddy
