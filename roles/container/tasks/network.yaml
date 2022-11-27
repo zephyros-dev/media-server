@@ -1,4 +1,0 @@
-- name: Create service podman network
-  containers.podman.podman_network:
-    name: caddy
-    state: "{{ network_state }}"
