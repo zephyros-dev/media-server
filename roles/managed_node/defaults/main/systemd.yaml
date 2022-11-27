@@ -2,21 +2,21 @@
 systemd:
   system:
     - name: shutdown
-      systemd_description: Shutdown system
-      timer: "*-*-* 00:00:00"
+      description: Shutdown system
+      schedule: "*-*-* 00:00:00"
       state: started
   user:
     - name: podman-prune
       command: podman system prune --all --volumes --force
-      systemd_description: Podman image prune service
-      timer: Sat *-*-* 19:00:00
+      description: Podman image prune service
+      schedule: Sat *-*-* 19:00:00
       state: started
     - name: podman-renumber
       command: podman system renumber
-      systemd_description: Daily podman locks prune
-      timer: "*-*-* 20:00:00"
+      description: Daily podman locks prune
+      schedule: "*-*-* 20:00:00"
       state: started
     - name: add-executable
-      systemd_description: Add executable permission for exe file in storage
-      timer: "*-*-* 20:00:00"
+      description: Add executable permission for exe file in storage
+      schedule: "*-*-* 20:00:00"
       state: started

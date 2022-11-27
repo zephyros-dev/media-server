@@ -17,25 +17,16 @@
         state: started
         name: "{{ item.name }}"
       loop: "{{ systemd.system }}"
-      when: item.timer is not defined
+      when: not item.schedule is defined
 
-    - name: Template system timer
-      vars:
-        template_var: "{{ item }}"
-      ansible.builtin.template:
-        src: "user/template.timer.j2"
-        dest: "/etc/systemd/system/{{ item.name }}.timer"
-        mode: "0600"
+    - name: Setyp systemd timer
+      ansible.builtin.include_role:
+        name: systemd_timer
       loop: "{{ systemd.system }}"
-      when: item.timer is defined
-
-    - name: Enable the systemd timer
       vars:
-        template_var: "{{ item }}"
-      ansible.builtin.systemd:
-        daemon_reload: true
-        enabled: true
-        state: "{{ item.state }}"
-        name: "{{ item.name }}.timer"
-      loop: "{{ systemd.system }}"
-      when: item.timer is defined
+        systemd_description: "{{ item.description }}"
+        systemd_name: "{{ item.name }}"
+        systemd_schedule: "{{ item.schedule }}"
+        systemd_scope: system
+        systemd_state: "{{ item.state }}"
+      when: item.schedule is defined

@@ -19,6 +19,7 @@
 
 - name: Setup user systemd
   ansible.builtin.import_tasks: system/systemd/user.yaml
+  tags: systemd
 
 - name: Setup storage mounts
   ansible.builtin.import_tasks: system/mount.yaml
