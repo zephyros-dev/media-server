@@ -32,10 +32,22 @@
         url: https://nvidia.github.io/libnvidia-container/{{ nvidia_container_runtime_os }}/libnvidia-container.repo
         dest: /etc/yum.repos.d/nvidia-container-toolkit.repo
         mode: "0644"
-    - name: Install nvidia container runtime
-      ansible.builtin.dnf:
-        name: nvidia-container-toolkit
-        state: latest
+    - name: Check if nvidia container runtime exists
+      ansible.builtin.stat:
+        path: /usr/bin/nvidia-container-toolkit
+      register: nvidia_container_toolkit
+    # When fedora is upgraded, it seems that nvidia container runtime symlink is removed, so the package need to be reinstalled
+    - name: Reinstall nvidia container runtime
+      when: not nvidia_container_toolkit.stat.exists
+      block:
+        - name: Remove nvidia-container-toolkit
+          ansible.builtin.dnf:
+            name: nvidia-container-toolkit
+            state: absent
+        - name: Install nvidia-container-toolkit
+          ansible.builtin.dnf:
+            name: nvidia-container-toolkit
+            state: latest
     # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#step-3-rootless-containers-setup
     - name: Add rootless support for nvidia gpu container runtime
       ansible.builtin.lineinfile:
