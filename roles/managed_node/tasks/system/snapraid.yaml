@@ -14,7 +14,7 @@
       vars:
         snapper_timer_timeline_enabled: false
         snapper_configs:
-          - path: /mnt/disks/storage/data/{{ snapper_loop_var.id }}
+          - path: "{{ global_disks_storage_path }}/{{ snapper_loop_var.id }}"
             name: "{{ snapper_loop_var.id }}"
             vars:
               ALLOW_USERS: "{{ ansible_env.USER }}"

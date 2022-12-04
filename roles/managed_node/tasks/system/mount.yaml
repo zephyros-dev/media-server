@@ -11,7 +11,7 @@
     - name: Mergerfs storage disk
       ansible.posix.mount:
         path: /mnt/storage
-        src: /mnt/disks/storage/data/*
+        src: "{{ global_disks_storage_path }}/*"
         fstype: fuse.mergerfs
         opts: "{{ mergerfs_options | join(',') }}"
         state: mounted

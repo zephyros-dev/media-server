@@ -8,7 +8,7 @@ content /mnt/disks/storage/content/{{ item.id }}/snapraid.content
 {% endfor %}
 
 {% for item in disks.storage.disks_list %}
-data d{{ loop.index }} /mnt/disks/storage/data/{{ item.id }}
+data d{{ loop.index }} {{ global_disks_storage_path }}/{{ item.id }}
 {% endfor %}
 
 # Excludes hidden files and directories

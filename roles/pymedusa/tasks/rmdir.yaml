@@ -1,12 +1,12 @@
 - name: Search for empty folder in {{ item.id }}
   ansible.builtin.command:
-    chdir: /mnt/disks/storage/data/{{ item.id }}/{{ global_storage_video_path }}
+    chdir: "{{ global_disks_storage_path }}/{{ item.id }}/{{ global_storage_video_path }}"
     cmd: fd --type empty
   changed_when: false
   register: remove_output
 - name: Remove empty folder in {{ item.id }}
   ansible.builtin.command:
-    chdir: /mnt/disks/storage/data/{{ item.id }}/{{ global_storage_video_path }}
+    chdir: "{{ global_disks_storage_path }}/{{ item.id }}/{{ global_storage_video_path }}"
     cmd: fd --type empty --exec rm -r
   changed_when: false
 # TODO: When this is implemented, just need to add until to one command https://github.com/sharkdp/fd/pull/1068
