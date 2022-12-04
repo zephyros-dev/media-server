@@ -47,6 +47,23 @@
             chdir: ../
             cmd: ansible-galaxy install -r requirements.yaml
 
+- name: Setup python repo
+  block:
+    - name: Check if repo contain python code
+      ansible.builtin.find:
+        paths: ../
+        recurse: true
+        patterns:
+          - "*.py"
+      register: python_repo_state
+
+    - name: Setup ansible repo
+      when: python_repo_state.matched > 0
+      block:
+        - name: Setup gitignore
+          ansible.builtin.set_fact:
+            gitignore_list: "{{ gitignore_list + ['python'] }}"
+
 - name: Setup gitignore file
   block:
     - name: Set gitignore template URL

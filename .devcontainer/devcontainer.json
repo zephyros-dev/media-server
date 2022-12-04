@@ -24,6 +24,7 @@
         "esbenp.prettier-vscode",
         "mhutchie.git-graph",
         "ms-azuretools.vscode-docker",
+        "njpwerner.autodocstring",
         "pascalreitermann93.vscode-yaml-sort",
         "redhat.ansible",
         "richie5um2.vscode-sort-json",
@@ -39,6 +40,11 @@
         },
         "[jsonc]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[python]": {
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+          }
         },
         "[yaml]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
