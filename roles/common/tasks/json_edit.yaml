@@ -1,3 +1,11 @@
+- name: Create json file if not exists
+  ansible.builtin.copy:
+    dest: "{{ json_file_path }}"
+    content: |
+      {}
+    force: false
+    mode: "0644"
+
 - name: Load json file
   ansible.builtin.slurp:
     src: "{{ json_file_path }}"
