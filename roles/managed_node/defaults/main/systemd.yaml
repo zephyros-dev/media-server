@@ -20,3 +20,7 @@ systemd:
       description: Add executable permission for exe file in storage
       schedule: "*-*-* 20:00:00"
       state: started
+    - name: mergerfs-directory
+      description: Sync directory between mergerfs disks
+      schedule: "*-*-* *:00:00"
+      state: started

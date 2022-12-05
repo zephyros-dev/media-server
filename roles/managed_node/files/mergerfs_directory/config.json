@@ -1,0 +1,6 @@
+{
+  "mergerfs_disks_names": ["disk_0", "disk_1"],
+  "mergerfs_disks_storage_path": "./.decrypted/disks/storage",
+  "mergerfs_storage_path": "./.decrypted/storage",
+  "mkdir_paths": ["directory_sync_0", "directory_sync_1"]
+}

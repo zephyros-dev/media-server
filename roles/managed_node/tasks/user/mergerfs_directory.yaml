@@ -1,0 +1,25 @@
+- name: Setup folder for scripts
+  ansible.builtin.file:
+    path: "{{ item }}"
+    mode: 0755
+    state: directory
+  loop:
+    - "{{ ansible_user_dir }}/.config/mergerfs_directory"
+
+- name: Copy the scripts to destination
+  ansible.builtin.copy:
+    src: mergerfs_directory/main.py
+    dest: "{{ ansible_user_dir }}/.config/mergerfs_directory/main.py"
+    mode: "0755"
+
+- name: Setup config file
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: json_edit.yaml
+  vars:
+    json_file_path: "{{ ansible_user_dir }}/.config/mergerfs_directory/config.json"
+    json_edit:
+      mergerfs_disks_name: "{{ disks.storage.disks_list }}"
+      mergerfs_disks_storage_path: "{{ global_disks_storage_path }}"
+      mergerfs_storage_path: "{{ global_storage }}"
+      mkdir_paths: "{{ global_storage_mergerfs_mkdir_paths }}"

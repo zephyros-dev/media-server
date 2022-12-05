@@ -25,6 +25,10 @@
   ansible.builtin.import_tasks: system/mount.yaml
   tags: mount
 
+- name: Setup mergerfs_directory service
+  ansible.builtin.import_tasks: user/mergerfs_directory.yaml
+  tags: mergerfs_directory
+
 - name: Setup snapraid
   ansible.builtin.import_tasks: system/snapraid.yaml
 
