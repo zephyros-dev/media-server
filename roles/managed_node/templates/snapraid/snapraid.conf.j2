@@ -1,14 +1,14 @@
 {% for item in disks.parity.disks_list %}
-{{ loop.index }}-parity /mnt/disks/parity/{{ item.id }}/snapraid.parity
+{{ loop.index }}-parity /mnt/disks/parity/{{ item }}/snapraid.parity
 {% endfor %}
 
 content /var/snapraid.content
 {% for item in disks.storage.disks_list %}
-content /mnt/disks/storage/content/{{ item.id }}/snapraid.content
+content /mnt/disks/storage/content/{{ item }}/snapraid.content
 {% endfor %}
 
 {% for item in disks.storage.disks_list %}
-data d{{ loop.index }} {{ global_disks_storage_path }}/{{ item.id }}
+data d{{ loop.index }} {{ global_disks_storage_path }}/{{ item }}
 {% endfor %}
 
 # Excludes hidden files and directories

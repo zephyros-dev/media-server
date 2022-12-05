@@ -1,6 +1,6 @@
 - name: Create a new primary partition for disks {{ "parition" + patition_loop_var.value.fs_type + "disk" + patition_loop_var.key }}
   community.general.parted:
-    device: /dev/disk/by-id/{{ disks_list_loop_var.id }}
+    device: /dev/disk/by-id/{{ disks_list_loop_var }}
     number: 1
     fs_type: "{{ patition_loop_var.value.fs_type }}"
     label: gpt
@@ -12,7 +12,7 @@
 - name: Make filesystem for disks {{ patition_loop_var.key }}
   community.general.filesystem:
     fstype: "{{ patition_loop_var.value.fs_type }}"
-    dev: /dev/disk/by-id/{{ disks_list_loop_var.id }}-part1
+    dev: /dev/disk/by-id/{{ disks_list_loop_var }}-part1
   loop: "{{ patition_loop_var.value.disks_list }}"
   loop_control:
     loop_var: disks_list_loop_var

@@ -1,7 +1,7 @@
 - name: Mount storage root
   ansible.posix.mount:
-    path: /mnt/disks/storage/root/{{ storage_loop_var.id }}
-    src: /dev/disk/by-id/{{ storage_loop_var.id }}-part1
+    path: /mnt/disks/storage/root/{{ storage_loop_var }}
+    src: /dev/disk/by-id/{{ storage_loop_var }}-part1
     fstype: btrfs
     state: mounted
 
@@ -16,5 +16,5 @@
 
 - name: Unmount storage root
   ansible.posix.mount:
-    path: /mnt/disks/storage/root/{{ storage_loop_var.id }}
+    path: /mnt/disks/storage/root/{{ storage_loop_var }}
     state: absent

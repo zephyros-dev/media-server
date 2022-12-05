@@ -2,8 +2,8 @@ disks:
   storage:
     fs_type: btrfs
     disks_list:
-      - id: disk-id
+      - disk-id
   parity:
     fs_type: ext4
     disks_list:
-      - id: disk-id
+      - disk-id
