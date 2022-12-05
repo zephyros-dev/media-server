@@ -80,5 +80,5 @@
     "EDITOR": "code --wait"
   },
   "remoteUser": "vscode",
-  "runArgs": ["--userns=keep-id"]
+  "runArgs": ["--userns=keep-id", "--platform=linux/amd64"]
 }
