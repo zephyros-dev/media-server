@@ -68,10 +68,12 @@
             state: "{{ state }}"
           register: service
           until: service.failed == false
-        - name: Reset restart_systemd variable
-          ansible.builtin.set_fact:
-            restart_sytemd:
-              changed: false
+          when: timer == ''
+        - name: Enable systemd timer {{ service_name }}
+          ansible.builtin.systemd:
+            enabled: true
+            state: "{{ state }}"
+          when: timer
 
     - name: Stop podman container
       when: state == "absent"
@@ -80,6 +82,7 @@
           name: "{{ service_name }}"
           daemon_reload: true
           scope: user
+          state: stopped
       block:
         - name: Check if systemd file for container exists
           ansible.builtin.stat:
@@ -87,5 +90,10 @@
           register: systemd_service_file_status
         - name: Stop systemd {{ service_name }}
           ansible.builtin.systemd:
-            state: stopped
-          when: systemd_service_file_status.stat.exists
+          when:
+            - systemd_service_file_status.stat.exists
+            - timer == ''
+        - name: Stop systemd timer {{ service_name }}
+          ansible.builtin.systemd:
+            name: "{{ service_name }}.timer"
+          when: timer != ''

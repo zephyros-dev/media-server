@@ -1,0 +1,24 @@
+- name: Setup config file
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: json_edit.yaml
+  vars:
+    json_file_path: "{{ renovate_volume_config }}"
+    json_edit:
+      autodiscover: false
+      platform: github
+      repositories:
+        - zephyros-dev/media-server
+      token: "{{ renovate_token }}"
+
+- name: Renovate
+  containers.podman.podman_container:
+    env:
+      RENOVATE_CONFIG_FILE: /opt/renovate/config.json
+    image: docker.io/renovate/renovate
+    name: renovate-instance
+    state: "{{ renovate_state }}"
+    pod: renovate
+    volumes:
+      - "{{ renovate_volume_config }}:/opt/renovate/config.json:U,z"
+      - "{{ renovate_volume_data }}:/tmp/renovate:U,z"
