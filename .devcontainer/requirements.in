@@ -1,0 +1,6 @@
+ansible
+ansible-lint
+black
+pip-tools
+pre-commit
+transmission-rpc
