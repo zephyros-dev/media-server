@@ -28,5 +28,6 @@
     pod: "{{ systemd_container_loop.value.pod | default('true') }}"
     state: "{{ systemd_container_loop.value.state }}"
     templates: "{{ systemd_container_loop.value.templates | default([]) }}"
+    timer: "{{ systemd_container_loop.value.timer | default('') }}"
   tags:
     - always
