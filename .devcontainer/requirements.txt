@@ -68,7 +68,7 @@ packaging==22.0
     #   ansible-core
     #   ansible-lint
     #   build
-pathspec==0.10.2
+pathspec==0.10.3
     # via
     #   black
     #   yamllint
