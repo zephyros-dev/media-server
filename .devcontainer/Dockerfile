@@ -8,11 +8,6 @@ ENV PRECOMMIT_HOOK_VERSION ${PRECOMMIT_HOOK_VERSION}
 ARG PRECOMMIT_CONVENTIONAL_COMMIT
 ENV PRECOMMIT_CONVENTIONAL_COMMIT ${PRECOMMIT_CONVENTIONAL_COMMIT}
 
-ARG USERNAME
-
-USER ${USERNAME}
-RUN mkdir -p ~/.vscode-server
-
 USER root
 RUN apt update \
     && apt install -y --no-install-recommends \
@@ -38,18 +33,14 @@ RUN curl -Lo sops.deb https://github.com/mozilla/sops/releases/download/v${SOPS_
     && apt autoremove -y \
     && apt clean -y
 
-ARG ANSIBLE_VERSION
-RUN pip install --no-cache-dir ansible==${ANSIBLE_VERSION}
+ARG USERNAME
+
+USER ${USERNAME}
+RUN mkdir -p \
+    ~/.vscode-server
+
+COPY --chown=${USERNAME}:${USERNAME} requirements.txt .
+RUN pip install --no-warn-script-location --requirement requirements.txt
 
 ARG ANSIBLE_LINT_VERSION
 ENV ANSIBLE_LINT_VERSION ${ANSIBLE_LINT_VERSION}
-RUN pip install --no-cache-dir ansible-lint==${ANSIBLE_LINT_VERSION}
-
-ARG PRECOMMIT_VERSION
-RUN pip install --no-cache-dir pre-commit==${PRECOMMIT_VERSION}
-
-ARG BLACK_VERSION
-RUN pip install --no-cache-dir black==${BLACK_VERSION}
-
-ARG TRANSMISSION_RPC_VERSION
-RUN pip install --no-cache-dir transmission-rpc==${TRANSMISSION_RPC_VERSION}

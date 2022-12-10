@@ -2,13 +2,9 @@
   "build": {
     "args": {
       "ANSIBLE_LINT_VERSION": "6.8.7",
-      "ANSIBLE_VERSION": "6.5.0",
-      "BLACK_VERSION": "22.10.0",
       "PRECOMMIT_CONVENTIONAL_COMMIT": "2.1.1",
       "PRECOMMIT_HOOK_VERSION": "4.3.0",
-      "PRECOMMIT_VERSION": "2.20.0",
       "SOPS_VERSION": "3.7.3",
-      "TRANSMISSION_RPC_VERSION": "3.4.0",
       "USERNAME": "vscode"
     },
     "dockerfile": "Dockerfile"
