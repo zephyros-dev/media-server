@@ -69,11 +69,22 @@
           register: service
           until: service.failed == false
           when: timer == ''
-        - name: Enable systemd timer {{ service_name }}
-          ansible.builtin.systemd:
-            enabled: true
-            state: "{{ state }}"
+        - name: Setup systemd timer {{ service_name }}
           when: timer
+          block:
+            - name: Setup systemd timer {{ service_name }}
+              ansible.builtin.include_role:
+                name: systemd_timer
+              vars:
+                systemd_name: "{{ service_name }}"
+                systemd_schedule: "{{ timer }}"
+                systemd_scope: user
+                systemd_state: "{{ state }}"
+
+            - name: Enable systemd timer {{ service_name }}
+              ansible.builtin.systemd:
+                enabled: true
+                state: "{{ state }}"
 
     - name: Stop podman container
       when: state == "absent"
