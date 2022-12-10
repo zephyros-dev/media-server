@@ -37,6 +37,10 @@ ARG USERNAME
 
 USER ${USERNAME}
 RUN mkdir -p \
+    ~/.ansible \
+    ~/.config/sops/age \
+    ~/.local/share/fish \
+    ~/.ssh \
     ~/.vscode-server
 
 COPY --chown=${USERNAME}:${USERNAME} requirements.txt .
