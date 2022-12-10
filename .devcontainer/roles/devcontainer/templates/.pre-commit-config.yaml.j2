@@ -15,7 +15,7 @@ repos:
       - id: conventional-pre-commit
 {% if ansible_repo_state.matched > 0 %}
   - repo: https://github.com/ansible-community/ansible-lint.git
-    rev: v{{ ansible_env.ANSIBLE_LINT_VERSION }}
+    rev: v{{ ansible_lint_version }}
     hooks:
       - id: ansible-lint
 {% endif %}

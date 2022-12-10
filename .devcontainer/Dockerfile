@@ -41,6 +41,3 @@ RUN mkdir -p \
 
 COPY --chown=${USERNAME}:${USERNAME} requirements.txt .
 RUN pip install --no-warn-script-location --requirement requirements.txt
-
-ARG ANSIBLE_LINT_VERSION
-ENV ANSIBLE_LINT_VERSION ${ANSIBLE_LINT_VERSION}

@@ -26,12 +26,18 @@
         - name: Setup gitignore
           ansible.builtin.set_fact:
             gitignore_list: "{{ gitignore_list + ['ansible'] }}"
+        - name: Check current installed version of ansible-lint
+          community.general.pip_package_info:
+          register: pip_package_info
+        - name: Set ansible-lint version
+          ansible.builtin.set_fact:
+            ansible_lint_version: "{{ pip_package_info.packages.pip['ansible-lint'][0].version }}"
         - name: Setup yamllint
           ansible.builtin.template:
             src: .yamllint.yaml.j2
             dest: ../.yamllint.yaml
             mode: "0644"
-        - name: Setup ansiblelint
+        - name: Setup ansible-lint
           ansible.builtin.template:
             src: .ansible-lint.j2
             dest: ../.ansible-lint
