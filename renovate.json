@@ -8,5 +8,8 @@
   "ignoreTests": true,
   "pip-compile": {
     "fileMatch": ["(^|/)requirements\\.in$"]
+  },
+  "pre-commit": {
+    "enabled": true
   }
 }
