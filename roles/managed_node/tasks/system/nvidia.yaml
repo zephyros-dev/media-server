@@ -1,10 +1,11 @@
-- name: Get fedora version
-  ansible.builtin.command: # noqa: command-instead-of-module
-    cmd: rpm -E %fedora
+- name: Check if nvidia driver is installed
   changed_when: false
-  register: fedora_version_output
+  ansible.builtin.command:
+    cmd: lspci
+  register: lspci
 
 - name: Setup nvidia driver
+  when: lspci.stdout is search("NVIDIA")
   become: true
   block:
     - name: Add rpm fusion repo non-free

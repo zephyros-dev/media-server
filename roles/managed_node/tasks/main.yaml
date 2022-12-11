@@ -40,7 +40,6 @@
   ansible.builtin.import_tasks: system/virtualization.yaml
   tags: virt
 
-# TODO: Run only if detect nvidia GPU
 - name: Setup nvidia driver
   ansible.builtin.import_tasks: system/nvidia.yaml
   tags: nvidia
