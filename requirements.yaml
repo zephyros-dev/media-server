@@ -9,4 +9,4 @@ collections:
     version: 8.3.0
 roles:
   - name: aisbergg.snapper
-    version: v2.0.0
+    version: v2.1.0
