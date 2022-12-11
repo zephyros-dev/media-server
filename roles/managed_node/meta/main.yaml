@@ -1,2 +1,2 @@
 dependencies:
-  - role: get_architecture
+  - role: custom_fact

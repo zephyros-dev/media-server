@@ -1,4 +1,0 @@
-- hosts: server
-  tasks:
-    - import_role:
-        name: container

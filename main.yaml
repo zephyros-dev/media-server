@@ -4,3 +4,6 @@
     - name: Setup server
       ansible.builtin.import_role:
         name: managed_node
+    - name: Setup container
+      ansible.builtin.import_role:
+        name: container

@@ -1,33 +1,36 @@
-- name: Create service podman network
-  containers.podman.podman_network:
-    name: caddy
-    state: "{{ network_state }}"
+- name: Setup container
+  tags: container
+  block:
+    - name: Create service podman network
+      containers.podman.podman_network:
+        name: caddy
+        state: "{{ network_state }}"
 
-- name: Setup scrutiny
-  ansible.builtin.import_tasks: scrutiny.yaml
-  tags: scrutiny
+    - name: Setup scrutiny
+      ansible.builtin.import_tasks: scrutiny.yaml
+      tags: scrutiny
 
-- name: Run podman container with systemd
-  ansible.builtin.include_tasks:
-    file: systemd_container.yaml
-  args:
-    apply:
+    - name: Run podman container with systemd
+      ansible.builtin.include_tasks:
+        file: systemd_container.yaml
+      args:
+        apply:
+          tags:
+            - "{{ systemd_container_loop.key }}"
+      loop: "{{ systemd_container_service | dict2items }}"
+      loop_control:
+        loop_var: systemd_container_loop
+      vars:
+        service_name: "{{ systemd_container_loop.key }}"
+        caddy_host_network: "{{ systemd_container_loop.value.caddy_host_network | default(false) }}"
+        caddy_proxy_custom: "{{ systemd_container_loop.value.caddy_proxy_custom | default(false) }}"
+        caddy_proxy_port: "{{ systemd_container_loop.value.caddy_proxy_port | default('') }}"
+        caddy_rewrite: "{{ systemd_container_loop.value.caddy_rewrite | default([]) }}"
+        caddy_sso: "{{ systemd_container_loop.value.caddy_sso | default(false) }}"
+        folder: "{{ systemd_container_loop.value.folder | default([]) }}"
+        pod: "{{ systemd_container_loop.value.pod | default('true') }}"
+        state: "{{ systemd_container_loop.value.state }}"
+        templates: "{{ systemd_container_loop.value.templates | default([]) }}"
+        timer: "{{ systemd_container_loop.value.timer | default('') }}"
       tags:
-        - "{{ systemd_container_loop.key }}"
-  loop: "{{ systemd_container_service | dict2items }}"
-  loop_control:
-    loop_var: systemd_container_loop
-  vars:
-    service_name: "{{ systemd_container_loop.key }}"
-    caddy_host_network: "{{ systemd_container_loop.value.caddy_host_network | default(false) }}"
-    caddy_proxy_custom: "{{ systemd_container_loop.value.caddy_proxy_custom | default(false) }}"
-    caddy_proxy_port: "{{ systemd_container_loop.value.caddy_proxy_port | default('') }}"
-    caddy_rewrite: "{{ systemd_container_loop.value.caddy_rewrite | default([]) }}"
-    caddy_sso: "{{ systemd_container_loop.value.caddy_sso | default(false) }}"
-    folder: "{{ systemd_container_loop.value.folder | default([]) }}"
-    pod: "{{ systemd_container_loop.value.pod | default('true') }}"
-    state: "{{ systemd_container_loop.value.state }}"
-    templates: "{{ systemd_container_loop.value.templates | default([]) }}"
-    timer: "{{ systemd_container_loop.value.timer | default('') }}"
-  tags:
-    - always
+        - always
