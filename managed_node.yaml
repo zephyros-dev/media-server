@@ -1,4 +1,6 @@
-- hosts: server
+- name: Setup server
+  hosts: server
   tasks:
-    - import_role:
+    - name: Setup server
+      ansible.builtin.import_role:
         name: managed_node

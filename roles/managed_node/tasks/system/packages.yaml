@@ -1,12 +1,38 @@
 - name: Install mergerfs
   become: true
-  tags:
-    - mergerfs
-  ansible.builtin.dnf:
-    name: |
-      https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-{{ mergerfs_version }}-1.{{ mergerfs_fedora_release }}.x86_64.rpm
-    state: present
-    disable_gpg_check: true
+  tags: mergerfs
+  block:
+    - name: Download mergerfs github releases
+      ansible.builtin.get_url:
+        mode: "0600"
+        url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-static-linux_{{ ansible_alternative_architecture }}.tar.gz
+        dest: /tmp/mergerfs.tar.gz
+    - name: Create temporary directory
+      ansible.builtin.file:
+        path: /tmp/mergerfs
+        mode: "0755"
+        state: directory
+    - name: Extract mergerfs
+      ansible.builtin.unarchive:
+        remote_src: true
+        src: /tmp/mergerfs.tar.gz
+        dest: /tmp/mergerfs
+    - name: Move mergerfs binary to specified location
+      changed_when: false
+      ansible.builtin.command:
+        chdir: /tmp/mergerfs
+        cmd: mv {{ item }} /{{ item }}
+      loop:
+        - usr/local/bin/mergerfs
+        - usr/local/bin/mergerfs-fusermount
+        - usr/local/share/man/man1/mergerfs.1
+    - name: Remove installation directory
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /tmp/mergerfs.tar.gz
+        - /tmp/mergerfs
 
 - name: Install snapraid
   become: true
