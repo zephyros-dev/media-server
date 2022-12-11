@@ -2,12 +2,6 @@ FROM mcr.microsoft.com/vscode/devcontainers/base
 
 ARG CANON_ARCH='dpkg --print-architecture'
 
-ARG PRECOMMIT_HOOK_VERSION
-ENV PRECOMMIT_HOOK_VERSION ${PRECOMMIT_HOOK_VERSION}
-
-ARG PRECOMMIT_CONVENTIONAL_COMMIT
-ENV PRECOMMIT_CONVENTIONAL_COMMIT ${PRECOMMIT_CONVENTIONAL_COMMIT}
-
 USER root
 RUN apt update \
     && apt install -y --no-install-recommends \
