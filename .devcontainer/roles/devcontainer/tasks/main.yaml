@@ -86,11 +86,6 @@
 
 - name: Setup precommit
   block:
-    - name: Setup precommit file for repo
-      ansible.builtin.template:
-        src: .pre-commit-config.yaml.j2
-        dest: ../.pre-commit-config.yaml
-        mode: "0644"
     - name: Install precommit
       ansible.builtin.command:
         chdir: ../
