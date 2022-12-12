@@ -15,18 +15,17 @@
           network: caddy
           state: "{{ state }}"
       block:
-        # Use the rules here since we just want to create the folder if not exists
-        - name: Prepare folder {{ service_name }} # noqa risky-file-permissions
+        - name: Prepare folder {{ service_name }}
           ansible.builtin.file:
             path: "{{ item }}"
             state: directory
+            mode: "0755"
           loop: "{{ folder }}"
         - name: Templates config files {{ service_name }}
           become: true
           ansible.builtin.template:
             src: "{{ item.src }}"
             dest: "{{ item.dest }}"
-            owner: "{{ ansible_env.USER }}"
             mode: "0600"
           loop: "{{ templates }}"
           register: restart_systemd
@@ -65,7 +64,6 @@
                 systemd_schedule: "{{ timer }}"
                 systemd_scope: user
                 systemd_state: "{{ state }}"
-
             - name: Enable systemd timer {{ service_name }}
               ansible.builtin.systemd:
                 enabled: true
