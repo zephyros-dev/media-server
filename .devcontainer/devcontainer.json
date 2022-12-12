@@ -64,7 +64,7 @@
     "source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
     "source=ansible-cache,target=/home/vscode/.ansible,type=volume,U=true",
-    "source=vscode-extension,target=/home/vscode/.vscode-server/extensions,type=volume,U=true" // Cache extensions reinstall. Source: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
+    "source=vscode-extension,target=/home/vscode/.vscode-server/extensions,type=volume" // Cache extensions reinstall. Source: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
   ],
   "name": "Infra",
   "postStartCommand": "ansible-playbook .devcontainer/playbook.yaml",
