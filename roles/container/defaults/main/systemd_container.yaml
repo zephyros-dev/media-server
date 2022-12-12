@@ -120,14 +120,6 @@ systemd_container_service:
       - "{{ nextcloud_volume_web_data }}"
     caddy_proxy_port: "80"
     state: "{{ nextcloud_state }}"
-  nocodb:
-    folder:
-      - "{{ nocodb_db_data }}"
-    caddy_proxy_port: "8080"
-    caddy_rewrite:
-      - src: /
-        dest: /dashboard
-    state: "{{ nocodb_state }}"
   privatebin:
     folder:
       - "{{ privatebin_web_data }}"
