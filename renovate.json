@@ -1,5 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "ansible": {
+    "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
+  },
   "automerge": true,
   "automergeType": "branch",
   "git-submodules": {
