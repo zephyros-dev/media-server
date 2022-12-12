@@ -13,7 +13,7 @@
           POSTGRES_PASSWORD: "{{ nocodb_db_password }}"
           POSTGRES_USER: "{{ nocodb_db_username }}"
           TZ: "{{ global_timezone }}"
-        image: docker.io/postgres:13-alpine
+        image: docker.io/postgres:15-alpine
         name: nocodb-db
         volumes:
           - "{{ nocodb_db_data }}:/var/lib/postgresql/data"
