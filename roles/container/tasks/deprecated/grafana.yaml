@@ -1,9 +1,0 @@
-- name: Grafana
-  containers.podman.podman_container:
-    name: grafana-web
-    image: "{{ grafana_web_image }}"
-    pod: grafana
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro,z"
-      - "{{ grafana_volume_web_data }}:/var/lib/grafana:U,z"
-    state: "{{ grafana_state }}"

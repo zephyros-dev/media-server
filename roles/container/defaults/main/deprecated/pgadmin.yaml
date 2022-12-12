@@ -1,6 +1,0 @@
-# Pgadmin
-pgadmin_state: "absent"
-pgadmin_image: "dpage/pgadmin4:latest"
-pgadmin_data: "{{ global_volume_path }}/pgadmin"
-pgadmin_email: "secret_example@email.com"
-pgadmin_password: "secret_string"

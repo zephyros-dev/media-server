@@ -1,5 +1,0 @@
-# Heimdall
-heimdall_state: "started"
-heimdall_image: "ghcr.io/linuxserver/heimdall:latest"
-heimdall_data: "{{ global_volume_path }}/heimdall"
-heimdall_data_config: "{{ heimdall_data }}/config"

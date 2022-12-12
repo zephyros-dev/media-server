@@ -1,9 +1,0 @@
-- name: Heimdall
-  containers.podman.podman_container:
-    image: "{{ heimdall_image }}"
-    name: heimdall-web
-    pod: heimdall
-    state: "{{ heimdall_state }}"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro,z
-      - "{{ heimdall_data_config }}:/config:U,z"
