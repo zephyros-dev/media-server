@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/vscode/devcontainers/base
+FROM mcr.microsoft.com/vscode/devcontainers/base:debian@sha256:7da3f9f54c3cca6340548070251050025a1b1ae3ab1f1596e2ef7d73d5cba8c5
 
 ARG CANON_ARCH='dpkg --print-architecture'
 
