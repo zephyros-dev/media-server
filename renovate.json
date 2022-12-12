@@ -4,7 +4,6 @@
     "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
   },
   "automerge": true,
-  "automergeType": "branch",
   "git-submodules": {
     "enabled": true
   },
