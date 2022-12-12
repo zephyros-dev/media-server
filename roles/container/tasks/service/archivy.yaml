@@ -25,7 +25,7 @@
       containers.podman.podman_container:
         env:
           discovery.type: single-node
-        image: docker.io/elasticsearch:7.17.8
+        image: docker.io/elasticsearch:8.5.2
         name: archivy-elasticsearch
         volumes:
           - "{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
