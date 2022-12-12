@@ -5,7 +5,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: docker.io/mattikus/murmur
+    image: docker.io/mattikus/murmur:latest@sha256:43cc85419c0894483269c24bf8cfd36c7474752990da1560c09a4a1df81a640e
     name: mumble
     ports:
       - 64738:64738/tcp

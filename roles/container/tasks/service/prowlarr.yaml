@@ -1,14 +1,10 @@
-# Remove auto mapping permission with user since the container run as root, but the prowlarr process run as user 1000
 - name: Prowlarr
   containers.podman.podman_container:
     env:
-      PGID: "1000"
-      PUID: "1000"
       TZ: "{{ global_timezone }}"
-      UMASK: "002"
-    image: cr.hotio.dev/hotio/prowlarr:nightly
+    image: lscr.io/linuxserver/prowlarr:develop@sha256:c99cb74c45b8c7475744e43f5e295a323f829711fb3c319c95de9acc6bb7e52d
     name: prowlarr-web
     pod: prowlarr
     state: "{{ prowlarr_state }}"
     volumes:
-      - "{{ prowlarr_web_config }}:/config:z"
+      - "{{ prowlarr_web_config }}:/config:U,z"

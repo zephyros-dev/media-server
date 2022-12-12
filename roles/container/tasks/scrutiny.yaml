@@ -34,7 +34,7 @@
           path: /lib/systemd/system
           pod_prefix: ""
           separator: ""
-        image: ghcr.io/analogj/scrutiny:master-omnibus
+        image: ghcr.io/analogj/scrutiny:master-omnibus@sha256:3acd57617550d2966e577954999a4d3308cec0d2c735e1a1b7ec53769cfa76af
         labels:
           io.containers.autoupdate: registry
         name: scrutiny

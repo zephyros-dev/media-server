@@ -9,7 +9,7 @@
     env:
       TZ: "{{ global_timezone }}"
       WOLWEBBCASTIP: "{{ wol_bcast_ip }}:9"
-    image: docker.io/aranajuan/wolweb
+    image: docker.io/aranajuan/wolweb:latest@sha256:9958179770035737922a77b1bfe306f48c48e4e7e4a35bdb228e2f6921805a31
     name: wol
     network: host
     state: "{{ wol_state }}"

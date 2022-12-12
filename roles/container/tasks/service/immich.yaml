@@ -9,7 +9,7 @@
     - name: Server
       containers.podman.podman_container:
         name: immich-server
-        image: docker.io/altran1502/immich-server:release
+        image: docker.io/altran1502/immich-server:release@sha256:df8ee315cc99d7b6e71fbfbfb0cbfab94ab3fcfc3a156f0bedd7291113767fcd
         command:
           - "/bin/sh"
           - "./start-server.sh"
@@ -28,7 +28,7 @@
     - name: Microservices
       containers.podman.podman_container:
         name: immich-microservices
-        image: docker.io/altran1502/immich-server:release
+        image: docker.io/altran1502/immich-server:release@sha256:df8ee315cc99d7b6e71fbfbfb0cbfab94ab3fcfc3a156f0bedd7291113767fcd
         command:
           - "/bin/sh"
           - "./start-microservices.sh"
@@ -47,7 +47,7 @@
     - name: Machine learning
       containers.podman.podman_container:
         name: immich-machine-learning
-        image: docker.io/altran1502/immich-machine-learning:release
+        image: docker.io/altran1502/immich-machine-learning:release@sha256:27126721c3250c8d4ca8d42b713c56610f15113ba950f64d14f17b0cdb15d2ff
         command:
           - "/bin/sh"
           - "./entrypoint.sh"
@@ -60,7 +60,7 @@
     - name: Web
       containers.podman.podman_container:
         name: immich-web
-        image: docker.io/altran1502/immich-web:release
+        image: docker.io/altran1502/immich-web:release@sha256:5de4a9fbf50ffcf25f330ca8a607762a7a8c05751f29b6b190e25ff2bda40f0a
         command:
           - "/bin/sh"
           - "./entrypoint.sh"
@@ -70,14 +70,14 @@
     - name: Redis
       containers.podman.podman_container:
         name: immich-redis
-        image: docker.io/redis:6.2
+        image: docker.io/redis:6.2-alpine@sha256:fe7cce7c87019e13a14a04eddf96d74c72ae64d503ebf6f8d38ad0393d13ead1
         env:
           TZ: "{{ global_timezone }}"
 
     - name: Database
       containers.podman.podman_container:
         name: immich-database
-        image: docker.io/postgres:14
+        image: docker.io/postgres:14-alpine@sha256:1785b8611bb46e7b8776841be5febc322cdb84c3b72c12bfed364379ecdf9b0d
         env:
           POSTGRES_DB: "{{ immich_database_db }}"
           POSTGRES_PASSWORD: "{{ immich_database_password }}"

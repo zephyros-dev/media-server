@@ -4,7 +4,7 @@
       TZ: "{{ global_timezone }}"
     group_add:
       - "998"
-    image: docker.io/jellyfin/jellyfin
+    image: docker.io/jellyfin/jellyfin:latest@sha256:25238b01ff3534204f92fdb190e009582de15d1221a4a3272a8e113d675e8f11
     name: jellyfin-web
     pod: jellyfin
     security_opt:

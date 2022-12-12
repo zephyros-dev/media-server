@@ -15,7 +15,7 @@
           PGID: 0
           PUID: 0
           TZ: "{{ global_timezone }}"
-        image: docker.io/uzayg/archivy
+        image: docker.io/uzayg/archivy:latest@sha256:8bb09c684f3781ac9bf4786ea8060261feb6c1ba34c336bd2bb45430a2fd9a29
         name: archivy-web
         volumes:
           - "{{ archivy_web_data }}:/archivy/data:U,z"

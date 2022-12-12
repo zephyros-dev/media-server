@@ -15,7 +15,7 @@
   containers.podman.podman_container:
     env:
       RENOVATE_CONFIG_FILE: /opt/renovate/config.json
-    image: docker.io/renovate/renovate
+    image: docker.io/renovate/renovate:latest@sha256:c58adf4464b31f02cda7b70885ad169e6a2db70eb0e7fa528b697b2667755a3b
     name: renovate-instance
     state: "{{ renovate_state }}"
     pod: renovate

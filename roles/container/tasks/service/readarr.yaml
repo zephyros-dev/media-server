@@ -1,10 +1,8 @@
 - name: Readarr
   containers.podman.podman_container:
     env:
-      PGID: "1000"
-      PUID: "1000"
       TZ: "{{ global_timezone }}"
-    image: cr.hotio.dev/hotio/readarr:nightly
+    image: lscr.io/linuxserver/readarr:develop@sha256:e49002b6bae56f08e324313983f3df0cc12fdc68087bf7ec4552c81f1e526a13
     name: readarr-web
     pod: readarr
     state: "{{ readarr_state }}"
