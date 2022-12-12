@@ -4,7 +4,7 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
-    image: lscr.io/linuxserver/bazarr:latest@sha256:93201fdcacb44907a655148380ae399008c217d5b13e1ebb9285317bcef8db2a
+    image: lscr.io/linuxserver/bazarr:latest@sha256:8f6ef99233158aadc1f7205698c5f2e9ebb1d150d1d1f9d0a62bad2fc15f0cd2
     name: bazarr-web
     pod: bazarr
     state: started
