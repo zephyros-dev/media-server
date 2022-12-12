@@ -13,30 +13,15 @@
         dest: "{{ scrutiny_volume_config }}/scrutiny.yaml"
         mode: "0755"
 
-    - name: Stop systemd
-      ansible.builtin.systemd:
-        name: scrutiny
-        daemon_reload: true
-        enabled: true
-        state: stopped
-
     - name: Scrutiny
       containers.podman.podman_container:
         cap_add:
-          - SYS_RAWIO
           - SYS_ADMIN
+          - SYS_RAWIO
         device: "{{ scrutiny_device }}"
         env:
           TZ: "{{ global_timezone }}"
-        generate_systemd:
-          container_prefix: ""
-          new: true
-          path: /lib/systemd/system
-          pod_prefix: ""
-          separator: ""
         image: ghcr.io/analogj/scrutiny:master-omnibus@sha256:3acd57617550d2966e577954999a4d3308cec0d2c735e1a1b7ec53769cfa76af
-        labels:
-          io.containers.autoupdate: registry
         name: scrutiny
         ports:
           - "{{ scrutiny_port }}:8080"
@@ -46,6 +31,14 @@
           - "{{ scrutiny_volume_config }}/scrutiny.yaml:/scrutiny/config/scrutiny.yaml:ro,z"
       register: container
       until: container.failed == false
+
+    - name: Create systemd service file for scrutiny
+      containers.podman.podman_generate_systemd:
+        container_prefix: ""
+        dest: "/etc/systemd/system/"
+        name: scrutiny
+        pod_prefix: ""
+        separator: ""
 
     - name: Enable scrutiny systemd
       ansible.builtin.systemd:

@@ -14,9 +14,6 @@
           infra_name: "{{ service_name }}-pod"
           network: caddy
           state: "{{ state }}"
-        containers.podman.podman_container:
-          labels:
-            io.containers.autoupdate: registry
       block:
         # Use the rules here since we just want to create the folder if not exists
         - name: Prepare folder {{ service_name }} # noqa risky-file-permissions
@@ -33,17 +30,8 @@
             mode: "0600"
           loop: "{{ templates }}"
           register: restart_systemd
-        - name: Check if systemd file for container exists
-          ansible.builtin.stat:
-            path: "{{ ansible_user_dir }}/.config/systemd/user/{{ service_name }}.service"
-          register: systemd_service_file_status
-        - name: Stop systemd {{ service_name }}
-          ansible.builtin.systemd:
-            state: stopped
-          when: systemd_service_file_status.stat.exists
         - name: Create pod {{ service_name }}
           containers.podman.podman_pod:
-            recreate: true
           when: pod
         - name: Create container {{ service_name }}
           ansible.builtin.import_tasks: "service/{{ service_name }}.yaml"
@@ -52,15 +40,12 @@
             container_prefix: ""
             dest: "{{ ansible_user_dir }}/.config/systemd/user/"
             name: "{{ service_name }}"
-            new: true
             pod_prefix: ""
             separator: ""
         # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
         - name: Restart if config files are changed {{ service_name }}
           ansible.builtin.systemd:
             state: restarted
-          register: service
-          until: service.failed == false
           when: restart_systemd.changed
         - name: Enable systemd {{ service_name }}
           ansible.builtin.systemd:
@@ -85,6 +70,8 @@
               ansible.builtin.systemd:
                 enabled: true
                 state: "{{ state }}"
+              register: service
+              until: service.failed == false
 
     - name: Stop podman container
       when: state == "absent"

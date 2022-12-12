@@ -1,8 +1,6 @@
 - name: Setup Archivy
   module_defaults:
     containers.podman.podman_container:
-      labels:
-        io.containers.autoupdate: registry
       pod: archivy
       state: "{{ archivy_state }}"
   block:
