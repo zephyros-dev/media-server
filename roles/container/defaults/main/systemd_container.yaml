@@ -175,12 +175,6 @@ systemd_container_service:
     pod: false
     caddy_proxy_custom: true
     state: "{{ samba_state }}"
-  sftp:
-    folder:
-      - "{{ sftp_volume_data }}"
-    pod: false
-    caddy_proxy_custom: true
-    state: "{{ sftp_state }}"
   sonarr:
     folder:
       - "{{ global_media }}"
