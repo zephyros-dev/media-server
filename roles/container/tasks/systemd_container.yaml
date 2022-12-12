@@ -26,6 +26,8 @@
           ansible.builtin.template:
             src: "{{ item.src }}"
             dest: "{{ item.dest }}"
+            owner: "{{ ansible_user }}"
+            group: "{{ ansible_user }}"
             mode: "0600"
           loop: "{{ templates }}"
           register: restart_systemd
