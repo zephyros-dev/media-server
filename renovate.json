@@ -8,7 +8,6 @@
   "git-submodules": {
     "enabled": true
   },
-  "ignoreTests": true,
   "pip-compile": {
     "fileMatch": ["(^|/)requirements\\.in$"]
   },
