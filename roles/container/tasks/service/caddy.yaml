@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: docker.io/caddy:alpine@sha256:634454504e439f776bb79f361ae31de30cd157a0089446ce6e2d0d6714eb6576
+    image: docker.io/caddy:alpine@sha256:25a0097607868fb05a89a5ab9fea2f2ea4cecdc89d887d7dcee8c778a21b9e1f
     name: caddy
     network:
       - caddy
