@@ -34,8 +34,7 @@ RUN mkdir -p \
     ~/.ansible \
     ~/.config/sops/age \
     ~/.local/share/fish \
-    ~/.ssh \
-    ~/.vscode-server/extensions
+    ~/.ssh
 
 COPY --chown=${USERNAME}:${USERNAME} requirements.txt .
 RUN pip install --no-warn-script-location --requirement requirements.txt
