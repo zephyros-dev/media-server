@@ -16,21 +16,20 @@
           state: "{{ state }}"
       block:
         - name: Prepare folder {{ service_name }}
+          become: true
           ansible.builtin.file:
             path: "{{ item }}"
             state: directory
             mode: "0755"
-          loop: "{{ folder }}"
-        - name: Templates config files {{ service_name }}
-          become: true
-          ansible.builtin.template:
-            src: "{{ item.src }}"
-            dest: "{{ item.dest }}"
             owner: "{{ ansible_user }}"
             group: "{{ ansible_user }}"
-            mode: "0600"
+          loop: "{{ folder }}"
+        - name: Templates config file
+          ansible.builtin.include_tasks:
+            file: systemd_container_templates.yaml
           loop: "{{ templates }}"
-          register: restart_systemd
+          loop_control:
+            loop_var: systemd_container_templates_loop
         - name: Create pod {{ service_name }}
           containers.podman.podman_pod:
           when: pod

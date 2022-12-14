@@ -1,0 +1,23 @@
+- name: Templates config files {{ service_name }}
+  module_defaults:
+    ansible.builtin.template:
+      src: "{{ systemd_container_templates_loop.src }}"
+      dest: "{{ systemd_container_templates_loop.dest }}"
+  block:
+    - name: Check if config file exists
+      ansible.builtin.stat:
+        path: "{{ systemd_container_templates_loop.dest }}"
+      register: config_file_stat
+    - name: Create config files {{ service_name }}
+      when: not config_file_stat.stat.exists
+      ansible.builtin.template:
+        mode: "0600"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+      register: restart_systemd
+    - name: Templates config files {{ service_name }}
+      when: config_file_stat.stat.exists
+      become: true
+      ansible.builtin.template:
+        mode: "0600"
+      register: restart_systemd
