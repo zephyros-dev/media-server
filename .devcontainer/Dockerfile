@@ -1,18 +1,15 @@
-FROM mcr.microsoft.com/vscode/devcontainers/base:debian@sha256:7da3f9f54c3cca6340548070251050025a1b1ae3ab1f1596e2ef7d73d5cba8c5
+FROM mcr.microsoft.com/devcontainers/python:3.11
 
 ARG CANON_ARCH='dpkg --print-architecture'
 
 USER root
 RUN apt update \
     && apt install -y --no-install-recommends \
-    curl \
     fish \
     gettext-base \
     openssl \
-    python3-pip \
     sshpass \
     tmux \
-    unzip \
     whois \
     && rm -rf /var/lib/apt/lists/* \
     && apt autoremove -y \
@@ -37,4 +34,7 @@ RUN mkdir -p \
     ~/.ssh
 
 COPY --chown=${USERNAME}:${USERNAME} requirements.txt .
-RUN pip install --no-warn-script-location --requirement requirements.txt
+RUN pip install \
+    --no-warn-script-location \
+    --requirement requirements.txt \
+    --user
