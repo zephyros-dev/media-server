@@ -24,9 +24,3 @@
     content: "{{ json_file | to_nice_json }}"
     dest: "{{ json_file_path }}"
     mode: "0644"
-
-- name: Reset variable
-  ansible.builtin.set_fact:
-    json_edit: null
-    json_file: null
-    json_file_path: null
