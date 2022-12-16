@@ -12,7 +12,7 @@ ansible-core==2.14.1
     # via
     #   ansible
     #   ansible-lint
-ansible-lint==6.9.1
+ansible-lint==6.10.0
     # via -r requirements.in
 attrs==22.1.0
     # via jsonschema
