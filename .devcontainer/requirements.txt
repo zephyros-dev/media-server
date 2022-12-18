@@ -103,7 +103,7 @@ rich==12.6.0
     # via ansible-lint
 ruamel-yaml==0.17.21
     # via ansible-lint
-subprocess-tee==0.4.0
+subprocess-tee==0.4.1
     # via ansible-compat
 toml==0.10.2
     # via pre-commit
