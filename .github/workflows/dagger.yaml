@@ -7,6 +7,9 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
+    env:
+      DAGGER_CACHE_FROM: type=gha,scope=dagger-cache
+      DAGGER_CACHE_TO: type=gha,mode=max,scope=dagger-cache
     steps:
       - name: Set up WireGuard
         run: sudo apt update && sudo apt install wireguard openresolv
