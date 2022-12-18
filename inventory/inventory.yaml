@@ -1,4 +1,4 @@
 all:
   children:
     server:
-      hosts: server.lan
+      hosts: server.local.zephyr.dynv6.net
