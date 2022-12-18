@@ -11,7 +11,7 @@ jobs:
       - name: Set up WireGuard
         run: sudo apt update && sudo apt install wireguard openresolv
       - name: Create wireguard config
-        run: echo ${WIREGUARD_CONFIG} | sudo tee /etc/wireguard/wg0.conf > /dev/null
+        run: echo "$WIREGUARD_CONFIG" | sudo tee /etc/wireguard/wg0.conf > /dev/null
         env:
           WIREGUARD_CONFIG: "{{ secrets.WIREGUARD_CONFIG }}"
       - name: Setup wireguard connection
