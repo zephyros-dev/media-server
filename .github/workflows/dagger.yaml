@@ -11,9 +11,11 @@ jobs:
       - name: Set up WireGuard
         run: sudo apt update && sudo apt install wireguard openresolv
       - name: Create wireguard config
-        run: "echo $WIREGUARD_CONFIG | sudo tee /etc/wireguard/wg0.conf > /dev/null"
-        env:
-          WIREGUARD_CONFIG: "{{ secrets.WIREGUARD_CONFIG }}"
+        uses: "DamianReeves/write-file-action@master"
+        with:
+          path: /etc/wireguard/wg0.conf
+          write-mode: overwrite
+          contents: "{{ secrets.WIREGUARD_CONFIG }}"
       - name: Setup wireguard connection
         run: wg-quick up wg0
       - uses: actions/setup-python@v4
