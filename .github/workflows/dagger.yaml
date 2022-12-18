@@ -1,0 +1,29 @@
+name: dagger
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up WireGuard
+        uses: egor-tensin/setup-wireguard@v1
+      - name: Create wireguard config
+        run: echo {{ secrets.WG0 }} | tee /etc/wireguard/wg0.conf > /dev/null
+      - name: Setup wireguard connection
+        run: wg-quick up wg0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - uses: actions/checkout@v3
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run Dagger pipeline
+        run: python ci.py
+        env:
+          SOPS_AGE_KEY: "{{ secrets.SOPS_AGE_KEY }}"
+          SSH_PRIVATE_KEY: "{{ secrets.SSH_PRIVATE_KEY }}"
