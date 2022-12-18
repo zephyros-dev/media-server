@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up WireGuard
-        uses: egor-tensin/setup-wireguard@v1
+        run: apt update && apt install wireguards openresolv
       - name: Create wireguard config
         run: echo {{ secrets.WG0 }} | tee /etc/wireguard/wg0.conf > /dev/null
       - name: Setup wireguard connection

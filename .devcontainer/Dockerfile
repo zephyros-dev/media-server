@@ -7,6 +7,7 @@ RUN apt update \
     && apt install -y --no-install-recommends \
     fish \
     gettext-base \
+    openresolv \
     openssl \
     sshpass \
     tmux \
