@@ -43,7 +43,10 @@ async def ci():
             )
             .with_exec(["ansible-galaxy", "install", "-r", "requirements.yaml"])
             .with_env_variable("ANSIBLE_HOST_KEY_CHECKING", "False")
-            .with_env_variable("ANSIBLE_NO_LOG", "True")
+            .with_env_variable(
+                "ANSIBLE_NO_LOG",
+                await client.host().env_variable("ANSIBLE_NO_LOG").value(),
+            )
             .with_exec(["ansible-playbook", "main.yaml"])
         )
 

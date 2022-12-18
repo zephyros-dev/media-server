@@ -27,5 +27,6 @@ jobs:
       - name: Run Dagger pipeline
         run: python ci.py
         env:
+          ANSIBLE_NO_LOG: ${{ secrets.ANSIBLE_NO_LOG }}
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
