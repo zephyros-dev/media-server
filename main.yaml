@@ -1,4 +1,5 @@
 - name: Setup server
+  no_log: true
   hosts: server
   tasks:
     - name: Setup server

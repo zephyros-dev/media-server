@@ -1,41 +1,38 @@
-FROM mcr.microsoft.com/devcontainers/python:3.11
+FROM python:3.11-slim
 
 ARG CANON_ARCH='dpkg --print-architecture'
 
-USER root
 RUN apt update \
     && apt install -y --no-install-recommends \
-    fish \
-    gettext-base \
+    curl \
+    openssh-client \
     openssl \
     sshpass \
-    tmux \
+    tar \
     whois \
-    wireguard \
     && rm -rf /var/lib/apt/lists/* \
     && apt autoremove -y \
     && apt clean -y
 
-ARG SOPS_VERSION
+ARG SOPS_VERSION="3.7.3"
 RUN curl -Lo sops.deb https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops_${SOPS_VERSION}_$(eval ${CANON_ARCH}).deb \
     && apt install -y --no-install-recommends ./sops.deb \
-    && git config --global diff.sopsdiffer.textconv "sops -d" \
     && rm -r sops.deb \
     && rm -rf /var/lib/apt/lists/* \
     && apt autoremove -y \
     && apt clean -y
 
-ARG USERNAME
+# ARG USER=rootless
 
-USER ${USERNAME}
-RUN mkdir -p \
-    ~/.ansible \
-    ~/.config/sops/age \
-    ~/.local/share/fish \
-    ~/.ssh
+# ARG UID=1000
+# RUN groupadd --system ${USER} --gid ${UID} \
+#     && useradd --no-log-init --create-home --system --gid ${USER} ${USER} --uid ${UID}
 
-COPY --chown=${USERNAME}:${USERNAME} requirements.txt .
+# USER ${USER}
+
+# ENV PATH="/home/${USER}/.local/bin:$PATH"
+
 RUN pip install \
     --no-warn-script-location \
-    --requirement requirements.txt \
-    --user
+    # --user \
+    ansible

@@ -49,11 +49,7 @@
           "**/handlers/**/*.yaml": "ansible",
           "**/tasks/**/*.yaml": "ansible"
         },
-        "python.formatting.blackArgs": [
-          "--line-length",
-          "80",
-          "--experimental-string-processing"
-        ],
+        "python.linting.flake8Args": ["--max-line-length", "88"],
         "python.formatting.provider": "black",
         "python.linting.flake8Enabled": true,
         "python.linting.pylintEnabled": false,
