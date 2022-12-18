@@ -35,7 +35,7 @@
         command: redis-server --requirepass {{ nextcloud_redis_host_password }}
         env:
           TZ: "{{ global_timezone }}"
-        image: docker.io/redis:7-alpine@sha256:d937dcf39e204d8c1d148544d94cb542a60bac0dfddb83b62939f7ec1ae9a865
+        image: docker.io/redis:7-alpine@sha256:51091b7b3ba1f790b8c09381cd043e2736acfed95fc8c5559a2b7f6d5ef1d59a
         name: nextcloud-redis
       when: nextcloud_db_action == "none"
 
