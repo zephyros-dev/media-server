@@ -30,7 +30,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install dagger-io
       - name: Setup tmate session
-        if: ${{ secrets.DEBUG == 'true' }}
+        if: ${{ secrets.INTERACTIVE_SESSION == 'true' }}
         uses: mxschmitt/action-tmate@v3
       - name: Run Dagger pipeline
         run: python ci.py
