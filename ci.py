@@ -14,13 +14,14 @@ async def ci():
         secret_ssh_key = (
             await client.host().env_variable("SSH_PRIVATE_KEY").secret().id()
         )
-
         ci = (
             client.container()
             .build(context=workspace, dockerfile="Dockerfile")
             .with_unix_socket(
                 "/ssh-agent.sock",
-                client.host().unix_socket(os.environ["SSH_AUTH_SOCK"]),
+                client.host().unix_socket(
+                    await client.host().env_variable("SSH_AUTH_SOCK").value()
+                ),
             )
             .with_mounted_secret(f"{user_dir}/.ssh/id_ed25519", secret_ssh_key)
             .with_mounted_directory(f"{user_dir}/workspace", workspace)
