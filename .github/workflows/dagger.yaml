@@ -11,11 +11,9 @@ jobs:
       - name: Set up WireGuard
         run: sudo apt update && sudo apt install wireguard openresolv
       - name: Create wireguard config
-        uses: "DamianReeves/write-file-action@master"
-        with:
-          path: /etc/wireguard/wg0.conf
-          write-mode: overwrite
-          contents: "{{ secrets.WIREGUARD_CONFIG }}"
+        run: echo $WIREGUARD_CONFIG | sudo tee /etc/wireguard/wg0.conf > /dev/null
+        env:
+          WIREGUARD_CONFIG: ${{ secrets.WIREGUARD_CONFIG }}
       - name: Setup wireguard connection
         run: wg-quick up wg0
       - uses: actions/setup-python@v4
@@ -29,5 +27,5 @@ jobs:
       - name: Run Dagger pipeline
         run: python ci.py
         env:
-          SOPS_AGE_KEY: "{{ secrets.SOPS_AGE_KEY }}"
-          SSH_PRIVATE_KEY: "{{ secrets.SSH_PRIVATE_KEY }}"
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
