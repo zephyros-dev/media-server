@@ -22,17 +22,6 @@ RUN curl -Lo sops.deb https://github.com/mozilla/sops/releases/download/v${SOPS_
     && apt autoremove -y \
     && apt clean -y
 
-# ARG USER=rootless
-
-# ARG UID=1000
-# RUN groupadd --system ${USER} --gid ${UID} \
-#     && useradd --no-log-init --create-home --system --gid ${USER} ${USER} --uid ${UID}
-
-# USER ${USER}
-
-# ENV PATH="/home/${USER}/.local/bin:$PATH"
-
 RUN pip install \
     --no-warn-script-location \
-    # --user \
     ansible
