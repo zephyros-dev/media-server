@@ -30,8 +30,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install dagger-io
       - name: Setup tmate session
-        if: env.secrets.DEBUG_MODE == 'true'
+        if: env.DEBUG_MODE == 'true'
         uses: mxschmitt/action-tmate@v3
+        env:
+          DEBUG_MODE: ${{ secrets.DEBUG_MODE }}
       - name: Run Dagger pipeline
         run: python ci.py
         env:
