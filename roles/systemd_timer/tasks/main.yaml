@@ -22,7 +22,7 @@
             dest: "{{ systemd_path }}"
             mode: "0600"
 
-        - name: Set systemd timer state {{ systemd_state + ' ' + systemd_name }}
+        - name: Set systemd timer state {{ systemd_state + ' ' + systemd_name }} # noqa: args[module]
           ansible.builtin.systemd:
             daemon_reload: true
             scope: "{{ systemd_scope }}"

@@ -1,7 +1,7 @@
 - name: Setup container
   tags: container
   block:
-    - name: Create service podman network
+    - name: Create service podman network # noqa: args[module]
       containers.podman.podman_network:
         name: caddy
         state: "{{ network_state }}"

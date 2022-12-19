@@ -14,7 +14,7 @@
         value: "{{ auto_update.timer }}"
         mode: "0600"
 
-    - name: Enable automatic update timer
+    - name: Enable automatic update timer # noqa: args[module]
       ansible.builtin.systemd:
         name: dnf-automatic-install.timer
         daemon_reload: true
