@@ -1,7 +1,9 @@
 name: dagger
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      # - "**issue**"
 
 jobs:
   build:
@@ -9,17 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up WireGuard
-        run: sudo apt update && sudo apt install wireguard openresolv
+        run: sudo apt update && sudo apt install wireguard
       - name: Create wireguard config
         run: echo "$WIREGUARD_CONFIG" | sudo tee /etc/wireguard/wg0.conf > /dev/null
         env:
           WIREGUARD_CONFIG: ${{ secrets.WIREGUARD_CONFIG }}
       - name: Setup wireguard connection
-        run: |
-          wg-quick up wg0
-          wg-quick down wg0
-          wg-quick up wg0
-          dig server.lan
+        run: wg-quick up wg0 &> /dev/null
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
@@ -38,6 +36,7 @@ jobs:
           ANSIBLE_NO_LOG: ${{ secrets.ANSIBLE_NO_LOG }}
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          WIREGUARD_CONFIG: ${{ secrets.WIREGUARD_CONFIG }}
       - name: Run Dagger pipeline
         run: python ci.py
         env:

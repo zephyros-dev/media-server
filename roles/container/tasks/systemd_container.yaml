@@ -30,6 +30,7 @@
           loop: "{{ templates }}"
           loop_control:
             loop_var: systemd_container_templates_loop
+          register: restart_systemd
         - name: Create pod {{ service_name }}
           containers.podman.podman_pod:
           when: pod
