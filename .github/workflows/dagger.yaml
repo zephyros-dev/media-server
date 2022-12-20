@@ -15,7 +15,11 @@ jobs:
         env:
           WIREGUARD_CONFIG: ${{ secrets.WIREGUARD_CONFIG }}
       - name: Setup wireguard connection
-        run: wg-quick up wg0 > /dev/null
+        run: |
+          wg-quick up wg0
+          wg-quick down wg0
+          wg-quick up wg0
+          dig server.lan
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
