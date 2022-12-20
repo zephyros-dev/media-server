@@ -12,6 +12,9 @@
   "pip-compile": {
     "fileMatch": ["(^|/)requirements\\.in$"]
   },
+  "pip_requirements": {
+    "enabled": false
+  },
   "pre-commit": {
     "enabled": true
   }
