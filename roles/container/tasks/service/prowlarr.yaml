@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: lscr.io/linuxserver/prowlarr:develop@sha256:b826c3cced90056f3db339e6857318f87be89df88767a59725b5f9be9baec8bf
+    image: lscr.io/linuxserver/prowlarr:develop@sha256:fc6f27bd2119f42169882331c4d840da3ec8fd33d029b27631913c006ada8c16
     name: prowlarr-web
     pod: prowlarr
     state: "{{ prowlarr_state }}"
