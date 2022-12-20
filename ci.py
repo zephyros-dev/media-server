@@ -6,7 +6,9 @@ import dagger
 
 
 async def ci():
-    async with dagger.Connection(dagger.Config(log_output=sys.stderr)) as client:
+    async with dagger.Connection(
+        dagger.Config(log_output=sys.stderr, execute_timeout=None)
+    ) as client:
         user_dir = "/root"
         workspace = client.host().directory(".")
 
