@@ -1,7 +1,13 @@
+[![dagger](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml/badge.svg)](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml)
+
 # Introduction
+
 Code for running self-hosted services using podman and ansible
+
 # Infrastructure graph
+
 ## Networking
+
 ```mermaid
 flowchart TB
   subgraph internet
@@ -33,7 +39,9 @@ flowchart TB
   end
   wireguard --> lan_network
 ```
+
 ## Data
+
 ```mermaid
 flowchart TB
   subgraph media_server
@@ -50,24 +58,39 @@ flowchart TB
     end
   end
 ```
+
 # Note
+
 - Always run partition playbook with --check first
+
 ```
 ansible-playbook partition --check
 ```
+
 # Troubleshooting
+
 ## Pymedusa
+
 ### Pymedusa failed create hardlink
+
 - Check [this](roles/pymedusa/README.md)
+
 ### Check failed to hardlink file
+
 - Run this command in the Video folder
+
 ```
 find . -type f -links 1 ! -name "*.srt" -print
 ```
+
 <!-- TODO: Write a scheduled monitoring for this -->
+
 ## Nextcloud
+
 ### Stuck in maintenance mode
+
 1. Rebuild nextcloud
+
 ```
 ansible-playbook container_run.yaml --tags nextcloud
 ```

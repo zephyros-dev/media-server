@@ -1,4 +1,4 @@
-name: dagger
+name: Deployment
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: build
+    name: Deploy to server
     runs-on: ubuntu-latest
     steps:
       - name: Set up WireGuard
