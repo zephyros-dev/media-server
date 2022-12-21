@@ -13,6 +13,24 @@
 - name: Setup systemd with scope {{ systemd_scope + ' ' + systemd_name }}
   become: "{{ systemd_become }}"
   block:
+    - name: Remove systemd timer {{ systemd_name }}
+      when: systemd_state == "absent"
+      module_defaults:
+        ansible.builtin.systemd:
+          daemon_reload: true
+          name: "{{ systemd_name }}.timer"
+          scope: "{{ systemd_scope }}"
+      block:
+        - name: Stop systemd timer # noqa: args[module]
+          ansible.builtin.systemd:
+            enabled: false
+            state: stopped
+
+        - name: Remove systemd timer file {{ systemd_name }}
+          ansible.builtin.file:
+            path: "{{ systemd_path }}"
+            state: absent
+
     - name: Set systemd timer state {{ systemd_state }}
       when: systemd_state == "started" or systemd_state == "stopped"
       block:
@@ -21,27 +39,21 @@
             src: template.timer.j2
             dest: "{{ systemd_path }}"
             mode: "0600"
+          register: timer_state
 
-        - name: Set systemd timer state {{ systemd_state + ' ' + systemd_name }} # noqa: args[module]
+        - name: Restart systemd timer if changed
+          ansible.builtin.set_fact:
+            final_systemd_state: restarted
+          when:
+            - timer_state.changed
+            - systemd_state != "stopped"
+
+        - name: Set systemd timer state
+          ansible.builtin.set_fact:
+            final_systemd_state: "{{ systemd_state }}"
+          when: not timer_state.changed
+
+        - name: Set systemd timer state {{ final_systemd_state + ' ' + systemd_name }} # noqa: args[module]
           ansible.builtin.systemd:
-            daemon_reload: true
-            scope: "{{ systemd_scope }}"
             enabled: true
-            state: "{{ systemd_state }}"
-            name: "{{ systemd_name }}.timer"
-
-    - name: Remove systemd timer {{ systemd_name }}
-      when: systemd_state == "absent"
-      block:
-        - name: Stope systemd timer
-          ansible.builtin.systemd:
-            daemon_reload: true
-            scope: user
-            enabled: false
-            state: stopped
-            name: "{{ systemd_name }}.timer"
-
-        - name: Remove systemd timer file {{ systemd_name }}
-          ansible.builtin.file:
-            path: "{{ systemd_path }}"
-            state: absent
+            state: "{{ final_systemd_state }}"
