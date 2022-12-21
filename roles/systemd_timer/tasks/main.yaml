@@ -11,15 +11,15 @@
   when: systemd_scope == "system"
 
 - name: Setup systemd with scope {{ systemd_scope + ' ' + systemd_name }}
+  module_defaults:
+    ansible.builtin.systemd:
+      daemon_reload: true
+      name: "{{ systemd_name }}.timer"
+      scope: "{{ systemd_scope }}"
   become: "{{ systemd_become }}"
   block:
     - name: Remove systemd timer {{ systemd_name }}
       when: systemd_state == "absent"
-      module_defaults:
-        ansible.builtin.systemd:
-          daemon_reload: true
-          name: "{{ systemd_name }}.timer"
-          scope: "{{ systemd_scope }}"
       block:
         - name: Stop systemd timer # noqa: args[module]
           ansible.builtin.systemd:
