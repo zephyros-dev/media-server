@@ -46,12 +46,21 @@ async def ci():
             )
             .with_exec(["ansible-galaxy", "install", "-r", "requirements.yaml"])
             .with_env_variable("ANSIBLE_HOST_KEY_CHECKING", "False")
-            .with_env_variable(
-                "ANSIBLE_NO_LOG",
-                await client.host().env_variable("ANSIBLE_NO_LOG").value(),
-            )
-            .with_exec(["ansible-playbook", "main.yaml"])
         )
+
+        ansible_config = {
+            "ANSIBLE_CALLBACKS_ENABLED": "timer",
+            "ANSIBLE_DISPLAY_SKIPPED_HOSTS": "False",
+            "ANSIBLE_STDOUT_CALLBACK": "dense",
+        }
+
+        if await client.host().env_variable("DEBUG_MODE").value():
+            pass
+        else:
+            for key, value in ansible_config.items():
+                ci = ci.with_env_variable(key, value)
+
+        ci = ci.with_exec(["ansible-playbook", "main.yaml"])
 
         await ci.stdout()
 

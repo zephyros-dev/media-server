@@ -1,5 +1,4 @@
 - name: Setup server
-  no_log: "{{ lookup('ansible.builtin.env', 'ANSIBLE_NO_LOG') | default(false)}}"
   hosts: server
   tasks:
     - name: Setup server
