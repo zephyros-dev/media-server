@@ -3,10 +3,11 @@ on:
   push:
     branches:
       - main
-      # - "**issue**"
+      - "**issue**"
 
 jobs:
-  build:
+  deploy:
+    concurrency: deployment
     name: Deploy to server
     runs-on: ubuntu-latest
     steps:
