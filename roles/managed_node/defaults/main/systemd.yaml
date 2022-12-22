@@ -1,26 +1,12 @@
----
-systemd:
-  system:
-    - name: shutdown
-      description: Shutdown system
-      schedule: "*-*-* 00:00:00"
-      state: started
-  user:
-    - name: podman-prune
-      command: podman system prune --all --volumes --force
-      description: Podman image prune service
-      schedule: Sat *-*-* 19:00:00
-      state: started
-    - name: podman-renumber
-      command: podman system renumber
-      description: Daily podman locks prune
-      schedule: "*-*-* 20:00:00"
-      state: started
-    - name: add-executable
-      description: Add executable permission for exe file in storage
-      schedule: "*-*-* 20:00:00"
-      state: started
-    - name: mergerfs-directory
-      description: Sync directory between mergerfs disks
-      schedule: "*-*-* *:00:00"
-      state: started
+systemd_services:
+  - name: shutdown
+    schedule: "00:00:00"
+    scope: system
+  - name: podman-prune
+    schedule: Sat 19:00:00
+  - name: podman-renumber
+    schedule: "20:00:00"
+  - name: add-executable
+    schedule: "20:00:00"
+  - name: mergerfs-directory
+    schedule: "*:00:00"

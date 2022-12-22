@@ -17,8 +17,19 @@
   ansible.builtin.import_tasks: system/packages.yaml
   tags: packages
 
-- name: Setup user systemd
-  ansible.builtin.import_tasks: system/systemd/user.yaml
+- name: Setup systemd
+  ansible.builtin.include_tasks:
+    file: systemd.yaml
+    apply:
+      tags: systemd
+  loop: "{{ systemd_services }}"
+  loop_control:
+    loop_var: systemd_loop_var
+  vars:
+    systemd_name: "{{ systemd_loop_var.name }}"
+    systemd_scope: "{{ systemd_loop_var.scope | default('user') }}"
+    systemd_state: "{{ systemd_loop_var.state | default('started') }}"
+    systemd_schedule: "{{ systemd_loop_var.schedule | default('') }}"
   tags: systemd
 
 - name: Setup storage mounts
@@ -31,10 +42,6 @@
 
 - name: Setup snapraid
   ansible.builtin.import_tasks: system/snapraid.yaml
-
-- name: Setup system systemd
-  ansible.builtin.import_tasks: system/systemd/system.yaml
-  tags: systemd
 
 - name: Setup Virtualization
   ansible.builtin.import_tasks: system/virtualization.yaml
