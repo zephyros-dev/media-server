@@ -62,10 +62,10 @@
               ansible.builtin.include_role:
                 name: systemd_timer
               vars:
-                systemd_name: "{{ service_name }}"
-                systemd_schedule: "{{ timer }}"
-                systemd_scope: user
-                systemd_state: "{{ state }}"
+                systemd_timer_name: "{{ service_name }}"
+                systemd_timer_schedule: "{{ timer }}"
+                systemd_timer_scope: user
+                systemd_timer_state: "{{ state }}"
 
     - name: Stop podman container
       when: state == "absent"

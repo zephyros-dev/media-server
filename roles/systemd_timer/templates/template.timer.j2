@@ -1,9 +1,9 @@
 [Unit]
-Description={{ systemd_description }}
+Description={{ systemd_timer_name }}
 
 [Timer]
 RandomizedDelaySec=10
-OnCalendar={{ systemd_schedule }}
+OnCalendar={{ systemd_timer_schedule }}
 Persistent=true
 
 [Install]

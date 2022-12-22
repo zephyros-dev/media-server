@@ -1,0 +1,56 @@
+- name: Setup variable for user scope
+  ansible.builtin.set_fact:
+    systemd_path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_name }}.service"
+    systemd_become: false
+  when: systemd_scope == "user"
+
+- name: Setup variable for system scope
+  ansible.builtin.set_fact:
+    systemd_path: /etc/systemd/system/{{ systemd_name }}.service
+    systemd_become: true
+  when: systemd_scope == "system"
+
+- name: Setup systemd
+  module_defaults:
+    ansible.builtin.systemd:
+      daemon_reload: true
+      name: "{{ systemd_name }}"
+      scope: "{{ systemd_scope }}"
+  become: "{{ systemd_become }}"
+  block:
+    - name: Remove systemd timer {{ systemd_name }}
+      when: systemd_state == "absent"
+      block:
+        - name: Stop systemd
+          ansible.builtin.systemd: # noqa: args[module]
+            enabled: false
+            state: stopped
+        - name: Remove systemd file
+          ansible.builtin.file:
+            path: "{{ systemd_path }}"
+            state: absent
+
+    - name: Set systemd state {{ systemd_state }}
+      when: systemd_state == "started" or systemd_state == "stopped"
+      block:
+        - name: Template systemd service {{ systemd_name }}
+          ansible.builtin.template:
+            src: "systemd/{{ systemd_name }}.service.j2"
+            dest: "{{ systemd_path }}"
+            mode: "0600"
+
+        - name: Enable systemd service {{ systemd_name }} # noqa: args[module]
+          ansible.builtin.systemd:
+            enabled: true
+            state: started
+          when: systemd_schedule == ''
+
+    - name: Setyp systemd timer {{ systemd_name }}
+      ansible.builtin.include_role:
+        name: systemd_timer
+      vars:
+        systemd_timer_name: "{{ systemd_name }}"
+        systemd_timer_schedule: "{{ systemd_schedule }}"
+        systemd_timer_scope: "{{ systemd_scope }}"
+        systemd_timer_state: "{{ systemd_state }}"
+      when: systemd_schedule != ''

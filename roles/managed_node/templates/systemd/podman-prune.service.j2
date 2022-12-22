@@ -1,11 +1,11 @@
 [Unit]
-Description={{ template_var.description }}
+Description=Podman image prune service
 Wants=network.target
 After=network-online.target
 RequiresMountsFor=%h/.local/share/containers/storage %t/containers
 
 [Service]
-ExecStart={{ template_var.command }}
+ExecStart=podman system prune --all --volumes --force
 RemainAfterExit=true
 Type=oneshot
 
