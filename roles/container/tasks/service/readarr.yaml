@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: lscr.io/linuxserver/readarr:develop@sha256:298cbf958ad7441b7f5f5660531f9fc51dc5426cc7a63e3e00fc4130a5845668
+    image: lscr.io/linuxserver/readarr:develop@sha256:32656cbb9aeebc6de57f39a740fcc28725da3dd43f2e64ea66475f0df577ae21
     name: readarr-web
     pod: readarr
     state: "{{ readarr_state }}"
