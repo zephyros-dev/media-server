@@ -16,7 +16,7 @@
     env:
       LOG_LEVEL: DEBUG
       RENOVATE_CONFIG_FILE: /opt/renovate/config.json
-    image: docker.io/renovate/renovate:latest@sha256:5a6d3a725a36f3ad32bcc68bbc92c8155f89134450fe547f90ec412ab3975707
+    image: docker.io/renovate/renovate:latest@sha256:aab19e83bddbaee1904e7607ab3e6022bcc938fa0efce100c5a4136cc88ccad4
     name: renovate-instance
     state: "{{ renovate_state }}"
     pod: renovate
