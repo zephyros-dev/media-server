@@ -3,7 +3,7 @@
     env:
       AUTO_UPDATE: "true"
       TZ: "{{ global_timezone }}"
-    image: lscr.io/linuxserver/jackett:latest@sha256:cf6a7f4f8436a52fa80fb25c00887cead155950f4563e9d8b746ace5d338ae4b
+    image: lscr.io/linuxserver/jackett:latest@sha256:140d4ec85ee0d89e01ad86fdd12470a8d30546177580349ce8e119352be890ab
     name: jackett-web
     pod: jackett
     state: "{{ jackett_state }}"
