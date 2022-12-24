@@ -1,4 +1,4 @@
-- name: Configure netdata
+- name: Configure netdata # noqa: args[module]
   become: true
   community.general.ini_file:
     path: /etc/netdata/netdata.conf
@@ -26,15 +26,6 @@
       ansible.builtin.command:
         chdir: "{{ netdata_root }}/usr/lib/netdata/conf.d"
         cmd: cp python.d.conf {{ netdata_root }}/etc/netdata/python.d.conf
-    # Could edit yaml file this way, but it removes all the comments in the file
-    # - name: Edit configuration file
-    #   ansible.builtin.import_role:
-    #     name: common
-    #     tasks_from: yaml_edit
-    #   vars:
-    #     yaml_file_path: "{{ netdata_root }}/usr/lib/netdata/python.d.conf"
-    #     yaml_edit:
-    #       nvidia_smi: yes
     - name: Enable nvidia monitoring
       ansible.builtin.lineinfile:
         path: "{{ netdata_root }}/etc/netdata/python.d.conf"
