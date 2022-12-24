@@ -9,7 +9,7 @@
     pod: calibre
     state: "{{ calibre_state }}"
     device:
-      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/renderd128:/dev/dri/renderd128
     volumes:
       - "{{ calibre_book }}:/books"
       - "{{ calibre_volume_config }}:/config:U,z"

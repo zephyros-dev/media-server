@@ -15,14 +15,11 @@
           network: caddy
           state: "{{ state }}"
       block:
-        - name: Prepare folder {{ service_name }}
+        - name: Prepare folder {{ service_name }} # noqa: risky-file-permissions
           become: true
           ansible.builtin.file:
             path: "{{ item }}"
             state: directory
-            mode: "0755"
-            owner: "{{ ansible_user }}"
-            group: "{{ ansible_user }}"
           loop: "{{ folder }}"
         - name: Templates config file
           ansible.builtin.include_tasks:
@@ -41,6 +38,7 @@
             container_prefix: ""
             dest: "{{ ansible_user_dir }}/.config/systemd/user/"
             name: "{{ service_name }}"
+            no_header: true
             pod_prefix: ""
             separator: ""
         # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765

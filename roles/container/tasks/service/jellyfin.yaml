@@ -2,17 +2,12 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    group_add:
-      - "998"
     image: docker.io/jellyfin/jellyfin:latest@sha256:25238b01ff3534204f92fdb190e009582de15d1221a4a3272a8e113d675e8f11
     name: jellyfin-web
     pod: jellyfin
-    security_opt:
-      - unmask=/sys/dev
     state: "{{ jellyfin_state }}"
     device:
       - /dev/dri/card0:/dev/dri/card0
-      - /dev/dri/renderD128:/dev/dri/renderD128
     volumes:
       - "{{ global_media }}:/home"
       - "{{ jellyfin_web_cache }}:/cache:U,z"
