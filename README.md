@@ -11,31 +11,31 @@ Code for running self-hosted services using podman and ansible
 ```mermaid
 flowchart TB
   subgraph internet
-    client
+    http_client
     wireguard_client
-  end
-  subgraph dynv6
-    dynv6_server
+    subgraph github[Github]
+      github_action_runner
+    end
+    dns_name_server[DNS Name Server]
   end
   subgraph lan_network
     subgraph media_server
       subgraph container_network
         caddy -- reverse proxy --> applications
       end
-      media_server_port -- 80 and 443 --> caddy
+      server_port -- 80 and 443 --> caddy
     end
     subgraph pc
       windows
     end
   end
   subgraph openwrt_router
-    client --> port_forward
+    http_client --> port_forward
+    github_action_runner --> wireguard
     wireguard_client --> wireguard
-    port_forward -- 80 and 443 --> media_server_port
-  end
-  subgraph openwrt_router
-    ddns_client_v4-- update dynamic public IPv4 --> dynv6_server
-    ddns_client_v6 -- update dynamic public IPv6 prefix --> dynv6_server
+    port_forward -- 80 and 443 --> server_port
+    dns_name_server <-- update dynamic public IPv4 -->  ddns_client_v4
+    dns_name_server <-- update dynamic public IPv6 prefix -->  ddns_client_v6
   end
   wireguard --> lan_network
 ```
