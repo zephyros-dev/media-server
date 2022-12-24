@@ -71,19 +71,53 @@
         ansible.builtin.systemd:
           name: "{{ service_name }}"
           daemon_reload: true
+          enabled: false
           scope: user
           state: stopped
+      vars:
+        systemd_file_list: ["{{ service_name }}"]
       block:
-        - name: Check if systemd file for container exists
+        - name: Check if systemd file for container exists {{ service_name }}
           ansible.builtin.stat:
             path: "{{ ansible_user_dir }}/.config/systemd/user/{{ service_name }}.service"
-          register: systemd_service_file_status
-        - name: Stop systemd {{ service_name }}
-          ansible.builtin.systemd:
+          register: systemd_service_file_state
+        - name: Setup systemd file list {{ service_name }}
           when:
-            - systemd_service_file_status.stat.exists
-            - timer == ''
-        - name: Stop systemd timer {{ service_name }}
-          ansible.builtin.systemd:
-            name: "{{ service_name }}.timer"
-          when: timer != ''
+            - systemd_service_file_state.stat.exists
+          block:
+            - name: Setup systemd file list for pod {{ service_name }}
+              when:
+                - pod
+              block:
+                - name: Start the service once if timer {{ service_name }}
+                  when: timer != ''
+                  ansible.builtin.systemd:
+                    name: "{{ service_name }}"
+                    state: started
+                - name: Get a list of systemd files {{ service_name }}
+                  containers.podman.podman_pod_info:
+                    name: "{{ service_name }}"
+                  register: pod_info
+                - name: Set list of systemd files {{ service_name }}
+                  ansible.builtin.set_fact:
+                    systemd_file_list: "{{ systemd_file_list + [item.Name] }}"
+                  loop: "{{ pod_info.pods[0].Containers }}"
+                - name: Stop systemd timer {{ service_name }}
+                  when:
+                    - timer != ''
+                  ansible.builtin.systemd:
+                    name: "{{ service_name }}.timer"
+
+            - name: Stop container systemd {{ service_name }}
+              when: timer != ''
+              ansible.builtin.systemd:
+
+            - name: Remove systemd files
+              ansible.builtin.file:
+                path: "{{ ansible_user_dir }}/.config/systemd/user/{{ item }}.service"
+                state: absent
+              loop: "{{ systemd_file_list }}"
+            - name: Remove systemd timer
+              when: timer != ''
+              ansible.builtin.file:
+                path: "{{ ansible_user_dir }}/.config/systemd/user/{{ service_name }}.timer"
