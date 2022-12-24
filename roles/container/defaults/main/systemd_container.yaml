@@ -79,11 +79,6 @@ systemd_container_service:
       - src: /
         dest: /login
     state: "{{ kavita_state }}"
-  komga:
-    folder:
-      - "{{ komga_volume_config }}"
-    caddy_proxy_port: "8080"
-    state: "{{ komga_state }}"
   librespeed:
     folder:
       - "{{ librespeed_web_config }}"

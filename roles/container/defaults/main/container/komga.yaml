@@ -1,3 +1,0 @@
-komga_state: absent
-komga_volume: "{{ global_volume_path }}/komga"
-komga_volume_config: "{{ kavita_volume }}/data"
