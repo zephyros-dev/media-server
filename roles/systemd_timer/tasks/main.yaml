@@ -1,10 +1,10 @@
-- name: Setup variable for user scope
+- name: Setup variable for user scope {{ systemd_timer_name }}
   ansible.builtin.set_fact:
     systemd_timer_path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_timer_name }}.timer"
     systemd_timer_become: false
   when: systemd_timer_scope == "user"
 
-- name: Setup variable for system scope
+- name: Setup variable for system scope {{ systemd_timer_name }}
   ansible.builtin.set_fact:
     systemd_timer_path: /etc/systemd/system/{{ systemd_timer_name }}.timer
     systemd_timer_become: true
@@ -21,7 +21,7 @@
     - name: Remove systemd timer {{ systemd_timer_name }}
       when: systemd_timer_state == "absent"
       block:
-        - name: Stop systemd timer # noqa: args[module]
+        - name: Stop systemd timer {{ systemd_timer_name }} # noqa: args[module]
           ansible.builtin.systemd:
             enabled: false
             state: stopped
@@ -31,7 +31,7 @@
             path: "{{ systemd_timer_path }}"
             state: absent
 
-    - name: Set systemd timer state {{ systemd_timer_state }}
+    - name: Set systemd timer state {{ systemd_timer_name }}
       when: systemd_timer_state == "started" or systemd_timer_state == "stopped"
       block:
         - name: Template systemd timer {{ systemd_timer_name }}
@@ -41,14 +41,14 @@
             mode: "0600"
           register: timer_state
 
-        - name: Restart systemd timer if changed
+        - name: Restart systemd timer if changed {{ systemd_timer_name }}
           ansible.builtin.set_fact:
             final_systemd_timer_state: restarted
           when:
             - timer_state.changed
             - systemd_timer_state != "stopped"
 
-        - name: Set systemd timer state
+        - name: Set systemd timer state {{ systemd_timer_name }}
           ansible.builtin.set_fact:
             final_systemd_timer_state: "{{ systemd_timer_state }}"
           when: not timer_state.changed
