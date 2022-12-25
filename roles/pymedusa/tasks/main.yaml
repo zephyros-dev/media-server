@@ -1,13 +1,3 @@
-- name: Make empty folder in video for post-processing with hardlink on different disks
-  ansible.builtin.include_tasks: mkdir.yaml
-  loop: "{{ disks.storage.disks_list }}"
-  args:
-    apply:
-      tags:
-        - mkdir
-  tags:
-    - always
-
 - name: Remove all empty folder after post-processing
   ansible.builtin.include_tasks: rmdir.yaml
   loop: "{{ disks.storage.disks_list }}"
