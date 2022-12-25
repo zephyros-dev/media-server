@@ -1,7 +1,7 @@
 systemd_services:
   - name: shutdown
     schedule: "00:00:00"
-    scope: system
+    become: true
   - name: podman-prune
     schedule: Sat 19:00:00
   - name: podman-renumber
