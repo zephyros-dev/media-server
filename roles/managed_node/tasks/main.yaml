@@ -6,13 +6,6 @@
   ansible.builtin.import_tasks: system/ssh.yaml
   when: ansible_user != "root"
 
-- name: Setup hostname
-  ansible.builtin.import_tasks: system/hostname.yaml
-
-- name: Setup Podman
-  ansible.builtin.import_tasks: system/podman.yaml
-  tags: podman
-
 - name: Install packages
   ansible.builtin.import_tasks: system/packages.yaml
   tags: packages

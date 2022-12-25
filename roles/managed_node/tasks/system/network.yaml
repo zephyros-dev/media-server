@@ -1,3 +1,8 @@
+- name: Set a hostname
+  ansible.builtin.hostname:
+    name: server
+    use: systemd
+
 - name: Change address gen mode of main interface to use MAC address for stable IPv6 address
   become: true
   community.general.nmcli:
