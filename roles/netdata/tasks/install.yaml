@@ -12,10 +12,5 @@
       ansible.builtin.shell:
         cmd: /kickstart.sh
 
-    - name: Cleanup installation script
-      ansible.builtin.file:
-        path: /kickstart.sh
-        state: absent
-
     - name: Configure Netdata
       ansible.builtin.import_tasks: configure.yaml

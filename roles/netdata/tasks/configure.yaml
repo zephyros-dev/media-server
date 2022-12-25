@@ -1,4 +1,4 @@
-- name: Configure netdata # noqa: args[module]
+- name: Configure netdata # noqa: args[module] risky-file-permissions
   become: true
   community.general.ini_file:
     path: /etc/netdata/netdata.conf
@@ -6,7 +6,6 @@
     option: "{{ item.option }}"
     value: "{{ item.value }}"
     state: "{{ item.state }}"
-    mode: "0644"
   loop: "{{ netdata_config }}"
   notify: Restart Netdata
 
@@ -21,19 +20,23 @@
   become: true
   when: nvidia_smi_state.stat.exists
   block:
+    - name: Check if previous configs differ netdata
+      ansible.builtin.copy:
+        remote_src: true
+        mode: "0600"
+        src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d.conf"
+        dest: "{{ netdata_root }}/etc/netdata/python.d.conf.default"
+      register: netdata_default_config_state
     - name: Copy default python monitor configuration
-      changed_when: false
-      ansible.builtin.command:
-        chdir: "{{ netdata_root }}/usr/lib/netdata/conf.d"
-        cmd: cp python.d.conf {{ netdata_root }}/etc/netdata/python.d.conf
+      ansible.builtin.copy:
+        remote_src: true
+        mode: "0600"
+        src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d.conf"
+        dest: "{{ netdata_root }}/etc/netdata/python.d.conf"
+      when: netdata_default_config_state.changed
     - name: Enable nvidia monitoring
       ansible.builtin.lineinfile:
         path: "{{ netdata_root }}/etc/netdata/python.d.conf"
-        regexp: "^#nvidia_smi: yes$"
+        regexp: "^# nvidia_smi: yes$"
         line: "nvidia_smi: yes"
-    - name: Restart netdata
-      ansible.builtin.systemd:
-        name: netdata
-        state: restarted
-        daemon_reload: true
-        enabled: true
+      notify: Restart Netdata
