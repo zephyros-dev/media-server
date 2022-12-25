@@ -1,5 +1,0 @@
-sftp_state: absent
-sftp_volume_data: "/path/to/data"
-sftp_port: "22222"
-# sftp_user:
-# sftp_password:
