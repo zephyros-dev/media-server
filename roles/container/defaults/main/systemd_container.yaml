@@ -109,11 +109,6 @@ systemd_container_service:
       - "{{ nextcloud_volume_web_data }}"
     caddy_proxy_port: "80"
     state: "{{ nextcloud_state }}"
-  privatebin:
-    folder:
-      - "{{ privatebin_web_data }}"
-    caddy_proxy_port: "8080"
-    state: "{{ privatebin_state }}"
   prowlarr:
     folder:
       - "{{ prowlarr_web_config }}"

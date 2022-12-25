@@ -1,3 +1,0 @@
-privatebin_state: absent
-privatebin_data: "{{ global_volume_path }}/privatebin"
-privatebin_web_data: "{{ privatebin_data }}/web/data"
