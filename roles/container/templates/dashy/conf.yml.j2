@@ -1,4 +1,3 @@
----
 pageInfo:
   title: Zephyr Server
   description: Homelab server of Zephyr
@@ -39,11 +38,6 @@ sections:
         statusCheckAllowInsecure: true
         statusCheckUrl: http://{{ caddyfile_host_address }}:8089/wolweb
         url: https://wol.{{ server_domain }}
-      # - title: Gitea
-      #   icon: favicon-local
-      #   statusCheckAllowInsecure: true
-      #   statusCheckUrl: http://gitea:3000
-      #   url: https://gitea.{{ server_domain }}
   - name: Media Consumption
     items:
       - title: Calibre
@@ -52,11 +46,6 @@ sections:
         statusCheckUrl: http://calibre:8081
         url: https://calibre-content.{{ server_domain }}
         statusCheckAcceptCodes: "401"
-      - title: Calibreweb
-        icon: https://calibrew.{{ server_domain }}/static/favicon.ico
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://calibrew:8083
-        url: https://calibrew.{{ server_domain }}
       - title: Jellyfin
         icon: https://jellyfin.{{ server_domain }}/web/favicon.ico
         statusCheckAllowInsecure: true
@@ -68,11 +57,6 @@ sections:
         statusCheckUrl: http://kavita:5000
         # Kavita has problem with firefox, dev refused to fix though, need to use workaround. Reference: https://github.com/Kareadita/Kavita/issues/1292
         url: https://kavita.{{ server_domain }}
-      # - title: Komga
-      #   icon: favicon-local
-      #   statusCheckAllowInsecure: true
-      #   statusCheckUrl: http://komga:8080
-      #   url: https://komga.{{ server_domain }}
       - title: Navidrome
         icon: https://navidrome.{{ server_domain }}/app/android-chrome-192x192.png
         statusCheckAllowInsecure: true

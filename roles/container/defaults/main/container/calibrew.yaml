@@ -1,4 +1,0 @@
-calibrew_state: absent
-calibrew_data: "{{ global_volume_path }}/calibrew"
-calibrew_web_config: "{{ calibrew_data }}/web/config"
-calibrew_book: "{{ calibre_book }}"
