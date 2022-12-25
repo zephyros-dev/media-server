@@ -9,7 +9,7 @@
   loop_control:
     loop_var: disks_list_loop_var
 
-- name: Make filesystem for disks {{ patition_loop_var.key }}
+- name: Make filesystem for disks {{ patition_loop_var.key }} # noqa: args[module]
   community.general.filesystem:
     fstype: "{{ patition_loop_var.value.fs_type }}"
     dev: /dev/disk/by-id/{{ disks_list_loop_var }}-part1
