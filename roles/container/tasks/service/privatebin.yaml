@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: docker.io/privatebin/nginx-fpm-alpine:latest@sha256:5a2bac832a51b243c0c8cff1c927b73bd37ebfdfeb31202db646f1f364b056ec
+    image: docker.io/privatebin/nginx-fpm-alpine:latest@sha256:fed55e29df1c07465f162152a91fe1ce704a93672fd2c3bbfe6a52f33319c714
     name: privatebin-web
     pod: privatebin
     state: "{{ privatebin_state }}"
