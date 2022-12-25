@@ -1,4 +1,4 @@
-mumble_state: started
+mumble_state: absent
 mumble_volume: "{{ global_volume_path }}/mumble"
 mumble_volume_data: "{{ mumble_volume }}/data"
 mumble_volume_config: "{{ mumble_volume }}/config"
