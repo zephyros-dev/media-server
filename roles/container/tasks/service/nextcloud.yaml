@@ -81,18 +81,22 @@
       ansible.builtin.file:
         path: "{{ nextcloud_volume }}/db_bak"
         state: directory
-        mode: "0755"
-    - name: Backup nextcloud volume
+        mode: "0700"
+    - name: Backup nextcloud volume # noqa: risky-file-permissions
       become: true
-      changed_when: false
-      ansible.builtin.command:
-        chdir: "{{ nextcloud_volume }}"
-        cmd: cp -ra {{ nextcloud_volume_db_data }} ./db_bak/{{ ansible_date_time.iso8601_basic_short }}
+      ansible.builtin.copy:
+        dest: "{{ nextcloud_volume }}//db_bak/{{ ansible_date_time.iso8601_basic_short }}"
+        directory_mode: recursive
+        group: "{{ ansible_user }}"
+        mode: "0700"
+        owner: "{{ ansible_user }}"
+        remote_src: true
+        src: "{{ nextcloud_volume_db_data }}"
     - name: Create nextcloud db dump
+      changed_when: false
       ansible.builtin.shell:
         chdir: "{{ nextcloud_volume }}"
         cmd: podman exec nextcloud-db pg_dumpall -U {{ nextcloud_postgres_user }} > dump.sql
-      changed_when: false
     - name: Remove nextcloud container
       containers.podman.podman_container:
         name: nextcloud-db

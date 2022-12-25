@@ -46,10 +46,11 @@
             mode: "0600"
           register: snapraid_runner_config
         - name: Replace default config if changed
-          ansible.builtin.command:
-            cmd: cp snapraid-btrfs-runner.conf.example snapraid-btrfs-runner.conf
-          args:
-            chdir: "{{ snapraid_runner_path }}"
+          ansible.builtin.copy:
+            remote_src: true
+            mode: "0600"
+            src: "{{ snapraid_runner_path }}/snapraid-btrfs-runner.conf.example"
+            dest: "{{ snapraid_runner_path }}/snapraid-btrfs-runner.conf"
           when: snapraid_runner_config.changed
         - name: Configure snapraid runner config
           community.general.ini_file:
