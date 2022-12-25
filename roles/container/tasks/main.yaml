@@ -6,10 +6,6 @@
         name: caddy
         state: "{{ network_state }}"
 
-    - name: Setup scrutiny
-      ansible.builtin.import_tasks: scrutiny.yaml
-      tags: scrutiny
-
     - name: Run podman container with systemd
       ansible.builtin.include_tasks:
         file: systemd_container.yaml
@@ -22,6 +18,7 @@
         loop_var: systemd_container_loop
       vars:
         service_name: "{{ systemd_container_loop.key }}"
+        become: "{{ systemd_container_loop.value.become | default(false) }}"
         caddy_host_network: "{{ systemd_container_loop.value.caddy_host_network | default(false) }}"
         caddy_proxy_custom: "{{ systemd_container_loop.value.caddy_proxy_custom | default(false) }}"
         caddy_proxy_port: "{{ systemd_container_loop.value.caddy_proxy_port | default('') }}"

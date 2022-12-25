@@ -1,0 +1,16 @@
+- name: Scrutiny
+  containers.podman.podman_container:
+    cap_add:
+      - SYS_ADMIN
+      - SYS_RAWIO
+    device: "{{ scrutiny_device }}"
+    env:
+      TZ: "{{ global_timezone }}"
+    image: ghcr.io/analogj/scrutiny:master-omnibus@sha256:3acd57617550d2966e577954999a4d3308cec0d2c735e1a1b7ec53769cfa76af
+    name: scrutiny
+    ports:
+      - "{{ scrutiny_port }}:8080"
+    state: "{{ scrutiny_state }}"
+    volumes:
+      - /run/udev:/run/udev:ro,z
+      - "{{ scrutiny_volume_config }}/scrutiny.yaml:/scrutiny/config/scrutiny.yaml:ro,z"

@@ -156,14 +156,23 @@ systemd_container_service:
     pod: false
     caddy_proxy_custom: true
     state: "{{ samba_state }}"
+  scrutiny:
+    become: true
+    folder:
+      - "{{ scrutiny_volume_config }}"
+    pod: false
+    caddy_sso: true
+    caddy_proxy_port: "{{ scrutiny_port }}"
+    caddy_host_network: true
+    state: "{{ scrutiny_state }}"
   syncthing:
     folder:
       - "{{ syncthing_data }}"
     pod: false
     caddy_sso: true
     caddy_proxy_port: "8384"
-    state: "{{ syncthing_state }}"
     caddy_host_network: true
+    state: "{{ syncthing_state }}"
   transmission:
     folder:
       - "{{ transmission_download }}"
