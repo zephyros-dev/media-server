@@ -136,14 +136,6 @@ systemd_container_service:
     caddy_sso: true
     caddy_proxy_port: "7878"
     state: "{{ radarr_state }}"
-  readarr:
-    folder:
-      - "{{ global_media }}"
-      - "{{ transmission_download }}"
-      - "{{ readarr_web_config }}"
-    caddy_sso: true
-    caddy_proxy_port: "8787"
-    state: "{{ readarr_state }}"
   renovate:
     folder:
       - "{{ renovate_volume_data }}"

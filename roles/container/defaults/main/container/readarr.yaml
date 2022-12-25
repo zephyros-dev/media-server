@@ -1,3 +1,0 @@
-readarr_state: absent
-readarr_data: "{{ global_volume_path }}/readarr"
-readarr_web_config: "{{ readarr_data }}/web/config"
