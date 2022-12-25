@@ -76,8 +76,8 @@
                     name: systemd_timer
                   vars:
                     systemd_timer_name: "{{ service_name }}"
+                    systemd_timer_become: "{{ become }}"
                     systemd_timer_schedule: "{{ timer }}"
-                    systemd_timer_scope: "{{ systemd_scope }}"
                     systemd_timer_state: "{{ state }}"
 
         - name: Stop podman container

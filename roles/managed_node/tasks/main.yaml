@@ -27,7 +27,7 @@
     loop_var: systemd_loop_var
   vars:
     systemd_name: "{{ systemd_loop_var.name }}"
-    systemd_scope: "{{ systemd_loop_var.scope | default('user') }}"
+    systemd_become: "{{ systemd_loop_var.become | default(false) }}"
     systemd_state: "{{ systemd_loop_var.state | default('started') }}"
     systemd_schedule: "{{ systemd_loop_var.schedule | default('') }}"
   tags: systemd

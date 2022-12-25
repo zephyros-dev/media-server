@@ -1,14 +1,14 @@
 - name: Setup variable for user scope {{ systemd_timer_name }}
   ansible.builtin.set_fact:
     systemd_timer_path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_timer_name }}.timer"
-    systemd_timer_become: false
-  when: systemd_timer_scope == "user"
+    systemd_timer_scope: user
+  when: not systemd_timer_become
 
 - name: Setup variable for system scope {{ systemd_timer_name }}
   ansible.builtin.set_fact:
     systemd_timer_path: /etc/systemd/system/{{ systemd_timer_name }}.timer
-    systemd_timer_become: true
-  when: systemd_timer_scope == "system"
+    systemd_timer_scope: system
+  when: systemd_timer_become
 
 - name: Setup systemd with scope {{ systemd_timer_name }}
   module_defaults:

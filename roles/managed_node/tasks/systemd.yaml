@@ -1,14 +1,14 @@
 - name: Setup variable for user scope
   ansible.builtin.set_fact:
     systemd_path: "{{ ansible_user_dir }}/.config/systemd/user/{{ systemd_name }}.service"
-    systemd_become: false
-  when: systemd_scope == "user"
+    systemd_scope: user
+  when: not systemd_become
 
 - name: Setup variable for system scope
   ansible.builtin.set_fact:
     systemd_path: /etc/systemd/system/{{ systemd_name }}.service
-    systemd_become: true
-  when: systemd_scope == "system"
+    systemd_scope: system
+  when: systemd_become
 
 - name: Setup systemd
   module_defaults:
@@ -50,7 +50,7 @@
         name: systemd_timer
       vars:
         systemd_timer_name: "{{ systemd_name }}"
+        systemd_timer_become: "{{ systemd_become }}"
         systemd_timer_schedule: "{{ systemd_schedule }}"
-        systemd_timer_scope: "{{ systemd_scope }}"
         systemd_timer_state: "{{ systemd_state }}"
       when: systemd_schedule != ''
