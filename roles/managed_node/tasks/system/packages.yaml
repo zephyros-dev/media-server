@@ -2,37 +2,54 @@
   become: true
   tags: mergerfs
   block:
-    - name: Download mergerfs github releases
-      ansible.builtin.get_url:
-        mode: "0600"
-        url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-static-linux_{{ ansible_alternative_architecture }}.tar.gz
-        dest: /tmp/mergerfs.tar.gz
-    - name: Create temporary directory
-      ansible.builtin.file:
-        path: /tmp/mergerfs
-        mode: "0755"
-        state: directory
-    - name: Extract mergerfs
-      ansible.builtin.unarchive:
-        remote_src: true
-        src: /tmp/mergerfs.tar.gz
-        dest: /tmp/mergerfs
-    - name: Move mergerfs binary to specified location
+    - name: Check if mergerfs is installed
+      ansible.builtin.stat:
+        path: /usr/local/bin/mergerfs
+      register: mergerfs_install_state
+    - name: Check mergerfs version
+      when: mergerfs_install_state.stat.exists
       changed_when: false
       ansible.builtin.command:
-        chdir: /tmp/mergerfs
-        cmd: mv {{ item }} /{{ item }}
-      loop:
-        - usr/local/bin/mergerfs
-        - usr/local/bin/mergerfs-fusermount
-        - usr/local/share/man/man1/mergerfs.1
-    - name: Remove installation directory
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      loop:
-        - /tmp/mergerfs.tar.gz
-        - /tmp/mergerfs
+        cmd: mergerfs --version
+      register: mergerfs_current_version
+    - name: Get mergerfs current version
+      ansible.builtin.set_fact:
+        mergerfs_current_version: "{{ mergerfs_current_version.stdout | regex_search('\\d.+\\d') }}"
+      when: mergerfs_install_state.stat.exists
+    - name: Install mergerfs
+      when: (not mergerfs_install_state.stat.exists) or (mergerfs_current_version != mergerfs_version)
+      block:
+        - name: Download mergerfs github releases
+          ansible.builtin.get_url:
+            mode: "0600"
+            url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-static-linux_{{ ansible_alternative_architecture }}.tar.gz
+            dest: /tmp/mergerfs.tar.gz
+        - name: Create temporary directory
+          ansible.builtin.file:
+            path: /tmp/mergerfs
+            mode: "0755"
+            state: directory
+        - name: Extract mergerfs
+          ansible.builtin.unarchive:
+            remote_src: true
+            src: /tmp/mergerfs.tar.gz
+            dest: /tmp/mergerfs
+        - name: Move mergerfs binary to specified location
+          changed_when: false
+          ansible.builtin.command:
+            chdir: /tmp/mergerfs
+            cmd: mv {{ item }} /{{ item }}
+          loop:
+            - usr/local/bin/mergerfs
+            - usr/local/bin/mergerfs-fusermount
+            - usr/local/share/man/man1/mergerfs.1
+        - name: Remove installation directory
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop:
+            - /tmp/mergerfs.tar.gz
+            - /tmp/mergerfs
 
 - name: Install snapraid
   become: true
