@@ -7,12 +7,10 @@ RUN apt update \
     && apt install -y --no-install-recommends \
     fish \
     gettext-base \
-    openresolv \
     openssl \
     sshpass \
     tmux \
     whois \
-    wireguard \
     && rm -rf /var/lib/apt/lists/* \
     && apt autoremove -y \
     && apt clean -y
