@@ -62,10 +62,10 @@
   },
   "initializeCommand": "./.devcontainer/initializeCommand.sh",
   "mounts": [
+    "source=${localEnv:HOME}/.ansible,target=/home/vscode/.ansible,type=bind",
     "source=${localEnv:HOME}/.config/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind",
     "source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
-    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
-    "source=ansible-cache,target=/home/vscode/.ansible,type=volume,U=true"
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind"
   ],
   "name": "Infra",
   "postStartCommand": "ansible-playbook .devcontainer/playbook.yaml",
