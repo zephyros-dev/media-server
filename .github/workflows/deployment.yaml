@@ -10,37 +10,35 @@ jobs:
     concurrency: deployment
     name: Deploy to server
     runs-on: ubuntu-latest
+    env:
+      DEBUG_MODE: ${{ secrets.DEBUG_MODE }}
     steps:
-      - name: Set up WireGuard
-        run: sudo apt update && sudo apt install wireguard
-      - name: Create wireguard config
-        run: echo "$WIREGUARD_CONFIG" | sudo tee /etc/wireguard/wg0.conf > /dev/null
-        env:
-          WIREGUARD_CONFIG: ${{ secrets.WIREGUARD_CONFIG }}
-      - name: Setup wireguard connection
-        run: wg-quick up wg0 &> /dev/null
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
       - uses: actions/checkout@v3
         with:
           submodules: true
+      - name: Setup sops
+        uses: mdgreenwald/mozilla-sops-action@v1.4.0
+      - name: Set up WireGuard
+        run: |
+          sudo apt update && sudo apt install wireguard
+          sops -d wg0.sops.ini | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          wg-quick up wg0 &> /dev/null
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
           pip install dagger-io
-      - name: Setup tmate session
-        if: env.DEBUG_MODE == 'true'
-        uses: mxschmitt/action-tmate@v3
-        env:
-          DEBUG_MODE: ${{ secrets.DEBUG_MODE }}
-          ANSIBLE_NO_LOG: ${{ secrets.ANSIBLE_NO_LOG }}
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          WIREGUARD_CONFIG: ${{ secrets.WIREGUARD_CONFIG }}
+      - name: Setup ssh-agent
+        run: |
+          sops -d ci.sops | ssh-add -
       - name: Run Dagger pipeline
         run: python main.py
         env:
-          ANSIBLE_NO_LOG: ${{ secrets.ANSIBLE_NO_LOG }}
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Setup tmate session
+        if: env.DEBUG_MODE == 'true' && failure()
+        uses: mxschmitt/action-tmate@v3
