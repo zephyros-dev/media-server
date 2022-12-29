@@ -13,9 +13,6 @@ async def ci():
         workspace = client.host().directory(".")
 
         secret_sops_env = await client.host().env_variable("SOPS_AGE_KEY").secret().id()
-        secret_ssh_key = (
-            await client.host().env_variable("SSH_PRIVATE_KEY").secret().plaintext()
-        )
         ci = (
             client.container()
             .build(context=workspace, dockerfile="Dockerfile")
@@ -25,8 +22,6 @@ async def ci():
                     await client.host().env_variable("SSH_AUTH_SOCK").value()
                 ),
             )
-            .with_new_file(f"{user_dir}/.ssh/id_ed25519", secret_ssh_key + "\n")
-            .with_exec(["chmod", "600", f"{user_dir}/.ssh/id_ed25519"])
             .with_mounted_directory(f"{user_dir}/workspace", workspace)
             .with_workdir(f"{user_dir}/workspace")
         )
