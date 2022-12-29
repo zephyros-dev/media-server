@@ -7,7 +7,7 @@
     - name: Server
       containers.podman.podman_container:
         name: immich-server
-        image: docker.io/altran1502/immich-server:release@sha256:c61f6c5373efb4544db8d04e6e090b77561b71b07d4f272821a6349a18531e37
+        image: docker.io/altran1502/immich-server:release@sha256:94e02ba8151aeed2aa201d8408ef5b53a7a018d54cbd80f6e53bcaf489c46842
         command:
           - "/bin/sh"
           - "./start-server.sh"
@@ -26,7 +26,7 @@
     - name: Microservices
       containers.podman.podman_container:
         name: immich-microservices
-        image: docker.io/altran1502/immich-server:release@sha256:c61f6c5373efb4544db8d04e6e090b77561b71b07d4f272821a6349a18531e37
+        image: docker.io/altran1502/immich-server:release@sha256:94e02ba8151aeed2aa201d8408ef5b53a7a018d54cbd80f6e53bcaf489c46842
         command:
           - "/bin/sh"
           - "./start-microservices.sh"
