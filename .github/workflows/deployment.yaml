@@ -34,6 +34,7 @@ jobs:
           pip install dagger-io
       - name: Setup ssh-agent
         run: |
+          eval `ssh-agent`
           sops -d ci.sops | ssh-add -
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}

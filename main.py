@@ -22,7 +22,6 @@ async def ci():
                     await client.host().env_variable("SSH_AUTH_SOCK").value()
                 ),
             )
-            .with_exec(["chmod", "600", f"{user_dir}/.ssh/id_ed25519"])
             .with_mounted_directory(f"{user_dir}/workspace", workspace)
             .with_workdir(f"{user_dir}/workspace")
         )
