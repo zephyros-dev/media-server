@@ -35,7 +35,7 @@ jobs:
       - name: Run Dagger pipeline
         run: |
           eval `ssh-agent`
-          sops -d ci.sops | ssh-add -
+          sops -d ci.sops | ssh-add - &> /dev/null
           python main.py
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
