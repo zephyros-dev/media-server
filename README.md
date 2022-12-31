@@ -94,3 +94,10 @@ find . -type f -links 1 ! -name "*.srt" -print
 ```
 ansible-playbook container_run.yaml --tags nextcloud
 ```
+
+# Note
+
+## Koreader connection to opds Calibre content server
+
+- The koreader opds requires `/opds` path to the calibre content server
+- The calibre content server authentication need to be `digest` for the koreader opds
