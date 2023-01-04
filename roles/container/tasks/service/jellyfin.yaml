@@ -7,7 +7,7 @@
     pod: jellyfin
     state: "{{ jellyfin_state }}"
     device:
-      - /dev/dri/card0
+      - /dev/dri/
     volumes:
       - "{{ global_media }}:/home"
       - "{{ jellyfin_web_cache }}:/cache:U,z"
