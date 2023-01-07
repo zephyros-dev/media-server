@@ -135,7 +135,7 @@ systemd_container_service:
     folder:
       - "{{ renovate_volume_data }}"
     caddy_proxy_custom: true
-    timer: "18:00:00"
+    timer: "hourly"
     state: "{{ renovate_state }}"
   samba:
     folder:

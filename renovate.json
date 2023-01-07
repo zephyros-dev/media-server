@@ -15,6 +15,7 @@
   "pip_requirements": {
     "enabled": false
   },
+  "prConcurrentLimit": 1,
   "pre-commit": {
     "enabled": true
   }
