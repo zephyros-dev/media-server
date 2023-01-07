@@ -13,8 +13,3 @@
     - content
   loop_control:
     loop_var: subvolume_loop_var
-
-- name: Unmount storage root
-  ansible.posix.mount:
-    path: /mnt/disks/storage/root/{{ storage_loop_var }}
-    state: absent
