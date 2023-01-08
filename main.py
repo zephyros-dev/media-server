@@ -73,7 +73,7 @@ async def ci():
             "ANSIBLE_STDOUT_CALLBACK": "dense",
         }
 
-        if await client.host().env_variable("DEBUG_MODE").value():
+        if await client.host().env_variable("DEBUG_MODE").value() == "true":
             pass
         else:
             for key, value in ansible_config.items():
