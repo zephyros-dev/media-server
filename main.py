@@ -26,6 +26,30 @@ async def ci():
             .with_workdir(f"{user_dir}/workspace")
         )
 
+        AQUA_INSTALLER_VERSION = "2.0.2"
+
+        ci = (
+            ci.with_mounted_cache(
+                f"{user_dir}/.local/share/aquaproj-aqua/pkgs",
+                client.cache_volume("aqua-pkgs"),
+            )
+            .with_mounted_cache(
+                f"{user_dir}/.local/share/aquaproj-aqua/registries",
+                client.cache_volume("aqua-registries"),
+            )
+            .with_exec(
+                [
+                    "curl",
+                    "-Lo",
+                    "aqua-installer",
+                    f"https://raw.githubusercontent.com/aquaproj/aqua-installer/v{AQUA_INSTALLER_VERSION}/aqua-installer",  # noqa
+                ]
+            )
+            .with_exec(["chmod", "+x", "aqua-installer"])
+            .with_exec(["./aqua-installer"])
+            .with_exec(["aqua", "install"])
+        )
+
         age_key_path = f"{os.environ['HOME']}/.config/sops/age/keys.txt"
         if os.path.exists(age_key_path):
             ci = ci.with_mounted_directory(

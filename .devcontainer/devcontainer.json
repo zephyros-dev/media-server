@@ -1,7 +1,7 @@
 {
   "build": {
     "args": {
-      "SOPS_VERSION": "3.7.3",
+      "AQUA_INSTALLER_VERSION": "2.0.2",
       "USERNAME": "vscode"
     },
     "dockerfile": "Dockerfile"
@@ -49,8 +49,11 @@
           "**/handlers/**/*.yaml": "ansible",
           "**/tasks/**/*.yaml": "ansible"
         },
-        "python.linting.flake8Args": ["--max-line-length", "88"],
         "python.formatting.provider": "black",
+        "python.linting.flake8Args": [
+          "--max-line-length",
+          "88"
+        ],
         "python.linting.flake8Enabled": true,
         "python.linting.pylintEnabled": false,
         "sops.creationEnabled": true
@@ -65,13 +68,20 @@
     "source=${localEnv:HOME}/.ansible,target=/home/vscode/.ansible,type=bind",
     "source=${localEnv:HOME}/.config/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind",
     "source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
-    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind"
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
+    "source=aqua-pkgs,target=/home/vscode/.local/share/aquaproj-aqua/pkgs,type=volume,chown=true",
+    "source=aqua-registries,target=/home/vscode/.local/share/aquaproj-aqua/registries,type=volume,chown=true"
   ],
   "name": "Infra",
-  "postStartCommand": "ansible-playbook .devcontainer/playbook.yaml",
+  "postAttachCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postAttachCommand",
+  "onCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags onCreateCommand",
   "remoteEnv": {
+    "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
     "EDITOR": "code --wait"
   },
   "remoteUser": "vscode",
-  "runArgs": ["--userns=keep-id", "--platform=linux/amd64"]
+  "runArgs": [
+    "--userns=keep-id",
+    "--platform=linux/amd64"
+  ]
 }

@@ -1,0 +1,28 @@
+- name: Download aqua installation scripts
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/aquaproj/aqua-installer/v{{ ansible_env.AQUA_INSTALLER_VERSION }}/aqua-installer
+    dest: "{{ ansible_user_dir }}/aqua-installer"
+    mode: "0755"
+
+- name: Install aqua
+  changed_when: false
+  ansible.builtin.command:
+    chdir: "{{ ansible_user_dir }}"
+    cmd: ./aqua-installer
+
+- name: Setup aqua config directory
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.config/aquaproj-aqua"
+    mode: "0755"
+    state: directory
+
+- name: Setup aqua global config file
+  ansible.builtin.copy:
+    src: ../aqua.yaml
+    mode: "0644"
+    dest: "{{ ansible_user_dir }}/.config/aquaproj-aqua/aqua.yaml"
+
+- name: Install aqua dependencies
+  changed_when: false
+  ansible.builtin.command:
+    cmd: aqua install --all
