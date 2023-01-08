@@ -15,12 +15,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     tmux \
     whois
 
-ARG SOPS_VERSION
-RUN curl -Lo sops.deb https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops_${SOPS_VERSION}_$(eval ${CANON_ARCH}).deb \
-    && apt install -y --no-install-recommends ./sops.deb \
-    && git config --global diff.sopsdiffer.textconv "sops -d" \
-    && rm -r sops.deb
-
 ARG USERNAME
 ARG UID=1000
 
@@ -29,6 +23,8 @@ RUN mkdir -p \
     ~/.ansible \
     ~/.cache/pip \
     ~/.config/sops/age \
+    ~/.local/share/aquaproj-aqua/pkgs \
+    ~/.local/share/aquaproj-aqua/registries \
     ~/.local/share/fish \
     ~/.ssh
 
@@ -39,3 +35,7 @@ RUN \
     --no-warn-script-location \
     --requirement requirements.txt \
     --user
+
+ARG AQUA_INSTALLER_VERSION
+ENV AQUA_INSTALLER_VERSION ${AQUA_INSTALLER_VERSION}
+ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:$PATH
