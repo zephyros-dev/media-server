@@ -12,7 +12,7 @@ async def ci():
         user_dir = "/root"
         workspace = client.host().directory(".")
 
-        secret_sops_env = await client.host().env_variable("SOPS_AGE_KEY").secret().id()
+        secret_sops_env = client.host().env_variable("SOPS_AGE_KEY").secret()
         ci = (
             client.container()
             .build(context=workspace, dockerfile="Dockerfile")
