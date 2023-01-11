@@ -25,6 +25,8 @@ attrs==22.2.0
     #   jsonschema
 backoff==2.2.1
     # via gql
+beartype==0.11.0
+    # via dagger-io
 black==22.12.0
     # via
     #   -r requirements.in
@@ -57,7 +59,7 @@ commonmark==0.9.1
     # via rich
 cryptography==39.0.0
     # via ansible-core
-dagger-io==0.2.1
+dagger-io==0.3.0
     # via -r requirements.in
 distlib==0.3.6
     # via virtualenv
@@ -114,6 +116,7 @@ pip-tools==6.12.1
 platformdirs==2.6.2
     # via
     #   black
+    #   dagger-io
     #   virtualenv
 pre-commit==2.21.0
     # via -r requirements.in
