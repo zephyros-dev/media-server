@@ -58,7 +58,7 @@
     - name: Web
       containers.podman.podman_container:
         name: immich-web
-        image: docker.io/altran1502/immich-web:release@sha256:14ee0ec2204674654761e29f6e560e7e633d9d21b52c4392379ff1462dd9be9c
+        image: docker.io/altran1502/immich-web:release@sha256:d7cd7d935440a5bad543022562f04b3efca9252361aa2a430825bd8170e92c8e
         command:
           - "/bin/sh"
           - "./entrypoint.sh"
