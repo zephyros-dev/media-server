@@ -50,10 +50,7 @@
           "**/tasks/**/*.yaml": "ansible"
         },
         "python.formatting.provider": "black",
-        "python.linting.flake8Args": [
-          "--max-line-length",
-          "88"
-        ],
+        "python.linting.flake8Args": ["--max-line-length", "88"],
         "python.linting.flake8Enabled": true,
         "python.linting.pylintEnabled": false,
         "sops.creationEnabled": true
@@ -75,15 +72,12 @@
     "source=aqua-registries,target=/home/vscode/.local/share/aquaproj-aqua/registries,type=volume,chown=true"
   ],
   "name": "Infra",
-  "postAttachCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postAttachCommand",
   "onCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags onCreateCommand",
+  "postAttachCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postAttachCommand",
   "remoteEnv": {
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
     "EDITOR": "code --wait"
   },
   "remoteUser": "vscode",
-  "runArgs": [
-    "--userns=keep-id",
-    "--platform=linux/amd64"
-  ]
+  "runArgs": ["--userns=keep-id", "--platform=linux/amd64"]
 }
