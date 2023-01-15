@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - "**issue**"
+      - "renovate**"
 
 jobs:
   deploy:
