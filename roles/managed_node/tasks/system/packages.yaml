@@ -80,16 +80,15 @@
 - name: Install snapraid
   become: true
   block:
-    - name: Add repository
-      ansible.builtin.yum_repository:
-        name: copr:copr.fedorainfracloud.org:pauken:SnapRAID
-        description: Copr repo for SnapRAID owned by pauken
-        baseurl: https://download.copr.fedorainfracloud.org/results/pauken/SnapRAID/fedora-35-$basearch/
-        skip_if_unavailable: true
-        gpgcheck: true
-        gpgkey: https://download.copr.fedorainfracloud.org/results/pauken/SnapRAID/pubkey.gpg
-        repo_gpgcheck: false
-        enabled: true
+    - name: Add copr support
+      ansible.builtin.dnf:
+        name: dnf-plugins-core
+        state: latest
+    - name: Add snapraid repository
+      changed_when: false
+      ansible.builtin.command:
+        stdin: "y"
+        cmd: dnf copr enable pauken/SnapRAID fedora-35-x86_64
     - name: Install snapraid and dependencies
       ansible.builtin.dnf:
         name:
