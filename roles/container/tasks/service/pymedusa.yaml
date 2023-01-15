@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: docker.io/pymedusa/medusa:master@sha256:18cae5a6d573e4d59c86b27227d1360532a329f056f46c85a290c14445091310
+    image: docker.io/pymedusa/medusa:master@sha256:3991fc35f33809cf4de93c0e17a06b2d37004f00ba2eecd6a2f7b560f5d3f047
     name: pymedusa-web
     pod: pymedusa
     state: "{{ pymedusa_state }}"
