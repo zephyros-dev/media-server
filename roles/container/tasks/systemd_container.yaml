@@ -13,6 +13,17 @@
         systemd_service_path: /etc/systemd/system
         systemd_scope: system
       when: become
+
+    - name: Setup pod for service {{ service_name }}
+      ansible.builtin.set_fact:
+        final_pod: "{{ pod }}"
+      when: timer == ''
+
+    - name: Do not setup pod if service is timer {{ service_name }}
+      ansible.builtin.set_fact:
+        final_pod: false
+      when: timer
+
     - name: Setup systemd container {{ service_name }}
       become: "{{ become }}"
       block:
@@ -44,7 +55,7 @@
               register: restart_systemd
             - name: Create pod {{ service_name }}
               containers.podman.podman_pod:
-              when: pod
+              when: final_pod
             - name: Create container {{ service_name }}
               become: "{{ become }}"
               ansible.builtin.import_tasks: "service/{{ service_name }}.yaml"
@@ -101,14 +112,8 @@
                 - systemd_service_file_state.stat.exists
               block:
                 - name: Setup systemd file list for pod {{ service_name }}
-                  when:
-                    - pod
+                  when: final_pod
                   block:
-                    - name: Start the service once if timer {{ service_name }}
-                      when: timer != ''
-                      ansible.builtin.systemd:
-                        name: "{{ service_name }}"
-                        state: started
                     - name: Get a list of systemd files {{ service_name }}
                       containers.podman.podman_pod_info:
                         name: "{{ service_name }}"
@@ -117,11 +122,6 @@
                       ansible.builtin.set_fact:
                         systemd_file_list: "{{ systemd_file_list + [item.Name] }}"
                       loop: "{{ pod_info.pods[0].Containers }}"
-                    - name: Stop systemd timer {{ service_name }}
-                      when:
-                        - timer != ''
-                      ansible.builtin.systemd:
-                        name: "{{ service_name }}.timer"
 
                 - name: Stop systemd service {{ service_name }}
                   ansible.builtin.systemd:
