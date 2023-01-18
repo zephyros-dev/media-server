@@ -68,7 +68,7 @@
     - name: Redis
       containers.podman.podman_container:
         name: immich-redis
-        image: docker.io/redis:6-alpine@sha256:e23bc4f8f94da81e54b5c9b6f0b843c8b579c88a0f62823634de091d79fdd6ad
+        image: docker.io/redis:6-alpine@sha256:6536c76c861b30f2f64b38c391330813ef187cef5f773dc58b5646230cc0afc5
         env:
           TZ: "{{ global_timezone }}"
 
