@@ -1,3 +1,4 @@
+#jinja2:lstrip_blocks: True
 pageInfo:
   title: Zephyr Server
   description: Homelab server of Zephyr
@@ -9,123 +10,55 @@ pageInfo:
     - title: Source Code
       path: https://github.com/zephyros-dev/media-server
 appConfig:
+  iconSize: large
+  layout: vertical
   statusCheck: true
   theme: Material
-  iconSize: large
 sections:
-  - name: Personal
+  - name: All
     items:
-      - title: Archivy
-        icon: https://archivy.{{ server_domain }}/static/archivy.svg
+{% set custom_dashy_service = {
+  "calibre_content": {
+    "caddy_proxy_port": "8081",
+    "dashy_icon": "/favicon.png",
+    "dashy_statusCheckUrl": "http://calibre:8081",
+    "dashy_statusCheckAcceptCodes": "401"
+  },
+  "dashy": {},
+  "netdata": {
+    "caddy_proxy_port": "19999",
+    "dashy_statusCheckAcceptCodes": "401"
+  }
+}
+%}
+{% set _ = systemd_container_service.update(custom_dashy_service) %}
+{% for key, value in systemd_container_service | dictsort %}
+{% set url_key = key.replace("_", "-") %}
+{% set url_public = "https://" + url_key + "." + server_domain %}
+  {% if value.caddy_proxy_port is defined %}
+      - title: {{ key.capitalize().replace("_", " ") }}
+        icon: {% if value.dashy_icon is not defined %}{{ "hl-" + key }}
+              {% elif "/" in value.dashy_icon %}{{ "https://" + url_key + "." + server_domain + value.dashy_icon }}
+              {% else %}{{ value.dashy_icon }}
+              {% endif %}
+  {% if value.caddy_sso is defined %}
+    {% if value.caddy_sso %}
         statusCheckAllowInsecure: true
-        statusCheckUrl: http://archivy:5000
-        url: https://archivy.{{ server_domain }}
-      - title: Immich
-        icon: https://immich.{{ server_domain }}/favicon.png
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://immich:3000
-        url: https://immich.{{ server_domain }}
-      - title: Nextcloud
-        icon: https://nextcloud.{{ server_domain }}/core/img/favicon.ico
-        url: https://nextcloud.{{ server_domain }}
-      - title: Syncthing
-        icon: https://syncthing.{{ server_domain }}/assets/img/favicon-default.png
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddyfile_host_address }}:8384
-        url: https://syncthing.{{ server_domain }}
-      - title: Wake-on-lan
-        icon: mdi-desktop-classic
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddyfile_host_address }}:8089/wolweb
-        url: https://wol.{{ server_domain }}
-  - name: Media Consumption
-    items:
-      - title: Calibre
-        icon: hl-calibre
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://calibre:8081
-        url: https://calibre-content.{{ server_domain }}
-        statusCheckAcceptCodes: "401"
-      - title: Jellyfin
-        icon: https://jellyfin.{{ server_domain }}/web/favicon.ico
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://jellyfin:8096
-        url: https://jellyfin.{{ server_domain }}
-      - title: Kavita
-        icon: https://kavita.{{ server_domain }}/assets/images/logo.png
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://kavita:5000
-        # Kavita has problem with firefox, dev refused to fix though, need to use workaround. Reference: https://github.com/Kareadita/Kavita/issues/1292
-        url: https://kavita.{{ server_domain }}
-      - title: Navidrome
-        icon: https://navidrome.{{ server_domain }}/app/android-chrome-192x192.png
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://navidrome:4533
-        url: https://navidrome.{{ server_domain }}
-  - name: Media management
-    items:
-      - title: Bazarr
-        icon: hl-bazarr
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://bazarr:6767
-        url: https://bazarr.{{ server_domain }}
-      - title: Calibre
-        icon: hl-calibre
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://calibre:8080
-        url: https://calibre.{{ server_domain }}
-      - title: Lidarr
-        icon: favicon-local
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://lidarr:8686
-        url: https://lidarr.{{ server_domain }}
-      - title: Prowlarr
-        icon: favicon-local
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://prowlarr:9696
-        url: https://prowlarr.{{ server_domain }}
-      - title: Pymedusa
-        icon: favicon-local
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://pymedusa:8081
-        url: https://pymedusa.{{ server_domain }}
-      - title: Radarr
-        icon: favicon-local
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://radarr:7878
-        url: https://radarr.{{ server_domain }}
-      - title: Jackett
-        icon: favicon-local
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://jackett:9117
-        url: https://jackett.{{ server_domain }}
-      - title: Transmission
-        icon: hl-transmission
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://transmission:9091
-        statusCheckAcceptCodes: "401"
-        url: https://transmission.{{ server_domain }}
-  - name: Monitoring
-    items:
-      - title: Librespeed
-        icon: favicon-local
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://librespeed:80
-        url: https://librespeed.{{ server_domain }}
-      - title: Netdata
-        icon: hl-netdata
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddyfile_host_address }}:19999
-        url: https://netdata.{{ server_domain }}
-      - title: Scrutiny
-        icon: https://scrutiny.{{ server_domain }}/web/assets/images/logo/scrutiny-logo-white.svg
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://{{ caddyfile_host_address }}:18080
-        url: https://scrutiny.{{ server_domain }}
-  - name: Public
-    items:
-      - title: Filebrowser
-        icon: hl-filebrowser
-        statusCheckAllowInsecure: true
-        statusCheckUrl: http://filebrowser:80
-        url: https://filebrowser.{{ server_domain }}
+        statusCheckUrl: {% if value.dashy_statusCheckUrl is not defined %}
+                          {% if value.caddy_host_network is defined %}
+                            {% if value.caddy_host_network %}{{ "http://" + caddyfile_host_address + ":" + value.caddy_proxy_port }}
+                            {% endif %}
+                          {% else %}{{ "http://" + url_key + ":" + value.caddy_proxy_port }}
+                          {% endif %}
+                        {% else %}{{ value.dashy_statusCheckUrl }}
+                        {% endif %}
+    {% endif %}
+  {% else %}
+        statusCheckUrl: {{ url_public }}
+  {% endif %}
+  {% if value.dashy_statusCheckAcceptCodes is defined %}
+        statusCheckAcceptCodes: "{{ value.dashy_statusCheckAcceptCodes }}"
+  {% endif %}
+        url: {{ url_public }}
+  {% endif %}
+{% endfor %}
