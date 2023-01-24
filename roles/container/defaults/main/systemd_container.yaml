@@ -5,6 +5,7 @@ systemd_container_service:
       - "{{ archivy_web_config }}"
       - "{{ archivy_elasticsearch_data }}"
     caddy_proxy_port: "5000"
+    dashy_icon: /static/archivy.svg
     state: "{{ archivy_state }}"
     templates:
       - dest: "{{ archivy_web_config }}/config.yml"
@@ -30,7 +31,9 @@ systemd_container_service:
     folder:
       - "{{ calibre_book }}"
       - "{{ calibre_volume_config }}"
+    caddy_proxy_port: "8080"
     caddy_proxy_custom: true
+    dashy_statusCheckAcceptCodes: "401"
     state: "{{ calibre_state }}"
   dashy:
     folder:
@@ -122,6 +125,7 @@ systemd_container_service:
       - "{{ transmission_download }}"
     caddy_sso: true
     caddy_proxy_port: "8081"
+    dashy_icon: favicon-local
     state: "{{ pymedusa_state }}"
   radarr:
     folder:
@@ -166,6 +170,7 @@ systemd_container_service:
       - "{{ transmission_web_config }}"
     pod: false
     caddy_proxy_port: "9091"
+    dashy_statusCheckAcceptCodes: "401"
     state: "{{ transmission_state }}"
   wol:
     folder:
@@ -173,8 +178,6 @@ systemd_container_service:
     pod: false
     caddy_sso: true
     caddy_proxy_port: "8089"
-    caddy_rewrite:
-      - src: /
-        dest: /wolweb
-    state: "{{ wol_state }}"
     caddy_host_network: true
+    dashy_icon: mdi-desktop-classic
+    state: "{{ wol_state }}"
