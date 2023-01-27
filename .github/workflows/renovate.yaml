@@ -1,0 +1,12 @@
+name: Renovate
+on:
+  push:
+    branches:
+      - "renovate**"
+
+jobs:
+  renovate:
+    name: Make auto-accept test pass to limit the concurrent PR from renovate
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Pass"
