@@ -1,0 +1,10 @@
+- name: Podgrab
+  containers.podman.podman_container:
+    env:
+      CHECK_FREQUENCY: "240"
+    image: docker.io/akhilrex/podgrab:latest@sha256:bce133f3f5111381f63d9341313fa7ce7e16209068e8a06e6db2c4ed33972b87
+    name: podgrab-web
+    state: "{{ podgrab_state }}"
+    volumes:
+      - "{{ podgrab_volume_config }}:/config:U,z"
+      - "{{ podgrab_volume_data }}:/assets:U,z"

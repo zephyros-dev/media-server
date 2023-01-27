@@ -1,0 +1,4 @@
+podgrab_state: started
+podgrab_volume: "{{ global_volume_path }}/podgrab"
+podgrab_volume_config: "{{ podgrab_volume }}/config"
+podgrab_volume_data: "{{ podgrab_volume }}/data"

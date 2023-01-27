@@ -118,6 +118,13 @@ systemd_container_service:
     caddy_sso: true
     caddy_proxy_port: "9696"
     state: "{{ prowlarr_state }}"
+  podgrab:
+    folder:
+      - "{{ podgrab_volume_config }}"
+      - "{{ podgrab_volume_data }}"
+    caddy_sso: true
+    caddy_proxy_port: "8080"
+    state: "{{ podgrab_state }}"
   pymedusa:
     folder:
       - "{{ global_media }}"

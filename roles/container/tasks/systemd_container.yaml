@@ -44,6 +44,8 @@
               become: true
               ansible.builtin.file:
                 path: "{{ item }}"
+                owner: "{{ ansible_user }}"
+                group: "{{ ansible_user }}"
                 state: directory
               loop: "{{ folder }}"
             - name: Templates config file
