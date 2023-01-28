@@ -4,13 +4,10 @@
       pod: immich
       state: "{{ immich_state }}"
   block:
-    - name: Set fact for containers
-      ansible.builtin.set_fact:
-        immich_image_server: docker.io/altran1502/immich-server:release@sha256:ad54ebc8937674bbaa9703b08f0be6c3ecc12440d677557e837366050a0669a7
     - name: Server
       containers.podman.podman_container:
         name: immich-server
-        image: "{{ immich_image_server }}"
+        image: docker.io/altran1502/immich-server:release@sha256:ad54ebc8937674bbaa9703b08f0be6c3ecc12440d677557e837366050a0669a7
         command:
           - "/bin/sh"
           - "./start-server.sh"
@@ -29,7 +26,7 @@
     - name: Microservices
       containers.podman.podman_container:
         name: immich-microservices
-        image: "{{ immich_image_server }}"
+        image: docker.io/altran1502/immich-server:release@sha256:ad54ebc8937674bbaa9703b08f0be6c3ecc12440d677557e837366050a0669a7
         command:
           - "/bin/sh"
           - "./start-microservices.sh"
