@@ -40,12 +40,30 @@
               network: caddy
               state: "{{ state }}"
           block:
-            - name: Prepare folder {{ service_name }} # noqa: risky-file-permissions
-              become: true
-              ansible.builtin.file:
+            - name: Check if folder exists {{ service_name }}
+              ansible.builtin.stat:
                 path: "{{ item }}"
-                state: directory
               loop: "{{ folder }}"
+              register: folder_state
+            - name: Prepare folder {{ service_name }}
+              module_defaults:
+                ansible.builtin.file:
+                  path: "{{ item }}"
+                  state: directory
+              when: not folder_state.skipped
+              block:
+                - name: Prepare folder if not exists {{ service_name }}
+                  ansible.builtin.file:
+                    owner: "{{ ansible_user }}"
+                    group: "{{ ansible_user }}"
+                    mode: "0755"
+                  loop: "{{ folder }}"
+                  when: not folder_state.results[0].stat.exists
+                - name: Preserve folder if already exists {{ service_name }} # noqa: risky-file-permissions
+                  become: true
+                  ansible.builtin.file:
+                  loop: "{{ folder }}"
+                  when: folder_state.results[0].stat.exists
             - name: Templates config file
               ansible.builtin.include_tasks:
                 file: systemd_container_templates.yaml
