@@ -1,4 +1,3 @@
-caddy_state: started
 caddy_data: "{{ global_volume_path }}/caddy"
 caddy_data_caddyfile: "{{ caddy_data }}/Caddyfile"
 caddy_data_config: "{{ caddy_data }}/config"

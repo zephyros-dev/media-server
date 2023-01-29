@@ -6,8 +6,6 @@
       TZ: "{{ global_timezone }}"
     image: lscr.io/linuxserver/bazarr:latest@sha256:a234814880891dd40d78f742d9992fa9ee77a0887cdc1381959195b48bec8eed
     name: bazarr-web
-    pod: bazarr
-    state: started
     volumes:
       - "{{ bazarr_web_config }}:/config:U,z"
       - "{{ global_media }}:/home"

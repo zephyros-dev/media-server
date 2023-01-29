@@ -71,11 +71,28 @@
               loop_control:
                 loop_var: systemd_container_templates_loop
               register: restart_systemd
-            - name: Create pod {{ service_name }}
-              containers.podman.podman_pod:
-              when: final_pod
-            - name: Create container {{ service_name }}
+            - name: Run service with pod {{ service_name }}
               become: "{{ become }}"
+              when: final_pod
+              block:
+                - name: Create pod {{ service_name }}
+                  containers.podman.podman_pod:
+                    name: "{{ service_name }}"
+                    infra_name: "{{ service_name }}-pod"
+                    network: caddy
+                    state: "{{ state }}"
+                - name: Create container {{ service_name }}
+                  module_defaults:
+                    containers.podman.podman_container:
+                      pod: "{{ service_name }}"
+                      state: "{{ state }}"
+                  ansible.builtin.import_tasks: "service/{{ service_name }}.yaml"
+            - name: Run service without pod {{ service_name }}
+              become: "{{ become }}"
+              when: not final_pod
+              module_defaults:
+                containers.podman.podman_container:
+                  state: "{{ state }}"
               ansible.builtin.import_tasks: "service/{{ service_name }}.yaml"
             - name: Create systemd service file for {{ service_name }}
               containers.podman.podman_generate_systemd:

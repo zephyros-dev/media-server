@@ -1,3 +1,2 @@
-lidarr_state: started
 lidarr_data: "{{ global_volume_path }}/lidarr"
 lidarr_web_config: "{{ lidarr_data }}/web/config"

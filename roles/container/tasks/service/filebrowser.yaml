@@ -14,8 +14,6 @@
       TZ: "{{ global_timezone }}"
     image: docker.io/filebrowser/filebrowser:latest@sha256:86e8449ff8ff481fa6ca555d9f8ddf9ea887a41483526e889fc9b7d79b15d3a4
     name: filebrowser-web
-    pod: filebrowser
-    state: "{{ filebrowser_state }}"
     volumes:
       - "{{ global_media }}:/srv:ro"
       - "{{ filebrowser_volume }}/database.db:/database.db:U,z"

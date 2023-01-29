@@ -6,7 +6,7 @@ systemd_container_service:
       - "{{ archivy_elasticsearch_data }}"
     caddy_proxy_port: "5000"
     dashy_icon: /static/archivy.svg
-    state: "{{ archivy_state }}"
+    state: started
     templates:
       - dest: "{{ archivy_web_config }}/config.yml"
         src: archivy/config.yml
@@ -16,14 +16,14 @@ systemd_container_service:
       - "{{ global_media }}"
     caddy_sso: true
     caddy_proxy_port: "6767"
-    state: "{{ bazarr_state }}"
+    state: started
   caddy:
     folder:
       - "{{ caddy_data_config }}"
       - "{{ caddy_data_data }}"
     pod: false
     caddy_proxy_custom: true
-    state: "{{ caddy_state }}"
+    state: started
     templates:
       - dest: "{{ caddy_data_caddyfile }}"
         src: caddy/Caddyfile.j2
@@ -34,13 +34,13 @@ systemd_container_service:
     caddy_proxy_port: "8080"
     caddy_proxy_custom: true
     dashy_statusCheckAcceptCodes: "401"
-    state: "{{ calibre_state }}"
+    state: started
   dashy:
     folder:
       - "{{ dashy_volume_config }}"
     caddy_sso: true
     caddy_proxy_port: "80"
-    state: "{{ dashy_state }}"
+    state: started
     templates:
       - dest: "{{ dashy_volume_config }}/conf.yml"
         src: dashy/conf.yml.j2
@@ -48,26 +48,26 @@ systemd_container_service:
     folder:
       - "{{ filebrowser_volume }}"
     caddy_proxy_port: "80"
-    state: "{{ filebrowser_state }}"
+    state: started
   immich:
     folder:
       - "{{ immich_volume_upload }}"
       - "{{ immich_volume_database }}"
     caddy_proxy_port: "8080"
     caddy_proxy_custom: true
-    state: "{{ immich_state }}"
+    state: started
   jackett:
     folder:
       - "{{ jackett_web_config }}"
     caddy_proxy_port: "9117"
-    state: "{{ jackett_state }}"
+    state: started
   jellyfin:
     folder:
       - "{{ global_media }}"
       - "{{ jellyfin_web_cache }}"
       - "{{ jellyfin_web_config }}"
     caddy_proxy_port: "8096"
-    state: "{{ jellyfin_state }}"
+    state: started
   kavita:
     folder:
       - "{{ kavita_volume_data }}"
@@ -75,12 +75,12 @@ systemd_container_service:
     caddy_rewrite:
       - src: /
         dest: /login
-    state: "{{ kavita_state }}"
+    state: started
   librespeed:
     folder:
       - "{{ librespeed_web_config }}"
     caddy_proxy_port: "80"
-    state: "{{ librespeed_state }}"
+    state: started
   lidarr:
     folder:
       - "{{ global_media }}"
@@ -88,14 +88,14 @@ systemd_container_service:
       - "{{ transmission_download }}"
     caddy_sso: true
     caddy_proxy_port: "8686"
-    state: "{{ lidarr_state }}"
+    state: started
   mumble:
     certbot: true
     folder:
       - "{{ mumble_volume_data }}"
       - "{{ mumble_volume_config }}"
     pod: false
-    state: "{{ mumble_state }}"
+    state: absent
     templates:
       - dest: "{{ mumble_volume_config }}/murmur.ini"
         src: mumble/murmur.ini.j2
@@ -104,27 +104,27 @@ systemd_container_service:
       - "{{ global_media }}"
       - "{{ navidrome_web_data }}"
     caddy_proxy_port: "4533"
-    state: "{{ navidrome_state }}"
+    state: started
   nextcloud:
     folder:
       - "{{ nextcloud_volume_db_data }}"
       - "{{ nextcloud_volume_web_storage }}"
       - "{{ nextcloud_volume_web_data }}"
     caddy_proxy_port: "80"
-    state: "{{ nextcloud_state }}"
+    state: started
   prowlarr:
     folder:
       - "{{ prowlarr_web_config }}"
     caddy_sso: true
     caddy_proxy_port: "9696"
-    state: "{{ prowlarr_state }}"
+    state: started
   podgrab:
     folder:
       - "{{ podgrab_volume_config }}"
       - "{{ podgrab_volume_data }}"
     caddy_sso: true
     caddy_proxy_port: "8080"
-    state: "{{ podgrab_state }}"
+    state: started
   pymedusa:
     folder:
       - "{{ global_media }}"
@@ -133,7 +133,7 @@ systemd_container_service:
     caddy_sso: true
     caddy_proxy_port: "8081"
     dashy_icon: favicon-local
-    state: "{{ pymedusa_state }}"
+    state: started
   radarr:
     folder:
       - "{{ global_media }}"
@@ -141,19 +141,19 @@ systemd_container_service:
       - "{{ transmission_download }}"
     caddy_sso: true
     caddy_proxy_port: "7878"
-    state: "{{ radarr_state }}"
+    state: started
   renovate:
     folder:
       - "{{ renovate_volume_data }}"
     caddy_proxy_custom: true
     timer: "08..21:00/30:00"
-    state: "{{ renovate_state }}"
+    state: started
   samba:
     folder:
       - "{{ global_storage }}"
     pod: false
     caddy_proxy_custom: true
-    state: "{{ samba_state }}"
+    state: started
   scrutiny:
     become: true
     folder:
@@ -162,7 +162,7 @@ systemd_container_service:
     caddy_sso: true
     caddy_proxy_port: "{{ scrutiny_port }}"
     caddy_host_network: true
-    state: "{{ scrutiny_state }}"
+    state: started
   syncthing:
     folder:
       - "{{ syncthing_data }}"
@@ -170,7 +170,7 @@ systemd_container_service:
     caddy_sso: true
     caddy_proxy_port: "8384"
     caddy_host_network: true
-    state: "{{ syncthing_state }}"
+    state: started
   transmission:
     folder:
       - "{{ transmission_download }}"
@@ -178,7 +178,7 @@ systemd_container_service:
     pod: false
     caddy_proxy_port: "9091"
     dashy_statusCheckAcceptCodes: "401"
-    state: "{{ transmission_state }}"
+    state: started
   wol:
     folder:
       - "{{ wol_volume }}"
@@ -187,4 +187,4 @@ systemd_container_service:
     caddy_proxy_port: "8089"
     caddy_host_network: true
     dashy_icon: mdi-desktop-classic
-    state: "{{ wol_state }}"
+    state: started

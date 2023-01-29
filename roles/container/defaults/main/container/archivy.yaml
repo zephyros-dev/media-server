@@ -1,4 +1,3 @@
-archivy_state: started
 archivy_data: "{{ global_volume_path }}/archivy"
 archivy_elasticsearch: "{{ archivy_data }}/elasticsearch"
 archivy_web: "{{ archivy_data }}/web"

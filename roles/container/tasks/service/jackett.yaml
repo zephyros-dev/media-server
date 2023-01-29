@@ -5,7 +5,5 @@
       TZ: "{{ global_timezone }}"
     image: lscr.io/linuxserver/jackett:latest@sha256:3a3b256405a19b2e51982cf91b2129cae89a1254321f19e3efbf2eb7fd7d431f
     name: jackett-web
-    pod: jackett
-    state: "{{ jackett_state }}"
     volumes:
       - "{{ jackett_web_config }}:/config:U,z"

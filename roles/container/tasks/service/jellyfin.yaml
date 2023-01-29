@@ -4,8 +4,6 @@
       TZ: "{{ global_timezone }}"
     image: docker.io/jellyfin/jellyfin:latest@sha256:97ae358b2f9091c6f745c47d9342cc615c73e3d672d8ac383385548afc836e28
     name: jellyfin-web
-    pod: jellyfin
-    state: "{{ jellyfin_state }}"
     device:
       - /dev/dri/
     volumes:

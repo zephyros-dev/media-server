@@ -1,4 +1,3 @@
-wol_state: started
 wol_volume: "{{ global_volume_path }}/wol"
 # wol_config_devices:
 #   devices:
