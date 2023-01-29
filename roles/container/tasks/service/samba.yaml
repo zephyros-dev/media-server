@@ -14,7 +14,6 @@
     image: docker.io/servercontainers/samba:smbd-only-latest@sha256:139048569c813cabf4179727d9a1d8820b97de07556062dc9eeaa809c3ad36ca
     name: samba
     network: host
-    state: "{{ samba_state }}"
     volumes:
       - "{{ ansible_user_dir }}/disk:/shares/disk"
       - "{{ global_disks_data }}:/shares/disks"

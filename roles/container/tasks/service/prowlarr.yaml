@@ -4,7 +4,5 @@
       TZ: "{{ global_timezone }}"
     image: lscr.io/linuxserver/prowlarr:develop@sha256:3a7800ad79cdca81424472288965889f4274a6da4f77333de9dcb882f2184e37
     name: prowlarr-web
-    pod: prowlarr
-    state: "{{ prowlarr_state }}"
     volumes:
       - "{{ prowlarr_web_config }}:/config:U,z"

@@ -1,4 +1,3 @@
-navidrome_state: started
 navidrome_data: "{{ global_volume_path }}/navidrome"
 navidrome_web_data: "{{ navidrome_data }}/data"
 navidrome_music: "/path/to/music"

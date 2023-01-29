@@ -4,8 +4,6 @@
       TZ: "{{ global_timezone }}"
     image: docker.io/kizaing/kavita:latest@sha256:61b1dbfefc5cbc2bc3e73de8c24e79e45a51d97627fccfec9d770d10a67f3107
     name: kavita-web
-    pod: kavita
-    state: "{{ kavita_state }}"
     volumes:
       - "{{ global_media }}:/home:ro"
       - "{{ kavita_volume_data }}:/kavita/config:U,z"

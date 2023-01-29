@@ -1,2 +1,1 @@
-syncthing_state: started
 syncthing_data: "{{ global_volume_path }}/syncthing"

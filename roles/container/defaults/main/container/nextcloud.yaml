@@ -1,4 +1,3 @@
-nextcloud_state: started
 nextcloud_volume: "{{ global_volume_path }}/nextcloud"
 nextcloud_volume_web_data: "{{ nextcloud_volume }}/web/data"
 nextcloud_volume_web_storage: "{{ nextcloud_volume }}/web/storage"

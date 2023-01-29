@@ -18,7 +18,6 @@
       RENOVATE_CONFIG_FILE: /opt/renovate/config.json
     image: docker.io/renovate/renovate:latest@sha256:26badc150ff1b0f04eddf890ea655cd0c60820ead7e9f5b504c58f3e94853cb5
     name: renovate
-    state: "{{ renovate_state }}"
     volumes:
       - "{{ renovate_volume_config }}:/opt/renovate/config.json:U,z"
       - "{{ renovate_volume_data }}:/tmp/renovate:U,z"

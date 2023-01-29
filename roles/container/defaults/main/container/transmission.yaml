@@ -1,4 +1,3 @@
-transmission_state: "started"
 transmission_data: "{{ global_volume_path }}/transmission"
 transmission_web_config: "{{ transmission_data }}/web/config"
 transmission_download: "{{ global_media }}/Download/torrent"

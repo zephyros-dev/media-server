@@ -6,8 +6,6 @@
       TZ: "{{ global_timezone }}"
     image: lscr.io/linuxserver/radarr:latest@sha256:60d58da8697c7d0b8c0a07a85fcd6ab62ba489630d1a91050902abb1ddf5a3b7
     name: radarr-web
-    pod: radarr
-    state: "{{ radarr_state }}"
     volumes:
       - "{{ global_media }}:/home"
       - "{{ radarr_web_config }}:/config:U,z"

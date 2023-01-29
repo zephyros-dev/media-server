@@ -1,3 +1,2 @@
-librespeed_state: started
 librespeed_data: "{{ global_volume_path }}/librespeed"
 librespeed_web_config: "{{ librespeed_data }}/web/config"

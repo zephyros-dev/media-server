@@ -26,7 +26,6 @@
     name: scrutiny
     ports:
       - "{{ scrutiny_port }}:8080"
-    state: "{{ scrutiny_state }}"
     volumes:
       - /run/udev:/run/udev:ro,z
       - "{{ scrutiny_volume_config }}/scrutiny.yaml:/scrutiny/config/scrutiny.yaml:ro,z"

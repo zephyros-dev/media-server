@@ -8,8 +8,6 @@
       TZ: "{{ global_timezone }}"
     image: docker.io/deluan/navidrome:latest@sha256:9d7c5dbbede7f2894b964112d669b3c5b0d40df460f6d33b4e46b961829e04da
     name: navidrome-web
-    pod: navidrome
-    state: "{{ navidrome_state }}"
     volumes:
       - "{{ navidrome_music }}:/music:ro"
       - "{{ navidrome_web_data }}:/data:U,z"

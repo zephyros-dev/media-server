@@ -4,7 +4,5 @@
       TZ: "{{ global_timezone }}"
     image: lscr.io/linuxserver/librespeed:latest@sha256:7592326cd404766d9094852715a61469b0173381906c40469d84bded3fc46610
     name: librespeed-web
-    pod: librespeed
-    state: "{{ librespeed_state }}"
     volumes:
       - "{{ librespeed_web_config }}:/config:U,z"

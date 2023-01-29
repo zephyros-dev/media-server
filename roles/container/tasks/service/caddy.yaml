@@ -4,13 +4,11 @@
       TZ: "{{ global_timezone }}"
     image: docker.io/caddy:alpine@sha256:25a0097607868fb05a89a5ab9fea2f2ea4cecdc89d887d7dcee8c778a21b9e1f
     name: caddy
-    network:
-      - caddy
+    network: caddy
     ports:
       - 80:80/tcp
       - 443:443/tcp
       - 443:443/udp
-    state: "{{ caddy_state }}"
     volumes:
       - "{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:U,ro,z"
       - "{{ caddy_data_config }}:/config:U,z"

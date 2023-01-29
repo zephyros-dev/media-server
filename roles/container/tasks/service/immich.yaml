@@ -1,85 +1,79 @@
-- name: Immich component
-  module_defaults:
-    containers.podman.podman_container:
-      pod: immich
-      state: "{{ immich_state }}"
-  block:
-    - name: Server
-      containers.podman.podman_container:
-        name: immich-server
-        image: docker.io/altran1502/immich-server:release@sha256:d2ea42b6c3e229bac4bf9b7ecb3ffc92aade6d671f82be2005f04cabc8df1e72
-        command:
-          - "/bin/sh"
-          - "./start-server.sh"
-        volumes:
-          - "{{ immich_volume_upload }}:/usr/src/app/upload"
-        env:
-          DB_DATABASE_NAME: "{{ immich_database_db }}"
-          DB_HOSTNAME: localhost
-          DB_PASSWORD: "{{ immich_database_password }}"
-          DB_USERNAME: "{{ immich_database_user }}"
-          JWT_SECRET: "{{ immich_jwt_secret }}"
-          NODE_ENV: production
-          REDIS_HOSTNAME: localhost
-          TZ: "{{ global_timezone }}"
+- name: Immich Server
+  containers.podman.podman_container:
+    name: immich-server
+    image: docker.io/altran1502/immich-server:release@sha256:d2ea42b6c3e229bac4bf9b7ecb3ffc92aade6d671f82be2005f04cabc8df1e72
+    command:
+      - "/bin/sh"
+      - "./start-server.sh"
+    volumes:
+      - "{{ immich_volume_upload }}:/usr/src/app/upload"
+    env:
+      DB_DATABASE_NAME: "{{ immich_database_db }}"
+      DB_HOSTNAME: localhost
+      DB_PASSWORD: "{{ immich_database_password }}"
+      DB_USERNAME: "{{ immich_database_user }}"
+      JWT_SECRET: "{{ immich_jwt_secret }}"
+      NODE_ENV: production
+      REDIS_HOSTNAME: localhost
+      TZ: "{{ global_timezone }}"
 
-    - name: Microservices
-      containers.podman.podman_container:
-        name: immich-microservices
-        image: docker.io/altran1502/immich-server:release@sha256:d2ea42b6c3e229bac4bf9b7ecb3ffc92aade6d671f82be2005f04cabc8df1e72
-        command:
-          - "/bin/sh"
-          - "./start-microservices.sh"
-        volume:
-          - "{{ immich_volume_upload }}:/usr/src/app/upload"
-        env:
-          DB_DATABASE_NAME: "{{ immich_database_db }}"
-          DB_HOSTNAME: localhost
-          DB_PASSWORD: "{{ immich_database_password }}"
-          DB_USERNAME: "{{ immich_database_user }}"
-          JWT_SECRET: "{{ immich_jwt_secret }}"
-          NODE_ENV: production
-          REDIS_HOSTNAME: localhost
-          TZ: "{{ global_timezone }}"
+- name: Immich Microservices
+  containers.podman.podman_container:
+    name: immich-microservices
+    image: docker.io/altran1502/immich-server:release@sha256:d2ea42b6c3e229bac4bf9b7ecb3ffc92aade6d671f82be2005f04cabc8df1e72
+    command:
+      - "/bin/sh"
+      - "./start-microservices.sh"
+    volume:
+      - "{{ immich_volume_upload }}:/usr/src/app/upload"
+    env:
+      DB_DATABASE_NAME: "{{ immich_database_db }}"
+      DB_HOSTNAME: localhost
+      DB_PASSWORD: "{{ immich_database_password }}"
+      DB_USERNAME: "{{ immich_database_user }}"
+      JWT_SECRET: "{{ immich_jwt_secret }}"
+      NODE_ENV: production
+      REDIS_HOSTNAME: localhost
+      TZ: "{{ global_timezone }}"
 
-    - name: Machine learning
-      containers.podman.podman_container:
-        name: immich-machine-learning
-        image: docker.io/altran1502/immich-machine-learning:release@sha256:3373962c8d64b264b42751614be88590e279cc6442db0d55615a8daa9cead8f9
-        command:
-          - "/bin/sh"
-          - "./entrypoint.sh"
-        volumes:
-          - "{{ immich_volume_upload }}:/usr/src/app/upload"
-        env:
-          NODE_ENV: production
-          TZ: "{{ global_timezone }}"
+- name: Immich Machine learning
+  containers.podman.podman_container:
+    name: immich-machine-learning
+    image: docker.io/altran1502/immich-machine-learning:release@sha256:3373962c8d64b264b42751614be88590e279cc6442db0d55615a8daa9cead8f9
+    command:
+      - "/bin/sh"
+      - "./entrypoint.sh"
+    volumes:
+      - "{{ immich_volume_upload }}:/usr/src/app/upload"
+    env:
+      NODE_ENV: production
+      TZ: "{{ global_timezone }}"
 
-    - name: Web
-      containers.podman.podman_container:
-        name: immich-web
-        image: docker.io/altran1502/immich-web:release@sha256:71ea56ee6010c34848f1bf5cb88721ac7cd46fb7cfc13baebd5908d64d66cbbe
-        command:
-          - "/bin/sh"
-          - "./entrypoint.sh"
-        env:
-          TZ: "{{ global_timezone }}"
+- name: Immich Web
+  containers.podman.podman_container:
+    name: immich-web
+    image: docker.io/altran1502/immich-web:release@sha256:71ea56ee6010c34848f1bf5cb88721ac7cd46fb7cfc13baebd5908d64d66cbbe
+    command:
+      - "/bin/sh"
+      - "./entrypoint.sh"
+    env:
+      TZ: "{{ global_timezone }}"
 
-    - name: Redis
-      containers.podman.podman_container:
-        name: immich-redis
-        image: docker.io/redis:6-alpine@sha256:6536c76c861b30f2f64b38c391330813ef187cef5f773dc58b5646230cc0afc5
-        env:
-          TZ: "{{ global_timezone }}"
+- name: Immich Redis
+  containers.podman.podman_container:
+    name: immich-redis
+    image: docker.io/redis:6-alpine@sha256:6536c76c861b30f2f64b38c391330813ef187cef5f773dc58b5646230cc0afc5
+    env:
+      TZ: "{{ global_timezone }}"
 
-    - name: Database
-      containers.podman.podman_container:
-        name: immich-database
-        image: docker.io/postgres:14-alpine@sha256:a0f7890719c3c42b9f78f1ad98b2cd45aa2ee3472da12f9d2d3bfbc07f421146
-        env:
-          POSTGRES_DB: "{{ immich_database_db }}"
-          POSTGRES_PASSWORD: "{{ immich_database_password }}"
-          POSTGRES_USER: "{{ immich_database_user }}"
-          TZ: "{{ global_timezone }}"
-        volumes:
-          - "{{ immich_volume_database }}:/var/lib/postgresql/data"
+- name: Immich Database
+  containers.podman.podman_container:
+    name: immich-database
+    image: docker.io/postgres:14-alpine@sha256:a0f7890719c3c42b9f78f1ad98b2cd45aa2ee3472da12f9d2d3bfbc07f421146
+    env:
+      POSTGRES_DB: "{{ immich_database_db }}"
+      POSTGRES_PASSWORD: "{{ immich_database_password }}"
+      POSTGRES_USER: "{{ immich_database_user }}"
+      TZ: "{{ global_timezone }}"
+    volumes:
+      - "{{ immich_volume_database }}:/var/lib/postgresql/data"

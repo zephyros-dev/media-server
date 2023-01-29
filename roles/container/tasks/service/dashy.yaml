@@ -4,8 +4,6 @@
       TZ: "{{ global_timezone }}"
     image: docker.io/lissy93/dashy:latest@sha256:686391afc0611517f7f779faabef3559e9bb06be32b8068e243596c7af589636
     name: dashy-web
-    pod: dashy
-    state: "{{ dashy_state }}"
     user: "0:0"
     volumes:
       - "{{ dashy_volume_config }}/conf.yml:/app/public/conf.yml:ro,z"

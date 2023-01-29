@@ -6,8 +6,6 @@
       TZ: "{{ global_timezone }}"
     image: lscr.io/linuxserver/calibre:latest@sha256:ed2672a029aefd3903b97288c934e84786aac22ccbff112099bea09e1d54f279
     name: calibre-web
-    pod: calibre
-    state: "{{ calibre_state }}"
     device:
       - /dev/dri/
     volumes:

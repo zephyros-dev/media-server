@@ -6,8 +6,6 @@
       TZ: "{{ global_timezone }}"
     image: lscr.io/linuxserver/lidarr:latest@sha256:e3d935c93680246925fe08dd3b80367ad3805f7c517477645b846d835facfada
     name: lidarr-web
-    pod: lidarr
-    state: "{{ lidarr_state }}"
     volumes:
       - "{{ global_media }}:/home"
       - "{{ lidarr_web_config }}:/config:U,z"

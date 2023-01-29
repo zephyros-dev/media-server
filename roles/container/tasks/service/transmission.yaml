@@ -12,7 +12,6 @@
     ports:
       - 51413:51413/tcp
       - 51413:51413/udp
-    state: "{{ transmission_state }}"
     volumes:
       - "{{ global_media }}:/home"
       - "{{ transmission_web_config }}:/config:U,z"
