@@ -38,7 +38,7 @@ sections:
   {% if value.caddy_proxy_port is defined %}
       - title: {{ key.capitalize().replace("_", " ") }}
         icon: {% if value.dashy_icon is not defined %}{{ "hl-" + key }}
-              {% elif "/" in value.dashy_icon %}{{ "https://" + url_key + "." + server_domain + value.dashy_icon }}
+              {% elif "/" in value.dashy_icon[0] %}{{ "https://" + url_key + "." + server_domain + value.dashy_icon }}
               {% else %}{{ value.dashy_icon }}
               {% endif %}
   {% if value.caddy_sso is defined %}

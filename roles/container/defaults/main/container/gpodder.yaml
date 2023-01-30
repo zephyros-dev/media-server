@@ -1,0 +1,3 @@
+gpodder_volume: "{{ global_volume_path }}/gpodder"
+gpodder_volume_config: "{{ gpodder_volume }}/config"
+gpodder_volume_downloads: "{{ gpodder_volume }}/downloads"
