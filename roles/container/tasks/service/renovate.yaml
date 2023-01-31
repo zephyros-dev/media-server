@@ -16,7 +16,7 @@
     env:
       LOG_LEVEL: DEBUG
       RENOVATE_CONFIG_FILE: /opt/renovate/config.json
-    image: docker.io/renovate/renovate:latest@sha256:2c1d012c9ffc1a9b623e8fd879ba619b4b40a4e91400de952882cfeb087adb1e
+    image: docker.io/renovate/renovate:latest@sha256:81f868c3abbaac6753d8be192b06daa0bd2457d91a1f63103dfa7d74bacf0c80
     name: renovate
     volumes:
       - "{{ renovate_volume_config }}:/opt/renovate/config.json:U,z"
