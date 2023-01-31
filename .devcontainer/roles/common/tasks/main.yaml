@@ -1,0 +1,11 @@
+- name: Custom facts gathering
+  tags: always
+  block:
+    - name: Set architecture when amd64
+      ansible.builtin.set_fact:
+        ansible_alternative_architecture: amd64
+      when: ansible_architecture == 'x86_64'
+    - name: Set architecture
+      ansible.builtin.set_fact:
+        ansible_alternative_architecture: arm64
+      when: ansible_architecture == 'aarch64'

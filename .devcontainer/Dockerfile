@@ -20,6 +20,7 @@ RUN mkdir -p \
     ~/.ansible \
     ~/.cache/pip \
     ~/.config/sops/age \
+    ~/.local/share/aquaproj-aqua/bin \
     ~/.local/share/aquaproj-aqua/pkgs \
     ~/.local/share/aquaproj-aqua/registries \
     ~/.local/share/fish \
@@ -33,6 +34,6 @@ RUN \
     --requirement requirements.txt \
     --user
 
-ARG AQUA_INSTALLER_VERSION
-ENV AQUA_INSTALLER_VERSION ${AQUA_INSTALLER_VERSION}
+ARG AQUA_VERSION="1.32.1"
+ENV AQUA_VERSION ${AQUA_VERSION}
 ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:$PATH
