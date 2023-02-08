@@ -150,12 +150,6 @@ systemd_container_service:
     caddy_sso: true
     caddy_proxy_port: "7878"
     state: started
-  renovate:
-    folder:
-      - "{{ renovate_volume_data }}"
-    caddy_proxy_custom: true
-    timer: "08..21:00/30:00"
-    state: absent
   samba:
     folder:
       - "{{ global_storage }}"

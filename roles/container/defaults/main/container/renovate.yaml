@@ -1,4 +1,0 @@
-renovate_volume: "{{ global_volume_path }}/renovate"
-renovate_volume_data: "{{ renovate_volume }}/data"
-renovate_volume_config: "{{ renovate_volume }}/config.json"
-# renovate_token:
