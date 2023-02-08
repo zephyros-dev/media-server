@@ -16,5 +16,6 @@
   "prConcurrentLimit": 1,
   "pre-commit": {
     "enabled": true
-  }
+  },
+  "schedule": ["after 2pm, before 0am"]
 }
