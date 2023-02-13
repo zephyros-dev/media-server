@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: "*/30 0-15 * * *"
 jobs:
-  renovate:
+  renovate-repo:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -1,7 +1,7 @@
 name: Update renovate
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "0 8 * * *"
 jobs:
   renovate:
     runs-on: ubuntu-latest
