@@ -4,15 +4,13 @@
 #
 #    pip-compile requirements.in
 #
-ansible==7.1.0
+ansible==7.2.0
     # via -r requirements.in
-ansible-compat==2.2.7
-    # via ansible-lint
-ansible-core==2.14.1
+ansible-core==2.14.2
     # via
     #   ansible
     #   ansible-lint
-ansible-lint==6.10.2
+ansible-lint==6.12.2
     # via -r requirements.in
 anyio==3.6.2
     # via
@@ -25,15 +23,15 @@ attrs==22.2.0
     #   jsonschema
 backoff==2.2.1
     # via gql
-beartype==0.11.0
+beartype==0.12.0
     # via dagger-io
-black==22.12.0
+black==23.1.0
     # via
     #   -r requirements.in
     #   ansible-lint
 bracex==2.3.post1
     # via wcmatch
-build==0.9.0
+build==0.10.0
     # via pip-tools
 cattrs==22.2.0
     # via dagger-io
@@ -46,7 +44,7 @@ cffi==1.15.1
     # via cryptography
 cfgv==3.3.1
     # via pre-commit
-charset-normalizer==2.1.1
+charset-normalizer==3.0.1
     # via requests
 click==8.1.3
     # via
@@ -57,9 +55,9 @@ colorama==0.4.6
     # via typer
 commonmark==0.9.1
     # via rich
-cryptography==39.0.0
+cryptography==39.0.1
     # via ansible-core
-dagger-io==0.3.0
+dagger-io==0.3.2
     # via -r requirements.in
 distlib==0.3.6
     # via virtualenv
@@ -77,7 +75,7 @@ httpcore==0.16.3
     # via httpx
 httpx==0.23.3
     # via dagger-io
-identify==2.5.12
+identify==2.5.17
     # via pre-commit
 idna==3.4
     # via
@@ -88,52 +86,49 @@ idna==3.4
 jinja2==3.1.2
     # via ansible-core
 jsonschema==4.17.3
-    # via
-    #   ansible-compat
-    #   ansible-lint
-markupsafe==2.1.1
+    # via ansible-lint
+markupsafe==2.1.2
     # via jinja2
 multidict==6.0.4
     # via yarl
-mypy-extensions==0.4.3
+mypy-extensions==1.0.0
     # via black
 nodeenv==1.7.0
     # via pre-commit
 packaging==23.0
     # via
-    #   ansible-compat
     #   ansible-core
     #   ansible-lint
+    #   black
     #   build
-pathspec==0.10.3
+pathspec==0.11.0
     # via
     #   black
     #   yamllint
-pep517==0.13.0
-    # via build
-pip-tools==6.12.1
+pip-tools==6.12.2
     # via -r requirements.in
-platformdirs==2.6.2
+platformdirs==3.0.0
     # via
     #   black
     #   dagger-io
     #   virtualenv
-pre-commit==2.21.0
+pre-commit==3.0.4
     # via -r requirements.in
 pycparser==2.21
     # via cffi
 pygments==2.14.0
     # via rich
+pyproject-hooks==1.0.0
+    # via build
 pyrsistent==0.19.3
     # via jsonschema
 pyyaml==6.0
     # via
-    #   ansible-compat
     #   ansible-core
     #   ansible-lint
     #   pre-commit
     #   yamllint
-requests==2.28.1
+requests==2.28.2
     # via transmission-rpc
 resolvelib==0.8.1
     # via ansible-core
@@ -153,22 +148,22 @@ sniffio==1.3.0
     #   httpcore
     #   httpx
 subprocess-tee==0.4.1
-    # via ansible-compat
+    # via ansible-lint
 transmission-rpc==3.4.0
     # via -r requirements.in
 typer[all]==0.7.0
     # via dagger-io
 typing-extensions==4.4.0
     # via transmission-rpc
-urllib3==1.26.13
+urllib3==1.26.14
     # via requests
-virtualenv==20.17.1
+virtualenv==20.19.0
     # via pre-commit
 wcmatch==8.4.1
     # via ansible-lint
 wheel==0.38.4
     # via pip-tools
-yamllint==1.28.0
+yamllint==1.29.0
     # via ansible-lint
 yarl==1.8.2
     # via gql
