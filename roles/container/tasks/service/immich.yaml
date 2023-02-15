@@ -39,7 +39,7 @@
 - name: Immich Machine learning
   containers.podman.podman_container:
     name: immich-machine-learning
-    image: docker.io/altran1502/immich-machine-learning:release@sha256:f6d0fc06b4faadcd0378a3a2c9e8da48b67d68d04b8b5709f00c7c1ef03ce8ad
+    image: docker.io/altran1502/immich-machine-learning:release@sha256:0fc3e24ec83237712ffe73455efbea8ae797241c976f4b4b20876ec26282f756
     command:
       - "/bin/sh"
       - "./entrypoint.sh"
