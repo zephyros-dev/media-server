@@ -1,18 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "ansible": {
-    "fileMatch": [
-      "(^|/)tasks/.+\\.ya?ml$"
-    ]
+    "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
   },
   "automerge": true,
   "git-submodules": {
     "enabled": true
   },
+  "onboarding": false,
   "pip-compile": {
-    "fileMatch": [
-      "(^|/)requirements\\.in$"
-    ]
+    "fileMatch": ["(^|/)requirements\\.in$"]
   },
   "pip_requirements": {
     "enabled": false
@@ -22,7 +19,6 @@
   "pre-commit": {
     "enabled": true
   },
-  "repositories": [
-    "zephyros-dev/media-server"
-  ]
+  "repositories": ["zephyros-dev/media-server"],
+  "requireConfig": "ignored"
 }
