@@ -6,7 +6,7 @@ collections:
   - name: containers.podman
     version: 1.10.1
   - name: devsec.hardening
-    version: 8.5.0
+    version: 8.6.0
 roles:
   - name: aisbergg.snapper
     version: v2.1.0
