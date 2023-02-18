@@ -7,17 +7,14 @@
   "git-submodules": {
     "enabled": true
   },
-  "onboarding": false,
   "pip-compile": {
     "fileMatch": ["(^|/)requirements\\.in$"]
   },
   "pip_requirements": {
     "enabled": false
   },
-  "platform": "github",
   "prConcurrentLimit": 1,
   "pre-commit": {
     "enabled": true
-  },
-  "repositories": ["zephyros-dev/media-server"]
+  }
 }
