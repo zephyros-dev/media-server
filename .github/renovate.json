@@ -1,0 +1,7 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "onboarding": false,
+  "platform": "github",
+  "repositories": ["zephyros-dev/media-server"],
+  "requireConfig": "ignored"
+}
