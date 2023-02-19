@@ -4,6 +4,7 @@
     "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
   },
   "automerge": true,
+  "extends": ["github>aquaproj/aqua-renovate-config#1.5.2"],
   "git-submodules": {
     "enabled": true
   },
@@ -19,5 +20,13 @@
   "pre-commit": {
     "enabled": true
   },
+  "regexManagers": [
+    {
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": " aquaproj/aqua",
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": ["ARG AQUA_VERSION==(?<currentValue>.*?)\\n"]
+    }
+  ],
   "repositories": ["zephyros-dev/media-server"]
 }
