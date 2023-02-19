@@ -3,6 +3,7 @@
   "ansible": {
     "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
   },
+  "autodiscover": false,
   "automerge": true,
   "git-submodules": {
     "enabled": true
