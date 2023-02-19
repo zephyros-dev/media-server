@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - roles/**
+      - submodules/**
+      - group_vars/**
 jobs:
   deploy:
     concurrency: deployment
