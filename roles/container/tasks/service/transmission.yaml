@@ -6,7 +6,7 @@
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
       USER: "{{ transmission_user }}"
-    image: lscr.io/linuxserver/transmission:latest@sha256:b7d7992a2d0d767942e36db137f2a3f4700622c03d5885a0399874c762787bbd
+    image: lscr.io/linuxserver/transmission:latest@sha256:3fc83168f3d92405c5d82243035fc1846669aff9a7213811aebc60729c67dce4
     name: transmission
     network: caddy
     ports:
