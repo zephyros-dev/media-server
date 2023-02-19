@@ -1,7 +1,8 @@
 name: Renovate
 on:
-  schedule:
-    - cron: "*/30 0-15 * * *"
+  push:
+    branches:
+      - "zephyros-dev/issue315"
 jobs:
   renovate-repo:
     runs-on: ubuntu-latest
