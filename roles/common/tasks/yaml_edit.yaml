@@ -21,6 +21,6 @@
 
 - name: Write yaml to file
   ansible.builtin.copy:
-    content: "{{ yaml_file | to_nice_yaml(sort_keys=false, indent=2, width=1337) }}"
+    content: "{{ yaml_file | to_nice_yaml(sort_keys=false, indent=2, width=1337) }}" # noqa: jinja[invalid]
     dest: "{{ yaml_file_path }}"
     mode: "0644"
