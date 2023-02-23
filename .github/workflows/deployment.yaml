@@ -4,9 +4,10 @@ on:
     branches:
       - main
     paths:
+      - group_vars/**
+      - requirements.yaml
       - roles/**
       - submodules/**
-      - group_vars/**
 jobs:
   deploy:
     concurrency: deployment
