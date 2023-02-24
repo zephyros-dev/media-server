@@ -1,7 +1,6 @@
 {
   "build": {
     "args": {
-      "AQUA_INSTALLER_VERSION": "2.0.2",
       "USERNAME": "vscode"
     },
     "dockerfile": "Dockerfile"
