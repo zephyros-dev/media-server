@@ -64,11 +64,6 @@ systemd_container_service:
     caddy_proxy_port: "8080"
     caddy_proxy_custom: true
     state: started
-  jackett:
-    folder:
-      - "{{ jackett_web_config }}"
-    caddy_proxy_port: "9117"
-    state: started
   jellyfin:
     folder:
       - "{{ global_media }}"
