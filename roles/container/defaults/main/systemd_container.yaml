@@ -49,14 +49,6 @@ systemd_container_service:
       - "{{ filebrowser_volume }}"
     caddy_proxy_port: "80"
     state: started
-  gpodder:
-    folder:
-      - "{{ gpodder_volume_config }}"
-      - "{{ gpodder_volume_downloads }}"
-    caddy_proxy_port: "3000"
-    caddy_sso: true
-    dashy_icon: https://gpodder.github.io/gpodder.png
-    state: started
   immich:
     folder:
       - "{{ immich_volume_upload }}"
