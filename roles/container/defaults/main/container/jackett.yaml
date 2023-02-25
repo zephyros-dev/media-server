@@ -1,2 +1,0 @@
-jackett_data: "{{ global_volume_path }}/jackett"
-jackett_web_config: "{{ jackett_data }}/web/config"

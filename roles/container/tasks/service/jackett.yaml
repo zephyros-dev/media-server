@@ -1,9 +1,0 @@
-- name: Jackett
-  containers.podman.podman_container:
-    env:
-      AUTO_UPDATE: "true"
-      TZ: "{{ global_timezone }}"
-    image: lscr.io/linuxserver/jackett:latest@sha256:e428f1394bc622257c99da687f67a4bc9f3a9f37bbbd607b19955b0e599ac918
-    name: jackett-web
-    volumes:
-      - "{{ jackett_web_config }}:/config:U,z"
