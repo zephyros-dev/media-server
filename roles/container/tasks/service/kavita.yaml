@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: docker.io/kizaing/kavita:latest@sha256:64bdc20bc9f55a3a4a4cb32c0977c608d427433c54bf055070d2cb2ba62ff3a5
+    image: docker.io/kizaing/kavita:latest@sha256:d01e701f471492a20ec446bd463f8c24f5e03a85119ad1279d766810b0e120e8
     name: kavita-web
     volumes:
       - "{{ global_media }}:/home:ro"
