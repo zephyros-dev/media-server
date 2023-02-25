@@ -1,4 +1,3 @@
-snapraid_version: "12.1"
 snapraid_runner_path: /opt/snapraid-btrfs-runner/
 snapraid_runner_configuration:
   - section: snapraid-btrfs
