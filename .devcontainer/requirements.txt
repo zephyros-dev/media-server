@@ -57,7 +57,7 @@ commonmark==0.9.1
     # via rich
 cryptography==39.0.1
     # via ansible-core
-dagger-io==0.3.2
+dagger-io==0.3.3
     # via -r requirements.in
 distlib==0.3.6
     # via virtualenv
@@ -68,7 +68,9 @@ filelock==3.9.0
 gql==3.4.0
     # via dagger-io
 graphql-core==3.2.3
-    # via gql
+    # via
+    #   dagger-io
+    #   gql
 h11==0.14.0
     # via httpcore
 httpcore==0.16.3
@@ -112,7 +114,7 @@ platformdirs==3.0.0
     #   black
     #   dagger-io
     #   virtualenv
-pre-commit==3.0.4
+pre-commit==3.1.0
     # via -r requirements.in
 pycparser==2.21
     # via cffi
@@ -137,6 +139,7 @@ rfc3986[idna2008]==1.5.0
 rich==12.6.0
     # via
     #   ansible-lint
+    #   dagger-io
     #   typer
 ruamel-yaml==0.17.21
     # via ansible-lint
@@ -149,12 +152,10 @@ sniffio==1.3.0
     #   httpx
 subprocess-tee==0.4.1
     # via ansible-lint
-transmission-rpc==3.4.0
+transmission-rpc==4.1.0
     # via -r requirements.in
 typer[all]==0.7.0
     # via dagger-io
-typing-extensions==4.5.0
-    # via transmission-rpc
 urllib3==1.26.14
     # via requests
 virtualenv==20.19.0
