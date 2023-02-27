@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: docker.io/lissy93/dashy:latest@sha256:ad9002ef415723af1dfd0d384859875376eec302710c2938ef737a072eaf8810
+    image: docker.io/lissy93/dashy:latest@sha256:67d2c9a5719944c34a9179701e2a2a0f2d4518754a0c7aab3bd7d978ccbe058d
     name: dashy-web
     user: "0:0"
     volumes:
