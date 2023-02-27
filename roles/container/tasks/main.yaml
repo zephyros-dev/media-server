@@ -8,26 +8,13 @@
 
     - name: Run podman container with systemd
       ansible.builtin.include_tasks:
-        file: systemd_container.yaml
+        file: container.yaml
       args:
         apply:
           tags:
-            - "{{ systemd_container_loop.key }}"
-      loop: "{{ systemd_container_service | dict2items }}"
+            - "{{ container_loop_var.key }}"
+      loop: "{{ container | dict2items }}"
       loop_control:
-        loop_var: systemd_container_loop
-      vars:
-        service_name: "{{ systemd_container_loop.key }}"
-        become: "{{ systemd_container_loop.value.become | default(false) }}"
-        caddy_host_network: "{{ systemd_container_loop.value.caddy_host_network | default(false) }}"
-        caddy_proxy_custom: "{{ systemd_container_loop.value.caddy_proxy_custom | default(false) }}"
-        caddy_proxy_port: "{{ systemd_container_loop.value.caddy_proxy_port | default('') }}"
-        caddy_rewrite: "{{ systemd_container_loop.value.caddy_rewrite | default([]) }}"
-        caddy_sso: "{{ systemd_container_loop.value.caddy_sso | default(false) }}"
-        folder: "{{ systemd_container_loop.value.folder | default([]) }}"
-        pod: "{{ systemd_container_loop.value.pod | default('true') }}"
-        state: "{{ systemd_container_loop.value.state }}"
-        templates: "{{ systemd_container_loop.value.templates | default([]) }}"
-        timer: "{{ systemd_container_loop.value.timer | default('') }}"
+        loop_var: container_loop_var
       tags:
         - always

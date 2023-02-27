@@ -1,3 +1,4 @@
+#jinja2:lstrip_blocks: True
 (basic-auth) {
   basicauth / {
     {{ caddyfile_auth_user }} {{ caddyfile_auth_pass }}
@@ -35,81 +36,81 @@ auth.{{ server_domain }} {
     encode gzip
 }
 (security-header) {
-    header_down Strict-Transport-Security "max-age=15552000;"
-    header_down Referrer-Policy "strict-origin-when-cross-origin"
-    header_down X-XSS-Protection "1; mode=block"
-    header_down X-Content-Type-Options "nosniff"
-    header_down X-Frame-Options "SAMEORIGIN"
+  header_down Strict-Transport-Security "max-age=15552000;"
+  header_down Referrer-Policy "strict-origin-when-cross-origin"
+  header_down X-XSS-Protection "1; mode=block"
+  header_down X-Content-Type-Options "nosniff"
+  header_down X-Frame-Options "SAMEORIGIN"
 }
-{% for key,value in systemd_container_service.items() %}
-{% if value.state == 'started' %}
-{% if not (value.caddy_proxy_custom is defined and value.caddy_proxy_custom) %}
+{% for key,value in container | dictsort %}
+  {% if value.state == 'started' %}
+    {% if not value.caddy_proxy_custom %}
 {{ key }}.{{ server_domain }} {
-{% if not value.certbot is defined or not value.certbot %}
+      {% if not value.certbot %}
     import global-config
-{% if value.caddy_sso is defined and value.caddy_sso %}
+        {% if value.caddy_sso %}
     import proxy-auth
-{% endif %}
-{% if value.caddy_rewrite is defined %}
-{% for rule in value.caddy_rewrite %}
+        {% endif %}
+        {% if value.caddy_rewrite %}
+          {% for rule in value.caddy_rewrite %}
     rewrite {{ rule.src }} {{ rule.dest }}
-{% endfor %}
-{% endif %}
-{% if value.caddy_host_network is defined and value.caddy_host_network %}
+          {% endfor %}
+        {% endif %}
+        {% if value.caddy_host_network %}
     reverse_proxy {{ caddyfile_host_address }}:{{ value.caddy_proxy_port }} {
-{% else %}
+        {% else %}
     reverse_proxy {{ key }}:{{ value.caddy_proxy_port }} {
-{% endif %}
+        {% endif %}
         import security-header
     }
-{% if key == 'nextcloud' %}
+        {% if key == 'nextcloud' %}
     redir /.well-known/carddav /remote.php/carddav 301
     redir /.well-known/caldav /remote.php/caldav 301
-{% endif %}
-{% else %}
+        {% endif %}
+        {% else %}
 
-{% endif %}
+      {% endif %}
 }
-{% endif %}
-{% endif %}
+    {% endif %}
+  {% endif %}
 {% endfor %}
 calibre.{{ server_domain }} {
-    import global-config
-    import proxy-auth
-    reverse_proxy calibre:8080 {
-        import security-header
-    }
+  import global-config
+  import proxy-auth
+  reverse_proxy calibre:8080 {
+      import security-header
+  }
 }
 calibre-content.{{ server_domain }} {
-    import global-config
-    reverse_proxy calibre:8081 {
-        import security-header
-    }
+  import global-config
+  reverse_proxy calibre:8081 {
+      import security-header
+  }
 }
 immich.{{ server_domain }} {
-    import global-config
-    handle /api* {
-        uri strip_prefix /api
-        reverse_proxy immich:3001
-    }
-    handle {
-        reverse_proxy immich:3000
-    }
+  import global-config
+  handle /api* {
+      uri strip_prefix /api
+      reverse_proxy immich:3001
+  }
+  handle {
+      reverse_proxy immich:3000
+  }
 }
 netdata.{{ server_domain }} {
-    import global-config
-    import proxy-auth
-    reverse_proxy {{ caddyfile_host_address }}:19999 {
-        import security-header
-    }
+  import global-config
+  import proxy-auth
+  reverse_proxy {{ caddyfile_host_address }}:19999 {
+      import security-header
+  }
 }
 {{ caddyfile_lan_address }} {
-    import global-config
-    reverse_proxy https://{{ caddyfile_host_address }}:9090 {
-        import security-header
-        transport http {
-            tls_insecure_skip_verify
-            }
-        }
-    tls internal
+  import global-config
+  reverse_proxy https://{{ caddyfile_host_address }}:9090 {
+      import security-header
+      transport http {
+          tls_insecure_skip_verify
+          }
+      }
+  tls internal
 }

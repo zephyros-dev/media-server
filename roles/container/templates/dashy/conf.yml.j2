@@ -17,48 +17,51 @@ appConfig:
 sections:
   - name: All
     items:
+{% set calibre_content = container_default | combine({
+  "caddy_proxy_port": "8081",
+  "dashy_icon": "/favicon.png",
+  "dashy_statusCheckUrl": "http://calibre:8081",
+  "dashy_statusCheckAcceptCodes": "401",
+  "state": container.calibre.state
+}) %}
+{% set dashy = container_default | combine({}) %}
+{% set netdata = container_default | combine ({
+  "caddy_proxy_port": "19999",
+  "dashy_statusCheckAcceptCodes": "401",
+  "state": netdata_state
+}) %}
 {% set custom_dashy_service = {
-  "calibre_content": {
-    "caddy_proxy_port": "8081",
-    "dashy_icon": "/favicon.png",
-    "dashy_statusCheckUrl": "http://calibre:8081",
-    "dashy_statusCheckAcceptCodes": "401"
-  },
-  "dashy": {},
-  "netdata": {
-    "caddy_proxy_port": "19999",
-    "dashy_statusCheckAcceptCodes": "401"
+  "calibre_content": calibre_content,
+  "dashy": dashy,
+  "netdata": netdata
   }
-}
 %}
-{% set _ = systemd_container_service.update(custom_dashy_service) %}
-{% for key, value in systemd_container_service | dictsort %}
-{% set url_key = key.replace("_", "-") %}
-{% set url_public = "https://" + url_key + "." + server_domain %}
-  {% if value.caddy_proxy_port is defined %}
+{% set _ = container.update(custom_dashy_service) %}
+{% for key, value in container | dictsort %}
+  {% if value.state == "started" or value.state == "present" %}
+  {% set url_key = key.replace("_", "-") %}
+  {% set url_public = "https://" + url_key + "." + server_domain %}
+    {% if value.caddy_proxy_port %}
       - title: {{ key.capitalize().replace("_", " ") }}
-        icon: {% if value.dashy_icon is not defined %}{{ "hl-" + key }}
+        icon: {% if not value.dashy_icon %}{{ "hl-" + key }}
               {% elif "/" in value.dashy_icon[0] %}{{ "https://" + url_key + "." + server_domain + value.dashy_icon }}
               {% else %}{{ value.dashy_icon }}
               {% endif %}
-  {% if value.caddy_sso is defined %}
-    {% if value.caddy_sso %}
+      {% if value.caddy_sso %}
         statusCheckAllowInsecure: true
-        statusCheckUrl: {% if value.dashy_statusCheckUrl is not defined %}
-                          {% if value.caddy_host_network is defined %}
-                            {% if value.caddy_host_network %}{{ "http://" + caddyfile_host_address + ":" + value.caddy_proxy_port }}
-                            {% endif %}
+        statusCheckUrl: {% if not value.dashy_statusCheckUrl %}
+                          {% if value.caddy_host_network %}{{ "http://" + caddyfile_host_address + ":" + value.caddy_proxy_port }}
                           {% else %}{{ "http://" + url_key + ":" + value.caddy_proxy_port }}
                           {% endif %}
                         {% else %}{{ value.dashy_statusCheckUrl }}
                         {% endif %}
-    {% endif %}
-  {% else %}
+      {% else %}
         statusCheckUrl: {{ url_public }}
-  {% endif %}
-  {% if value.dashy_statusCheckAcceptCodes is defined %}
+      {% endif %}
+      {% if value.dashy_statusCheckAcceptCodes %}
         statusCheckAcceptCodes: "{{ value.dashy_statusCheckAcceptCodes }}"
-  {% endif %}
+      {% endif %}
         url: {{ url_public }}
+    {% endif %}
   {% endif %}
 {% endfor %}

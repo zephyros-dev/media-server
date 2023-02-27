@@ -1,21 +1,21 @@
-- name: Templates config files {{ service_name }}
+- name: Templates config files {{ container_loop_var.key }}
   module_defaults:
     ansible.builtin.template:
-      src: "{{ systemd_container_templates_loop.src }}"
-      dest: "{{ systemd_container_templates_loop.dest }}"
+      src: "{{ container_templates_loop_var.src }}"
+      dest: "{{ container_templates_loop_var.dest }}"
   block:
     - name: Check if config file exists
       ansible.builtin.stat:
-        path: "{{ systemd_container_templates_loop.dest }}"
+        path: "{{ container_templates_loop_var.dest }}"
       register: config_file_stat
-    - name: Create config files {{ service_name }}
+    - name: Create config files {{ container_loop_var.key }}
       when: not config_file_stat.stat.exists
       ansible.builtin.template:
         mode: "0600"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
       register: restart_systemd
-    - name: Templates config files {{ service_name }}
+    - name: Templates config files {{ container_loop_var.key }}
       when: config_file_stat.stat.exists
       become: true
       ansible.builtin.template:
