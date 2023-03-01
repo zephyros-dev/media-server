@@ -1,7 +1,7 @@
 - name: Immich Server
   containers.podman.podman_container:
     name: immich-server
-    image: docker.io/altran1502/immich-server:release@sha256:30b040593a14870bb01bde7dc904332672066d77a3c6d2fcae4b8bdf1fcb3d22
+    image: docker.io/altran1502/immich-server:release@sha256:25b780473ad9f522016b23eb490be120b40b190f06e9736696f0e613a2e072f1
     command:
       - "/bin/sh"
       - "./start-server.sh"
@@ -20,7 +20,7 @@
 - name: Immich Microservices
   containers.podman.podman_container:
     name: immich-microservices
-    image: docker.io/altran1502/immich-server:release@sha256:30b040593a14870bb01bde7dc904332672066d77a3c6d2fcae4b8bdf1fcb3d22
+    image: docker.io/altran1502/immich-server:release@sha256:25b780473ad9f522016b23eb490be120b40b190f06e9736696f0e613a2e072f1
     command:
       - "/bin/sh"
       - "./start-microservices.sh"
@@ -39,7 +39,7 @@
 - name: Immich Machine learning
   containers.podman.podman_container:
     name: immich-machine-learning
-    image: docker.io/altran1502/immich-machine-learning:release@sha256:0db4a47dcbfeae7af9fb731c210783c12c477bc034934277b2eed1a217d4c8da
+    image: docker.io/altran1502/immich-machine-learning:release@sha256:798b06928fee92fabb5e21785b48ec6f73c29daec7a83aa6d80ba55b027ae6a2
     command:
       - "/bin/sh"
       - "./entrypoint.sh"
@@ -52,7 +52,7 @@
 - name: Immich Web
   containers.podman.podman_container:
     name: immich-web
-    image: docker.io/altran1502/immich-web:release@sha256:d08aa9c07c0b608db3f58b672ba0354820182f239e9f44591d37f4da900b79a6
+    image: docker.io/altran1502/immich-web:release@sha256:11d1037bdc6baf24d9850d220985f163224b11f136544b80716b2f1d9497890f
     command:
       - "/bin/sh"
       - "./entrypoint.sh"
