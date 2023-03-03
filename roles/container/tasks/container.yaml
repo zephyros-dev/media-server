@@ -73,20 +73,21 @@
               register: restart_systemd
             - name: Run service with pod {{ container_loop_var.key }}
               become: "{{ container_loop_var.value.become }}"
+              module_defaults:
+                containers.podman.podman_container:
+                  pod: "{{ container_loop_var.key }}"
+                  state: "{{ container_loop_var.value.state }}"
               when: final_pod
               block:
                 - name: Create pod {{ container_loop_var.key }}
+                  ansible.builtin.import_tasks: container_pod.yaml
+              rescue:
+                - name: Delete pod {{ container_loop_var.key }}
                   containers.podman.podman_pod:
                     name: "{{ container_loop_var.key }}"
-                    infra_name: "{{ container_loop_var.key }}-pod"
-                    network: caddy
-                    state: "{{ container_loop_var.value.state }}"
-                - name: Create container {{ container_loop_var.key }}
-                  module_defaults:
-                    containers.podman.podman_container:
-                      pod: "{{ container_loop_var.key }}"
-                      state: "{{ container_loop_var.value.state }}"
-                  ansible.builtin.import_tasks: "service/{{ container_loop_var.key }}.yaml"
+                    state: absent
+                - name: Create pod {{ container_loop_var.key }}
+                  ansible.builtin.import_tasks: container_pod.yaml
             - name: Run service without pod {{ container_loop_var.key }}
               become: "{{ container_loop_var.value.become }}"
               when: not final_pod

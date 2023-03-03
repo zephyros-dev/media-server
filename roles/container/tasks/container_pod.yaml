@@ -1,0 +1,8 @@
+- name: Create pod {{ container_loop_var.key }}
+  containers.podman.podman_pod:
+    name: "{{ container_loop_var.key }}"
+    infra_name: "{{ container_loop_var.key }}-pod"
+    network: caddy
+    state: "{{ container_loop_var.value.state }}"
+- name: Create container {{ container_loop_var.key }}
+  ansible.builtin.import_tasks: "service/{{ container_loop_var.key }}.yaml"
