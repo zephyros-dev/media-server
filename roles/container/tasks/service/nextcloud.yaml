@@ -1,37 +1,38 @@
-- name: Nextcloud pod
+- name: Nextcloud
   block:
-    - name: Nextcloud
-      containers.podman.podman_container:
-        env:
-          NEXTCLOUD_TRUTED_DOMAINS: "{{ nextcloud_trusted_domains }}"
-          OVERWRITEPROTOCOL: https
-          POSTGRES_DB: "{{ nextcloud_postgres_db }}"
-          POSTGRES_HOST: localhost:5432
-          POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
-          POSTGRES_USER: "{{ nextcloud_postgres_user }}"
-          REDIS_HOST: localhost
-          REDIS_HOST_PASSWORD: "{{ nextcloud_redis_host_password }}"
-          TZ: "{{ global_timezone }}"
-        image: docker.io/nextcloud:stable@sha256:f5118e06411f973fa2ab9d602af0054a9c3c3d8816d85a3298cca2dfcc2b691d
-        name: nextcloud-web
-        volumes:
-          - "{{ nextcloud_volume_web_storage }}:/var/www/html/data:z"
-          - "{{ nextcloud_volume_web_data }}:/var/www/html:z"
+    - name: Nextcloud setup
       when: nextcloud_db_action == "none"
+      block:
+        - name: Nextcloud
+          containers.podman.podman_container:
+            env:
+              NEXTCLOUD_TRUTED_DOMAINS: nextcloud.{{ server_domain }}
+              OVERWRITEPROTOCOL: https
+              POSTGRES_DB: nextcloud
+              POSTGRES_HOST: localhost:5432
+              POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
+              POSTGRES_USER: postgres
+              REDIS_HOST: localhost
+              REDIS_HOST_PASSWORD: "{{ nextcloud_redis_password }}"
+              TZ: "{{ global_timezone }}"
+            image: docker.io/nextcloud:stable@sha256:f5118e06411f973fa2ab9d602af0054a9c3c3d8816d85a3298cca2dfcc2b691d
+            name: nextcloud-web
+            volumes:
+              - "{{ nextcloud_volume_web_storage }}:/var/www/html/data:z"
+              - "{{ nextcloud_volume_web_data }}:/var/www/html:z"
 
-    - name: Nextcloud chown
-      ansible.builtin.command:
-        cmd: podman exec -it nextcloud-web chown -R www-data:www-data ./
-      changed_when: false
+        - name: Nextcloud chown
+          ansible.builtin.command:
+            cmd: podman exec -it nextcloud-web chown -R www-data:www-data ./
+          changed_when: false
 
-    - name: Nextcloud Redis
-      containers.podman.podman_container:
-        command: redis-server --requirepass {{ nextcloud_redis_host_password }}
-        env:
-          TZ: "{{ global_timezone }}"
-        image: docker.io/redis:7-alpine@sha256:bef17825e8f1224b2956d84b7110cad7eb23601df441d2912c1b283d821f2045
-        name: nextcloud-redis
-      when: nextcloud_db_action == "none"
+        - name: Nextcloud Redis
+          containers.podman.podman_container:
+            command: redis-server --requirepass {{ nextcloud_redis_password }}
+            env:
+              TZ: "{{ global_timezone }}"
+            image: docker.io/redis:7-alpine@sha256:bef17825e8f1224b2956d84b7110cad7eb23601df441d2912c1b283d821f2045
+            name: nextcloud-redis
 
     - name: Clean current database
       when: nextcloud_db_action == "import"
@@ -50,9 +51,9 @@
     - name: Nextcloud database
       containers.podman.podman_container:
         env:
-          POSTGRES_DB: "{{ nextcloud_postgres_db }}"
+          POSTGRES_DB: nextcloud
           POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
-          POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+          POSTGRES_USER: postgres
           TZ: "{{ global_timezone }}"
         image: docker.io/postgres:14-alpine@sha256:ba94667f4d21cf4254a9d07ae11b6a60103c710fb1b29ebd6162a1409ac0fdb6
         name: nextcloud-db
