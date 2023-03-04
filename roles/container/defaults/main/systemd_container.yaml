@@ -10,7 +10,6 @@ container:
   kavita: "{{ container_default | combine(kavita) }}"
   librespeed: "{{ container_default | combine(librespeed) }}"
   lidarr: "{{ container_default | combine(lidarr) }}"
-  mumble: "{{ container_default | combine(mumble) }}"
   navidrome: "{{ container_default | combine(navidrome) }}"
   nextcloud: "{{ container_default | combine(nextcloud) }}"
   prowlarr: "{{ container_default | combine(prowlarr) }}"
@@ -96,16 +95,6 @@ lidarr:
     - "{{ transmission_download }}"
   caddy_sso: true
   caddy_proxy_port: "8686"
-mumble:
-  certbot: true
-  folder:
-    - "{{ mumble_volume_data }}"
-    - "{{ mumble_volume_config }}"
-  pod: false
-  state: absent
-  templates:
-    - dest: "{{ mumble_volume_config }}/murmur.ini"
-      src: mumble/murmur.ini.j2
 navidrome:
   folder:
     - "{{ global_media }}"

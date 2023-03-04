@@ -8,7 +8,7 @@
         file: ca_loop.yaml
         apply:
           vars:
-            caddy_cert_domain: mumble.{{ server_domain }}
+            caddy_cert_domain: "{{ final_caddy_cert_domain }}"
       loop: "{{ caddy_acme_ca_list }}"
     - name: Force tasks to fail if no valid cert is found
       ansible.builtin.fail:
