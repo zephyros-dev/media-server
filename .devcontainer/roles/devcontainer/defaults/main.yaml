@@ -1,5 +1,7 @@
 gitignore_list:
+  - ansible
   - dotenv
   - intellij+all
   - macOS
+  - python
   - VisualStudioCode

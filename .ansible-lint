@@ -3,4 +3,5 @@ exclude_paths:
   - .github
 skip_list:
   - command-instead-of-shell
+  - meta-no-info
   - package-latest
