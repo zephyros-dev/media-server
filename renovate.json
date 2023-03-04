@@ -1,10 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "ansible": {
-    "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
+    "fileMatch": [
+      "(^|/)tasks/.+\\.ya?ml$"
+    ]
   },
   "automerge": true,
-  "extends": ["github>aquaproj/aqua-renovate-config#1.5.2"],
+  "extends": [
+    "github>aquaproj/aqua-renovate-config#1.5.2"
+  ],
   "git-submodules": {
     "enabled": true
   },
@@ -12,14 +16,20 @@
   "packageRules": [
     {
       "groupName": "immich",
-      "matchPackagePrefixes": ["docker.io/altran1502/immich"]
+      "matchPackagePrefixes": [
+        "docker.io/altran1502/immich"
+      ]
     }
   ],
   "pip-compile": {
-    "fileMatch": ["(^|/)requirements\\.in$"]
+    "fileMatch": [
+      "(^|/)requirements\\.in$"
+    ]
   },
   "pip_requirements": {
-    "enabled": false
+    "fileMatch": [
+      "(^|/)requirements\\.in$"
+    ]
   },
   "platform": "github",
   "prConcurrentLimit": 1,
@@ -31,9 +41,15 @@
     {
       "datasourceTemplate": "github-releases",
       "depNameTemplate": " aquaproj/aqua",
-      "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["ENV AQUA_VERSION==(?<currentValue>.*?)\\n"]
+      "fileMatch": [
+        "^Dockerfile$"
+      ],
+      "matchStrings": [
+        "ENV AQUA_VERSION==(?<currentValue>.*?)\\n"
+      ]
     }
   ],
-  "repositories": ["zephyros-dev/media-server"]
+  "repositories": [
+    "zephyros-dev/media-server"
+  ]
 }
