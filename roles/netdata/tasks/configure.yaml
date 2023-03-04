@@ -21,25 +21,14 @@
         - name: Add nvidia monitoring if nvidia driver is installed
           when: nvidia_smi_state.stat.exists
           block:
-            - name: Check if previous configs differ netdata
+            - name: Enable nvidia monitoring netdata
               ansible.builtin.copy:
-                remote_src: true
+                dest: "{{ netdata_root }}/etc/netdata/go.d/nvidia_smi.conf"
+                group: netdata
                 mode: "0600"
-                src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d.conf"
-                dest: "{{ netdata_root }}/etc/netdata/python.d.conf.default"
-              register: netdata_default_config_state
-            - name: Copy default python monitor configuration
-              ansible.builtin.copy:
+                owner: netdata
                 remote_src: true
-                mode: "0600"
-                src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d.conf"
-                dest: "{{ netdata_root }}/etc/netdata/python.d.conf"
-              when: netdata_default_config_state.changed
-            - name: Enable nvidia monitoring
-              ansible.builtin.lineinfile:
-                path: "{{ netdata_root }}/etc/netdata/python.d.conf"
-                regexp: "^# nvidia_smi: yes$"
-                line: "nvidia_smi: yes"
+                src: "{{ netdata_root }}/usr/lib/netdata/conf.d/go.d/nvidia_smi.conf"
               notify: Restart Netdata
 
     - name: Setup smartd monitoring
