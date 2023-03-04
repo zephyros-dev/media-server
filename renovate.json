@@ -20,7 +20,7 @@
   },
   "pip_requirements": {
     "fileMatch": ["(^|/)requirements\\.in$"],
-    "ignorePaths": ["requirements.txt"]
+    "ignorePaths": [".devcontainer/requirements.txt"]
   },
   "platform": "github",
   "prConcurrentLimit": 1,
