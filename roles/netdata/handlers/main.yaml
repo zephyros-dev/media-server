@@ -3,3 +3,9 @@
   ansible.builtin.systemd:
     name: netdata
     state: restarted
+
+- name: Restart smartd
+  become: true
+  ansible.builtin.systemd:
+    name: smartd
+    state: restarted

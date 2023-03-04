@@ -1,42 +1,74 @@
-- name: Configure netdata # noqa: args[module] risky-file-permissions
+- name: Configure netdata
   become: true
-  community.general.ini_file:
-    path: /etc/netdata/netdata.conf
-    section: "{{ item.section }}"
-    option: "{{ item.option }}"
-    value: "{{ item.value }}"
-    state: "{{ item.state }}"
-  loop: "{{ netdata_config }}"
-  notify: Restart Netdata
-
-- name: Check if nvidia-smi is installed
-  tags: nvidia
-  ansible.builtin.stat:
-    path: /usr/bin/nvidia-smi
-  register: nvidia_smi_state
-
-- name: Add nvidia monitoring if nvidia driver is installed
-  tags: nvidia
-  become: true
-  when: nvidia_smi_state.stat.exists
   block:
-    - name: Check if previous configs differ netdata
-      ansible.builtin.copy:
-        remote_src: true
-        mode: "0600"
-        src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d.conf"
-        dest: "{{ netdata_root }}/etc/netdata/python.d.conf.default"
-      register: netdata_default_config_state
-    - name: Copy default python monitor configuration
-      ansible.builtin.copy:
-        remote_src: true
-        mode: "0600"
-        src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d.conf"
-        dest: "{{ netdata_root }}/etc/netdata/python.d.conf"
-      when: netdata_default_config_state.changed
-    - name: Enable nvidia monitoring
-      ansible.builtin.lineinfile:
-        path: "{{ netdata_root }}/etc/netdata/python.d.conf"
-        regexp: "^# nvidia_smi: yes$"
-        line: "nvidia_smi: yes"
+    - name: Configure netdata # noqa: args[module] risky-file-permissions
+      community.general.ini_file:
+        path: /etc/netdata/netdata.conf
+        section: "{{ item.section }}"
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        state: "{{ item.state }}"
+      loop: "{{ netdata_config }}"
       notify: Restart Netdata
+
+    - name: Setup nvidia monitoring
+      tags: nvidia
+      block:
+        - name: Check if nvidia-smi is installed
+          ansible.builtin.stat:
+            path: /usr/bin/nvidia-smi
+          register: nvidia_smi_state
+        - name: Add nvidia monitoring if nvidia driver is installed
+          when: nvidia_smi_state.stat.exists
+          block:
+            - name: Check if previous configs differ netdata
+              ansible.builtin.copy:
+                remote_src: true
+                mode: "0600"
+                src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d.conf"
+                dest: "{{ netdata_root }}/etc/netdata/python.d.conf.default"
+              register: netdata_default_config_state
+            - name: Copy default python monitor configuration
+              ansible.builtin.copy:
+                remote_src: true
+                mode: "0600"
+                src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d.conf"
+                dest: "{{ netdata_root }}/etc/netdata/python.d.conf"
+              when: netdata_default_config_state.changed
+            - name: Enable nvidia monitoring
+              ansible.builtin.lineinfile:
+                path: "{{ netdata_root }}/etc/netdata/python.d.conf"
+                regexp: "^# nvidia_smi: yes$"
+                line: "nvidia_smi: yes"
+              notify: Restart Netdata
+
+    - name: Setup smartd monitoring
+      block:
+        - name: Create smartd log directory
+          ansible.builtin.file:
+            path: /var/log/smartd
+            state: directory
+            mode: "0755"
+        - name: Setup smartd options
+          community.general.ini_file:
+            path: /etc/sysconfig/smartmontools
+            section: null
+            option: smartd_opts
+            no_extra_spaces: true
+            value: '"-A /var/log/smartd/ -i 600 -q never"'
+            mode: "0644"
+          notify: Restart smartd
+        - name: Create logrotate config file
+          ansible.builtin.template:
+            src: smartd.j2
+            dest: /etc/logrotate.d/smartd
+            mode: "0644"
+        - name: Enable smartd monitoring netdata
+          ansible.builtin.copy:
+            dest: "{{ netdata_root }}/etc/netdata/python.d/smartd_log.conf"
+            group: netdata
+            mode: "0600"
+            owner: netdata
+            remote_src: true
+            src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d/smartd_log.conf"
+          notify: Restart Netdata
