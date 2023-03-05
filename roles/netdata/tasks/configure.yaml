@@ -1,4 +1,10 @@
 - name: Configure netdata
+  module_defaults:
+    ansible.builtin.copy:
+      group: netdata
+      mode: "0600"
+      owner: netdata
+      remote_src: true
   become: true
   block:
     - name: Configure netdata # noqa: args[module] risky-file-permissions
@@ -11,6 +17,17 @@
       loop: "{{ netdata_config }}"
       notify: Restart Netdata
 
+    - name: Check if previous configs differ systemd # noqa: args[module] risky-file-permissions
+      ansible.builtin.copy:
+        src: "{{ netdata_root }}/usr/lib/netdata/conf.d/go.d.conf"
+        dest: "{{ netdata_root }}/etc/netdata/go.d.conf.default"
+      register: netdata_default_config_state
+    - name: Copy default go monitor configuration # noqa: args[module] risky-file-permissions
+      ansible.builtin.copy:
+        src: "{{ netdata_root }}/usr/lib/netdata/conf.d/go.d.conf"
+        dest: "{{ netdata_root }}/etc/netdata/go.d.conf"
+      when: netdata_default_config_state.changed
+
     - name: Setup nvidia monitoring
       tags: nvidia
       block:
@@ -21,14 +38,20 @@
         - name: Add nvidia monitoring if nvidia driver is installed
           when: nvidia_smi_state.stat.exists
           block:
-            - name: Enable nvidia monitoring netdata
+            - name: Setup nvidia config # noqa: args[module] risky-file-permissions
               ansible.builtin.copy:
                 dest: "{{ netdata_root }}/etc/netdata/go.d/nvidia_smi.conf"
-                group: netdata
-                mode: "0600"
-                owner: netdata
-                remote_src: true
                 src: "{{ netdata_root }}/usr/lib/netdata/conf.d/go.d/nvidia_smi.conf"
+              notify: Restart Netdata
+            - name: Enable nvidia monitoring
+              ansible.builtin.import_role:
+                name: common
+                tasks_from: yaml_edit.yaml
+              vars:
+                yaml_file_path: "{{ netdata_root }}/etc/netdata/go.d.conf"
+                yaml_edit:
+                  modules:
+                    nvidia_smi: true
               notify: Restart Netdata
 
     - name: Setup smartd monitoring
@@ -52,12 +75,8 @@
             src: smartd.j2
             dest: /etc/logrotate.d/smartd
             mode: "0644"
-        - name: Enable smartd monitoring netdata
+        - name: Enable smartd monitoring netdata # noqa: args[module] risky-file-permissions
           ansible.builtin.copy:
             dest: "{{ netdata_root }}/etc/netdata/python.d/smartd_log.conf"
-            group: netdata
-            mode: "0600"
-            owner: netdata
-            remote_src: true
             src: "{{ netdata_root }}/usr/lib/netdata/conf.d/python.d/smartd_log.conf"
           notify: Restart Netdata
