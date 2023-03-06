@@ -19,8 +19,7 @@
     "fileMatch": ["(^|/)requirements\\.in$"]
   },
   "pip_requirements": {
-    "fileMatch": ["(^|/)requirements\\.in$"],
-    "ignorePaths": [".devcontainer/requirements.txt"]
+    "fileMatch": ["(^|/)requirements\\.in$"]
   },
   "platform": "github",
   "prConcurrentLimit": 1,
@@ -31,7 +30,7 @@
   "regexManagers": [
     {
       "datasourceTemplate": "github-releases",
-      "depNameTemplate": " aquaproj/aqua",
+      "depNameTemplate": "aquaproj/aqua",
       "fileMatch": ["^Dockerfile$"],
       "matchStrings": ["ENV AQUA_VERSION=(?<currentValue>.*?)\\n"]
     }
