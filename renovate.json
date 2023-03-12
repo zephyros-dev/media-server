@@ -32,7 +32,8 @@
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "aquaproj/aqua",
       "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["ENV AQUA_VERSION=(?<currentValue>.*?)\\n"]
+      "matchStrings": ["ENV AQUA_VERSION=(?<currentValue>.*?)\\n"],
+      "versioningTemplate": "semver"
     }
   ],
   "repositories": ["zephyros-dev/media-server"]
