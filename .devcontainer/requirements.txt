@@ -162,7 +162,7 @@ virtualenv==20.21.0
     # via pre-commit
 wcmatch==8.4.1
     # via ansible-lint
-wheel==0.38.4
+wheel==0.40.0
     # via pip-tools
 yamllint==1.29.0
     # via ansible-lint
