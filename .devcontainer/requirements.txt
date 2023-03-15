@@ -103,7 +103,7 @@ packaging==23.0
     #   ansible-lint
     #   black
     #   build
-pathspec==0.11.0
+pathspec==0.11.1
     # via
     #   black
     #   yamllint
