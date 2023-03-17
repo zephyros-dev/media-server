@@ -15,7 +15,7 @@
               REDIS_HOST: localhost
               REDIS_HOST_PASSWORD: "{{ nextcloud_redis_password }}"
               TZ: "{{ global_timezone }}"
-            image: docker.io/nextcloud:stable@sha256:f5118e06411f973fa2ab9d602af0054a9c3c3d8816d85a3298cca2dfcc2b691d
+            image: docker.io/nextcloud:stable@sha256:9d03e29e72a95e12c339e414bd92d074e08f6375654de77aba2048a2c08acfb7
             name: nextcloud-web
             volumes:
               - "{{ nextcloud_volume_web_storage }}:/var/www/html/data:z"
