@@ -57,7 +57,7 @@ commonmark==0.9.1
     # via rich
 cryptography==39.0.2
     # via ansible-core
-dagger-io==0.4.0
+dagger-io==0.4.1
     # via -r requirements.in
 distlib==0.3.6
     # via virtualenv
@@ -73,7 +73,7 @@ graphql-core==3.2.3
     #   gql
 h11==0.14.0
     # via httpcore
-httpcore==0.17.0
+httpcore==0.16.3
     # via httpx
 httpx==0.23.3
     # via dagger-io
