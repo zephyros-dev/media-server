@@ -4,6 +4,8 @@ on:
     branches:
       - main
     paths:
+      - ci/deployment.py
+      - ci/helper_functions.py
       - group_vars/**
       - requirements.yaml
       - roles/**
@@ -44,7 +46,7 @@ jobs:
         run: |
           eval `ssh-agent`
           sops -d ci.sops | ssh-add - &> /dev/null
-          python main.py
+          python ci/deployment.py
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: Setup tmate session

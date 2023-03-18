@@ -12,7 +12,6 @@ async def ci():
         user_dir = "/root"
         workspace = client.host().directory(".")
 
-        secret_sops_env = client.host().env_variable("SOPS_AGE_KEY").secret()
         ci = (
             client.container()
             .build(context=workspace, dockerfile="Dockerfile")
@@ -50,6 +49,7 @@ async def ci():
             .with_exec(["aqua", "install"])
         )
 
+        secret_sops_env = client.host().env_variable("SOPS_AGE_KEY").secret()
         age_key_path = f"{os.environ['HOME']}/.config/sops/age/keys.txt"
         if os.path.exists(age_key_path):
             ci = ci.with_mounted_directory(
