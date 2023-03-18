@@ -1,14 +1,12 @@
-import os
 import sys
 
 import anyio
 import dagger
+from helper_functions import install_aqua, sops_loader
 
 
 async def ci():
-    async with dagger.Connection(
-        dagger.Config(log_output=sys.stderr, execute_timeout=None)
-    ) as client:
+    async with dagger.Connection(dagger.Config(log_output=sys.stderr)) as client:
         user_dir = "/root"
         workspace = client.host().directory(".")
 
@@ -48,13 +46,8 @@ async def ci():
             )
         )
 
-        container_path = await ci.env_variable("PATH")
-
         ci = (
-            ci.with_env_variable(
-                "PATH", f"/root/.local/share/aquaproj-aqua/bin:{container_path}"
-            )
-            .with_mounted_cache(
+            ci.with_mounted_cache(
                 "/root/.cache/pip",
                 cache=client.cache_volume(key="ci-cache-pip"),
                 sharing=dagger.CacheSharingMode.LOCKED,
@@ -70,39 +63,7 @@ async def ci():
             .with_workdir(f"{user_dir}/workspace")
         )
 
-        AQUA_INSTALLER_VERSION = "2.0.2"
-
-        ci = (
-            ci.with_mounted_cache(
-                f"{user_dir}/.local/share/aquaproj-aqua/pkgs",
-                client.cache_volume("aqua-pkgs"),
-            )
-            .with_mounted_cache(
-                f"{user_dir}/.local/share/aquaproj-aqua/registries",
-                client.cache_volume("aqua-registries"),
-            )
-            .with_exec(
-                [
-                    "curl",
-                    "-Lo",
-                    "aqua-installer",
-                    f"https://raw.githubusercontent.com/aquaproj/aqua-installer/v{AQUA_INSTALLER_VERSION}/aqua-installer",  # noqa
-                ]
-            )
-            .with_exec(["chmod", "+x", "aqua-installer"])
-            .with_exec(["./aqua-installer"])
-            .with_exec(["aqua", "install"])
-        )
-
-        secret_sops_env = client.host().env_variable("SOPS_AGE_KEY").secret()
-        age_key_path = f"{os.environ['HOME']}/.config/sops/age/keys.txt"
-        if os.path.exists(age_key_path):
-            ci = ci.with_mounted_directory(
-                f"{user_dir}/.config/sops/age",
-                client.host().directory(os.path.dirname(age_key_path)),
-            )
-        else:
-            ci = ci.with_secret_variable("SOPS_AGE_KEY", secret_sops_env)
+        ci = await install_aqua(client, ci, user_dir)
 
         ci = (
             ci.with_mounted_cache(
@@ -123,6 +84,8 @@ async def ci():
         else:
             for key, value in ansible_config.items():
                 ci = ci.with_env_variable(key, value)
+
+        ci = sops_loader(client, ci, user_dir)
 
         ci = ci.with_exec(["ansible-playbook", "main.yaml"])
 
