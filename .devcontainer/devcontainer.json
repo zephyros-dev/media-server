@@ -9,11 +9,12 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "GitHub.vscode-pull-request-github",
-        "Grafana.vscode-jsonnet",
         "bierner.markdown-mermaid",
+        "charliermarsh.ruff",
         "eamodio.gitlens",
         "esbenp.prettier-vscode",
+        "GitHub.vscode-pull-request-github",
+        "Grafana.vscode-jsonnet",
         "mhutchie.git-graph",
         "ms-azuretools.vscode-docker",
         "njpwerner.autodocstring",
@@ -49,9 +50,7 @@
           "**/tasks/**/*.yaml": "ansible"
         },
         "python.formatting.provider": "black",
-        "python.linting.flake8Args": ["--max-line-length", "88"],
-        "python.linting.flake8Enabled": true,
-        "python.linting.pylintEnabled": false,
+        "python.linting.enabled": false,
         "sops.creationEnabled": true
       }
     }
