@@ -4,6 +4,7 @@ on:
     branches:
       - main
     paths:
+      - secret/*
       - ci/deployment.py
       - ci/helper_functions.py
       - group_vars/**
@@ -30,7 +31,7 @@ jobs:
       - name: Set up WireGuard
         run: |
           sudo apt update && sudo apt install wireguard
-          sops -d wg0.sops.ini | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          sops -d secret/deployment/wg0.sops.ini | sudo tee /etc/wireguard/wg0.conf > /dev/null
           wg-quick up wg0 &> /dev/null
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
@@ -45,7 +46,7 @@ jobs:
         timeout-minutes: 30
         run: |
           eval `ssh-agent`
-          sops -d ci.sops | ssh-add - &> /dev/null
+          sops -d secret/deployment/ssh_key.sops | ssh-add - &> /dev/null
           python ci/deployment.py
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}

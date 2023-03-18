@@ -14,7 +14,52 @@ async def ci():
 
         ci = (
             client.container()
-            .build(context=workspace, dockerfile="Dockerfile")
+            .from_("docker.io/python:3.11-slim")
+            .with_exec(["rm", "-f", "/etc/apt/apt.conf.d/docker-clean"])
+            .with_new_file(
+                path="/etc/apt/apt.conf.d/keep-cache",
+                contents='Binary::apt::APT::Keep-Downloaded-Packages "true";',
+                permissions=644,
+            )
+            .with_mounted_cache(
+                path="/var/cache/apt",
+                cache=client.cache_volume(key="ci-cache-cache-apt"),
+                sharing=dagger.CacheSharingMode.LOCKED,
+            )
+            .with_mounted_cache(
+                path="/var/lib/apt",
+                cache=client.cache_volume(key="ci-cache-lib-apt"),
+                sharing=dagger.CacheSharingMode.LOCKED,
+            )
+            .with_exec(["apt", "update"])
+            .with_exec(
+                [
+                    "apt",
+                    "install",
+                    "-y",
+                    "--no-install-recommends",
+                    "curl",
+                    "openssh-client",
+                    "openssl",
+                    "sshpass",
+                    "tar",
+                    "whois",
+                ]
+            )
+        )
+
+        container_path = await ci.env_variable("PATH")
+
+        ci = (
+            ci.with_env_variable(
+                "PATH", f"/root/.local/share/aquaproj-aqua/bin:{container_path}"
+            )
+            .with_mounted_cache(
+                "/root/.cache/pip",
+                cache=client.cache_volume(key="ci-cache-pip"),
+                sharing=dagger.CacheSharingMode.LOCKED,
+            )
+            .with_exec(["pip", "install", "--no-warn-script-location", "ansible"])
             .with_unix_socket(
                 "/ssh-agent.sock",
                 client.host().unix_socket(
