@@ -12,7 +12,7 @@
 
 - name: Get aqua current version
   ansible.builtin.set_fact:
-    aqua_current_version: "{{ aqua_current_version.stdout | regex_search('\\d+\\.\\d+\\.\\d+') }}"
+    aqua_current_version: "v{{ aqua_current_version.stdout | regex_search('\\d+\\.\\d+\\.\\d+') }}"
   when: aqua_install_state.stat.exists
 
 - name: Install aqua
@@ -20,7 +20,7 @@
   block:
     - name: Download aqua
       ansible.builtin.get_url:
-        url: https://github.com/aquaproj/aqua/releases/download/v{{ ansible_env.AQUA_VERSION }}/aqua_linux_{{ ansible_alternative_architecture }}.tar.gz
+        url: https://github.com/aquaproj/aqua/releases/download/{{ ansible_env.AQUA_VERSION }}/aqua_linux_{{ ansible_alternative_architecture }}.tar.gz
         dest: "{{ ansible_user_dir }}/aqua.tar.gz"
         mode: "0644"
         force: true
