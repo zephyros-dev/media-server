@@ -32,12 +32,6 @@
         include:
           - aqua
 
-    - name: Create aqua bin directory
-      ansible.builtin.file:
-        path: "{{ ansible_user_dir }}/.local/share/aquaproj-aqua/bin"
-        state: directory
-        mode: "0755"
-
     - name: Install aqua
       ansible.builtin.copy:
         remote_src: true
