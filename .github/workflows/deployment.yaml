@@ -24,7 +24,7 @@ jobs:
           submodules: true
       - uses: aquaproj/aqua-installer@v2.0.2
         with:
-          aqua_version: v1.37.0
+          aqua_version: v1.37.1
       - name: Install aqua software
         run: |
           aqua install
