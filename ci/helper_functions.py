@@ -1,7 +1,9 @@
 import os
 
+import dagger
 
-def sops_loader(client, ci, user_dir):
+
+def sops_loader(client: dagger.Client, ci: dagger.Container, user_dir):
     secret_sops_env = client.host().env_variable("SOPS_AGE_KEY").secret()
     age_key_path = f"{os.environ['HOME']}/.config/sops/age/keys.txt"
     if os.path.exists(age_key_path):
@@ -13,7 +15,7 @@ def sops_loader(client, ci, user_dir):
         return ci.with_secret_variable("SOPS_AGE_KEY", secret_sops_env)
 
 
-async def install_aqua(client, ci, user_dir):
+async def install_aqua(client: dagger.Client, ci: dagger.Container, user_dir):
     AQUA_INSTALLER_VERSION = "2.0.2"
     container_path = await ci.env_variable("PATH")
     return (
