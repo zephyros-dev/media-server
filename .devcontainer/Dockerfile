@@ -34,5 +34,5 @@ RUN \
     --requirement requirements.txt \
     --user
 
-ENV AQUA_VERSION=v1.37.2
+ENV AQUA_VERSION=v1.38.0
 ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:$PATH
