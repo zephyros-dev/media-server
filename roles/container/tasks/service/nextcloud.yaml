@@ -31,7 +31,7 @@
             command: redis-server --requirepass {{ nextcloud_redis_password }}
             env:
               TZ: "{{ global_timezone }}"
-            image: docker.io/redis:7-alpine@sha256:bef17825e8f1224b2956d84b7110cad7eb23601df441d2912c1b283d821f2045
+            image: docker.io/redis:7-alpine@sha256:c2473bf9553fcd0ca17d495ac4bdc9bb52ec475b86fe3fc10ac29715fb9bac90
             name: nextcloud-redis
 
     - name: Clean current database
