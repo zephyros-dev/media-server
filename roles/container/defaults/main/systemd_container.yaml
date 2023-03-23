@@ -67,8 +67,10 @@ filebrowser:
   caddy_proxy_port: "80"
 immich:
   folder:
-    - "{{ immich_volume_upload }}"
     - "{{ immich_volume_database }}"
+    - "{{ immich_volume_ml_cache }}"
+    - "{{ immich_volume_typesense }}"
+    - "{{ immich_volume_upload }}"
   caddy_proxy_port: "8080"
   caddy_proxy_custom: true
 jellyfin:
