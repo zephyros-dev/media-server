@@ -61,7 +61,7 @@ dagger-io==0.4.2
     # via -r requirements.in
 distlib==0.3.6
     # via virtualenv
-filelock==3.10.2
+filelock==3.10.3
     # via
     #   ansible-lint
     #   virtualenv
