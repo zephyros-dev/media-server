@@ -55,7 +55,7 @@ colorama==0.4.6
     # via typer
 commonmark==0.9.1
     # via rich
-cryptography==39.0.2
+cryptography==40.0.0
     # via ansible-core
 dagger-io==0.4.2
     # via -r requirements.in
