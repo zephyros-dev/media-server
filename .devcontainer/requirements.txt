@@ -115,7 +115,7 @@ platformdirs==3.1.1
     #   black
     #   dagger-io
     #   virtualenv
-pre-commit==3.2.0
+pre-commit==3.2.1
     # via -r requirements.in
 pycparser==2.21
     # via cffi
