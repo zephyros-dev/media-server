@@ -15,7 +15,7 @@
   "packageRules": [
     {
       "groupName": "immich",
-      "matchPackagePrefixes": ["docker.io/altran1502/immich"]
+      "matchPackagePrefixes": ["ghcr.io/immich-app"]
     }
   ],
   "pip-compile": {
