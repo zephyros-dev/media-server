@@ -22,7 +22,7 @@
         src: "{{ netdata_root }}/usr/lib/netdata/conf.d/go.d.conf"
         dest: "{{ netdata_root }}/etc/netdata/go.d.conf.default"
       register: netdata_default_config_state
-    - name: Copy default go monitor configuration # noqa: args[module] risky-file-permissions
+    - name: Copy default go monitor configuration # noqa: args[module] risky-file-permissions no-handler
       ansible.builtin.copy:
         src: "{{ netdata_root }}/usr/lib/netdata/conf.d/go.d.conf"
         dest: "{{ netdata_root }}/etc/netdata/go.d.conf"

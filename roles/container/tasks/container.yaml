@@ -104,7 +104,7 @@
                 pod_prefix: ""
                 separator: ""
             # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
-            - name: Restart if config files are changed {{ container_loop_var.key }}
+            - name: Restart if config files are changed {{ container_loop_var.key }} # noqa: no-handler
               ansible.builtin.systemd:
                 state: restarted
               when: restart_systemd.changed

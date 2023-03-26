@@ -41,14 +41,14 @@
             mode: "0600"
           register: timer_state
 
-        - name: Restart systemd timer if changed {{ systemd_timer_name }}
+        - name: Restart systemd timer if changed {{ systemd_timer_name }} # noqa: no-handler
           ansible.builtin.set_fact:
             final_systemd_timer_state: restarted
           when:
             - timer_state.changed
             - systemd_timer_state != "stopped"
 
-        - name: Set systemd timer state {{ systemd_timer_name }}
+        - name: Set systemd timer state {{ systemd_timer_name }} # noqa: no-handler
           ansible.builtin.set_fact:
             final_systemd_timer_state: "{{ systemd_timer_state }}"
           when: not timer_state.changed
