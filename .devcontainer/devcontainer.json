@@ -70,7 +70,8 @@
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
     "source=aqua-bin,target=/home/vscode/.local/share/aquaproj-aqua/bin,type=volume,chown=true",
     "source=aqua-pkgs,target=/home/vscode/.local/share/aquaproj-aqua/pkgs,type=volume,chown=true",
-    "source=aqua-registries,target=/home/vscode/.local/share/aquaproj-aqua/registries,type=volume,chown=true"
+    "source=aqua-registries,target=/home/vscode/.local/share/aquaproj-aqua/registries,type=volume,chown=true",
+    "source=vscode-server,target=/home/vscode/.vscode-server,type=volume,chown=true"
   ],
   "name": "Infra",
   "onCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags onCreateCommand",
