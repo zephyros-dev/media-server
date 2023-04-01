@@ -56,5 +56,14 @@
         regexp: ^#no-cgroups = false
         line: no-cgroups = true
     - name: Setup nvidia limit removal script
-      ansible.builtin.script:
-        cmd: submodules/nvidia-patch/patch.sh
+      block:
+        - name: Install nvidia limit removal script
+          ansible.builtin.script:
+            cmd: submodules/nvidia-patch/patch.sh
+      rescue:
+        - name: Reboot to apply nvidia driver
+          ansible.builtin.reboot:
+            reboot_timeout: 600
+        - name: Reinstall nvidia limit removal script
+          ansible.builtin.script:
+            cmd: submodules/nvidia-patch/patch.sh
