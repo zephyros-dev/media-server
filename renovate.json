@@ -35,7 +35,13 @@
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "aquaproj/aqua",
       "fileMatch": ["Dockerfile"],
-      "matchStrings": ["ENV AQUA_VERSION=(?<currentValue>.*?)\\n"]
+      "matchStrings": ["ENV AQUA_VERSION=(?<currentValue>.*?)\n"]
+    },
+    {
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "trapexit/mergerfs",
+      "fileMatch": ["mergerfs.yaml"],
+      "matchStrings": ["mergerfs_version: \"(?<currentValue>.*?)\"\n"]
     }
   ],
   "repositories": ["zephyros-dev/media-server"]
