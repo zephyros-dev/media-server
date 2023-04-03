@@ -1,4 +1,4 @@
-mergerfs_version: "2.35.0"
+mergerfs_version: "2.35.1"
 mergerfs_options:
   - allow_other
   - category.create=mfs
