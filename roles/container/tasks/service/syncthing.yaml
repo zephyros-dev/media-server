@@ -4,7 +4,7 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
-    image: docker.io/syncthing/syncthing:latest@sha256:8eb65bcdc7fe342febe18c893527c5bd8534079bffe174f28f1dad8c207cad9a
+    image: docker.io/syncthing/syncthing:latest@sha256:5dbe8bcc7952f3638f03bd16697243698618cd20ecdee52c5e79f374e2fe9b8c
     name: syncthing
     network_mode: host
     volumes:
