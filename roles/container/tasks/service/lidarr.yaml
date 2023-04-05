@@ -4,7 +4,7 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
-    image: lscr.io/linuxserver/lidarr:latest@sha256:30ce06578f6c7fe4b277412d1976cc4c71bcc12750bc7069a7987a9b1c85c534
+    image: lscr.io/linuxserver/lidarr:latest@sha256:e38ffe30e600270da6c74e03b2d2aeaa966b04f6ecf42f264f5e4256e632e3d8
     name: lidarr-web
     volumes:
       - "{{ global_media }}:/home"
