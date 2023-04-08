@@ -107,7 +107,7 @@ pathspec==0.11.0
     # via
     #   black
     #   yamllint
-pip-tools==6.12.3
+pip-tools==6.13.0
     # via -r requirements.in
 platformdirs==3.2.0
     # via
