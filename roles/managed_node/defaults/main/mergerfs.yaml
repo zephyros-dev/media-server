@@ -1,10 +1,5 @@
 mergerfs_version: "2.35.1"
 mergerfs_options:
-  - allow_other
+  - cache.files=off
   - category.create=mfs
-  - defaults
-  - dropcacheonclose=true
   - fsname=mergerfs
-  - moveonenospc=true
-  - nonempty
-  - use_ino,cache.files=off
