@@ -55,7 +55,7 @@
           POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
           POSTGRES_USER: postgres
           TZ: "{{ global_timezone }}"
-        image: docker.io/postgres:14-alpine@sha256:728efc6ff28e42b2201aaec8f1834e414d3b7fb611bbeb1c57e82527ec8b2933
+        image: docker.io/postgres:14-alpine@sha256:446abaf8831c54f57212c0ae52f5df84e69eeb2767e2376d07bed9c9742b1243
         name: nextcloud-db
         volumes:
           - "{{ nextcloud_volume_db_data }}:/var/lib/postgresql/data:U,z"
