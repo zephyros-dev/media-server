@@ -35,4 +35,4 @@ RUN \
     --user
 
 ENV AQUA_VERSION=v2.2.2
-ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:$PATH
+ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:$PATH

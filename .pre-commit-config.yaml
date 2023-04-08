@@ -17,3 +17,7 @@ repos:
     rev: v6.14.4
     hooks:
       - id: ansible-lint
+  - repo: https://github.com/renovatebot/pre-commit-hooks
+    rev: 35.38.0
+    hooks:
+      - id: renovate-config-validator

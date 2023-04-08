@@ -55,3 +55,26 @@
   changed_when: false
   ansible.builtin.command:
     cmd: aqua install --all
+
+- name: Install nodejs software
+  block:
+    - name: Install npm
+      changed_when: false
+      ansible.builtin.shell:
+        cmd: |
+          source /usr/local/share/nvm/nvm.sh
+          nvm install
+        executable: /bin/bash
+    - name: Copy package.json to global
+      ansible.builtin.copy:
+        src: "./{{ item }}"
+        dest: "{{ ansible_user_dir }}/{{ item }}"
+        mode: "0644"
+      loop:
+        - package.json
+        - package-lock.json
+    - name: Install global npm packages
+      changed_when: false
+      ansible.builtin.command:
+        chdir: "{{ ansible_user_dir }}"
+        cmd: npm install
