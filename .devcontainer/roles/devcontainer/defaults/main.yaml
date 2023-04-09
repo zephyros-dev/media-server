@@ -3,5 +3,6 @@ gitignore_list:
   - dotenv
   - intellij+all
   - macOS
+  - node
   - python
   - VisualStudioCode
