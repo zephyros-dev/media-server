@@ -1,6 +1,9 @@
 exclude_paths:
-  - submodules
+  - .git
   - .github
+  - ci
+  - secret
+  - submodules
 skip_list:
   - command-instead-of-shell
   - meta-no-info
