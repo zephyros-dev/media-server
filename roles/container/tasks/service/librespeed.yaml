@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: lscr.io/linuxserver/librespeed:latest@sha256:d707289e6fcde4cf8fef32b9822f1392be12122a37e5621c4d61bd96180ef509
+    image: lscr.io/linuxserver/librespeed:latest@sha256:7fda42a92b3d23286a3e711fdffe9326039aab82979c47e544435800d01a4dd1
     name: librespeed-web
     volumes:
       - "{{ librespeed_web_config }}:/config:U,z"
