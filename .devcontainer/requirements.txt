@@ -23,7 +23,7 @@ attrs==22.2.0
     #   jsonschema
 backoff==2.2.1
     # via gql
-beartype==0.13.0
+beartype==0.13.1
     # via dagger-io
 black==23.3.0
     # via
