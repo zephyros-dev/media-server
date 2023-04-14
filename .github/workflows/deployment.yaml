@@ -4,12 +4,12 @@ on:
     branches:
       - main
     paths:
-      - secret/*
-      - ci/deployment.py
-      - ci/helper_functions.py
+      - .github/workflows/deployment.yaml
+      - ci/**
       - group_vars/**
       - requirements.yaml
       - roles/**
+      - secret/*
       - submodules/**
 jobs:
   deploy:
