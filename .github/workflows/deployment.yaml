@@ -49,6 +49,7 @@ jobs:
           sops -d secret/deployment/ssh_key.sops | ssh-add - &> /dev/null
           python ci/deployment.py
         env:
+          _EXPERIMENTAL_DAGGER_CACHE_CONFIG: type=gha;mode=max
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: Setup tmate session
         if: env.DEBUG_MODE == 'true' && failure()
