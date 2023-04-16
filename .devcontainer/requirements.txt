@@ -16,7 +16,7 @@ anyio==3.6.2
     # via
     #   dagger-io
     #   httpcore
-attrs==22.2.0
+attrs==23.1.0
     # via
     #   cattrs
     #   dagger-io
