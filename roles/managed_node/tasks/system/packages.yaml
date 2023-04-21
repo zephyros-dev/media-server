@@ -109,3 +109,21 @@
     state: latest
   tags:
     - fd
+
+- name: Setup low power mode
+  become: true
+  block:
+    - name: Install power-profiles-daemon
+      ansible.builtin.dnf:
+        name: power-profiles-daemon
+        state: latest
+    - name: Enable power-profiles-daemon
+      ansible.builtin.systemd:
+        name: power-profiles-daemon
+        daemon_reload: true
+        enabled: true
+        state: started
+    - name: Enable low power mode
+      changed_when: false
+      ansible.builtin.command:
+        cmd: powerprofilesctl set power-saver
