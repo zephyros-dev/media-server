@@ -1,6 +1,5 @@
 - name: Harden ssh
   tags: ssh
-  become: true
   ansible.builtin.import_role:
     name: devsec.hardening.ssh_hardening
   vars:
