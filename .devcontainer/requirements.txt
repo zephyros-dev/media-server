@@ -168,7 +168,7 @@ wheel==0.40.0
     # via pip-tools
 yamllint==1.31.0
     # via ansible-lint
-yarl==1.9.1
+yarl==1.9.2
     # via gql
 
 # The following packages are considered to be unsafe in a requirements file:
