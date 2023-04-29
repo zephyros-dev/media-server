@@ -57,7 +57,7 @@ commonmark==0.9.1
     # via rich
 cryptography==40.0.2
     # via ansible-core
-dagger-io==0.5.1
+dagger-io==0.5.2
     # via -r requirements.in
 distlib==0.3.6
     # via virtualenv
@@ -157,8 +157,10 @@ transmission-rpc==4.2.0
 typer[all]==0.7.0
     # via dagger-io
 typing-extensions==4.5.0
-    # via transmission-rpc
-urllib3==2.0.0
+    # via
+    #   dagger-io
+    #   transmission-rpc
+urllib3==1.26.15
     # via requests
 virtualenv==20.23.0
     # via pre-commit
