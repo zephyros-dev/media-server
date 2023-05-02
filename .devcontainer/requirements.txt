@@ -141,7 +141,7 @@ rich==12.6.0
     #   typer
 ruamel-yaml==0.17.22
     # via ansible-lint
-ruff==0.0.263
+ruff==0.0.264
     # via -r requirements.in
 shellingham==1.5.0.post1
     # via typer
@@ -160,6 +160,7 @@ typing-extensions==4.5.0
     # via
     #   dagger-io
     #   transmission-rpc
+    #   typer
 urllib3==1.26.15
     # via requests
 virtualenv==20.23.0
