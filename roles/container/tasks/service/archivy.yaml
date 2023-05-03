@@ -16,7 +16,7 @@
     env:
       ES_JAVA_OPTS: "-Xms2g -Xmx2g"
       discovery.type: single-node
-    image: docker.io/elasticsearch:7.17.9@sha256:e04ffd9739aa018693acb752f13c5791d15185a8c48e18a0ebd7055d1a203291
+    image: docker.io/elasticsearch:7.17.10@sha256:43b9e781ebb2bd731ea3966bb816edce947e34965676046b3c0f8c17318cee72
     name: archivy-elasticsearch
     user: 1000
     volumes:
