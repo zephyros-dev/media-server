@@ -1,0 +1,8 @@
+- name: Trilium
+  containers.podman.podman_container:
+    env:
+      TZ: "{{ global_timezone }}"
+    image: ghcr.io/zadam/trilium:0.59.4
+    name: trilium-web
+    volumes:
+      - "{{ trilium_volume_data }}://home/node/trilium-data:U,z"
