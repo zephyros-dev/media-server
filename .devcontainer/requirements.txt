@@ -139,7 +139,7 @@ rich==12.6.0
     #   ansible-lint
     #   dagger-io
     #   typer
-ruamel-yaml==0.17.23
+ruamel-yaml==0.17.24
     # via ansible-lint
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
