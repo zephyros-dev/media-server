@@ -139,7 +139,7 @@ rich==12.6.0
     #   ansible-lint
     #   dagger-io
     #   typer
-ruamel-yaml==0.17.22
+ruamel-yaml==0.17.23
     # via ansible-lint
 ruff==0.0.264
     # via -r requirements.in
