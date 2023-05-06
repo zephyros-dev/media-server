@@ -19,6 +19,7 @@ container:
   scrutiny: "{{ container_default | combine(scrutiny) }}"
   syncthing: "{{ container_default | combine(syncthing) }}"
   transmission: "{{ container_default | combine(transmission) }}"
+  trilium: "{{ container_default | combine(trilium) }}"
   wol: "{{ container_default | combine(wol) }}"
 
 archivy:
@@ -155,6 +156,11 @@ transmission:
   pod: false
   caddy_proxy_port: "9091"
   dashy_statusCheckAcceptCodes: "401"
+trilium:
+  folder:
+    - "{{ trilium_volume_data }}"
+  caddy_sso: true
+  caddy_proxy_port: "8080"
 wol:
   folder:
     - "{{ wol_volume }}"
