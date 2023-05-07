@@ -65,7 +65,7 @@ filelock==3.12.0
     # via
     #   ansible-lint
     #   virtualenv
-gql==3.4.0
+gql==3.4.1
     # via dagger-io
 graphql-core==3.2.3
     # via
