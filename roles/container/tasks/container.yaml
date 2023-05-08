@@ -109,12 +109,12 @@
                 state: restarted
               when: restart_systemd.changed
             - name: Enable systemd {{ container_loop_var.key }}
+              when: not container_loop_var.value.timer
               ansible.builtin.systemd:
                 enabled: true
                 state: "{{ container_loop_var.value.state }}"
               register: service
               until: service.failed == false
-              when: container_loop_var.value.timer == ''
             - name: Setup systemd timer {{ container_loop_var.key }}
               when: container_loop_var.value.timer
               block:

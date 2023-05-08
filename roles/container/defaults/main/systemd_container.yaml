@@ -185,4 +185,4 @@ container_default:
   pod: true
   state: started
   templates: []
-  timer:
+  timer: false
