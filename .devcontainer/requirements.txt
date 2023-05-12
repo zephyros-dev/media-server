@@ -55,7 +55,7 @@ colorama==0.4.6
     # via typer
 cryptography==40.0.2
     # via ansible-core
-dagger-io==0.5.2
+dagger-io==0.5.3
     # via -r requirements.in
 distlib==0.3.6
     # via virtualenv
