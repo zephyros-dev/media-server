@@ -111,7 +111,7 @@ pathspec==0.11.1
     #   yamllint
 pip-tools==6.13.0
     # via -r requirements.in
-platformdirs==3.5.0
+platformdirs==3.5.1
     # via
     #   black
     #   dagger-io
