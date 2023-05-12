@@ -97,7 +97,7 @@ multidict==6.0.4
     # via yarl
 mypy-extensions==1.0.0
     # via black
-nodeenv==1.7.0
+nodeenv==1.8.0
     # via pre-commit
 packaging==23.1
     # via
