@@ -159,7 +159,6 @@ transmission:
 trilium:
   folder:
     - "{{ trilium_volume_data }}"
-  caddy_sso: true
   caddy_proxy_port: "8080"
 wol:
   folder:
