@@ -145,7 +145,7 @@ ruamel-yaml==0.17.26
     # via ansible-lint
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
-ruff==0.0.265
+ruff==0.0.267
     # via -r requirements.in
 shellingham==1.5.0.post1
     # via typer
