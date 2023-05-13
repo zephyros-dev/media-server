@@ -16,6 +16,7 @@ def sops_loader(client: dagger.Client, ci: dagger.Container, user_dir):
 
 
 async def install_aqua(client: dagger.Client, ci: dagger.Container, user_dir):
+    # TODO: specify aqua version
     AQUA_INSTALLER_VERSION = "2.0.2"
     container_path = await ci.env_variable("PATH")
     return (

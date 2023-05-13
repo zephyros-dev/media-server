@@ -2,7 +2,7 @@ import sys
 
 import anyio
 import dagger
-from helper_functions import install_aqua, sops_loader
+from helper import install_aqua, sops_loader
 
 
 async def ci():
@@ -12,7 +12,7 @@ async def ci():
 
         ci = (
             client.container()
-            .from_("docker.io/python:3.11-slim")
+            .build(context=workspace, dockerfile="ci/Dockerfile")
             .with_exec(["rm", "-f", "/etc/apt/apt.conf.d/docker-clean"])
             .with_new_file(
                 path="/etc/apt/apt.conf.d/keep-cache",
