@@ -1,4 +1,5 @@
 import os
+import platform
 
 import dagger
 
@@ -16,8 +17,12 @@ def sops_loader(client: dagger.Client, ci: dagger.Container, user_dir):
 
 
 async def install_aqua(client: dagger.Client, ci: dagger.Container, user_dir):
-    # TODO: specify aqua version
-    AQUA_INSTALLER_VERSION = "2.0.2"
+    AQUA_VERSION = "v2.6.0"
+    if platform.machine() == "x86_64":
+        MACHINE = "amd64"
+    elif platform.machine() == "aarch64":
+        MACHINE = "arm64"
+    print(MACHINE)
     container_path = await ci.env_variable("PATH")
     return (
         ci.with_env_variable(
@@ -35,11 +40,12 @@ async def install_aqua(client: dagger.Client, ci: dagger.Container, user_dir):
             [
                 "curl",
                 "-Lo",
-                "aqua-installer",
-                f"https://raw.githubusercontent.com/aquaproj/aqua-installer/v{AQUA_INSTALLER_VERSION}/aqua-installer",  # noqa
+                "aqua.tar.gz",
+                f"https://github.com/aquaproj/aqua/releases/download/{AQUA_VERSION}/aqua_linux_{MACHINE}.tar.gz",  # noqa
             ]
         )
-        .with_exec(["chmod", "+x", "aqua-installer"])
-        .with_exec(["./aqua-installer"])
+        .with_exec(["tar", "-xzf", "aqua.tar.gz"])
+        .with_exec(["mkdir", "-p", "/root/.local/share/aquaproj-aqua/bin"])
+        .with_exec(["mv", "aqua", "/root/.local/share/aquaproj-aqua/bin/aqua"])
         .with_exec(["aqua", "install"])
     )
