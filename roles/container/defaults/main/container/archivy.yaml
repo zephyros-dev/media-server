@@ -1,8 +1,8 @@
-archivy_data: "{{ global_volume_path }}/archivy"
-archivy_elasticsearch: "{{ archivy_data }}/elasticsearch"
-archivy_web: "{{ archivy_data }}/web"
-archivy_web_data: "{{ archivy_web }}/data"
-archivy_web_config: "{{ archivy_web }}/config"
-archivy_elasticsearch_data: "{{ archivy_elasticsearch }}/data"
+archivy_volume_elasticsearch_data: "{{ archivy_volume_elasticsearch }}/data"
+archivy_volume_elasticsearch: "{{ archivy_volume }}/elasticsearch"
+archivy_volume_web_config: "{{ archivy_volume_web }}/config"
+archivy_volume_web_data: "{{ archivy_volume_web }}/data"
+archivy_volume_web: "{{ archivy_volume }}/web"
+archivy_volume: "{{ global_volume_path }}/archivy"
 # archivy_admin_username:
 # archivy_admin_password:

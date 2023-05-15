@@ -8,8 +8,8 @@
     image: docker.io/uzayg/archivy:latest@sha256:ac5ff2cc1417fe7cadb9762b7de5ff3c29035723533af6de5feeaf70b263dc92
     name: archivy-web
     volumes:
-      - "{{ archivy_web_data }}:/archivy/data:U,z"
-      - "{{ archivy_web_config }}:/archivy/.local/share/archivy:U,z"
+      - "{{ archivy_volume_web_data }}:/archivy/data:U,z"
+      - "{{ archivy_volume_web_config }}:/archivy/.local/share/archivy:U,z"
 
 - name: Archivy elastic search
   containers.podman.podman_container:
@@ -20,7 +20,7 @@
     name: archivy-elasticsearch
     user: 1000
     volumes:
-      - "{{ archivy_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
+      - "{{ archivy_volume_elasticsearch_data }}:/usr/share/elasticsearch/data:U,z"
 
 - name: Create archivy admin user
   ansible.builtin.command:

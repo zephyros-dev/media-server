@@ -24,13 +24,13 @@ container:
 
 archivy:
   folder:
-    - "{{ archivy_web_data }}"
-    - "{{ archivy_web_config }}"
-    - "{{ archivy_elasticsearch_data }}"
+    - "{{ archivy_volume_web_data }}"
+    - "{{ archivy_volume_web_config }}"
+    - "{{ archivy_volume_elasticsearch_data }}"
   caddy_proxy_port: "5000"
   dashy_icon: /static/archivy.svg
   templates:
-    - dest: "{{ archivy_web_config }}/config.yml"
+    - dest: "{{ archivy_volume_web_config }}/config.yml"
       src: archivy/config.yml
 bazarr:
   folder:
