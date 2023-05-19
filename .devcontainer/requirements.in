@@ -1,7 +1,7 @@
 ansible-lint==6.16.1
 ansible==7.5.0
 black==23.3.0
-dagger-io==0.5.3
+dagger-io==0.5.4
 pip-tools==6.13.0
 pre-commit==3.3.2
 ruff==0.0.267
