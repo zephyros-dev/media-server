@@ -3,7 +3,7 @@
     chdir: "{{ global_disks_storage_path }}/{{ item }}/{{ global_storage_video_path }}"
     cmd: fd --type empty
   changed_when: false
-  register: remove_output
+  register: pymedusa_remove_output
 - name: Remove empty folder in {{ item }}
   ansible.builtin.command:
     chdir: "{{ global_disks_storage_path }}/{{ item }}/{{ global_storage_video_path }}"
@@ -12,4 +12,4 @@
 # TODO: When this is implemented, just need to add until to one command https://github.com/sharkdp/fd/pull/1068
 - name: Rerun the tasks until all the empty folders are deleted
   ansible.builtin.include_tasks: rmdir.yaml
-  when: remove_output.stdout_lines != []
+  when: pymedusa_remove_output.stdout_lines != []

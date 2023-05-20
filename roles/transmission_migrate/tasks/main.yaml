@@ -7,14 +7,14 @@
       ansible.builtin.script:
         cmd: "{{ transmission_migrate_cmd }} --dry-run"
       when: transmission_migrate_dry_run
-      register: migrate_output
+      register: transmission_migrate_output
 
     - name: Real run
       ansible.builtin.script:
         cmd: "{{ transmission_migrate_cmd }}"
       when: not transmission_migrate_dry_run
-      register: migrate_output
+      register: transmission_migrate_output
 
 - name: Output of stdout
   ansible.builtin.debug:
-    var: migrate_output.stdout_lines
+    var: transmission_migrate_output.stdout_lines

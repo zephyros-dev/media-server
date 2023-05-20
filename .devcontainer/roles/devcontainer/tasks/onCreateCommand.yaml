@@ -20,7 +20,7 @@
   block:
     - name: Download aqua
       ansible.builtin.get_url:
-        url: https://github.com/aquaproj/aqua/releases/download/{{ ansible_env.AQUA_VERSION }}/aqua_linux_{{ ansible_alternative_architecture }}.tar.gz
+        url: https://github.com/aquaproj/aqua/releases/download/{{ ansible_env.AQUA_VERSION }}/aqua_linux_{{ custom_fact_ansible_alternative_architecture }}.tar.gz
         dest: "{{ ansible_user_dir }}/aqua.tar.gz"
         mode: "0644"
         force: true

@@ -1,26 +1,26 @@
-- name: Setup the yaml file if not exists
+- name: Setup the yaml file if not exists {{ common_yaml_file_path }}
   ansible.builtin.copy:
-    dest: "{{ yaml_file_path }}"
+    dest: "{{ common_yaml_file_path }}"
     content: |
       ---
     force: false
     mode: "0644"
 
-- name: Load yaml file
+- name: Load yaml file {{ common_yaml_file_path }}
   ansible.builtin.slurp:
-    src: "{{ yaml_file_path }}"
-  register: yaml_file
+    src: "{{ common_yaml_file_path }}"
+  register: common_yaml_file
 
-- name: Convert yaml
+- name: Convert yaml {{ common_yaml_file_path }}
   ansible.builtin.set_fact:
-    yaml_file: "{{ yaml_file.content | b64decode | from_yaml_all | list }}"
+    common_yaml_file: "{{ common_yaml_file.content | b64decode | from_yaml_all | list }}"
 
-- name: Edit yaml
+- name: Edit yaml {{ common_yaml_file_path }}
   ansible.builtin.set_fact:
-    yaml_file: "{{ yaml_file | default([]) | combine(yaml_edit, recursive=true, list_merge='append_rp') }}"
+    common_yaml_file: "{{ common_yaml_file | default([]) | combine(common_yaml_edit, recursive=true, list_merge='append_rp') }}"
 
-- name: Write yaml to file
+- name: Write yaml to file {{ common_yaml_file_path }}
   ansible.builtin.copy:
-    content: "{{ yaml_file | to_nice_yaml(sort_keys=false, indent=2, width=1337) }}" # noqa: jinja[invalid]
-    dest: "{{ yaml_file_path }}"
+    content: "{{ common_yaml_file | to_nice_yaml(sort_keys=false, indent=2, width=1337) }}" # noqa: jinja[invalid]
+    dest: "{{ common_yaml_file_path }}"
     mode: "0644"

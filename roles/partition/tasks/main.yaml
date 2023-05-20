@@ -1,8 +1,8 @@
-- name: Create partition for drives
+- name: Create partition for drives # noqa: var-naming[no-role-prefix]
   ansible.builtin.include_tasks:
     file: partition.yaml
     apply:
       become: true
   loop: "{{ disks | dict2items }}"
   vars:
-    patition_loop_var: "{{ item }}"
+    partition_loop_var: "{{ item }}"

@@ -1,26 +1,26 @@
-- name: Create json file if not exists
+- name: Create json file if not exists {{ common_json_file_path }}
   ansible.builtin.copy:
-    dest: "{{ json_file_path }}"
+    dest: "{{ common_json_file_path }}"
     content: |
       {}
     force: false
     mode: "0644"
 
-- name: Load json file
+- name: Load json file {{ common_json_file_path }}
   ansible.builtin.slurp:
-    src: "{{ json_file_path }}"
-  register: json_file
+    src: "{{ common_json_file_path }}"
+  register: common_json_file
 
-- name: Convert json
+- name: Convert json {{ common_json_file_path }}
   ansible.builtin.set_fact:
-    json_file: "{{ json_file.content | b64decode | from_json }}"
+    common_json_file: "{{ common_json_file.content | b64decode | from_json }}"
 
-- name: Edit json
+- name: Edit json {{ common_json_file_path }}
   ansible.builtin.set_fact:
-    json_file: "{{ json_file | default([]) | combine(json_edit, recursive=True) }}"
+    common_json_file: "{{ common_json_file | default([]) | combine(common_json_edit, recursive=True) }}"
 
-- name: Write json to file
+- name: Write json to file {{ common_json_file_path }}
   ansible.builtin.copy:
-    content: "{{ json_file | to_nice_json }}"
-    dest: "{{ json_file_path }}"
+    content: "{{ common_json_file | to_nice_json }}"
+    dest: "{{ common_json_file_path }}"
     mode: "0644"

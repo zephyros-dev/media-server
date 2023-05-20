@@ -34,22 +34,22 @@
         - name: Check if nvidia-smi is installed
           ansible.builtin.stat:
             path: /usr/bin/nvidia-smi
-          register: nvidia_smi_state
+          register: netdata_nvidia_smi_state
         - name: Add nvidia monitoring if nvidia driver is installed
-          when: nvidia_smi_state.stat.exists
+          when: netdata_nvidia_smi_state.stat.exists
           block:
             - name: Setup nvidia config # noqa: args[module] risky-file-permissions
               ansible.builtin.copy:
                 dest: "{{ netdata_root }}/etc/netdata/go.d/nvidia_smi.conf"
                 src: "{{ netdata_root }}/usr/lib/netdata/conf.d/go.d/nvidia_smi.conf"
               notify: Restart Netdata
-            - name: Enable nvidia monitoring
+            - name: Enable nvidia monitoring # noqa: var-naming[no-role-prefix]
               ansible.builtin.import_role:
                 name: common
                 tasks_from: yaml_edit.yaml
               vars:
-                yaml_file_path: "{{ netdata_root }}/etc/netdata/go.d.conf"
-                yaml_edit:
+                common_yaml_file_path: "{{ netdata_root }}/etc/netdata/go.d.conf"
+                common_yaml_edit:
                   modules:
                     nvidia_smi: true
               notify: Restart Netdata

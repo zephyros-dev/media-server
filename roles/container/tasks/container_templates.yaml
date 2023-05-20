@@ -7,17 +7,17 @@
     - name: Check if config file exists
       ansible.builtin.stat:
         path: "{{ container_templates_loop_var.dest }}"
-      register: config_file_stat
+      register: container_config_file_stat
     - name: Create config files {{ container_loop_var.key }}
-      when: not config_file_stat.stat.exists
+      when: not container_config_file_stat.stat.exists
       ansible.builtin.template:
         mode: "0600"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
-      register: restart_systemd
+      register: container_restart_systemd
     - name: Templates config files {{ container_loop_var.key }}
-      when: config_file_stat.stat.exists
+      when: container_config_file_stat.stat.exists
       become: true
       ansible.builtin.template:
         mode: "0600"
-      register: restart_systemd
+      register: container_restart_systemd

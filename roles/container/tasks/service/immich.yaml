@@ -45,7 +45,7 @@
       NODE_ENV: production
       REDIS_HOSTNAME: localhost
       TYPESENSE_API_KEY: "{{ immich_typesense_api_key }}"
-      TYPESENSE_HOST: localhost
+      TYPESENSE_URL: "ha://{{ immich_typesense_url | to_json | b64encode }}"
       TZ: "{{ global_timezone }}"
 
 - name: Immich Microservices

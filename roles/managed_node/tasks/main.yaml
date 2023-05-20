@@ -10,7 +10,7 @@
   ansible.builtin.import_tasks: system/packages.yaml
   tags: packages
 
-- name: Setup systemd
+- name: Setup systemd # noqa: var-naming[no-role-prefix]
   ansible.builtin.include_tasks:
     file: systemd.yaml
     apply:
@@ -19,10 +19,10 @@
   loop_control:
     loop_var: systemd_loop_var
   vars:
-    systemd_name: "{{ systemd_loop_var.name }}"
-    systemd_become: "{{ systemd_loop_var.become | default(false) }}"
-    systemd_state: "{{ systemd_loop_var.state | default('started') }}"
-    systemd_schedule: "{{ systemd_loop_var.schedule | default('') }}"
+    managed_node_systemd_name: "{{ systemd_loop_var.name }}"
+    managed_node_systemd_become: "{{ systemd_loop_var.become | default(false) }}"
+    managed_node_systemd_state: "{{ systemd_loop_var.state | default('started') }}"
+    managed_node_systemd_schedule: "{{ systemd_loop_var.schedule | default('') }}"
   tags: systemd
 
 - name: Setup storage mounts

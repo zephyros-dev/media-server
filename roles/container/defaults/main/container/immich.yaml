@@ -5,6 +5,10 @@ immich_volume_upload: "{{ immich_volume }}/upload"
 immich_volume_ml_cache: "{{ immich_volume }}/ml_cache"
 immich_database_db: immich
 immich_database_user: immich
+immich_typesense_url:
+  - host: "127.0.0.1"
+    port: 8108
+    protocol: http
 # immich_database_password:
 # immich_jwt_secret:
 # immich_typesense_api_key:

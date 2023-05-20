@@ -48,7 +48,7 @@
         - name: Download mergerfs github releases
           ansible.builtin.get_url:
             mode: "0600"
-            url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-static-linux_{{ ansible_alternative_architecture }}.tar.gz
+            url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-static-linux_{{ custom_fact_ansible_alternative_architecture }}.tar.gz
             dest: /tmp/mergerfs.tar.gz
         - name: Create temporary directory
           ansible.builtin.file:

@@ -3,11 +3,11 @@
   block:
     - name: Set architecture
       ansible.builtin.set_fact:
-        ansible_alternative_architecture: amd64
+        custom_fact_custom_fact_ansible_alternative_architecture: amd64
       when: ansible_architecture == 'x86_64'
 
     - name: Get fedora version
       ansible.builtin.command: # noqa: command-instead-of-module
         cmd: rpm -E %fedora
       changed_when: false
-      register: fedora_version_output
+      register: custom_fact_fedora_version_output
