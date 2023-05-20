@@ -1,22 +1,22 @@
 - name: Check if aqua is installed
   ansible.builtin.stat:
     path: "{{ ansible_user_dir }}/.local/share/aquaproj-aqua/bin/aqua"
-  register: aqua_install_state
+  register: devcontainer_aqua_install_state
 
 - name: Check aqua version
-  when: aqua_install_state.stat.exists
+  when: devcontainer_aqua_install_state.stat.exists
   changed_when: false
   ansible.builtin.command:
     cmd: aqua --version
-  register: aqua_current_version
+  register: devcontainer_aqua_current_version
 
 - name: Get aqua current version
   ansible.builtin.set_fact:
-    aqua_current_version: "v{{ aqua_current_version.stdout | regex_search('\\d+\\.\\d+\\.\\d+') }}"
-  when: aqua_install_state.stat.exists
+    devcontainer_aqua_current_version: "v{{ devcontainer_aqua_current_version.stdout | regex_search('\\d+\\.\\d+\\.\\d+') }}"
+  when: devcontainer_aqua_install_state.stat.exists
 
 - name: Install aqua
-  when: (not aqua_install_state.stat.exists) or (aqua_current_version != ansible_env.AQUA_VERSION)
+  when: (not devcontainer_aqua_install_state.stat.exists) or (devcontainer_aqua_current_version != ansible_env.AQUA_VERSION)
   block:
     - name: Download aqua
       ansible.builtin.get_url:

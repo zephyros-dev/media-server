@@ -22,16 +22,14 @@
   block:
     - name: Set gitignore template URL
       ansible.builtin.set_fact:
-        gitignore_url: https://www.toptal.com/developers/gitignore/api/{{ gitignore_list | sort | join(',') }}
-    - name: Get gitignore template
-      ansible.builtin.set_fact:
-        gitignore_template: "{{ lookup('ansible.builtin.url', gitignore_url, wantlist=true) }}"
-    - name: Setup gitignore
+        devcontainer_gitignore_url: https://www.toptal.com/developers/gitignore/api/{{ gitignore_list | sort | join(',') }}
+    - name: Setup gitignore # noqa: var-naming[no-role-prefix]
       ansible.builtin.template:
         src: .gitignore.j2
         dest: ../.gitignore
         mode: "0644"
-
+      vars:
+        devcontainer_gitignore_template: "{{ lookup('ansible.builtin.url', devcontainer_gitignore_url, wantlist=true) }}"
 - name: Setup precommit
   block:
     - name: Install precommit
