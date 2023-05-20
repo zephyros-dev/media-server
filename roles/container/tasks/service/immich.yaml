@@ -30,7 +30,7 @@
 - name: Immich Server
   containers.podman.podman_container:
     name: immich-server
-    image: ghcr.io/immich-app/immich-server:release@sha256:a75eb410818f9bf93f637783fe50f17c456bd04bfb842f02ead3631b49e61322
+    image: ghcr.io/immich-app/immich-server:release@sha256:78f6203eb507ad399b6c5bdadcb40670a19037b40709f113fbb2722c772b8258
     command:
       - "/bin/sh"
       - "./start-server.sh"
@@ -51,7 +51,7 @@
 - name: Immich Microservices
   containers.podman.podman_container:
     name: immich-microservices
-    image: ghcr.io/immich-app/immich-server:release@sha256:a75eb410818f9bf93f637783fe50f17c456bd04bfb842f02ead3631b49e61322
+    image: ghcr.io/immich-app/immich-server:release@sha256:78f6203eb507ad399b6c5bdadcb40670a19037b40709f113fbb2722c772b8258
     command:
       - "/bin/sh"
       - "./start-microservices.sh"
@@ -72,7 +72,7 @@
 - name: Immich Machine learning
   containers.podman.podman_container:
     name: immich-machine-learning
-    image: ghcr.io/immich-app/immich-machine-learning:release@sha256:acd8d20996b27d088ffaefedf2f71e8598e8d60e7b58b7452e6a2c07676ae995
+    image: ghcr.io/immich-app/immich-machine-learning:release@sha256:dce086ffe4ec8838e9a794178c82e19241b92dbf5ed7fa15e18435a2b1daa377
     volumes:
       - "{{ immich_volume_upload }}:/usr/src/app/upload"
       - "{{ immich_volume_ml_cache }}:/cache:U,z"
@@ -83,7 +83,7 @@
 - name: Immich Web
   containers.podman.podman_container:
     name: immich-web
-    image: ghcr.io/immich-app/immich-web:release@sha256:c04389ca0ac031013cc2ddb286cfb6e23acd9e36b9dcf2cb30e1d218bfd7ae60
+    image: ghcr.io/immich-app/immich-web:release@sha256:c8c3785d37663719ffaf09e6e7b19c6017837872048cfb2895f3d74f79714dc2
     command:
       - "/bin/sh"
       - "./entrypoint.sh"
