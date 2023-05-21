@@ -5,5 +5,5 @@
     image: ghcr.io/lissy93/dashy:latest@sha256:c51e2538faed90a2215d180072e9bbe94a3808ef0859f68ad89e44dc7508c622
     name: dashy-web
     user: "0:0"
-    volumes:
-      - "{{ dashy_volume_config }}/conf.yml:/app/public/conf.yml:ro,z"
+    secrets:
+      - dashy_config,target=/app/public/conf.yml

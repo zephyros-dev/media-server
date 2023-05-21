@@ -9,7 +9,8 @@
       - 80:80/tcp
       - 443:443/tcp
       - 443:443/udp
+    secrets:
+      - caddyfile,target=/etc/caddy/Caddyfile
     volumes:
-      - "{{ caddy_data_caddyfile }}:/etc/caddy/Caddyfile:U,ro,z"
       - "{{ caddy_data_config }}:/config:U,z"
       - "{{ caddy_data_data }}:/data:U,z"

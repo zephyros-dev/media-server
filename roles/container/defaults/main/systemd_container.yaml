@@ -24,14 +24,15 @@ container:
 
 archivy:
   folder:
-    - "{{ archivy_volume_web_data }}"
-    - "{{ archivy_volume_web_config }}"
     - "{{ archivy_volume_elasticsearch_data }}"
+    - "{{ archivy_volume_web_data }}"
+    - "{{ archivy_volume_web_db }}"
   caddy_proxy_port: "5000"
   dashy_icon: /static/archivy.svg
-  templates:
-    - dest: "{{ archivy_volume_web_config }}/config.yml"
-      src: archivy/config.yml
+  secrets:
+    archivy_web_config:
+      type: templates
+      value: archivy/config.yml.j2
 bazarr:
   folder:
     - "{{ bazarr_web_config }}"
@@ -44,9 +45,10 @@ caddy:
     - "{{ caddy_data_data }}"
   pod: false
   caddy_proxy_custom: true
-  templates:
-    - dest: "{{ caddy_data_caddyfile }}"
-      src: caddy/Caddyfile.j2
+  secrets:
+    caddyfile:
+      type: templates
+      value: caddy/Caddyfile.j2
 calibre:
   folder:
     - "{{ calibre_book }}"
@@ -59,9 +61,10 @@ dashy:
     - "{{ dashy_volume_config }}"
   caddy_sso: true
   caddy_proxy_port: "80"
-  templates:
-    - dest: "{{ dashy_volume_config }}/conf.yml"
-      src: dashy/conf.yml.j2
+  secrets:
+    dashy_config:
+      type: templates
+      value: dashy/conf.yml.j2
 filebrowser:
   folder:
     - "{{ filebrowser_volume }}"
@@ -142,6 +145,10 @@ scrutiny:
   caddy_sso: true
   caddy_proxy_port: "{{ scrutiny_port }}"
   caddy_host_network: true
+  secrets:
+    scrutiny_config:
+      type: templates
+      value: scrutiny/scrutiny.yaml.j2
 syncthing:
   folder:
     - "{{ syncthing_data }}"
@@ -171,17 +178,18 @@ wol:
 
 container_default:
   become: false
-  certbot: false
   caddy_host_network: false
   caddy_proxy_custom: false
   caddy_proxy_port:
   caddy_rewrite: []
   caddy_sso: false
+  certbot: false
   dashy_icon:
   dashy_statusCheckAcceptCodes:
   dashy_statusCheckUrl:
   folder: []
   pod: true
+  secrets: {}
   state: started
   templates: []
   timer: false
