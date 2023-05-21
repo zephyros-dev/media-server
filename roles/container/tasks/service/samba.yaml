@@ -8,6 +8,7 @@
       SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes"
       SAMBA_VOLUME_CONFIG_disk: "[Disk]; path=/shares/disk; {{ samba_shares_settings }}"
       SAMBA_VOLUME_CONFIG_disks: "[Disks]; path=/shares/disks; {{ samba_shares_settings }}"
+      SAMBA_VOLUME_CONFIG_home: "[Home]; path=/shares/home; {{ samba_shares_settings }}"
       SAMBA_VOLUME_CONFIG_storage: "[Storage]; path=/shares/storage; {{ samba_shares_settings }}"
       UID_root: 0
       WSDD2_DISABLE: 1
@@ -15,6 +16,7 @@
     name: samba
     network: host
     volumes:
+      - "{{ ansible_user_dir }}:/shares/home"
       - "{{ ansible_user_dir }}/disk:/shares/disk"
       - "{{ global_disks_data }}:/shares/disks"
       - "{{ global_storage }}:/shares/storage"
