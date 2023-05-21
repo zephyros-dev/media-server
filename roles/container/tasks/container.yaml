@@ -64,13 +64,16 @@
                   ansible.builtin.file:
                   loop: "{{ container_loop_var.value.folder }}"
                   when: container_folder_state.results[0].stat.exists
-            - name: Templates config file
+            - name: Set container default restart state
+              ansible.builtin.set_fact:
+                container_restart_systemd: false
+            - name: Create secrets {{ container_loop_var.key }}
+              when: container_loop_var.value.secrets
               ansible.builtin.include_tasks:
-                file: container_templates.yaml
-              loop: "{{ container_loop_var.value.templates }}"
+                file: container_secrets.yaml
+              loop: "{{ container_loop_var.value.secrets | dict2items }}"
               loop_control:
-                loop_var: container_templates_loop_var
-              register: container_restart_systemd
+                loop_var: container_secrets_loop
             - name: Run service with pod {{ container_loop_var.key }}
               become: "{{ container_loop_var.value.become }}"
               module_defaults:
@@ -104,10 +107,10 @@
                 pod_prefix: ""
                 separator: ""
             # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
-            - name: Restart if config files are changed {{ container_loop_var.key }} # noqa: no-handler
+            - name: Restart if config changes {{ container_loop_var.key }} # noqa: no-handler
               ansible.builtin.systemd:
                 state: restarted
-              when: container_restart_systemd.changed
+              when: container_restart_systemd
             - name: Enable systemd {{ container_loop_var.key }}
               when: not container_loop_var.value.timer
               ansible.builtin.systemd:
