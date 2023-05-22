@@ -132,7 +132,7 @@ pyyaml==6.0
     #   ansible-lint
     #   pre-commit
     #   yamllint
-requests==2.30.0
+requests==2.31.0
     # via transmission-rpc
 resolvelib==0.8.1
     # via ansible-core
