@@ -10,7 +10,7 @@ ansible-core==2.14.5
     # via
     #   ansible
     #   ansible-lint
-ansible-lint==6.16.1
+ansible-lint==6.16.2
     # via -r requirements.in
 anyio==3.6.2
     # via
