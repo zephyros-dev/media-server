@@ -71,7 +71,7 @@ graphql-core==3.2.3
     #   gql
 h11==0.14.0
     # via httpcore
-httpcore==0.17.1
+httpcore==0.17.2
     # via httpx
 httpx==0.24.1
     # via dagger-io
