@@ -2,7 +2,6 @@
   # SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes" # Need this option for case sensitive files. This breaks calibre on windows however. Reference: https://www.oreilly.com/openbook/samba/book/ch05_04.html
   containers.podman.podman_container:
     env:
-      ACCOUNT_root: "{{ samba_password }}"
       AVAHI_DISABLE: 1
       GROUP_root: 0
       SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes"
@@ -15,6 +14,8 @@
     image: docker.io/servercontainers/samba:smbd-only-latest@sha256:b3e27f534a9f2be9b8aca3e2029f4adf87a5f696213ce6f55814992303803992
     name: samba
     network: host
+    secrets:
+      - samba_password,type=env,target=ACCOUNT_root
     volumes:
       - "{{ ansible_user_dir }}:/shares/home"
       - "{{ ansible_user_dir }}/disk:/shares/disk"

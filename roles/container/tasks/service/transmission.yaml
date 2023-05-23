@@ -1,17 +1,18 @@
 - name: Transmission
   containers.podman.podman_container:
     env:
-      PASS: "{{ transmission_password }}"
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
-      USER: "{{ transmission_user }}"
     image: lscr.io/linuxserver/transmission:latest@sha256:0bdb4d5de255e92326b9b5c126d0c0ed62423611f029c6a894d032dfc525d71a
     name: transmission
     network: caddy
     ports:
       - 51413:51413/tcp
       - 51413:51413/udp
+    secrets:
+      - transmission_password,type=env,target=PASS
+      - transmission_user,type=env,target=USER
     volumes:
       - "{{ global_media }}:/home"
       - "{{ transmission_web_config }}:/config:U,z"

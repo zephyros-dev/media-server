@@ -10,10 +10,11 @@
     name: immich-database
     image: docker.io/postgres:14-alpine@sha256:150dd39ccb7ae6c7ba6130c3582c39a30bb5d3d22cb08ad0ba37001e3f829abc
     env:
-      POSTGRES_DB: "{{ immich_database_db }}"
-      POSTGRES_PASSWORD: "{{ immich_database_password }}"
-      POSTGRES_USER: "{{ immich_database_user }}"
+      POSTGRES_DB: immich
+      POSTGRES_USER: immich
       TZ: "{{ global_timezone }}"
+    secrets:
+      - immich_postgres_db,type=env,target=POSTGRES_PASSWORD
     volumes:
       - "{{ immich_volume_database }}:/var/lib/postgresql/data"
 
@@ -22,8 +23,9 @@
     name: immich-typesense
     image: docker.io/typesense/typesense:0.24.1@sha256:e6ef6a082a62fb19c7fa80f596293f6519ce445670a59ae6ec4b750283865859
     env:
-      TYPESENSE_API_KEY: "{{ immich_typesense_api_key }}"
       TYPESENSE_DATA_DIR: /data
+    secrets:
+      - immich_typesense_api_key,type=env,target=TYPESENSE_API_KEY
     volumes:
       - "{{ immich_volume_typesense }}:/data:U,z"
 
@@ -37,16 +39,17 @@
     volumes:
       - "{{ immich_volume_upload }}:/usr/src/app/upload"
     env:
-      DB_DATABASE_NAME: "{{ immich_database_db }}"
+      DB_DATABASE_NAME: immich
       DB_HOSTNAME: localhost
-      DB_PASSWORD: "{{ immich_database_password }}"
-      DB_USERNAME: "{{ immich_database_user }}"
-      JWT_SECRET: "{{ immich_jwt_secret }}"
+      DB_USERNAME: immich
       NODE_ENV: production
       REDIS_HOSTNAME: localhost
-      TYPESENSE_API_KEY: "{{ immich_typesense_api_key }}"
       TYPESENSE_URL: "ha://{{ immich_typesense_url | to_json | b64encode }}"
       TZ: "{{ global_timezone }}"
+    secrets:
+      - immich_jwt_secret,type=env,target=JWT_SECRET
+      - immich_postgres_db,type=env,target=DB_PASSWORD
+      - immich_typesense_api_key,type=env,target=TYPESENSE_API_KEY
 
 - name: Immich Microservices
   containers.podman.podman_container:
@@ -58,16 +61,17 @@
     volume:
       - "{{ immich_volume_upload }}:/usr/src/app/upload"
     env:
-      DB_DATABASE_NAME: "{{ immich_database_db }}"
+      DB_DATABASE_NAME: immich
       DB_HOSTNAME: localhost
-      DB_PASSWORD: "{{ immich_database_password }}"
-      DB_USERNAME: "{{ immich_database_user }}"
-      JWT_SECRET: "{{ immich_jwt_secret }}"
+      DB_USERNAME: immich
       NODE_ENV: production
       REDIS_HOSTNAME: localhost
-      TYPESENSE_API_KEY: "{{ immich_typesense_api_key }}"
       TYPESENSE_HOST: localhost
       TZ: "{{ global_timezone }}"
+    secrets:
+      - immich_jwt_secret,type=env,target=JWT_SECRET
+      - immich_postgres_db,type=env,target=DB_PASSWORD
+      - immich_typesense_api_key,type=env,target=TYPESENSE_API_KEY
 
 - name: Immich Machine learning
   containers.podman.podman_container:

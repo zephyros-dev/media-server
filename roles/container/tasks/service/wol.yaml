@@ -1,16 +1,11 @@
-- name: Wol-web configurations
-  ansible.builtin.copy:
-    content: "{{ wol_config_devices | to_nice_json }}"
-    dest: "{{ wol_volume }}/devices.json"
-    mode: "0600"
-
 - name: Wol-web
   containers.podman.podman_container:
     env:
+      WOLWEBVDIR: "/"
       TZ: "{{ global_timezone }}"
-      WOLWEBBCASTIP: "{{ wol_bcast_ip }}:9"
-    image: docker.io/aranajuan/wolweb:latest@sha256:9958179770035737922a77b1bfe306f48c48e4e7e4a35bdb228e2f6921805a31
+    image: ghcr.io/zephyros-dev/wolweb:latest@sha256:b9fdc0cb423f7f03bb00eb81b9d84fd9c0c3b16c388e53ce2bddee1b1ea2187d
     name: wol
     network: host
-    volumes:
-      - "{{ wol_volume }}/devices.json:/wolweb/devices.json:U,ro,z"
+    secrets:
+      - wol_bcast_ip,type=env,target=WOLWEBBCASTIP
+      - wol_config_devices,target=/wolweb/devices.json

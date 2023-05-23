@@ -6,17 +6,18 @@
         - name: Nextcloud
           containers.podman.podman_container:
             env:
-              NEXTCLOUD_TRUTED_DOMAINS: nextcloud.{{ server_domain }}
+              NEXTCLOUD_TRUSTED_DOMAINS: nextcloud.{{ server_domain }}
               OVERWRITEPROTOCOL: https
               POSTGRES_DB: nextcloud
               POSTGRES_HOST: localhost:5432
-              POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
               POSTGRES_USER: postgres
               REDIS_HOST: localhost
-              REDIS_HOST_PASSWORD: "{{ nextcloud_redis_password }}"
               TZ: "{{ global_timezone }}"
             image: docker.io/nextcloud:stable@sha256:e366035e6a4ef03c3a607230b6be8a9bef6d80fd87a22c2494713d3ca9b2f120
             name: nextcloud-web
+            secrets:
+              - nextcloud_postgres_password,type=env,target=POSTGRES_PASSWORD
+              - nextcloud_redis_password,type=env,target=REDIS_HOST_PASSWORD
             volumes:
               - "{{ nextcloud_volume_web_storage }}:/var/www/html/data:z"
               - "{{ nextcloud_volume_web_data }}:/var/www/html:z"
@@ -27,6 +28,7 @@
           changed_when: false
 
         - name: Nextcloud Redis
+          # TODO: use acl https://github.com/docker-library/redis/issues/268#issuecomment-812952957
           containers.podman.podman_container:
             command: redis-server --requirepass {{ nextcloud_redis_password }}
             env:
@@ -52,11 +54,12 @@
       containers.podman.podman_container:
         env:
           POSTGRES_DB: nextcloud
-          POSTGRES_PASSWORD: "{{ nextcloud_postgres_password }}"
           POSTGRES_USER: postgres
           TZ: "{{ global_timezone }}"
         image: docker.io/postgres:14-alpine@sha256:150dd39ccb7ae6c7ba6130c3582c39a30bb5d3d22cb08ad0ba37001e3f829abc
         name: nextcloud-db
+        secrets:
+          - nextcloud_postgres_password,type=env,target=POSTGRES_PASSWORD
         volumes:
           - "{{ nextcloud_volume_db_data }}:/var/lib/postgresql/data:U,z"
 

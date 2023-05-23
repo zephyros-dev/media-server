@@ -74,6 +74,7 @@
               loop: "{{ container_loop_var.value.secrets | dict2items }}"
               loop_control:
                 loop_var: container_secrets_loop
+              no_log: true
             - name: Run service with pod {{ container_loop_var.key }}
               become: "{{ container_loop_var.value.become }}"
               module_defaults:

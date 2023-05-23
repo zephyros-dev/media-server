@@ -31,7 +31,7 @@ archivy:
   dashy_icon: /static/archivy.svg
   secrets:
     archivy_web_config:
-      type: templates
+      type: template
       value: archivy/config.yml.j2
 bazarr:
   folder:
@@ -47,7 +47,7 @@ caddy:
   caddy_proxy_custom: true
   secrets:
     caddyfile:
-      type: templates
+      type: template
       value: caddy/Caddyfile.j2
 calibre:
   folder:
@@ -63,7 +63,7 @@ dashy:
   caddy_proxy_port: "80"
   secrets:
     dashy_config:
-      type: templates
+      type: template
       value: dashy/conf.yml.j2
 filebrowser:
   folder:
@@ -77,6 +77,16 @@ immich:
     - "{{ immich_volume_upload }}"
   caddy_proxy_port: "8080"
   caddy_proxy_custom: true
+  secrets:
+    immich_jwt_secret:
+      type: value
+      value: "{{ immich_jwt_secret }}"
+    immich_postgres_db:
+      type: value
+      value: "{{ immich_database_password }}"
+    immich_typesense_api_key:
+      type: value
+      value: "{{ immich_typesense_api_key }}"
 jellyfin:
   folder:
     - "{{ global_media }}"
@@ -112,6 +122,13 @@ nextcloud:
     - "{{ nextcloud_volume_web_storage }}"
     - "{{ nextcloud_volume_web_data }}"
   caddy_proxy_port: "80"
+  secrets:
+    nextcloud_postgres_password:
+      type: value
+      value: "{{ nextcloud_postgres_password }}"
+    nextcloud_redis_password:
+      type: value
+      value: "{{ nextcloud_redis_password }}"
 prowlarr:
   folder:
     - "{{ prowlarr_web_config }}"
@@ -137,6 +154,10 @@ samba:
     - "{{ global_storage }}"
   pod: false
   caddy_proxy_custom: true
+  secrets:
+    samba_password:
+      type: value
+      value: "{{ samba_password }}"
 scrutiny:
   become: true
   folder:
@@ -147,7 +168,7 @@ scrutiny:
   caddy_host_network: true
   secrets:
     scrutiny_config:
-      type: templates
+      type: template
       value: scrutiny/scrutiny.yaml.j2
 syncthing:
   folder:
@@ -163,6 +184,13 @@ transmission:
   pod: false
   caddy_proxy_port: "9091"
   dashy_statusCheckAcceptCodes: "401"
+  secrets:
+    transmission_password:
+      type: value
+      value: "{{ transmission_password }}"
+    transmission_user:
+      type: value
+      value: "{{ transmission_user }}"
 trilium:
   folder:
     - "{{ trilium_volume_data }}"
@@ -174,7 +202,15 @@ wol:
   caddy_sso: true
   caddy_proxy_port: "8089"
   caddy_host_network: true
+  # caddy_proxy_custom: true
   dashy_icon: mdi-desktop-classic
+  secrets:
+    wol_config_devices:
+      type: template
+      value: wol/devices.json.j2
+    wol_bcast_ip:
+      type: value
+      value: "{{ wol_bcast_ip }}:9"
 
 container_default:
   become: false
@@ -191,5 +227,5 @@ container_default:
   pod: true
   secrets: {}
   state: started
-  templates: []
+  template: []
   timer: false

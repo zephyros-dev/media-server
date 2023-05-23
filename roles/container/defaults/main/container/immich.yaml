@@ -3,8 +3,6 @@ immich_volume_database: "{{ immich_volume }}/database"
 immich_volume_typesense: "{{ immich_volume }}/typesense"
 immich_volume_upload: "{{ immich_volume }}/upload"
 immich_volume_ml_cache: "{{ immich_volume }}/ml_cache"
-immich_database_db: immich
-immich_database_user: immich
 immich_typesense_url:
   - host: "127.0.0.1"
     port: 8108
