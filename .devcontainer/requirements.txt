@@ -4,9 +4,9 @@
 #
 #    pip-compile requirements.in
 #
-ansible==7.5.0
+ansible==7.6.0
     # via -r requirements.in
-ansible-core==2.14.5
+ansible-core==2.14.6
     # via
     #   ansible
     #   ansible-lint
