@@ -160,7 +160,7 @@ transmission-rpc==4.2.2
     # via -r requirements.in
 typer[all]==0.9.0
     # via dagger-io
-typing-extensions==4.6.0
+typing-extensions==4.6.1
     # via
     #   dagger-io
     #   transmission-rpc
