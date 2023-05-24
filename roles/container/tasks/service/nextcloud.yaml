@@ -13,7 +13,7 @@
               POSTGRES_USER: postgres
               REDIS_HOST: localhost
               TZ: "{{ global_timezone }}"
-            image: docker.io/nextcloud:stable@sha256:e366035e6a4ef03c3a607230b6be8a9bef6d80fd87a22c2494713d3ca9b2f120
+            image: docker.io/nextcloud:stable@sha256:09853d1e1ad078a3e8d0f8c40a3167a18a7e5e561e314ea7c6935f15b03f366d
             name: nextcloud-web
             secrets:
               - nextcloud_postgres_password,type=env,target=POSTGRES_PASSWORD
