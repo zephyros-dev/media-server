@@ -15,6 +15,7 @@
     env:
       ES_JAVA_OPTS: "-Xms2g -Xmx2g"
       discovery.type: single-node
+      ingest.geoip.downloader.enabled: "false"
     image: docker.io/elasticsearch:7.17.10@sha256:43b9e781ebb2bd731ea3966bb816edce947e34965676046b3c0f8c17318cee72
     name: archivy-elasticsearch
     user: 1000
