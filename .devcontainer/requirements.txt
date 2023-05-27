@@ -12,7 +12,7 @@ ansible-core==2.14.6
     #   ansible-lint
 ansible-lint==6.16.2
     # via -r requirements.in
-anyio==3.6.2
+anyio==3.7.0
     # via
     #   dagger-io
     #   httpcore
