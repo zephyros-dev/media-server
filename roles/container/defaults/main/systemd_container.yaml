@@ -57,8 +57,6 @@ calibre:
   caddy_proxy_custom: true
   dashy_statusCheckAcceptCodes: "401"
 dashy:
-  folder:
-    - "{{ dashy_volume_config }}"
   caddy_sso: true
   caddy_proxy_port: "80"
   secrets:
@@ -101,8 +99,6 @@ kavita:
     - src: /
       dest: /login
 librespeed:
-  folder:
-    - "{{ librespeed_web_config }}"
   caddy_proxy_port: "80"
 lidarr:
   folder:
@@ -160,8 +156,6 @@ samba:
       value: "{{ samba_password }}"
 scrutiny:
   become: true
-  folder:
-    - "{{ scrutiny_volume_config }}"
   pod: false
   caddy_sso: true
   caddy_proxy_port: "{{ scrutiny_port }}"
@@ -196,13 +190,10 @@ trilium:
     - "{{ trilium_volume_data }}"
   caddy_proxy_port: "8080"
 wol:
-  folder:
-    - "{{ wol_volume }}"
   pod: false
   caddy_sso: true
   caddy_proxy_port: "8089"
   caddy_host_network: true
-  # caddy_proxy_custom: true
   dashy_icon: mdi-desktop-classic
   secrets:
     wol_config_devices:

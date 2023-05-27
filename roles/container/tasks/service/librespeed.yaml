@@ -4,5 +4,3 @@
       TZ: "{{ global_timezone }}"
     image: lscr.io/linuxserver/librespeed:latest@sha256:e36685c1baae2afaa7e129001c4a6f37ecbc85d6e912457c7ec17a5cdc872dda
     name: librespeed-web
-    volumes:
-      - "{{ librespeed_web_config }}:/config:U,z"

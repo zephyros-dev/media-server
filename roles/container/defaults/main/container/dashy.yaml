@@ -1,2 +1,0 @@
-dashy_volume: "{{ global_volume_path }}/dashy"
-dashy_volume_config: "{{ dashy_volume }}/config"
