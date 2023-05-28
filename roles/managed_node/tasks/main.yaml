@@ -10,6 +10,10 @@
   ansible.builtin.import_tasks: system/packages.yaml
   tags: packages
 
+- name: Setup restic
+  ansible.builtin.import_tasks: system/restic.yaml
+  tags: restic
+
 - name: Setup systemd # noqa: var-naming[no-role-prefix]
   ansible.builtin.include_tasks:
     file: systemd.yaml

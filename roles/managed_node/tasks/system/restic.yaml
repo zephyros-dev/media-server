@@ -1,0 +1,54 @@
+- name: Setup restic backup
+  tags: restic
+  become: true
+  block:
+    - name: Setup restic env
+      community.general.ini_file:
+        path: "{{ restic_env_path }}"
+        section: null
+        option: "{{ item.key }}"
+        value: "{{ item.value }}"
+        mode: "0600"
+        no_extra_spaces: true
+      loop: "{{ restic_env | dict2items }}"
+      no_log: true
+    - name: Check if restic repo exists
+      block:
+        - name: Check if restic repo exists
+          changed_when: false
+          ansible.builtin.command:
+            cmd: restic cat config
+          environment: "{{ restic_env }}"
+          register: restic_repo_exists
+      rescue:
+        - name: Init restic repo
+          ansible.builtin.command:
+            cmd: restic init
+          environment: "{{ restic_env }}"
+          when: restic_repo_exists.rc != 0
+          changed_when: false
+    - name: Setup restic exclude file
+      ansible.builtin.template:
+        src: restic/exclude.j2
+        dest: "{{ restic_env.EXCLUDE_FILE }}"
+        mode: "0644"
+    - name: Setup restic systemd
+      ansible.builtin.template:
+        src: restic/{{ item }}.service.j2
+        dest: /etc/systemd/system/{{ item }}.service
+        mode: "0644"
+      loop:
+        - restic-backup
+        - restic-prune
+    - name: Setup restic timer
+      ansible.builtin.include_role:
+        name: systemd_timer
+      vars:
+        systemd_timer_name: "{{ item.name }}"
+        systemd_timer_become: true
+        systemd_timer_schedule: "{{ item.schedule }}"
+      loop:
+        - name: restic-backup
+          schedule: "23:30:00"
+        - name: restic-prune
+          schedule: "Sun 00:00:00"

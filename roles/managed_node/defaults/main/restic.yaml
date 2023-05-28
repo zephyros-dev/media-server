@@ -1,0 +1,17 @@
+restic_backup_path: "{{ global_volume_path }}"
+# restic_b2_account_id:
+# restic_b2_account_key:
+# restic_repository:
+# restic_password:
+restic_env:
+  B2_ACCOUNT_ID: "{{ restic_b2_account_id }}"
+  B2_ACCOUNT_KEY: "{{ restic_b2_account_key }}"
+  BACKUP_PATHS: "{{ restic_backup_path }}"
+  RESTIC_PASSWORD: "{{ restic_password }}"
+  RESTIC_REPOSITORY: "{{ restic_repository + restic_backup_path }}"
+  EXCLUDE_FILE: /etc/restic/exclude
+  RETENTION_MONTHS: 1
+  RETENTION_WEEKS: 1
+  RETENTION_DAYS: 1
+  RESTIC_CACHE_DIR: "/etc/restic/cache"
+restic_env_path: "/etc/restic/restic.env"
