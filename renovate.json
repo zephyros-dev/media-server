@@ -4,6 +4,7 @@
     "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
   },
   "automerge": true,
+  "automergeType": "branch",
   "extends": ["github>aquaproj/aqua-renovate-config#1.6.0"],
   "git-submodules": {
     "enabled": true
@@ -36,6 +37,7 @@
     "fileMatch": ["(^|/)requirements\\.in$"]
   },
   "platform": "github",
+  "platformAutomerge": true,
   "prConcurrentLimit": 1,
   "pre-commit": {
     "enabled": true

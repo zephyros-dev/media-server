@@ -1,8 +1,9 @@
 name: Renovate branch test
 on:
-  push:
+  pull_request:
     branches:
       - "renovate**"
+  merge_group:
 jobs:
   renovate-branh:
     name: Make test auto pass to limit the concurrent PR from renovate
