@@ -127,3 +127,10 @@
       changed_when: false
       ansible.builtin.command:
         cmd: powerprofilesctl set power-saver
+
+- name: Install restic
+  become: true
+  ansible.builtin.dnf:
+    name: restic
+    state: latest
+  tags: restic
