@@ -165,12 +165,17 @@
 
                 - name: Stop systemd service {{ container_loop_var.key }}
                   ansible.builtin.systemd:
+                - name: Remove secrets {{ container_loop_var.key }}
+                  containers.podman.podman_secret:
+                    name: "{{ item.key }}"
+                    state: absent
+                  loop: "{{ container_loop_var.value.secrets | dict2items }}"
                 - name: Remove systemd files {{ container_loop_var.key }}
                   ansible.builtin.file:
                     path: "{{ container_systemd_path }}/{{ item }}.service"
                     state: absent
                   loop: "{{ container_systemd_file_list }}"
                 - name: Remove systemd timer
-                  when: container_loop_var.value.timer != ''
+                  when: not container_loop_var.value.timer
                   ansible.builtin.file:
                     path: "{{ container_systemd_path }}/{{ container_loop_var.key }}.timer"

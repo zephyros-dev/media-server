@@ -31,8 +31,8 @@ archivy:
   dashy_icon: /static/archivy.svg
   secrets:
     archivy_web_config:
-      type: template
-      value: archivy/config.yml.j2
+      type: value
+      value: "{{ archivy_web_config | to_nice_yaml }}"
 bazarr:
   folder:
     - "{{ bazarr_web_config }}"
@@ -162,8 +162,8 @@ scrutiny:
   caddy_host_network: true
   secrets:
     scrutiny_config:
-      type: template
-      value: scrutiny/scrutiny.yaml.j2
+      type: value
+      value: "{{ scrutiny_config | to_nice_yaml }}"
 syncthing:
   folder:
     - "{{ syncthing_data }}"
@@ -218,5 +218,4 @@ container_default:
   pod: true
   secrets: {}
   state: started
-  template: []
   timer: false
