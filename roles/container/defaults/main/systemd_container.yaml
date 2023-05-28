@@ -70,7 +70,6 @@ filebrowser:
 immich:
   folder:
     - "{{ immich_volume_database }}"
-    - "{{ immich_volume_ml_cache }}"
     - "{{ immich_volume_typesense }}"
     - "{{ immich_volume_upload }}"
   caddy_proxy_port: "8080"
@@ -85,6 +84,8 @@ immich:
     immich_typesense_api_key:
       type: value
       value: "{{ immich_typesense_api_key }}"
+  volume:
+    - immich_volume_ml_cache
 jellyfin:
   folder:
     - "{{ global_media }}"
@@ -219,3 +220,4 @@ container_default:
   secrets: {}
   state: started
   timer: false
+  volume: []
