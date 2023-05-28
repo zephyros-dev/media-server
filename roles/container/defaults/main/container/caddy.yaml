@@ -1,7 +1,3 @@
-caddy_data: "{{ global_volume_path }}/caddy"
-caddy_data_caddyfile: "{{ caddy_data }}/Caddyfile"
-caddy_data_config: "{{ caddy_data }}/config"
-caddy_data_data: "{{ caddy_data }}/data"
 # server_domain: secret_example.com
 caddyfile_lan_address: server.lan
 # This is the address to reach the host when using podman
@@ -9,6 +5,3 @@ caddyfile_host_address: host.containers.internal
 # caddyfile_auth_user:
 # caddyfile_auth_pass:
 # caddyfile_auth_token:
-caddy_acme_ca_list:
-  - acme-v02.api.letsencrypt.org-directory
-  - acme.zerossl.com-v2-dv90

@@ -40,15 +40,15 @@ bazarr:
   caddy_sso: true
   caddy_proxy_port: "6767"
 caddy:
-  folder:
-    - "{{ caddy_data_config }}"
-    - "{{ caddy_data_data }}"
   pod: false
   caddy_proxy_custom: true
   secrets:
     caddyfile:
       type: template
       value: caddy/Caddyfile.j2
+  volume:
+    - caddy_volume_config
+    - caddy_volume_data
 calibre:
   folder:
     - "{{ calibre_book }}"
