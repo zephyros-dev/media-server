@@ -9,6 +9,7 @@
   "git-submodules": {
     "enabled": true
   },
+  "ignoreTests": true,
   "lockFileMaintenance": {
     "enabled": true
   },
