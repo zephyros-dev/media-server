@@ -4,7 +4,7 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
-    image: lscr.io/linuxserver/transmission:latest@sha256:0bdb4d5de255e92326b9b5c126d0c0ed62423611f029c6a894d032dfc525d71a
+    image: lscr.io/linuxserver/transmission:latest@sha256:3a2efc9b7231067b2593e82dbbf2f2de642c13759deb83ddbe6bd382c6511a2b
     name: transmission
     network: caddy
     ports:
