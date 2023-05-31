@@ -1,4 +1,4 @@
-ansible-lint==6.16.2
+ansible-lint==6.17.0
 ansible==8.0.0
 black==23.3.0
 dagger-io==0.6.0
