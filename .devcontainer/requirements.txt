@@ -33,7 +33,7 @@ bracex==2.3.post1
     # via wcmatch
 build==0.10.0
     # via pip-tools
-cattrs==23.1.0
+cattrs==23.1.1
     # via dagger-io
 certifi==2023.5.7
     # via
