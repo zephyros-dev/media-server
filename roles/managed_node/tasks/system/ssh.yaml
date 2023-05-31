@@ -1,6 +1,6 @@
 - name: Harden ssh
   tags: ssh
-  ansible.builtin.import_role:
+  ansible.builtin.import_role: # noqa: var-naming[no-role-prefix]
     name: devsec.hardening.ssh_hardening
   vars:
     sftp_enabled: true
