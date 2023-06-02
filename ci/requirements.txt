@@ -16,7 +16,7 @@ backoff==2.2.1
     # via gql
 beartype==0.14.0
     # via dagger-io
-cattrs==23.1.1
+cattrs==23.1.2
     # via dagger-io
 certifi==2023.5.7
     # via
