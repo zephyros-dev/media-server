@@ -68,7 +68,7 @@ sniffio==1.3.0
     #   httpx
 typer[all]==0.9.0
     # via dagger-io
-typing-extensions==4.6.2
+typing-extensions==4.6.3
     # via
     #   dagger-io
     #   typer
