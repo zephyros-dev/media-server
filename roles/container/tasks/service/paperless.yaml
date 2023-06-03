@@ -1,0 +1,76 @@
+- name: Paperless redis
+  containers.podman.podman_container:
+    name: paperless-redis
+    image: docker.io/library/redis:7@sha256:f9724694a0b97288d2255ff2b69642dfba7f34c8e41aaf0a59d33d10d8a42687
+    env:
+      TZ: "{{ global_timezone }}"
+    volumes:
+      - "{{ paperless_volume_redis_data }}:/data:U,z"
+
+- name: Paperless database
+  containers.podman.podman_container:
+    name: paperless-database
+    image: docker.io/library/postgres:13@sha256:7addfa460d462d50d2ddee473d0793f5d1b35626ea243ab58bfef78bd8e69091
+    env:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      TZ: "{{ global_timezone }}"
+    secrets:
+      - paperless_dbpass,type=env,target=POSTGRES_PASSWORD
+    volumes:
+      - "{{ paperless_volume_database_data }}:/var/lib/postgresql/data:U,z"
+
+- name: Paperless gotenberg
+  containers.podman.podman_container:
+    name: paperless-gotenberg
+    image: docker.io/gotenberg/gotenberg:7.8@sha256:78477be56f7f20d0819880c3815b56a73228b9700afcdb9958abc858f96d8280
+    env:
+      TZ: "{{ global_timezone }}"
+    command:
+      - gotenberg
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+
+- name: Paperless Tika
+  containers.podman.podman_container:
+    name: paperless-tika
+    image: ghcr.io/paperless-ngx/tika:latest@sha256:84f4dfe4515ad4c90bcd524d03d5aed82285ce1cdee21ebd94a09d1aeae9b97d
+    env:
+      TZ: "{{ global_timezone }}"
+
+- name: Paperless webserver
+  containers.podman.podman_container:
+    name: paperless-webserver
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest@sha256:76d207095455f33f2ea21c1cd3080eaaf632a33ac2a6ccdf0ca150eeeddd3351
+    env:
+      PAPERLESS_DBHOST: localhost
+      PAPERLESS_REDIS: redis://localhost:6379
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_ENDPOINT: http://localhost:9998
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://localhost:3000
+      TZ: "{{ global_timezone }}"
+    secrets:
+      - paperless_dbpass,type=env,target=PAPERLESS_DBPASS
+      - paperless_ocr_language,type=env,target=PAPERLESS_OCR_LANGUAGE
+      - paperless_ocr_languages,type=env,target=PAPERLESS_OCR_LANGUAGES
+      - paperless_secret_key,type=env,target=PAPERLESS_SECRET_KEY
+      - paperless_url,type=env,target=PAPERLESS_URL
+    healthcheck:
+      test:
+        ["CMD", "curl", "-fs", "-S", "--max-time", "2", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - "{{ paperless_volume_webserver_data }}:/usr/src/paperless/data:U,z"
+      - "{{ paperless_volume_webserver_media }}:/usr/src/paperless/media:U,z"
+      - "{{ paperless_volume_webserver_export }}:/usr/src/paperless/export:U,z"
+      - "{{ paperless_volume_webserver_consume }}:/usr/src/paperless/consume:U,z"
+# - name: Setup paperless root user
+#   ansible.builtin.expect:
+#     command: podman exec -it paperless-webserver python manage.py createsuperuser
+#     responses:
+#       (?i)username: "{{ paperless_root_username }}"
+#       (?i)email address: "{{ paperless_root_email }}"
+#       (?i)password: "{{ paperless_root_password }}"
+#       (?i)password \(again\): "{{ paperless_root_password }}"
