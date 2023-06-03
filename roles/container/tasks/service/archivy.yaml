@@ -2,10 +2,9 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
+      ELASTICSEARCH_URL: http://localhost:9200/
     image: docker.io/uzayg/archivy:latest@sha256:ac5ff2cc1417fe7cadb9762b7de5ff3c29035723533af6de5feeaf70b263dc92
     name: archivy-web
-    secrets:
-      - archivy_web_config,target=/archivy/.local/share/archivy/config.yml
     volumes:
       - "{{ archivy_volume_web_data }}:/archivy/data:U,z"
       - "{{ archivy_volume_web_db }}:/archivy/.local/share/archivy:U,z"

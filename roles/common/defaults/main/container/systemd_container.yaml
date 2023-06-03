@@ -29,10 +29,6 @@ archivy:
     - "{{ archivy_volume_web_db }}"
   caddy_proxy_port: "5000"
   dashy_icon: /static/archivy.svg
-  secrets:
-    archivy_web_config:
-      type: value
-      value: "{{ archivy_web_config | to_nice_yaml }}"
 bazarr:
   folder:
     - "{{ bazarr_web_config }}"
@@ -164,7 +160,7 @@ scrutiny:
   secrets:
     scrutiny_config:
       type: value
-      value: "{{ scrutiny_config | to_nice_yaml }}"
+      value: "{{ scrutiny_config }}"
 syncthing:
   folder:
     - "{{ syncthing_data }}"
@@ -198,8 +194,8 @@ wol:
   dashy_icon: mdi-desktop-classic
   secrets:
     wol_config_devices:
-      type: template
-      value: wol/devices.json.j2
+      type: json
+      value: "{{ wol_config_devices }}"
     wol_bcast_ip:
       type: value
       value: "{{ wol_bcast_ip }}:9"
