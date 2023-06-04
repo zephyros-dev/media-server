@@ -16,6 +16,10 @@
   "onboarding": false,
   "packageRules": [
     {
+      "automerge": false,
+      "matchUpdateTypes": ["major"]
+    },
+    {
       "groupName": "immich",
       "matchPackagePrefixes": ["ghcr.io/immich-app"]
     }
