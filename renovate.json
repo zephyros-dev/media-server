@@ -16,21 +16,11 @@
   "onboarding": false,
   "packageRules": [
     {
-      "automerge": true,
-      "automergeType": "branch",
-      "matchPaths": [
-        "!.github/**",
-        "!group_vars/**",
-        "!requirements.yaml",
-        "!roles/**",
-        "!submodules/**"
-      ]
-    },
-    {
       "groupName": "immich",
       "matchPackagePrefixes": ["ghcr.io/immich-app"]
     }
   ],
+  "pinDigests": true,
   "pip-compile": {
     "fileMatch": ["(^|/)requirements\\.in$"]
   },
