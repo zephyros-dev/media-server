@@ -1,0 +1,18 @@
+- name: Pod {{ container_loop_var.key }}
+  when: container_final_pod
+  block:
+    - name: Delete pod {{ container_loop_var.key }}
+      containers.podman.podman_pod:
+        name: "{{ container_loop_var.key }}"
+        state: absent
+    - name: Create pod {{ container_loop_var.key }}
+      ansible.builtin.import_tasks: container_pod.yaml
+- name: Recreate container {{ container_loop_var.key }}
+  when: not container_final_pod
+  block:
+    - name: Delete container {{ container_loop_var.key }}
+      containers.podman.podman_container:
+        name: "{{ container_loop_var.key }}"
+        state: absent
+    - name: Create container {{ container_loop_var.key }}
+      ansible.builtin.import_tasks: "service/{{ container_loop_var.key }}.yaml"

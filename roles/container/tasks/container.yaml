@@ -52,21 +52,21 @@
                   state: directory
               when: not container_folder_state.skipped
               block:
-                - name: Prepare folder if not exists {{ container_loop_var.key }}
+                - name: Prepare folder if not exists {{ container_loop_var.key }} # noqa: args[module]
                   ansible.builtin.file:
                     owner: "{{ ansible_user }}"
                     group: "{{ ansible_user }}"
                     mode: "0755"
                   loop: "{{ container_loop_var.value.folder }}"
                   when: not container_folder_state.results[0].stat.exists
-                - name: Preserve folder if already exists {{ container_loop_var.key }} # noqa: risky-file-permissions
+                - name: Preserve folder if already exists {{ container_loop_var.key }} # noqa: risky-file-permissions args[module]
                   become: true
                   ansible.builtin.file:
                   loop: "{{ container_loop_var.value.folder }}"
                   when: container_folder_state.results[0].stat.exists
             - name: Set container default restart state
               ansible.builtin.set_fact:
-                container_restart_systemd: false
+                container_recreate: false
             - name: Create secrets {{ container_loop_var.key }}
               when: container_loop_var.value.secrets
               ansible.builtin.include_tasks:
@@ -91,19 +91,22 @@
                 - name: Create pod {{ container_loop_var.key }}
                   ansible.builtin.import_tasks: container_pod.yaml
               rescue:
-                - name: Delete pod {{ container_loop_var.key }}
-                  containers.podman.podman_pod:
-                    name: "{{ container_loop_var.key }}"
-                    state: absent
-                - name: Create pod {{ container_loop_var.key }}
-                  ansible.builtin.import_tasks: container_pod.yaml
+                - name: Recreate {{ container_loop_var.key }}
+                  ansible.builtin.include_tasks:
+                    file: container_recreate.yaml
             - name: Run service without pod {{ container_loop_var.key }}
               become: "{{ container_loop_var.value.become }}"
               when: not container_final_pod
               module_defaults:
                 containers.podman.podman_container:
                   state: "{{ container_loop_var.value.state }}"
-              ansible.builtin.import_tasks: "service/{{ container_loop_var.key }}.yaml"
+              block:
+                - name: Create container {{ container_loop_var.key }}
+                  ansible.builtin.import_tasks: "service/{{ container_loop_var.key }}.yaml"
+              rescue:
+                - name: Recreate {{ container_loop_var.key }}
+                  ansible.builtin.include_tasks:
+                    file: container_recreate.yaml
             - name: Create systemd service file for {{ container_loop_var.key }}
               containers.podman.podman_generate_systemd:
                 container_prefix: ""
@@ -113,10 +116,10 @@
                 pod_prefix: ""
                 separator: ""
             # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
-            - name: Restart if config changes {{ container_loop_var.key }} # noqa: no-handler
-              ansible.builtin.systemd:
-                state: restarted
-              when: container_restart_systemd
+            - name: Recreate if config changes {{ container_loop_var.key }}
+              ansible.builtin.include_tasks:
+                file: container_recreate.yaml
+              when: container_recreate
             - name: Enable systemd {{ container_loop_var.key }}
               when: not container_loop_var.value.timer
               ansible.builtin.systemd:
