@@ -17,9 +17,6 @@ repos:
     rev: v6.17.0
     hooks:
       - id: ansible-lint
-        # TODO: report missing dependencies
-        additional_dependencies:
-          - typing_extensions
   - repo: https://github.com/renovatebot/pre-commit-hooks
     rev: 35.113.0
     hooks:
