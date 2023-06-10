@@ -20,14 +20,13 @@
           - xorg-x11-drv-nvidia-cuda # For cuda/nvdec/nvenc support
         state: latest
     # https://forums.developer.nvidia.com/t/nvidia-powerd-fails-to-start-on-fedora-36-510-68-02-driver/218254
-    # Need to enable this driver since disabling it block reboot
-    - name: Enable nvidia powerd service
+    - name: Disable nvidia powerd service
       ansible.builtin.systemd:
         name: nvidia-powerd
         state: stopped
         daemon_reload: true
         masked: false
-        enabled: true
+        enabled: false
     - name: Add nvidia container runtime repo
       ansible.builtin.get_url:
         url: https://nvidia.github.io/libnvidia-container/{{ nvidia_container_runtime_os }}/libnvidia-container.repo
@@ -58,6 +57,7 @@
     - name: Setup nvidia limit removal script
       block:
         - name: Install nvidia limit removal script
+          changed_when: false
           ansible.builtin.script:
             cmd: submodules/nvidia-patch/patch.sh
       rescue:
@@ -65,5 +65,6 @@
           ansible.builtin.reboot:
             reboot_timeout: 600
         - name: Reinstall nvidia limit removal script
+          changed_when: false
           ansible.builtin.script:
             cmd: submodules/nvidia-patch/patch.sh
