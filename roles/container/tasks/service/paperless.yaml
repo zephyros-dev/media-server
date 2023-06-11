@@ -44,6 +44,7 @@
     image: ghcr.io/paperless-ngx/paperless-ngx:latest@sha256:c8cc4c23b7f1974b2eb515a98b20aa05abf078a82c8de42c34109408c6c69c93
     env:
       PAPERLESS_DBHOST: localhost
+      PAPERLESS_OCR_SKIP_ARCHIVE_FILE: always
       PAPERLESS_REDIS: redis://localhost:6379
       PAPERLESS_TIKA_ENABLED: 1
       PAPERLESS_TIKA_ENDPOINT: http://localhost:9998
