@@ -74,7 +74,7 @@
 - name: Immich Machine learning
   containers.podman.podman_container:
     name: immich-machine-learning
-    image: ghcr.io/immich-app/immich-machine-learning:release@sha256:61d97c697587c3638c36893f6626c2900b2720b2143e3fbbba24bf03b828dd55
+    image: ghcr.io/immich-app/immich-machine-learning:release@sha256:f5c42879580edc686f447dee70b9f750822ff2a93cedec04331ec1bd8b323e3f
     volumes:
       - "{{ immich_volume_upload }}:/usr/src/app/upload"
       - "immich_volume_ml_cache:/cache:U"
