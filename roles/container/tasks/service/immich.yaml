@@ -32,7 +32,7 @@
 - name: Immich Server
   containers.podman.podman_container:
     name: immich-server
-    image: ghcr.io/immich-app/immich-server:release@sha256:b3957954fb83ca987db7fd61b2f3f095c85ce9c89d89e5f355dbe33cee30c017
+    image: ghcr.io/immich-app/immich-server:release@sha256:c04710ed178b8418bf67ef9e069f5ecc3104955fa54f279fb91941786681a355
     command:
       - "start-server.sh"
     volumes:
@@ -53,7 +53,7 @@
 - name: Immich Microservices
   containers.podman.podman_container:
     name: immich-microservices
-    image: ghcr.io/immich-app/immich-server:release@sha256:b3957954fb83ca987db7fd61b2f3f095c85ce9c89d89e5f355dbe33cee30c017
+    image: ghcr.io/immich-app/immich-server:release@sha256:c04710ed178b8418bf67ef9e069f5ecc3104955fa54f279fb91941786681a355
     command:
       - "start-microservices.sh"
     volume:
@@ -85,7 +85,7 @@
 - name: Immich Web
   containers.podman.podman_container:
     name: immich-web
-    image: ghcr.io/immich-app/immich-web:release@sha256:32e352cde02c6d2e6e439c77ca99c4bdf9daf808eee9ce9f1282688bcdec75be
+    image: ghcr.io/immich-app/immich-web:release@sha256:7d631ccb35ef45a1dd80706ea9f2532fbb865e7dbb8eb3c322bb893a306780c2
     env:
       IMMICH_SERVER_URL: http://localhost:3001
       TZ: "{{ global_timezone }}"
