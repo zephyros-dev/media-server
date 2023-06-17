@@ -22,7 +22,7 @@
     device: "{{ scrutiny_device_list }}"
     env:
       TZ: "{{ global_timezone }}"
-    image: ghcr.io/analogj/scrutiny:v0.7.1-omnibus@sha256:2eb257af930c06ded0c5c31ee3bbb14d61f027c5e24d5666cc32d58518ce2965
+    image: ghcr.io/analogj/scrutiny:v0.7.1-omnibus@sha256:eb799224be7fbe23a17446ba3095da11db5f3a9b29bfb76bdc6c1b1f05abbf99
     name: scrutiny
     ports:
       - "{{ scrutiny_port }}:8080"
