@@ -1,0 +1,16 @@
+- name: Prepare folder {{ container_folder_loop.item }}
+  module_defaults:
+    ansible.builtin.file:
+      path: "{{ container_folder_loop.item }}"
+      state: directory
+  block:
+    - name: Prepare folder if not exists {{ container_folder_loop.item }} # noqa: args[module]
+      ansible.builtin.file:
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: "0755"
+      when: not container_folder_loop.stat.exists
+    - name: Preserve folder if already exists {{ container_folder_loop.item }} # noqa: risky-file-permissions args[module]
+      become: true
+      when: container_folder_loop.stat.exists
+      ansible.builtin.file:

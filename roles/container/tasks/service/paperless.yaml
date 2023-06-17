@@ -20,7 +20,7 @@
     volumes:
       - "{{ paperless_volume_database_data }}:/var/lib/postgresql/data:U,z"
 
-- name: Paperless gotenberg
+- name: Paperless Gotenberg
   containers.podman.podman_container:
     name: paperless-gotenberg
     image: docker.io/gotenberg/gotenberg:7.8@sha256:78477be56f7f20d0819880c3815b56a73228b9700afcdb9958abc858f96d8280
@@ -38,12 +38,20 @@
     env:
       TZ: "{{ global_timezone }}"
 
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=682407
+# Huge picture will cause gs to crash
+# TODO: We need to be able to adjust the -r value of gs, but currently I'm not sure how to do it on ocrmypdf
 - name: Paperless webserver
   containers.podman.podman_container:
     name: paperless-webserver
     image: ghcr.io/paperless-ngx/paperless-ngx:latest@sha256:94200178bbec7c864cfe4789a90964bb5b0c4805b6739f67218dd79512d16f3c
     env:
       PAPERLESS_DBHOST: localhost
+      # PAPERLESS_OCR_IMAGE_DPI: 300
+      # https://github.com/ocrmypdf/OCRmyPDF/issues/1004
+      # PAPERLESS_OCR_USER_ARGS: '{"oversample": 300, "image_dpi": 300}'
+      # PAPERLESS_OCR_MAX_IMAGE_PIXELS: 7998434
+      # PAPERLESS_OCR_USER_ARGS: '{"skip_big": 8}'
       PAPERLESS_OCR_SKIP_ARCHIVE_FILE: always
       PAPERLESS_REDIS: redis://localhost:6379
       PAPERLESS_TIKA_ENABLED: 1
