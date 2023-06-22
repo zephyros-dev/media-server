@@ -44,7 +44,7 @@
 - name: Paperless webserver
   containers.podman.podman_container:
     name: paperless-webserver
-    image: ghcr.io/paperless-ngx/paperless-ngx:1.16.2@sha256:fa019a5a12abc1c327fc05bb74790672894ac45a86fac7653b765c18fb3e71f8
+    image: ghcr.io/paperless-ngx/paperless-ngx:1.16.3@sha256:cd180d927dd3c1ad246e0cf3464dcf00407244e8b32f55dd662c87cc2c24ae4d
     env:
       PAPERLESS_DBHOST: localhost
       # PAPERLESS_OCR_IMAGE_DPI: 300
