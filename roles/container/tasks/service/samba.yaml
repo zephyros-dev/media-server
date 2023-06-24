@@ -11,7 +11,7 @@
       SAMBA_VOLUME_CONFIG_storage: "[Storage]; path=/shares/storage; {{ samba_shares_settings }}"
       UID_root: 0
       WSDD2_DISABLE: 1
-    image: docker.io/servercontainers/samba:smbd-only-latest@sha256:29b5a2e7637d75fe9afc4a70ef73f83c5ec473c89d7bfd7b49b637e8af05767e
+    image: ghcr.io/servercontainers/samba:latest@sha256:5c6da9083e69325d42d24113dc2badd7e885d90db33315548b345b55c9ff38eb
     name: samba
     network: host
     secrets:

@@ -6,7 +6,7 @@
       ND_SCANSCHEDULE: 1h
       ND_SESSIONTIMEOUT: 24h
       TZ: "{{ global_timezone }}"
-    image: docker.io/deluan/navidrome:latest@sha256:11a24da08977ebfa4a9a71f8c878d822ffaae74a019f274a75dc6386d523da86
+    image: ghcr.io/navidrome/navidrome:0.49.3@sha256:11a24da08977ebfa4a9a71f8c878d822ffaae74a019f274a75dc6386d523da86
     name: navidrome-web
     volumes:
       - "{{ navidrome_music }}:/music:ro"
