@@ -33,7 +33,6 @@
   },
   "platform": "github",
   "platformAutomerge": true,
-  "prConcurrentLimit": 1,
   "pre-commit": {
     "enabled": true
   },
