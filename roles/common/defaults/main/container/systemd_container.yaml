@@ -1,5 +1,4 @@
 container:
-  archivy: "{{ container_default | combine(archivy) }}"
   bazarr: "{{ container_default | combine(bazarr) }}"
   caddy: "{{ container_default | combine(caddy) }}"
   calibre: "{{ container_default | combine(calibre) }}"
@@ -23,13 +22,6 @@ container:
   trilium: "{{ container_default | combine(trilium) }}"
   wol: "{{ container_default | combine(wol) }}"
 
-archivy:
-  folder:
-    - "{{ archivy_volume_elasticsearch_data }}"
-    - "{{ archivy_volume_web_data }}"
-    - "{{ archivy_volume_web_db }}"
-  caddy_proxy_port: "5000"
-  dashy_icon: /static/archivy.svg
 bazarr:
   folder:
     - "{{ bazarr_web_config }}"
