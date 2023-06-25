@@ -5,4 +5,10 @@
     network: caddy
     state: "{{ container_loop_var.value.state }}"
 - name: Create container {{ container_loop_var.key }}
-  ansible.builtin.import_tasks: "service/{{ container_loop_var.key }}.yaml"
+  module_defaults:
+    containers.podman.podman_container:
+      pod: "{{ container_loop_var.key }}"
+      state: "{{ container_loop_var.value.state }}"
+  block:
+    - name: Create container with pod {{ container_loop_var.key }}
+      ansible.builtin.import_tasks: "service/{{ container_loop_var.key }}.yaml"

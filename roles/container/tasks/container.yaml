@@ -70,10 +70,6 @@
               loop: "{{ container_loop_var.value.volume }}"
             - name: Run service with pod {{ container_loop_var.key }}
               become: "{{ container_loop_var.value.become }}"
-              module_defaults:
-                containers.podman.podman_container:
-                  pod: "{{ container_loop_var.key }}"
-                  state: "{{ container_loop_var.value.state }}"
               when: container_final_pod
               block:
                 - name: Create pod {{ container_loop_var.key }}
@@ -95,6 +91,11 @@
                 - name: Recreate {{ container_loop_var.key }}
                   ansible.builtin.include_tasks:
                     file: container_recreate.yaml
+            - name: Recreate if config changes {{ container_loop_var.key }}
+              when: container_recreate
+              ansible.builtin.include_tasks:
+                file: container_recreate.yaml
+            # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
             - name: Create systemd service file for {{ container_loop_var.key }}
               containers.podman.podman_generate_systemd:
                 container_prefix: ""
@@ -103,11 +104,6 @@
                 no_header: true
                 pod_prefix: ""
                 separator: ""
-            # Need this since handlers doesn't work with include. Issues: https://github.com/ansible/ansible/issues/19765
-            - name: Recreate if config changes {{ container_loop_var.key }}
-              ansible.builtin.include_tasks:
-                file: container_recreate.yaml
-              when: container_recreate
             - name: Enable systemd {{ container_loop_var.key }}
               when: not container_loop_var.value.timer
               ansible.builtin.systemd:
