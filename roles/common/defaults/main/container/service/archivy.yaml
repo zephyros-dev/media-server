@@ -1,8 +1,0 @@
-archivy_volume_elasticsearch_data: "{{ archivy_volume_elasticsearch }}/data"
-archivy_volume_elasticsearch: "{{ archivy_volume }}/elasticsearch"
-archivy_volume_web_db: "{{ archivy_volume_web }}/db"
-archivy_volume_web_data: "{{ archivy_volume_web }}/data"
-archivy_volume_web: "{{ archivy_volume }}/web"
-archivy_volume: "{{ global_volume_path }}/archivy"
-# archivy_admin_username:
-# archivy_admin_password:

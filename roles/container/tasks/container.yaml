@@ -177,6 +177,6 @@
                     state: absent
                   loop: "{{ container_systemd_file_list }}"
                 - name: Remove systemd timer
-                  when: not container_loop_var.value.timer
+                  when: container_loop_var.value.timer
                   ansible.builtin.file:
                     path: "{{ container_systemd_path }}/{{ container_loop_var.key }}.timer"
