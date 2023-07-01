@@ -95,6 +95,16 @@ find . -type f -links 1 ! -name "*.srt" -print
 ansible-playbook container_run.yaml --tags nextcloud
 ```
 
+## Server does not boot
+
+- I used a HPZ230 for the server with an NVME hard drive in the PCIE slot.
+- The mainboard does not allow booting from PCIE slot directly, so I have to boot from [Cloverboot](https://github.com/CloverHackyColor/CloverBootloader) installed in an USB.
+  - It can be installed by downloading the release from the github page and burn the ISO to the USB.
+- If PC fail to boot from the USB, the server will be stuck in the unbootable state.
+- In this case, the troubleshooting steps involve:
+  - Check if manual boot from usb is working
+  - Check the boot order in the BIOS
+
 # Note
 
 ## Koreader connection to opds Calibre content server
