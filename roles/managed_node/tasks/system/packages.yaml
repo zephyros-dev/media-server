@@ -78,6 +78,7 @@
             - /tmp/mergerfs
 
 - name: Install snapraid
+  tags: snapraid
   become: true
   block:
     - name: Add copr support
@@ -88,7 +89,7 @@
       changed_when: false
       ansible.builtin.command:
         stdin: "y"
-        cmd: dnf copr enable pauken/SnapRAID fedora-35-x86_64
+        cmd: dnf copr enable pauken/SnapRAID centos-stream-9-x86_64
     - name: Install snapraid and dependencies
       ansible.builtin.dnf:
         name:
