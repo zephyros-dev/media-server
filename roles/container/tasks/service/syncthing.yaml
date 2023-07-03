@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: docker.io/syncthing/syncthing:1.23.5@sha256:cb0a20d011488fd7d8c971708942889f767aecc7d0f5536ee0558cbd1008b0a9
+    image: docker.io/syncthing/syncthing:1.23.6@sha256:e84a00b83684b0d75b58ddc1ac5a5265629bcb07d28a7fd9b3874be00cc6279c
     name: syncthing
     network_mode: host
     userns: keep-id
