@@ -4,7 +4,7 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
-    image: ghcr.io/linuxserver/radarr:latest@sha256:5d5a48b0e5c3937bc872de3619594099334fd15aa51f5d80cce214adabe8c476
+    image: ghcr.io/linuxserver/radarr:latest@sha256:d4f9e8c3afa1b9ae75a619c6084b4c5b80d9d79823f09da49a93b004aa14ae3f
     name: radarr-web
     volumes:
       - "{{ global_media }}:/home"
