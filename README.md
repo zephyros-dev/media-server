@@ -67,6 +67,29 @@ flowchart TB
 ansible-playbook partition --check
 ```
 
+## PC
+
+### Boot from Nvme
+
+- I used a HPZ230 for the server with an NVME hard drive in the PCIE slot.
+- The mainboard does not allow booting from PCIE slot directly, so I have to boot from [Cloverboot](https://github.com/CloverHackyColor/CloverBootloader) installed in an USB.
+  - It can be installed by downloading the release from the github page and burn the ISO to the USB. The name is `CloverISO-<revision>.tar.lzma`
+  - After burning the ISO into USB, copy the EFI\CLOVER\drivers\off\NvmExpressDxe.efi to EFI\CLOVER\drivers\UEFI
+  - In the BIOS, set the boot order to boot from USB first
+  - Then set the following settings in the BIOS
+    - Advanced -> Option ROM Launch Policy -> Storage Options Rom -> UEFI only
+
+### WOL
+
+- In the BIOS, enable wol via Advanced -> Device Options -> S5 Wake on LAN
+
+## Services
+
+### Koreader connection to opds Calibre content server
+
+- The koreader opds requires `/opds` path to the calibre content server
+- The calibre content server authentication need to be `digest` for the koreader opds
+
 # Troubleshooting
 
 ## Pymedusa
@@ -95,19 +118,14 @@ find . -type f -links 1 ! -name "*.srt" -print
 ansible-playbook container_run.yaml --tags nextcloud
 ```
 
-## Server does not boot
+# FAQ
 
-- I used a HPZ230 for the server with an NVME hard drive in the PCIE slot.
-- The mainboard does not allow booting from PCIE slot directly, so I have to boot from [Cloverboot](https://github.com/CloverHackyColor/CloverBootloader) installed in an USB.
-  - It can be installed by downloading the release from the github page and burn the ISO to the USB.
-- If PC fail to boot from the USB, the server will be stuck in the unbootable state.
-- In this case, the troubleshooting steps involve:
-  - Check if manual boot from usb is working
-  - Check the boot order in the BIOS
+1. Why HP Z230?
 
-# Note
-
-## Koreader connection to opds Calibre content server
-
-- The koreader opds requires `/opds` path to the calibre content server
-- The calibre content server authentication need to be `digest` for the koreader opds
+- The PC itself is a bit old, and the bios is no longer updated. However, it is good for home usage due to the following reasons:
+  - Can be cheaply build with a Xeon E3-1230v3 CPU
+  - Has 4 DIMM DDR3 slots, and support for ECC memory. DDDR4 ECC memory can be expensive
+  - Has 2 GPU slots, though I don't really need SLI
+- It has some annoyances however:
+  - The mainboard has no Nvme slot, and does not allow booting from PCIE slot directly, but can be solved via Cloverboot option from above
+  - Has little room for HDD (2 by default), but can be solved by using a HDD cage
