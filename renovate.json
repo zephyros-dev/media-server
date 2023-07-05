@@ -20,6 +20,10 @@
       "matchUpdateTypes": ["major"]
     },
     {
+      "groupName": "renovate",
+      "matchPackagePatterns": ["renovate"]
+    },
+    {
       "groupName": "immich",
       "matchPackagePrefixes": ["ghcr.io/immich-app"]
     }
