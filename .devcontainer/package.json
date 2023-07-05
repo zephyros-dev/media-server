@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "renovate": "^35.25.0"
+    "renovate": "^36.0.0"
   },
   "name": "devcontainer"
 }
