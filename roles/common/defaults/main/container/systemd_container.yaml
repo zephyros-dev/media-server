@@ -165,7 +165,6 @@ reactive_resume:
   folder:
     - "{{ reactive_resume_volume_db_data }}"
   caddy_proxy_custom: true
-  dashy_icon: favicon-local
   secrets:
     reactive_resume_secret_key:
       type: value
