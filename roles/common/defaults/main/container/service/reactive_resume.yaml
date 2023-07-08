@@ -1,0 +1,5 @@
+# reactive_resume_jwt_secret:
+# reactive_resume_secret_key:
+# reactive_resume_postgres_password:
+reactive_resume_volume: "{{ global_volume_path }}/reactive-resume"
+reactive_resume_volume_db_data: "{{ reactive_resume_volume }}/db/data"

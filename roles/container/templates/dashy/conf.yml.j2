@@ -40,7 +40,7 @@ sections:
 {% for key, value in container | dictsort %}
   {% if value.state == "started" or value.state == "present" %}
   {% set url_key = key.replace("_", "-") %}
-  {% set url_public = "https://" + url_key + "." + server_domain %}
+  {% set url_public = "https://" + url_key + "." + server_domain | replace("_", "-")%}
     {% if value.caddy_proxy_port %}
       - title: {{ key.capitalize().replace("_", " ") }}
         icon: {% if not value.dashy_icon %}{{ "hl-" + key }}

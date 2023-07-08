@@ -15,6 +15,7 @@ container:
   prowlarr: "{{ container_default | combine(prowlarr) }}"
   pymedusa: "{{ container_default | combine(pymedusa) }}"
   radarr: "{{ container_default | combine(radarr) }}"
+  reactive_resume: "{{ container_default | combine(reactive_resume) }}"
   samba: "{{ container_default | combine(samba) }}"
   scrutiny: "{{ container_default | combine(scrutiny) }}"
   syncthing: "{{ container_default | combine(syncthing) }}"
@@ -160,6 +161,27 @@ radarr:
     - "{{ transmission_download }}"
   caddy_sso: true
   caddy_proxy_port: "7878"
+reactive_resume:
+  folder:
+    - "{{ reactive_resume_volume_db_data }}"
+  caddy_proxy_custom: true
+  dashy_icon: favicon-local
+  secrets:
+    reactive_resume_secret_key:
+      type: value
+      value: "{{ reactive_resume_secret_key }}"
+    reactive_resume_jwt_secret:
+      type: value
+      value: "{{ reactive_resume_jwt_secret }}"
+    reactive_resume_postgres_password:
+      type: value
+      value: "{{ reactive_resume_postgres_password }}"
+    reactive_resume_public_server_url:
+      type: value
+      value: http://reactive-resume-server.{{ server_domain }}
+    reactive_resume_public_url:
+      type: value
+      value: http://reactive-resume.{{ server_domain }}
 samba:
   folder:
     - "{{ global_storage }}"

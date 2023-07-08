@@ -4,6 +4,13 @@
     {{ caddyfile_auth_user }} {{ caddyfile_auth_pass }}
   }
 }
+# CORS snippet
+# https://caddyserver.com/docs/caddyfile/directives/import#examples
+(cors) {
+	@origin header Origin {args.0}
+	header @origin Access-Control-Allow-Origin "{args.0}"
+	header @origin Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
+}
 # A snippet to check if a cookie token is set. if not, store the current page as the referer and redirect to auth site
 (proxy-auth) {
   # if cookie not = some-token-nonsense
@@ -45,7 +52,7 @@ auth.{{ server_domain }} {
 {% for key,value in container | dictsort %}
   {% if value.state == 'started' %}
     {% if not value.caddy_proxy_custom %}
-{{ key }}.{{ server_domain }} {
+{{ key | replace("_", "-") }}.{{ server_domain }} {
       {% if not value.certbot %}
     import global-config
         {% if value.caddy_sso %}
@@ -84,6 +91,19 @@ calibre.{{ server_domain }} {
 calibre-content.{{ server_domain }} {
   import global-config
   reverse_proxy calibre:8081 {
+      import security-header
+  }
+}
+reactive-resume.{{ server_domain }} {
+  import global-config
+  reverse_proxy reactive_resume:3000 {
+      import security-header
+  }
+}
+reactive-resume-server.{{ server_domain }} {
+  import global-config
+  import cors https://reactive-resume.{{ server_domain }}
+  reverse_proxy reactive_resume:3100 {
       import security-header
   }
 }

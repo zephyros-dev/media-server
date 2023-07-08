@@ -1,0 +1,34 @@
+- name: Reactive resume postgres
+  containers.podman.podman_container:
+    env:
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: "{{ reactive_resume_postgres_password }}"
+      POSTGRES_USER: postgres
+    image: docker.io/postgres:15-alpine@sha256:28407a9961e76f2d285dc6991e8e48893503cc3836a4755bbc2d40bcc272a441
+    name: reactive-resume-db
+    volumes:
+      - "{{ reactive_resume_volume_db_data }}:/var/lib/postgresql/data:U,z"
+
+- name: Reactive resume server
+  containers.podman.podman_container:
+    env:
+      JWT_EXPIRY_TIME: 604800
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: localhost
+      POSTGRES_USER: postgres
+    image: docker.io/amruthpillai/reactive-resume:server-3.7.5@sha256:8f7c56a988a674170e96f98f17930218d6dbb1850b09a814b6d0b5e6649e9927
+    secrets:
+      - reactive_resume_secret_key,type=env,target=SECRET_KEY
+      - reactive_resume_jwt_secret,type=env,target=JWT_SECRET
+      - reactive_resume_postgres_password,type=env,target=POSTGRES_PASSWORD
+      - reactive_resume_public_server_url,type=env,target=PUBLIC_SERVER_URL
+      - reactive_resume_public_url,type=env,target=PUBLIC_URL
+    name: reactive-resume-server
+
+- name: Reactive resume client
+  containers.podman.podman_container:
+    image: docker.io/amruthpillai/reactive-resume:client-3.7.5@sha256:0bb66672b3d58f57abaa813f390f08a7e4f95f2dac066db4d74b36d6f1aab3da
+    secrets:
+      - reactive_resume_public_server_url,type=env,target=PUBLIC_SERVER_URL
+      - reactive_resume_public_url,type=env,target=PUBLIC_URL
+    name: reactive-resume-client
