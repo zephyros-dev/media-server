@@ -1,7 +1,7 @@
 - name: Paperless redis
   containers.podman.podman_container:
     name: paperless-redis
-    image: docker.io/redis:7@sha256:b7b4f80c6feb4d0c1df1105201d8b1008aff6a0f553a5bbc4bf445e340879f36
+    image: docker.io/redis:7@sha256:cf8545d8d3958db05bacf1eff18e1d05908383ac5676a434d644c0f90f64cb45
     env:
       TZ: "{{ global_timezone }}"
     volumes:
