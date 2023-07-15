@@ -7,6 +7,7 @@ container:
   immich: "{{ container_default | combine(immich) }}"
   jellyfin: "{{ container_default | combine(jellyfin) }}"
   kavita: "{{ container_default | combine(kavita) }}"
+  kosync: "{{ container_default | combine(kosync) }}"
   librespeed: "{{ container_default | combine(librespeed) }}"
   lidarr: "{{ container_default | combine(lidarr) }}"
   navidrome: "{{ container_default | combine(navidrome) }}"
@@ -89,6 +90,12 @@ kavita:
   caddy_rewrite:
     - src: /
       dest: /login
+kosync:
+  folder:
+    - "{{ kosync_volume_redis_data }}"
+  caddy_proxy_port: "17200"
+  dashy_statusCheckAcceptCodes: "412"
+  dashy_icon: "https://koreader.rocks/koreader.png"
 librespeed:
   caddy_proxy_port: "80"
 lidarr:

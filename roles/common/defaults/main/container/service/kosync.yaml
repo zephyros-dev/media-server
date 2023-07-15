@@ -1,0 +1,3 @@
+kosync_volume: "{{ global_volume_path }}/kosync"
+kosync_volume_redis: "{{ kosync_volume }}/redis"
+kosync_volume_redis_data: "{{ kosync_volume_redis }}/data"
