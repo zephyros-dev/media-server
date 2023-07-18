@@ -48,6 +48,8 @@ calibre:
   caddy_proxy_port: "8080"
   caddy_proxy_custom: true
   dashy_statusCheckAcceptCodes: "401"
+  ports:
+    - "59090:9090"
 dashy:
   caddy_sso: true
   caddy_proxy_port: "80"
@@ -95,6 +97,7 @@ koreader:
   folder:
     - "{{ koreader_volume_data }}"
   caddy_proxy_port: "3000"
+  dashy_icon: "https://koreader.rocks/koreader.png"
 kosync:
   folder:
     - "{{ kosync_volume_redis_data }}"
@@ -264,6 +267,7 @@ container_default:
   dashy_statusCheckUrl:
   folder: []
   pod: true
+  ports: []
   secrets: {}
   state: started
   timer: false
