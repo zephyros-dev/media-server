@@ -1,0 +1,15 @@
+- name: Koreader
+  containers.podman.podman_container:
+    cap_add:
+      - NET_RAW
+    env:
+      PUID: "{{ global_puid }}"
+      PGID: "{{ global_pgid }}"
+      TZ: "{{ global_timezone }}"
+    image: ghcr.io/zephyros-dev/koreader:main@sha256:68820f884942b1fa1123fa3b75804f090eb7c34f8f6cdeeec260b997ec02a44d
+    name: koreader-web
+    device:
+      - /dev/dri/
+    volumes:
+      - "{{ calibre_book }}:/config/calibre:ro"
+      - "{{ koreader_volume_data }}:/config:U,z"
