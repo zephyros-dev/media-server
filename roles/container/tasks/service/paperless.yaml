@@ -23,7 +23,7 @@
 - name: Paperless Gotenberg
   containers.podman.podman_container:
     name: paperless-gotenberg
-    image: docker.io/gotenberg/gotenberg:7.8@sha256:78477be56f7f20d0819880c3815b56a73228b9700afcdb9958abc858f96d8280
+    image: docker.io/gotenberg/gotenberg:7.9@sha256:c154f3c2753d33e0a515d673906f5b1caa84d382295a689a4dc64c1e7dedaee8
     env:
       TZ: "{{ global_timezone }}"
     command:
