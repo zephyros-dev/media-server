@@ -11,6 +11,7 @@ container:
   kosync: "{{ container_default | combine(kosync) }}"
   librespeed: "{{ container_default | combine(librespeed) }}"
   lidarr: "{{ container_default | combine(lidarr) }}"
+  masterduel: "{{ container_default | combine(masterduel) }}"
   navidrome: "{{ container_default | combine(navidrome) }}"
   nextcloud: "{{ container_default | combine(nextcloud) }}"
   paperless: "{{ container_default | combine(paperless) }}"
@@ -113,6 +114,14 @@ lidarr:
     - "{{ transmission_download }}"
   caddy_sso: true
   caddy_proxy_port: "8686"
+masterduel:
+  folder:
+    - "{{ masterduel_volume_game }}"
+    - "{{ masterduel_volume_wine_cache }}"
+    - "{{ masterduel_volume_wine_data }}"
+  ports:
+    - 4988-4989:4988-4989
+  caddy_proxy_custom: true
 navidrome:
   folder:
     - "{{ global_media }}"

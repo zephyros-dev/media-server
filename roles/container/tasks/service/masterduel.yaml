@@ -1,0 +1,105 @@
+- name: Setup masterduel cache
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.cache/masterduel"
+    state: directory
+    mode: "0755"
+
+- name: Download masterduel server
+  ansible.builtin.get_url:
+    url: "https://github.com/pixeltris/YgoMaster/releases/download/v1.33/YgoMaster-v1.33.zip"
+    dest: "{{ ansible_user_dir }}/.cache/masterduel/YgoMaster.zip"
+    mode: "0644"
+
+# Also need the masterduel_Data folder from the game
+- name: Edit masterduel configuration
+  become: true
+  become_method: containers.podman.podman_unshare
+  block:
+    - name: Check if previous config file exists
+      ansible.builtin.stat:
+        path: "{{ masterduel_volume_game }}/YgoMaster/Data/Settings.json"
+      register: master_duel_settings_json_exists
+    - name: Load config file
+      ansible.builtin.slurp:
+        src: "{{ masterduel_volume_game }}/YgoMaster/Data/Settings.json"
+      register: master_duel_settings_json_previous
+      when: master_duel_settings_json_exists.stat.exists
+    - name: Extract masterduel server # noqa: command-instead-of-module
+      changed_when: false
+      ansible.builtin.command:
+        cmd: unzip -o "{{ ansible_user_dir }}/.cache/masterduel/YgoMaster.zip" -d "{{ masterduel_volume_game }}/"
+    - name: Load config file
+      when: not master_duel_settings_json_exists.stat.exists
+      ansible.builtin.slurp:
+        src: "{{ masterduel_volume_game }}/YgoMaster/Data/Settings.json"
+      register: master_duel_settings_json
+    - name: Set previous config file
+      when: master_duel_settings_json_exists.stat.exists
+      ansible.builtin.set_fact:
+        master_duel_settings: "{{ master_duel_settings_json_previous.content | b64decode }}"
+    - name: Set default config file
+      when: not master_duel_settings_json_exists.stat.exists
+      ansible.builtin.set_fact:
+        master_duel_settings: "{{ master_duel_settings_json.content | b64decode }}"
+    - name: Edit BaseIP
+      ansible.builtin.set_fact:
+        master_duel_settings: '{{ master_duel_settings | regex_replace(''"BaseIP": ".+"'', ''"BaseIP": "server.lan"'') }}'
+    - name: Edit SessionServerIP
+      ansible.builtin.set_fact:
+        master_duel_settings: '{{ master_duel_settings | regex_replace(''"SessionServerIP": ".+"'', ''"SessionServerIP": "0.0.0.0"'') }}'
+    - name: Edit MultiplayerPvpClientConnectIP
+      ansible.builtin.set_fact:
+        master_duel_settings: '{{ master_duel_settings | regex_replace(''"MultiplayerPvpClientConnectIP": ".+"'', ''"MultiplayerPvpClientConnectIP": "localhost"'') }}'
+    - name: Edit MultiplayerEnabled
+      ansible.builtin.set_fact:
+        master_duel_settings: '{{ master_duel_settings | regex_replace(''"MultiplayerEnabled": .+,'', ''"MultiplayerEnabled": true,'') }}'
+    - name: Edit UnlockAllCards
+      ansible.builtin.set_fact:
+        master_duel_settings: '{{ master_duel_settings | regex_replace(''"UnlockAllCards": .+,'', ''"UnlockAllCards": true,'') }}'
+    - name: Edit BindIP
+      ansible.builtin.set_fact:
+        master_duel_settings: '{{ master_duel_settings | regex_replace(''"BindIP": ".+"'', ''"BindIP": "http://+:{BasePort}/"'') }}'
+    - name: Save file
+      ansible.builtin.copy:
+        content: "{{ master_duel_settings }}"
+        dest: "{{ masterduel_volume_game }}/YgoMaster/Data/Settings.json"
+        mode: "0644"
+
+- name: Install dependencies
+  containers.podman.podman_container:
+    command:
+      - winetricks
+      - dotnet40
+    env:
+      FORCED_OWNERSHIP: "yes"
+      NOTTY: "yes"
+      WINEDEBUG: "-all"
+    auto_remove: true
+    image: docker.io/scottyhardy/docker-wine:latest-nordp
+    name: winetricks
+    volumes:
+      - "{{ masterduel_volume_wine_cache }}:/home/wineuser/.cache:z"
+      - "{{ masterduel_volume_wine_data }}:/home/wineuser/.wine:z"
+
+- name: Masterduel server
+  containers.podman.podman_container:
+    command:
+      - wine
+      - YgoMaster
+    env:
+      TZ: "{{ global_timezone }}"
+      FORCED_OWNERSHIP: "yes"
+      NOTTY: "yes"
+      WINEDEBUG: "-all"
+    image: docker.io/scottyhardy/docker-wine:latest-nordp
+    workdir: /home/wineuser/game/YgoMaster
+    name: masterduel-server
+    volumes:
+      - "{{ masterduel_volume_game }}:/home/wineuser/game:z"
+      - "{{ masterduel_volume_wine_cache }}:/home/wineuser/.cache:z"
+      - "{{ masterduel_volume_wine_data }}:/home/wineuser/.wine:z"
+
+- name: Restart masterduel
+  when: master_duel_settings_json_previous.content | b64decode != master_duel_settings
+  ansible.builtin.set_fact:
+    container_recreate: true
