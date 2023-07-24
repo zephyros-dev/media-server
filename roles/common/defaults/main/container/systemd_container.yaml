@@ -30,8 +30,8 @@ bazarr:
   folder:
     - "{{ bazarr_web_config }}"
     - "{{ global_media }}"
-  caddy_sso: true
   caddy_proxy_port: "6767"
+  caddy_sso: true
 caddy:
   pod: false
   caddy_proxy_custom: true
@@ -50,10 +50,11 @@ calibre:
   caddy_proxy_custom: true
   dashy_statusCheckAcceptCodes: "401"
   ports:
+    # This port is used for the calibre wireless device connection
     - "59090:9090"
 dashy:
-  caddy_sso: true
   caddy_proxy_port: "80"
+  caddy_sso: true
   secrets:
     dashy_config:
       type: template
@@ -98,6 +99,8 @@ koreader:
   folder:
     - "{{ koreader_volume_data }}"
   caddy_proxy_port: "3000"
+  caddy_sso: true
+  dashy_statusCheckAcceptCodes: "401"
   dashy_icon: "https://koreader.rocks/koreader.png"
 kosync:
   folder:
@@ -112,8 +115,8 @@ lidarr:
     - "{{ global_media }}"
     - "{{ lidarr_web_config }}"
     - "{{ transmission_download }}"
-  caddy_sso: true
   caddy_proxy_port: "8686"
+  caddy_sso: true
 masterduel:
   folder:
     - "{{ masterduel_volume_game }}"
