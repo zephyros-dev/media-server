@@ -64,12 +64,10 @@
       - paperless_ocr_languages,type=env,target=PAPERLESS_OCR_LANGUAGES
       - paperless_secret_key,type=env,target=PAPERLESS_SECRET_KEY
       - paperless_url,type=env,target=PAPERLESS_URL
-    healthcheck:
-      test:
-        ["CMD", "curl", "-fs", "-S", "--max-time", "2", "http://localhost:8000"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    healthcheck: "curl -fs -S --max-time 2 http://localhost:8000"
+    healthcheck_interval: 30s
+    healthcheck_timeout: 10s
+    healthcheck_retries: 5
     volumes:
       - "{{ paperless_volume_webserver_data }}:/usr/src/paperless/data:U,z"
       - "{{ paperless_volume_webserver_media }}:/usr/src/paperless/media:U,z"
