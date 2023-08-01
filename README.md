@@ -69,6 +69,16 @@ ansible-playbook partition --check
 
 ## PC
 
+### Intel AMT support
+
+- It's possible to control the PC remotely from BIOS via Intel AMT
+- Setup:
+
+1. Enable Intel AMT
+2. Enable the integrated GPU in the BIOS in case of using a discrete GPU (NVIDA, AMD)
+3. Set the integrated GPU as the default GPU in the BIOS
+4. Use [Intel software](https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/default.htm?turl=WordDocuments%2Ftoolsusingkvm.htm) for setting up KVM (remote mouse and keyboard) to the PC
+
 ### Boot from Nvme
 
 - I used a HPZ230 for the server with an NVME hard drive in the PCIE slot.
@@ -126,6 +136,7 @@ ansible-playbook container_run.yaml --tags nextcloud
   - Can be cheaply build with a Xeon E3-1230v3 CPU
   - Has 4 DIMM DDR3 slots, and support for ECC memory. DDDR4 ECC memory can be expensive
   - Has 2 GPU slots, though I don't really need SLI
+  - Has Intel AMT support, so I can have headless remote access to the BIOS for troubleshooting
 - It has some annoyances however:
   - The mainboard has no Nvme slot, and does not allow booting from PCIE slot directly, but can be solved via Cloverboot option from above
   - Has little room for HDD (2 by default), but can be solved by using a HDD cage
