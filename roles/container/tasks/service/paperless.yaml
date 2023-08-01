@@ -34,7 +34,7 @@
 - name: Paperless Tika
   containers.podman.podman_container:
     name: paperless-tika
-    image: ghcr.io/paperless-ngx/tika:2.8.0-minimal@sha256:3ada97dad0aeaea0933eeccd08c29ad793fa7e82d10c5e3902d6cd370f269b8b
+    image: ghcr.io/paperless-ngx/tika:2.8.0-minimal@sha256:85fa0dd02555ee052a04ae2dbabdd47d7fbd42516690e1beb80b7dfceef403dd
     env:
       TZ: "{{ global_timezone }}"
 
