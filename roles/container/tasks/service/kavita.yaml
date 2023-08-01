@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: ghcr.io/kareadita/kavita:canary-0.7.3.13@sha256:10cbce6942417c66ffaf0b3d6f285fbda6b1fe07875876309449363e7e599265
+    image: ghcr.io/kareadita/kavita:0.7.5@sha256:2a773cf96aff652c42c3d2d9e27f9929d48701b67e2fbf4706fd6f6449ba382f
     name: kavita-web
     volumes:
       - "{{ global_media }}:/home:ro"
