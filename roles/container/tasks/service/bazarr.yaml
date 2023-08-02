@@ -4,7 +4,7 @@
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
       TZ: "{{ global_timezone }}"
-    image: ghcr.io/linuxserver/bazarr:latest@sha256:53543497c445fe44e9bab3cc3e06047c74070d7a3569550fdbd06b91456fc0e3
+    image: ghcr.io/linuxserver/bazarr:latest@sha256:d34acf3b82ced358c90faa1ba018566de391b645f4ccda3709f50e6f3559e177
     name: bazarr-web
     volumes:
       - "{{ bazarr_web_config }}:/config:U,z"
