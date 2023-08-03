@@ -20,6 +20,7 @@ flowchart TB
   end
   subgraph lan_network
     subgraph media_server
+      intel_amt[Intel AMT]
       subgraph container_network
         caddy -- reverse proxy --> applications
       end
@@ -77,7 +78,7 @@ ansible-playbook partition --check
 1. Enable Intel AMT
 2. Enable the integrated GPU in the BIOS in case of using a discrete GPU (NVIDA, AMD)
 3. Set the integrated GPU as the default GPU in the BIOS
-4. Use [Intel software](https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/default.htm?turl=WordDocuments%2Ftoolsusingkvm.htm) for setting up KVM (remote mouse and keyboard) to the PC
+4. Use [Intel software](https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/default.htm?turl=WordDocuments%2Ftoolsusingkvm.htm) for setting up KVM (remote mouse and keyboard) to the PC. For cross-platform open source solution, checkout [Meshcentral in a container](https://github.com/Typhonragewind/meshcentral-docker)
 
 ### Boot from Nvme
 
