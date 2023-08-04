@@ -6,8 +6,3 @@
     sftp_enabled: true
     ssh_allow_tcp_forwarding: "yes"
     ssh_allow_agent_forwarding: true # Could be exploited by someone with root access, so only use this for dev machines
-    # TODO: Fix fedora 38 host_key file permission https://github.dev/dev-sec/ansible-collection-hardening/tree/master/roles/ssh_hardening
-    ssh_host_key_files:
-      - /etc/ssh/ssh_host_rsa_key
-      - /etc/ssh/ssh_host_ecdsa_key
-      - /etc/ssh/ssh_host_ed25519_key
