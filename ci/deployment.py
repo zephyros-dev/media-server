@@ -1,3 +1,4 @@
+import os
 import sys
 
 import anyio
@@ -55,9 +56,7 @@ async def ci():
             .with_exec(["pip", "install", "--no-warn-script-location", "ansible"])
             .with_unix_socket(
                 "/ssh-agent.sock",
-                client.host().unix_socket(
-                    await client.host().env_variable("SSH_AUTH_SOCK").value()
-                ),
+                client.host().unix_socket(os.getenv("SSH_AUTH_SOCK")),
             )
             .with_mounted_directory(f"{user_dir}/workspace", workspace)
             .with_workdir(f"{user_dir}/workspace")
@@ -79,7 +78,7 @@ async def ci():
             "ANSIBLE_STDOUT_CALLBACK": "dense",
         }
 
-        if await client.host().env_variable("DEBUG_MODE").value() == "true":
+        if os.getenv("DEBUG_MODE") == "true":
             pass
         else:
             for key, value in ansible_config.items():

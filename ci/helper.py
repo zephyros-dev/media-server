@@ -5,7 +5,6 @@ import dagger
 
 
 def sops_loader(client: dagger.Client, ci: dagger.Container, user_dir):
-    secret_sops_env = client.host().env_variable("SOPS_AGE_KEY").secret()
     age_key_path = f"{os.environ['HOME']}/.config/sops/age/keys.txt"
     if os.path.exists(age_key_path):
         return ci.with_mounted_directory(
@@ -13,6 +12,9 @@ def sops_loader(client: dagger.Client, ci: dagger.Container, user_dir):
             client.host().directory(os.path.dirname(age_key_path)),
         )
     else:
+        secret_sops_env = client.set_secret(
+            "secret_sops_env", os.getenv("SOPS_AGE_KEY")
+        )
         return ci.with_secret_variable("SOPS_AGE_KEY", secret_sops_env)
 
 
