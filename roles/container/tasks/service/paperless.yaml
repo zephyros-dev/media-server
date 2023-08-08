@@ -10,7 +10,7 @@
 - name: Paperless database
   containers.podman.podman_container:
     name: paperless-database
-    image: docker.io/postgres:13-alpine@sha256:ace35ca529a7b68e93a8c6cb4f9bf945137293c4d284729ff2f620ca06b8ca19
+    image: docker.io/postgres:13-alpine@sha256:290978ef29bc25fff400ad2d329c1c9e1db6dd3ea475d04072e359ef60e67ac9
     env:
       POSTGRES_DB: paperless
       POSTGRES_USER: paperless
