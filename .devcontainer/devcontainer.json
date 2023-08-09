@@ -19,6 +19,7 @@
         "Grafana.vscode-jsonnet",
         "mhutchie.git-graph",
         "ms-azuretools.vscode-docker",
+        "ms-python.black-formatter",
         "njpwerner.autodocstring",
         "pascalreitermann93.vscode-yaml-sort",
         "redhat.ansible",
@@ -52,8 +53,6 @@
           "**/handlers/**/*.yaml": "ansible",
           "**/tasks/**/*.yaml": "ansible"
         },
-        "python.formatting.provider": "black",
-        "python.linting.enabled": false,
         "sops.creationEnabled": true
       }
     }
