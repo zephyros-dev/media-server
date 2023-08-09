@@ -8,7 +8,7 @@
 - name: Immich Database
   containers.podman.podman_container:
     name: immich-database
-    image: docker.io/postgres:14-alpine@sha256:d65ffbd791be8226628bb32d688fb55b288fa7855de3e0939169fa2b657d76e2
+    image: docker.io/postgres:14-alpine@sha256:0957cf0e4cb51648727a666fcd830db9bae9bbf6c5830c846486f14fa39b2819
     env:
       POSTGRES_DB: immich
       POSTGRES_USER: immich
