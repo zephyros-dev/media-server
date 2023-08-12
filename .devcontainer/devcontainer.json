@@ -73,6 +73,7 @@
     "source=aqua-registries,target=/home/vscode/.local/share/aquaproj-aqua/registries,type=volume,chown=true",
     "source=npm-global-pkg-cache,target=/home/vscode/node_modules,type=volume,chown=true",
     "source=nvm-cache,target=/usr/local/share/nvm/versions/node,type=volume,chown=true",
+    "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
     "source=vscode-server,target=/home/vscode/.vscode-server,type=volume,chown=true"
   ],
   "name": "Infra",
