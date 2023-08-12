@@ -62,7 +62,7 @@
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "pixeltris/YgoMaster",
       "fileMatch": ["masterduel.yaml"],
-      "matchStrings": ["masterduel_version: \"(?<currentValue>.*?)\"\n"]
+      "matchStrings": ["masterduel_version: (?<currentValue>.*?)\n"]
     }
   ],
   "repositories": ["zephyros-dev/media-server"]
