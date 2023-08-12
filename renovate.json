@@ -1,15 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "ansible": {
-    "fileMatch": [
-      "(^|/)tasks/.+\\.ya?ml$"
-    ]
+    "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
   },
   "automerge": true,
   "automergeType": "branch",
-  "extends": [
-    "github>aquaproj/aqua-renovate-config#1.8.0"
-  ],
+  "extends": ["github>aquaproj/aqua-renovate-config#1.8.0"],
   "git-submodules": {
     "enabled": true
   },
@@ -21,39 +17,27 @@
   "packageRules": [
     {
       "automerge": false,
-      "matchUpdateTypes": [
-        "major"
-      ]
+      "matchUpdateTypes": ["major"]
     },
     {
       "groupName": "reactive-resume",
-      "matchPackagePatterns": [
-        "reactive-resume"
-      ]
+      "matchPackagePatterns": ["reactive-resume"]
     },
     {
       "groupName": "renovate",
-      "matchPackagePatterns": [
-        "renovate"
-      ]
+      "matchPackagePatterns": ["renovate"]
     },
     {
       "groupName": "immich",
-      "matchPackagePatterns": [
-        "ghcr.io/immich-app"
-      ]
+      "matchPackagePatterns": ["ghcr.io/immich-app"]
     }
   ],
   "pinDigests": true,
   "pip-compile": {
-    "fileMatch": [
-      "(^|/)requirements\\.in$"
-    ]
+    "fileMatch": ["(^|/)requirements\\.in$"]
   },
   "pip_requirements": {
-    "fileMatch": [
-      "(^|/)requirements\\.in$"
-    ]
+    "fileMatch": ["(^|/)requirements\\.in$"]
   },
   "platform": "github",
   "platformAutomerge": true,
@@ -65,26 +49,21 @@
     {
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "aquaproj/aqua",
-      "fileMatch": [
-        "Dockerfile",
-        "helper.py"
-      ],
-      "matchStrings": [
-        "AQUA_VERSION=(?<currentValue>.*?)\n"
-      ]
+      "fileMatch": ["Dockerfile", "helper.py"],
+      "matchStrings": ["AQUA_VERSION=(?<currentValue>.*?)\n"]
     },
     {
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "trapexit/mergerfs",
-      "fileMatch": [
-        "mergerfs.yaml"
-      ],
-      "matchStrings": [
-        "mergerfs_version: \"(?<currentValue>.*?)\"\n"
-      ]
+      "fileMatch": ["mergerfs.yaml"],
+      "matchStrings": ["mergerfs_version: \"(?<currentValue>.*?)\"\n"]
+    },
+    {
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "pixeltris/YgoMaster",
+      "fileMatch": ["masterduel.yaml"],
+      "matchStrings": ["masterduel_version: \"(?<currentValue>.*?)\"\n"]
     }
   ],
-  "repositories": [
-    "zephyros-dev/media-server"
-  ]
+  "repositories": ["zephyros-dev/media-server"]
 }
