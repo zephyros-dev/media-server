@@ -6,7 +6,7 @@
       PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
       TZ: "{{ global_timezone }}"
-    image: ghcr.io/zephyros-dev/koreader:latest@sha256:93da53b15f0c8a9ebd6e39301f784b360ec97d01f023cbe049f9af8ecf3447ea
+    image: ghcr.io/zephyros-dev/koreader:latest@sha256:93c3a085c25c46f356f2032983fd3d80a6c06900c08d37fea1df1b5127aae577
     name: koreader-web
     device:
       - /dev/dri/
