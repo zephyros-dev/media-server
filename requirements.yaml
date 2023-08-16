@@ -4,7 +4,7 @@ collections:
   - name: community.libvirt
     version: 1.2.0
   - name: containers.podman
-    version: 1.10.2
+    version: 1.10.3
   - name: devsec.hardening
     version: 8.8.0
 roles:
