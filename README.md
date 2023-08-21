@@ -129,6 +129,18 @@ find . -type f -links 1 ! -name "*.srt" -print
 ansible-playbook container_run.yaml --tags nextcloud
 ```
 
+## Container name with pod exists
+
+- Check if the container exists as external storage in podman then remove that container
+
+```
+podman ps --external
+```
+
+- Reference
+  - https://docs.podman.io/en/latest/markdown/podman-ps.1.html#external
+  - https://github.com/containers/podman/issues/3983
+
 # FAQ
 
 1. Why HP Z230?
