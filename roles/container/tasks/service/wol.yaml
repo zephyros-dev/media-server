@@ -1,9 +1,9 @@
-- name: Wol-web
+- name: Wol
   containers.podman.podman_container:
     env:
       WOLWEBVDIR: "/"
       TZ: "{{ global_timezone }}"
-    image: ghcr.io/zephyros-dev/wolweb:latest@sha256:b9fdc0cb423f7f03bb00eb81b9d84fd9c0c3b16c388e53ce2bddee1b1ea2187d
+    image: ghcr.io/sameerdhoot/wolweb:latest@sha256:c85828b1bb2c0148c70b5699ae6c234ea25b7d32ddf9ffbb76cd5a40d3452b5d
     name: wol
     network: host
     secrets:
