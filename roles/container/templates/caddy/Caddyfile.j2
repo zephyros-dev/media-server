@@ -96,15 +96,13 @@ calibre-content.{{ server_domain }} {
 }
 reactive-resume.{{ server_domain }} {
   import global-config
-  reverse_proxy reactive_resume:3000 {
-      import security-header
+  handle_path /api/* {
+      reverse_proxy reactive_resume:3100
   }
-}
-reactive-resume-server.{{ server_domain }} {
-  import global-config
-  import cors https://reactive-resume.{{ server_domain }}
-  reverse_proxy reactive_resume:3100 {
+  handle {
+    reverse_proxy reactive_resume:3000 {
       import security-header
+    }
   }
 }
 immich.{{ server_domain }} {

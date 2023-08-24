@@ -204,10 +204,10 @@ reactive_resume:
       value: "{{ reactive_resume_postgres_password }}"
     reactive_resume_public_server_url:
       type: value
-      value: http://reactive-resume-server.{{ server_domain }}
+      value: https://reactive-resume.{{ server_domain }}/api
     reactive_resume_public_url:
       type: value
-      value: http://reactive-resume.{{ server_domain }}
+      value: https://reactive-resume.{{ server_domain }}
 samba:
   folder:
     - "{{ global_storage }}"
