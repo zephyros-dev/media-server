@@ -1,0 +1,2 @@
+jdownloader_volume: "{{ global_volume_path }}/jdownloader"
+jdownloader_volume_config: "{{ jdownloader_volume }}/config"

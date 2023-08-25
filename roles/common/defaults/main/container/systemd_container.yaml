@@ -5,6 +5,7 @@ container:
   dashy: "{{ container_default | combine(dashy) }}"
   filebrowser: "{{ container_default | combine(filebrowser) }}"
   immich: "{{ container_default | combine(immich) }}"
+  jdownloader: "{{ container_default | combine(jdownloader) }}"
   jellyfin: "{{ container_default | combine(jellyfin) }}"
   kavita: "{{ container_default | combine(kavita) }}"
   koreader: "{{ container_default | combine(koreader) }}"
@@ -82,6 +83,11 @@ immich:
       value: "{{ immich_typesense_api_key }}"
   volume:
     - immich_volume_ml_cache
+jdownloader:
+  folder:
+    - "{{ global_download }}"
+    - "{{ jdownloader_volume_config }}"
+  caddy_proxy_port: "5800"
 jellyfin:
   folder:
     - "{{ global_media }}"
