@@ -25,4 +25,4 @@ repos:
     hooks:
       - id: terraform_fmt
       - id: terraform_docs
-    rev: v1.82.0
+    rev: v1.83.0
