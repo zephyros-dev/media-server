@@ -1,15 +1,24 @@
-# Reference: https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
-- name: Increase buffer size for HTTP/3 perfomance in caddy
+- name: Misc settings
   become: true
-  ansible.posix.sysctl:
-    name: net.core.rmem_max
-    value: 2500000
-    state: present
+  block:
+    # Reference: https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
+    - name: Increase buffer size for HTTP/3 perfomance in caddy
+      ansible.posix.sysctl:
+        name: net.core.rmem_max
+        value: 2500000
+        state: present
 
-# Reference: https://jellyfin.org/docs/general/administration/troubleshooting.html#real-time-monitoring
-- name: Increase inotify watches for Jellyfin
-  become: true
-  ansible.posix.sysctl:
-    name: fs.inotify.max_user_watches
-    value: 524288
-    state: present
+    # Reference: https://jellyfin.org/docs/general/administration/troubleshooting.html#real-time-monitoring
+    - name: Increase inotify watches for Jellyfin
+      ansible.posix.sysctl:
+        name: fs.inotify.max_user_watches
+        value: 524288
+        state: present
+
+    - name: Add user to libvirt group
+      become: true
+      ansible.builtin.user:
+        name: "{{ ansible_user }}"
+        groups:
+          - libvirt
+        append: true

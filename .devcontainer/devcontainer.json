@@ -17,6 +17,7 @@
         "GitHub.copilot",
         "GitHub.vscode-pull-request-github",
         "Grafana.vscode-jsonnet",
+        "hashicorp.terraform",
         "mhutchie.git-graph",
         "ms-azuretools.vscode-docker",
         "ms-python.black-formatter",
@@ -53,7 +54,9 @@
           "**/handlers/**/*.yaml": "ansible",
           "**/tasks/**/*.yaml": "ansible"
         },
-        "sops.creationEnabled": true
+        "git.repositoryScanIgnoredFolders": [".terraform", "node_modules"],
+        "sops.creationEnabled": true,
+        "terraform.experimentalFeatures.validateOnSave": true
       }
     }
   },
@@ -64,6 +67,7 @@
   },
   "initializeCommand": "./.devcontainer/initializeCommand.sh",
   "mounts": [
+    "source=/mnt,target=/mnt,type=bind",
     "source=${localEnv:HOME}/.ansible,target=/home/vscode/.ansible,type=bind",
     "source=${localEnv:HOME}/.config/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind",
     "source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
@@ -74,7 +78,7 @@
     "source=npm-global-pkg-cache,target=/home/vscode/node_modules,type=volume,chown=true",
     "source=nvm-cache,target=/usr/local/share/nvm/versions/node,type=volume,chown=true",
     "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
-    "source=vscode-server,target=/home/vscode/.vscode-server,type=volume,chown=true"
+    "source=terraform-plugin-cache,target=/home/vscode/.terraform-plugin-cache,type=volume"
   ],
   "name": "Infra",
   "onCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags onCreateCommand",
