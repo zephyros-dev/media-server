@@ -21,3 +21,8 @@ repos:
     rev: 36.67.1
     hooks:
       - id: renovate-config-validator
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+    rev: v1.82.0
