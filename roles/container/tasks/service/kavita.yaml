@@ -4,7 +4,7 @@
       PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
       TZ: "{{ global_timezone }}"
-    image: ghcr.io/linuxserver/kavita:0.7.7@sha256:f69bdf31ab1e8362de7ea4e7063af6d0f826af176aac79fae36a29afe4cf3ffc
+    image: ghcr.io/linuxserver/kavita:0.7.7@sha256:973586bec86eb1ec1b9fc27f9a3085b61891bc3e56f6535c2f1362c5d6088cf3
     name: kavita-web
     volumes:
       - "{{ global_media }}:/home:ro"
