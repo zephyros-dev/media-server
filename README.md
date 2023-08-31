@@ -103,21 +103,11 @@ ansible-playbook partition --check
 
 # Troubleshooting
 
-## Pymedusa
+## Kavita
 
-### Pymedusa failed create hardlink
+### Kavita failed to save progress
 
-- Check [this](roles/pymedusa/README.md)
-
-### Check failed to hardlink file
-
-- Run this command in the Video folder
-
-```
-find . -type f -links 1 ! -name "*.srt" -print
-```
-
-<!-- TODO: Write a scheduled monitoring for this -->
+- Consult [this](https://wiki.kavitareader.com/en/faq#q-im-seeing-database-is-locked-errors-in-my-logs)
 
 ## Nextcloud
 
@@ -140,6 +130,22 @@ podman ps --external
 - Reference
   - https://docs.podman.io/en/latest/markdown/podman-ps.1.html#external
   - https://github.com/containers/podman/issues/3983
+
+## Pymedusa
+
+### Pymedusa failed create hardlink
+
+- Check [this](roles/pymedusa/README.md)
+
+### Check failed to hardlink file
+
+- Run this command in the Video folder
+
+```
+find . -type f -links 1 ! -name "*.srt" -print
+```
+
+<!-- TODO: Write a scheduled monitoring for this -->
 
 # FAQ
 
