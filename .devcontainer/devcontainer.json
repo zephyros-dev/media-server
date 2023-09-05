@@ -54,7 +54,10 @@
           "**/handlers/**/*.yaml": "ansible",
           "**/tasks/**/*.yaml": "ansible"
         },
-        "git.repositoryScanIgnoredFolders": [".terraform", "node_modules"],
+        "git.repositoryScanIgnoredFolders": [
+          ".terraform",
+          "node_modules"
+        ],
         "sops.creationEnabled": true,
         "terraform.experimentalFeatures.validateOnSave": true
       }
@@ -88,5 +91,7 @@
     "EDITOR": "code --wait"
   },
   "remoteUser": "vscode",
-  "runArgs": ["--userns=keep-id", "--platform=linux/amd64"]
+  "runArgs": [
+    "--userns=keep-id"
+  ]
 }
