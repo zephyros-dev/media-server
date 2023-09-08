@@ -4,7 +4,7 @@
       PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
       TZ: "{{ global_timezone }}"
-    image: ghcr.io/linuxserver/calibre:latest@sha256:83e7e704c8214b1e42846d6a3e4655722784b3d5bedf3d48f25769b70eef60a7
+    image: ghcr.io/linuxserver/calibre:latest@sha256:a4cb993280b264c635643b38ee9060fdb89c2ea2691ec35f99a4fba9cb56dfb9
     name: calibre-web
     device:
       - /dev/dri/
