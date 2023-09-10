@@ -11,6 +11,7 @@
       community.general.nmcli:
         type: bridge
         conn_name: bridge0
+        addr_gen_mode6: eui64
         state: present
 
     - name: Set ethernet interface as slave to master bridge
