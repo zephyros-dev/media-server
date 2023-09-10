@@ -1,11 +1,22 @@
-- name: Set a hostname
-  ansible.builtin.hostname:
-    name: server
-    use: systemd
-
-- name: Change address gen mode of main interface to use MAC address for stable IPv6 address
+- name: Setup network
+  tags: debug
   become: true
-  community.general.nmcli:
-    conn_name: eno1
-    addr_gen_mode6: eui64
-    state: present
+  block:
+    - name: Set a hostname
+      ansible.builtin.hostname:
+        name: server
+        use: systemd
+
+    - name: Create master bridge
+      community.general.nmcli:
+        type: bridge
+        conn_name: bridge0
+        state: present
+
+    - name: Set ethernet interface as slave to master bridge
+      community.general.nmcli:
+        type: bridge-slave
+        conn_name: eno1
+        master: bridge0
+        hairpin: false
+        state: present
