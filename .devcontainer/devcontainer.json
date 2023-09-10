@@ -54,10 +54,7 @@
           "**/handlers/**/*.yaml": "ansible",
           "**/tasks/**/*.yaml": "ansible"
         },
-        "git.repositoryScanIgnoredFolders": [
-          ".terraform",
-          "node_modules"
-        ],
+        "git.repositoryScanIgnoredFolders": [".terraform", "node_modules"],
         "sops.creationEnabled": true,
         "terraform.experimentalFeatures.validateOnSave": true
       }
@@ -78,6 +75,7 @@
     "source=aqua-bin,target=/home/vscode/.local/share/aquaproj-aqua/bin,type=volume,chown=true",
     "source=aqua-pkgs,target=/home/vscode/.local/share/aquaproj-aqua/pkgs,type=volume,chown=true",
     "source=aqua-registries,target=/home/vscode/.local/share/aquaproj-aqua/registries,type=volume,chown=true",
+    "source=guix-store,target=/gnu,type=volume",
     "source=npm-global-pkg-cache,target=/home/vscode/node_modules,type=volume,chown=true",
     "source=nvm-cache,target=/usr/local/share/nvm/versions/node,type=volume,chown=true",
     "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
@@ -86,12 +84,11 @@
   "name": "Infra",
   "onCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags onCreateCommand",
   "postAttachCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postAttachCommand",
+  "postStartCommand": "nohup bash -c 'sudo guix-daemon &' > /dev/null",
   "remoteEnv": {
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
     "EDITOR": "code --wait"
   },
   "remoteUser": "vscode",
-  "runArgs": [
-    "--userns=keep-id"
-  ]
+  "runArgs": ["--userns=keep-id"]
 }
