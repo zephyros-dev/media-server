@@ -13,22 +13,15 @@ resource "libvirt_domain" "guix" {
   vcpu   = 2
 
   network_interface {
-    network_name = "default"
+    bridge = "bridge0"
   }
 
   disk {
     volume_id = libvirt_volume.guix.id
   }
 
-  console {
-    type        = "pty"
-    target_type = "serial"
-    target_port = "0"
-  }
-
   graphics {
     type        = "vnc"
     listen_type = "address"
-    autoport    = true
   }
 }
