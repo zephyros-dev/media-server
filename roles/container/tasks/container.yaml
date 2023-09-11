@@ -34,10 +34,6 @@
               name: "{{ container_loop_var.key }}"
               daemon_reload: true
               scope: "{{ container_systemd_scope }}"
-            containers.podman.podman_pod:
-              name: "{{ container_loop_var.key }}"
-              infra_name: "{{ container_loop_var.key }}-pod"
-              state: "{{ container_loop_var.value.state }}"
           block:
             - name: Check if folder exists {{ container_loop_var.key }}
               ansible.builtin.stat:

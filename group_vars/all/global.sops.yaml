@@ -12,6 +12,7 @@ global_storage_mergerfs_mkdir_paths:
 global_timezone: ENC[AES256_GCM,data:1UerWO+jrrep0fU2qKQyQA==,iv:APNAlmje5wjhS4L9jdTuNhqCi5+xo79Ej+U3IMlPFtg=,tag:eoJZ3JXjxOM29QVRtaiHhw==,type:str]
 global_volume_path: ENC[AES256_GCM,data:lTBtzW2SRiwfXEJB6CtIyMLklS+XWVI9oCl1oN4=,iv:nvvCKV6p+jKW9wNVpLtczsSttkLVNjgj+tKSnvT386c=,tag:qibcuQTw5qw4O02QNK5f2Q==,type:str]
 server_domain: ENC[AES256_GCM,data:NGI6g5cdbiJSUEUkYJMIm9YZMZ22+HE=,iv:LaYaeMoXFEMN5c99r8DNpUz9mqS4JvKgMZI6ifXM74c=,tag:ABrlfhjpTVt8Abs4+bSXYQ==,type:str]
+caddyfile_host_address: ENC[AES256_GCM,data:WqZDnn5260+Caw==,iv:D26sDftOaYWrc04g0wVbZ4EF/+GiyCgFlgaOsIS0IlA=,tag:fiV7Cz/Nhdtn97/9a7sbWg==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -27,8 +28,8 @@ sops:
             VThOQW9MMTAxSEVoajV2THNKVzIzTzQKmrdW59KzTRqlhPhXCiKg6AfCRJc+wQFN
             X+y/8aa4S4ChOK+scFnzsA5q0A8aNWx1pR5l/mWnthhgdLdVEqJ82Q==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-08-22T07:54:23Z"
-    mac: ENC[AES256_GCM,data:nM0Xt3BywK+oaoaUxoVbpcHZl8ktsz6N4/uUbg6MtETVhoazP/aqqwQinnjQALa/9KKYrORaQk9p5ZgEXbcsBSg/VuVn+oETiULZ5mLfvfLfUi4RR2REmZG86yMrp77vwXwe90uLK33c1A8vNQoAluZQnt9Nwr8s9CDNDQlSCYY=,iv:pbKqSsTE8EFKXgwtqNHLPuKMRuzmraxMdPi3VXFlQV4=,tag:nNgG4BzjFAbpB/FizpPQWg==,type:str]
+    lastmodified: "2023-09-11T09:09:43Z"
+    mac: ENC[AES256_GCM,data:44ll1UHQbQSifh8RrcMfYc4Mu9fBYvlAAjtz7DQAw80HWEikmVNnninW4dcpoK08UqhiOR3sRPRrftJTNStWiajzp/2ClifQHHGCqT7/CIav5NUs1PI5+cuMbK19ao2HiOD11JwMriWMtgKY3YQ4xgKv+W2ZQRAV56L8s3kjlCU=,iv:6R07ZAECq0u73wZEBTsPLR8dGKYByOhUUz3iG5nKE1o=,tag:GT9ucwNKF74PMuGWFKN2cg==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.7.3
