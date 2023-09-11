@@ -11,7 +11,7 @@
       SAMBA_VOLUME_CONFIG_storage: "[Storage]; path=/shares/storage; {{ samba_shares_settings }}"
       UID_root: 0
       WSDD2_DISABLE: 1
-    image: ghcr.io/servercontainers/samba:latest@sha256:c11f6d293cc46cc4f7481632a37560188f4b5418d9cbf863f02084e38f833634
+    image: ghcr.io/servercontainers/samba:latest@sha256:55f1b019793117190188de79ed74dbd35107c10937d61ca86d45f985e199cc23
     name: samba
     network: host
     secrets:
