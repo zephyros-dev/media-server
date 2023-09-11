@@ -1,5 +1,3 @@
-global_container_state: started
-
 container:
   bazarr: "{{ container_default | combine(bazarr) }}"
   caddy: "{{ container_default | combine(caddy) }}"

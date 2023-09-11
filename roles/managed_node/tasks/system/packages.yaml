@@ -16,13 +16,30 @@
         sysctl_set: true
         value: "80"
 
-- name: Enable podman socket
-  ansible.builtin.systemd:
-    daemon_reload: true
-    enabled: true
-    name: podman.socket
-    scope: user
-    state: started
+- name: Setup rootless podman
+  tags: podman_rootless
+  block:
+    - name: Enable podman socket
+      ansible.builtin.systemd:
+        daemon_reload: true
+        enabled: true
+        name: podman.socket
+        scope: user
+        state: started
+    - name: Create containers config directory
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.config/containers/containers.conf.d"
+        owner: "{{ ansible_user_uid }}"
+        group: "{{ ansible_user_gid }}"
+        mode: "0755"
+        state: directory
+    - name: Create containers network config file
+      ansible.builtin.template:
+        src: templates/podman/network.conf.j2
+        dest: "{{ ansible_user_dir }}/.config/containers/containers.conf.d/network.conf"
+        owner: "{{ ansible_user_uid }}"
+        group: "{{ ansible_user_gid }}"
+        mode: "0644"
 
 - name: Install mergerfs
   become: true

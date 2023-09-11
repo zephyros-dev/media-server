@@ -28,7 +28,7 @@
       become: "{{ container_loop_var.value.become }}"
       block:
         - name: Setup podman container with systemd
-          when: container_loop_var.value.state == "started" and global_container_state == "started"
+          when: container_loop_var.value.state == "started"
           module_defaults:
             ansible.builtin.systemd:
               name: "{{ container_loop_var.key }}"
@@ -37,7 +37,6 @@
             containers.podman.podman_pod:
               name: "{{ container_loop_var.key }}"
               infra_name: "{{ container_loop_var.key }}-pod"
-              network: caddy
               state: "{{ container_loop_var.value.state }}"
           block:
             - name: Check if folder exists {{ container_loop_var.key }}
@@ -124,7 +123,7 @@
                     container_systemd_timer_state: "{{ container_loop_var.value.state }}"
 
         - name: Stop podman container # noqa: var-naming[no-role-prefix]
-          when: container_loop_var.value.state == "absent" or global_container_state == "absent"
+          when: container_loop_var.value.state == "absent"
           module_defaults:
             ansible.builtin.systemd:
               name: "{{ container_loop_var.key }}"
@@ -132,8 +131,6 @@
               enabled: false
               scope: "{{ container_systemd_scope }}"
               state: stopped
-          vars:
-            container_name_list: ["{{ container_loop_var.key }}"]
           block:
             - name: Check if systemd file for container exists {{ container_loop_var.key }}
               ansible.builtin.stat:
@@ -159,6 +156,11 @@
                         container_name_list: "{{ container_name_list + [item.Name] }}"
                       loop: "{{ container_pod_info.pods[0].Containers }}"
 
+                - name: Set systemd file list for container {{ container_loop_var.key }}
+                  when: not container_final_pod
+                  ansible.builtin.set_fact:
+                    container_name_list: ["{{ container_loop_var.key }}"]
+
                 - name: Stop systemd service {{ container_loop_var.key }}
                   ansible.builtin.systemd:
                 - name: Remove containers {{ container_loop_var.key }}
@@ -168,6 +170,8 @@
                   loop: "{{ container_name_list }}"
                 - name: Remove pod {{ container_loop_var.key }}
                   when: container_final_pod
+                  register: pod_removal
+                  until: pod_removal.failed == false
                   containers.podman.podman_pod:
                     name: "{{ container_loop_var.key }}"
                     state: absent
