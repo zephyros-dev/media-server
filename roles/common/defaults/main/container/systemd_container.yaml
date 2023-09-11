@@ -42,6 +42,7 @@ caddy:
     caddyfile:
       type: template
       value: caddy/Caddyfile.j2
+  preserve_volume: true
   volume:
     - caddy_volume_config
     - caddy_volume_data
@@ -288,6 +289,7 @@ container_default:
   folder: []
   pod: true
   ports: []
+  preserve_volume: false
   secrets: {}
   state: started
   timer: false

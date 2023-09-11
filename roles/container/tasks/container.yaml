@@ -178,6 +178,7 @@
                     state: absent
                   loop: "{{ container_loop_var.value.secrets | dict2items }}"
                 - name: Remove volume {{ container_loop_var.key }}
+                  when: not container_loop_var.value.preserve_volume
                   containers.podman.podman_volume:
                     name: "{{ item }}"
                     state: absent

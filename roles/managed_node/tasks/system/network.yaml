@@ -1,5 +1,5 @@
 - name: Setup network
-  tags: debug
+  tags: network
   become: true
   block:
     - name: Set a hostname
