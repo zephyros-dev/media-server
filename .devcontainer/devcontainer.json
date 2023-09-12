@@ -75,6 +75,8 @@
     "source=aqua-bin,target=/home/vscode/.local/share/aquaproj-aqua/bin,type=volume,chown=true",
     "source=aqua-pkgs,target=/home/vscode/.local/share/aquaproj-aqua/pkgs,type=volume,chown=true",
     "source=aqua-registries,target=/home/vscode/.local/share/aquaproj-aqua/registries,type=volume,chown=true",
+    "source=guix-config,target=/home/vscode/.config/guix,type=volume",
+    "source=guix-var,target=/var/guix,type=volume",
     "source=guix-store,target=/gnu,type=volume",
     "source=npm-global-pkg-cache,target=/home/vscode/node_modules,type=volume,chown=true",
     "source=nvm-cache,target=/usr/local/share/nvm/versions/node,type=volume,chown=true",
@@ -87,7 +89,8 @@
   "postStartCommand": "nohup bash -c 'sudo guix-daemon &' > /dev/null",
   "remoteEnv": {
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
-    "EDITOR": "code --wait"
+    "EDITOR": "code --wait",
+    "GUIX_PROFILE": "/home/vscode/.config/guix/current"
   },
   "remoteUser": "vscode",
   "runArgs": ["--userns=keep-id"]

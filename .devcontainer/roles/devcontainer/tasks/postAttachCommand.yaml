@@ -50,3 +50,13 @@
         chdir: ../
         cmd: pre-commit install
       changed_when: false
+
+- name: Setup guix
+  block:
+    - name: Setup profile
+      ansible.builtin.copy:
+        content: |
+          GUIX_PROFILE="$HOME/.config/.guix/current"
+          . "$GUIX_PROFILE/etc/profile"
+        dest: "{{ ansible_user_dir }}/.zshenv"
+        mode: "0644"
