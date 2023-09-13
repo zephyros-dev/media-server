@@ -4,5 +4,5 @@ black==23.9.1
 dagger-io==0.8.4
 pip-tools==7.3.0
 pre-commit==3.4.0
-ruff==0.0.288
+ruff==0.0.289
 transmission-rpc==6.0.0
