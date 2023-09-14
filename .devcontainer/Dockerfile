@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:3.11-bullseye@sha256:a12dc87b8f6c1f41153d7d27157904c1c69d21c27a9c3a21648700cb8f6d5898
+FROM mcr.microsoft.com/devcontainers/python:3.11-bullseye@sha256:6f420e954295b711085156126fc1cae3412f6c4e3c84f6a5fe3fc607071b4565
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
