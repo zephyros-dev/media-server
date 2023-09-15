@@ -86,10 +86,11 @@
   "name": "Infra",
   "onCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags onCreateCommand",
   "postAttachCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postAttachCommand",
-  "postStartCommand": "nohup bash -c 'sudo guix-daemon &' > /dev/null",
+  "postStartCommand": "nohup bash -c 'sudo guix-daemon &' > /dev/null && guix package -m guix.scm",
   "remoteEnv": {
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
     "EDITOR": "code --wait",
+    "GUIX_LOCPATH": "/home/vscode/.guix-profile/lib/locale",
     "GUIX_PROFILE": "/home/vscode/.config/guix/current"
   },
   "remoteUser": "vscode",
