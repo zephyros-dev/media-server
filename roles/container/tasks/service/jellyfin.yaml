@@ -2,7 +2,7 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: docker.io/jellyfin/jellyfin:10.8.10@sha256:d818ab432f1feb517795b05b11aa01037b7b25084b08a45e1bf56544ee236ba3
+    image: docker.io/jellyfin/jellyfin:10.8.11@sha256:381e1b4cab1a197fde7ce2d029c0907a4307ef7d0d18695258609375defa22f9
     name: jellyfin-web
     device:
       - /dev/dri/
