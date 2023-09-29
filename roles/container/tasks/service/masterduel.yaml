@@ -6,7 +6,7 @@
 
 - name: Download masterduel server
   ansible.builtin.get_url:
-    url: "https://github.com/pixeltris/YgoMaster/releases/download/v1.33/YgoMaster-v1.33.zip"
+    url: "https://github.com/pixeltris/YgoMaster/releases/download/{{ masterduel_version }}/YgoMaster-{{ masterduel_version }}.zip"
     dest: "{{ ansible_user_dir }}/.cache/masterduel/YgoMaster.zip"
     mode: "0644"
 

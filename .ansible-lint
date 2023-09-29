@@ -8,3 +8,4 @@ skip_list:
   - command-instead-of-shell
   - meta-no-info
   - package-latest
+  - var-naming
