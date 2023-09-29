@@ -4,7 +4,7 @@
       POSTGRES_DB: postgres
       POSTGRES_PASSWORD: "{{ reactive_resume_postgres_password }}"
       POSTGRES_USER: postgres
-    image: docker.io/postgres:15-alpine@sha256:8bc3c893342c766481df5fde58fab6f1a1115b94eb56778126163305243e9709
+    image: docker.io/postgres:15-alpine@sha256:88ec21dc6aefcae26cf91d385dc48fc777614bb3c141cdec2db77d756c3ffe7b
     name: reactive-resume-db
     volumes:
       - "{{ reactive_resume_volume_db_data }}:/var/lib/postgresql/data:U,z"
