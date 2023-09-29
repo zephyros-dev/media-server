@@ -56,7 +56,7 @@
           POSTGRES_DB: nextcloud
           POSTGRES_USER: postgres
           TZ: "{{ global_timezone }}"
-        image: docker.io/postgres:14-alpine@sha256:843d7160d0f521cbddebeb59bb455524303fed07eba972c1d75895eeb381153a
+        image: docker.io/postgres:14-alpine@sha256:6443baaf2f8c9ef30920ba8177cb2522a0ccb0e36e8b20d6cdcee2443702c4f9
         name: nextcloud-db
         secrets:
           - nextcloud_postgres_password,type=env,target=POSTGRES_PASSWORD
