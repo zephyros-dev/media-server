@@ -287,6 +287,7 @@ container_default:
   pod: true
   ports: []
   preserve_volume: false
+  quadlet: false
   secrets: {}
   state: started
   timer: false
