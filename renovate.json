@@ -23,10 +23,6 @@
       "matchUpdateTypes": ["major"]
     },
     {
-      "groupName": "reactive-resume",
-      "matchPackagePatterns": ["reactive-resume"]
-    },
-    {
       "groupName": "renovate",
       "matchPackagePatterns": ["renovate"]
     },

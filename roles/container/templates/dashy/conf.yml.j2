@@ -25,12 +25,6 @@ sections:
   "state": container.calibre.state
 }) %}
 {% set dashy = container_default | combine({}) %}
-{% set reactive_resume = container_default | combine({
-    "caddy_proxy_port": "3000",
-    "dashy_icon": "favicon-local",
-    "state": container.reactive_resume.state
-  })
-%}
 {% set netdata = container_default | combine ({
   "caddy_proxy_port": "19999",
   "dashy_statusCheckAcceptCodes": "401",
@@ -40,7 +34,6 @@ sections:
   "calibre_content": calibre_content,
   "dashy": dashy,
   "netdata": netdata,
-  "reactive_resume": reactive_resume
   }
 %}
 {% set _ = container.update(custom_dashy_service) %}
