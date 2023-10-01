@@ -2,5 +2,5 @@
   containers.podman.podman_container:
     env:
       TZ: "{{ global_timezone }}"
-    image: ghcr.io/linuxserver/librespeed:latest@sha256:69885b3e53f84758688a1fd294c32e09520d80d2d37503dc9f33fcabad86141e
+    image: ghcr.io/linuxserver/librespeed:latest@sha256:580dd09ed93e7315a77592d97a10ab8eb62e2807e2983395ae37274e244060f1
     name: librespeed-web
