@@ -1,5 +1,0 @@
-masterduel_volume: "{{ global_volume_path }}/masterduel"
-masterduel_volume_game: "{{ masterduel_volume }}/game"
-masterduel_volume_wine_cache: "{{ masterduel_volume }}/wine_cache"
-masterduel_volume_wine_data: "{{ masterduel_volume }}/wine_data"
-masterduel_version: v1.36

@@ -56,12 +56,6 @@
       "depNameTemplate": "trapexit/mergerfs",
       "fileMatch": ["mergerfs.yaml"],
       "matchStrings": ["mergerfs_version: \"(?<currentValue>.*?)\"\n"]
-    },
-    {
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "pixeltris/YgoMaster",
-      "fileMatch": ["masterduel.yaml"],
-      "matchStrings": ["masterduel_version: (?<currentValue>.*?)\n"]
     }
   ],
   "repositories": ["zephyros-dev/media-server"]
