@@ -32,7 +32,7 @@
 - name: Immich Server
   containers.podman.podman_container:
     name: immich-server
-    image: ghcr.io/immich-app/immich-server:v1.79.1@sha256:a32e81d60a59fb2209f59c0bd64cb1b67da2d406b30658da2c23d1e6352d429a
+    image: ghcr.io/immich-app/immich-server:v1.80.0@sha256:8b3e088b126fbc4fe4e3cfebd6d05bfd2e38e7c302a3563c3055214654c51452
     command:
       - "start-server.sh"
     volumes:
@@ -53,7 +53,7 @@
 - name: Immich Microservices
   containers.podman.podman_container:
     name: immich-microservices
-    image: ghcr.io/immich-app/immich-server:v1.79.1@sha256:a32e81d60a59fb2209f59c0bd64cb1b67da2d406b30658da2c23d1e6352d429a
+    image: ghcr.io/immich-app/immich-server:v1.80.0@sha256:8b3e088b126fbc4fe4e3cfebd6d05bfd2e38e7c302a3563c3055214654c51452
     command:
       - "start-microservices.sh"
     volume:
