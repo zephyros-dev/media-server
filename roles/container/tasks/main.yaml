@@ -1,6 +1,9 @@
 - name: Setup container
   tags: container
   block:
+    - name: Create network
+      containers.podman.podman_network:
+        name: webserver
     - name: Run podman container with systemd
       ansible.builtin.include_tasks:
         file: container.yaml

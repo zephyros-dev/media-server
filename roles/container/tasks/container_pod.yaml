@@ -3,7 +3,7 @@
     name: "{{ container_loop_var.key }}"
     infra_name: "{{ container_loop_var.key }}-pod"
     ports: "{{ container_loop_var.value.ports }}"
-    network: caddy
+    network: webserver
     state: "{{ container_loop_var.value.state }}"
 - name: Create container {{ container_loop_var.key }}
   module_defaults:
