@@ -23,6 +23,11 @@
       "matchUpdateTypes": ["major"]
     },
     {
+      "automerge": false,
+      "matchPackagePatterns": ["python"],
+      "matchUpdateTypes": ["minor"]
+    },
+    {
       "groupName": "renovate",
       "matchPackagePatterns": ["renovate"]
     },
