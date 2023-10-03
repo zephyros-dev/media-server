@@ -37,7 +37,7 @@ jobs:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.11.5"
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
