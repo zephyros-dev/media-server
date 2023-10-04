@@ -1,0 +1,81 @@
+- name: Create service {{ container_loop_var.key }}
+  when: container_loop_var.value.state == "started"
+  module_defaults:
+    ansible.builtin.systemd:
+      name: "{{ container_loop_var.key }}"
+      daemon_reload: true
+      scope: "{{ container_systemd_scope }}"
+  block:
+    - name: Prepare kube deployment {{ container_loop_var.key }}
+      delegate_to: localhost
+      block:
+        - name: Export facts to file {{ container_loop_var.key }}
+          changed_when: false
+          ansible.builtin.copy:
+            content: "{{ vars | to_nice_json }}"
+            mode: "0644"
+            dest: cue/tmp/fact.json
+        - name: Template fact into concrete value {{ container_loop_var.key }}
+          changed_when: false
+          ansible.builtin.template:
+            mode: "0644"
+            src: cue/tmp/fact.json
+            dest: cue/tmp/fact.json
+        - name: Extract fact to cue {{ container_loop_var.key }}
+          changed_when: false
+          ansible.builtin.command:
+            cmd: cue import cue/tmp/fact.json --outfile cue/tmp/fact.cue -p fact -f
+        - name: Render kube deployment {{ container_loop_var.key }}
+          changed_when: false
+          ansible.builtin.command:
+            chdir: cue
+            cmd: cue dump --inject applicationName={{ container_loop_var.key }}
+          register: cue_dump
+    - name: Setup kube deployment {{ container_loop_var.key }}
+      block:
+        - name: Create kube deployment folder {{ container_loop_var.key }}
+          ansible.builtin.file:
+            path: "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}"
+            state: directory
+            mode: "0755"
+        - name: Copy kube files {{ container_loop_var.key }}
+          ansible.builtin.copy:
+            mode: "0755"
+            src: "{{ container_loop_var.key }}/"
+            dest: "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/"
+        - name: Create kube deployment {{ container_loop_var.key }}
+          ansible.builtin.copy:
+            content: "{{ cue_dump.stdout }}"
+            mode: "0600"
+            dest: "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/deployment.yaml"
+        - name: Create kube quadlet file {{ container_loop_var.key }}
+          ansible.builtin.template:
+            src: quadlet/service.kube.j2
+            mode: "0600"
+            dest: "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}.kube"
+        - name: Start systemd service {{ container_loop_var.key }}
+          ansible.builtin.systemd:
+- name: Remove service {{ container_loop_var.key }}
+  when: container_loop_var.value.state == "absent"
+  module_defaults:
+    ansible.builtin.systemd:
+      name: "{{ container_loop_var.key }}"
+      daemon_reload: true
+      enabled: false
+      scope: "{{ container_systemd_scope }}"
+      state: stopped
+  block:
+    - name: Check if kube file exists {{ container_loop_var.key }}
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}.kube"
+      register: kube_file_exists
+    - name: Stop systemd service {{ container_loop_var.key }}
+      when: kube_file_exists.stat.exists
+      ansible.builtin.systemd:
+    - name: Remove kube file {{ container_loop_var.key }}
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}.kube"
+        - "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}"

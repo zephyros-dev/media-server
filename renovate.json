@@ -24,8 +24,12 @@
     },
     {
       "automerge": false,
-      "matchPackagePatterns": ["python"],
+      "matchPackagePatterns": ["python", "go"],
       "matchUpdateTypes": ["minor"]
+    },
+    {
+      "groupName": "python",
+      "matchPackagePatterns": ["python"]
     },
     {
       "groupName": "renovate",

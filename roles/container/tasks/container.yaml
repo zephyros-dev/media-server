@@ -63,3 +63,8 @@
           when: not container_loop_var.value.quadlet
           ansible.builtin.include_tasks:
             file: container_systemd.yaml
+
+        - name: Setup container with quadlet {{ container_loop_var.key }}
+          when: container_loop_var.value.quadlet
+          ansible.builtin.include_tasks:
+            file: container_quadlet.yaml

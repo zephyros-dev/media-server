@@ -51,3 +51,12 @@ async def install_aqua(client: dagger.Client, ci: dagger.Container, user_dir):
         .with_exec(["mv", "aqua", "/root/.local/share/aquaproj-aqua/bin/aqua"])
         .with_exec(["aqua", "install"])
     )
+
+
+async def cue_setup(client: dagger.Client, ci: dagger.Container, user_dir):
+    return (
+        ci.with_workdir(f"{user_dir}/workspace/cue")
+        .with_exec(["go", "mod", "download"])
+        .with_exec(["cue", "get", "go", "k8s.io/api/..."])
+        .with_workdir(f"{user_dir}/workspace")
+    )

@@ -3,7 +3,7 @@ import sys
 
 import anyio
 import dagger
-from helper import install_aqua, sops_loader
+from helper import cue_setup, install_aqua, sops_loader
 
 
 async def ci():
@@ -63,6 +63,8 @@ async def ci():
         )
 
         ci = await install_aqua(client, ci, user_dir)
+
+        ci = await cue_setup(client, ci, user_dir)
 
         ci = (
             ci.with_mounted_cache(

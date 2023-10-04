@@ -55,3 +55,10 @@
   changed_when: false
   ansible.builtin.command:
     cmd: aqua install --all
+
+- name: Install cue dependencies
+  changed_when: false
+  ansible.builtin.command:
+    cmd: "{{ item }}"
+  loop:
+    - cue get go k8s.io/api/...

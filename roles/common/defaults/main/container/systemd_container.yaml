@@ -31,6 +31,7 @@ bazarr:
     - "{{ global_media }}"
   caddy_proxy_port: "6767"
   caddy_sso: true
+  quadlet: true
 caddy:
   pod: false
   caddy_proxy_custom: true

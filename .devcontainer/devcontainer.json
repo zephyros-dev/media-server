@@ -10,6 +10,7 @@
     "vscode": {
       "extensions": [
         "bierner.markdown-mermaid",
+        "brody715.vscode-cuelang",
         "charliermarsh.ruff",
         "eamodio.gitlens",
         "esbenp.prettier-vscode",
@@ -33,6 +34,7 @@
         "yzhang.markdown-all-in-one"
       ],
       "settings": {
+        "cue.moduleRoot": "${workspaceFolder}/cue",
         "[json]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
@@ -42,7 +44,8 @@
         "[python]": {
           "editor.codeActionsOnSave": {
             "source.organizeImports": true
-          }
+          },
+          "editor.defaultFormatter": "ms-python.black-formatter"
         },
         "[yaml]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
