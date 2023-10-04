@@ -9,6 +9,11 @@
     - name: Prepare kube deployment {{ container_loop_var.key }}
       delegate_to: localhost
       block:
+        - name: Create tmp cue folder {{ container_loop_var.key }}
+          ansible.builtin.file:
+            path: cue/tmp
+            state: directory
+            mode: "0755"
         - name: Export facts to file {{ container_loop_var.key }}
           changed_when: false
           ansible.builtin.copy:
