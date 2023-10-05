@@ -1,5 +1,5 @@
 [Kube]
-Network=webserver # TODO: Conditional host network
+Network=webserver
 Yaml={{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/deployment.yaml
 [Install]
 WantedBy=default.target
