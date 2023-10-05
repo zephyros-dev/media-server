@@ -28,25 +28,76 @@ applicationSet & {
 					image: "bazarr"
 					name:  "web"
 					volumeMounts: [{
-						mountPath: "/config"
 						name:      "config"
+						mountPath: "/config"
 					}, {
-						mountPath: "/home"
 						name:      "home"
+						mountPath: "/home"
 					}]
 				}]
 				volumes: [{
+					name: "config"
 					hostPath: {
 						path: "\(fact.bazarr_web_config)"
 						type: "Directory"
 					}
-					name: "config"
 				}, {
+					name: "home"
 					hostPath: {
 						path: "\(fact.global_media)"
 						type: "Directory"
 					}
-					name: "home"
+				}]
+			}
+		}
+	}
+
+	caddy: {
+		_
+		#param: {
+			name: "caddy"
+			secret: {
+				caddyfile: "\(fact.caddy_secret_caddyfile)"
+			}
+			volume: [
+				"caddy_volume_config",
+				"caddy_volume_data",
+			]
+		}
+		#pod: {
+			spec: {
+				containers: [{
+					image: "caddy"
+					name:  "instance"
+					ports: [{
+						containerPort: 80
+						hostPort:      80
+					}, {
+						containerPort: 443
+						hostPort:      443
+					}, {
+						containerPort: 443
+						hostPort:      443
+						protocol:      "UDP"
+					}]
+					volumeMounts: [{
+						mountPath: "/config"
+						name:      "config"
+					}, {
+						mountPath: "/data"
+						name:      "data"
+					}, {
+						name:      "caddyfile"
+						readOnly:  true
+						mountPath: "/etc/caddy/Caddyfile"
+					}]
+				}]
+				volumes: [{
+					name: "config"
+					persistentVolumeClaim: claimName: "caddy_volume_config"
+				}, {
+					name: "data"
+					persistentVolumeClaim: claimName: "caddy_volume_data"
 				}]
 			}
 		}

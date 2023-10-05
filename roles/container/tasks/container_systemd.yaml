@@ -6,6 +6,14 @@
       daemon_reload: true
       scope: "{{ container_systemd_scope }}"
   block:
+    - name: Set container default restart state
+      ansible.builtin.set_fact:
+        container_recreate: false
+    - name: Create volume {{ container_loop_var.key }}
+      when: container_loop_var.value.volume
+      containers.podman.podman_volume:
+        name: "{{ item }}"
+      loop: "{{ container_loop_var.value.volume }}"
     - name: Run service with pod {{ container_loop_var.key }}
       become: "{{ container_loop_var.value.become }}"
       when: container_final_pod

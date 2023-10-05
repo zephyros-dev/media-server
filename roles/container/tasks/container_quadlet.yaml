@@ -4,6 +4,7 @@
     ansible.builtin.systemd:
       name: "{{ container_loop_var.key }}"
       daemon_reload: true
+      state: started
       scope: "{{ container_systemd_scope }}"
   block:
     - name: Prepare kube deployment {{ container_loop_var.key }}
@@ -66,7 +67,6 @@
     ansible.builtin.systemd:
       name: "{{ container_loop_var.key }}"
       daemon_reload: true
-      enabled: false
       scope: "{{ container_systemd_scope }}"
       state: stopped
   block:

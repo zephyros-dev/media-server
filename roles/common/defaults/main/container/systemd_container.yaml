@@ -33,13 +33,13 @@ bazarr:
   caddy_sso: true
   quadlet: true
 caddy:
-  pod: false
   caddy_proxy_custom: true
   secrets:
     caddyfile:
       type: template
       value: caddy/Caddyfile.j2
   preserve_volume: true
+  quadlet: true
   volume:
     - caddy_volume_config
     - caddy_volume_data

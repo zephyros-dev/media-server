@@ -42,9 +42,6 @@
               loop: "{{ container_folder_state.results }}"
               loop_control:
                 loop_var: container_folder_loop
-            - name: Set container default restart state
-              ansible.builtin.set_fact:
-                container_recreate: false
             - name: Create secrets {{ container_loop_var.key }}
               when: container_loop_var.value.secrets
               ansible.builtin.include_tasks:
@@ -53,11 +50,6 @@
               loop_control:
                 loop_var: container_secrets_loop
               no_log: true
-            - name: Create volume {{ container_loop_var.key }}
-              when: container_loop_var.value.volume
-              containers.podman.podman_volume:
-                name: "{{ item }}"
-              loop: "{{ container_loop_var.value.volume }}"
 
         - name: Setup container with generate systemd {{ container_loop_var.key }}
           when: not container_loop_var.value.quadlet

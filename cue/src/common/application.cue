@@ -11,6 +11,10 @@ import (
 		env: {
 			string?: string
 		}
+		secret: {
+			string?: string
+		}
+		volume: [...string]
 	}
 
 	#pod: core.#Pod & {
@@ -30,7 +34,7 @@ import (
 				}}]}]
 	}
 
-	#envSecret: core.#Secret & {
+	#env: core.#Secret & {
 		apiVersion: "v1"
 		kind:       "Secret"
 		metadata: {
@@ -44,12 +48,35 @@ import (
 		}}
 	}
 
-	// #volume: null
-	// #secret: null
+	#secret: core.#Secret & {
+		apiVersion: "v1"
+		kind:       "Secret"
+		metadata: {
+			name: "\(#param.name)-secret"
+		}
+		type:       "Opaque"
+		stringData: {
+			TZ: fact.global_timezone
+		} & {for k, v in #param.secret {
+			"\(k)": v
+		}}
+	}
+
+	#volume: [
+		for volumeName in #param.volume {
+			core.#PersistentVolumeClaim & {
+				apiVersion: "v1"
+				kind:       "PersistentVolumeClaim"
+				metadata: {
+					name: volumeName
+				}
+			}
+		},
+	]
+
 	[
 		#pod,
-		#envSecret,
-		// #volume,
-		// #secret,
-	]
+		#env,
+		#secret,
+	] + #volume
 }
