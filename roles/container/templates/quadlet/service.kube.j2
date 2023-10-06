@@ -1,8 +1,5 @@
 [Kube]
 Network=webserver
-{% if not container_loop_var.value.preserve_volume %}
-PodmanArgs=--force
-{% endif %}
 Yaml={{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/deployment.yaml
 [Install]
 WantedBy=default.target
