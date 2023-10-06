@@ -1,7 +1,5 @@
 - name: Prowlarr
   containers.podman.podman_container:
-    env:
-      TZ: "{{ global_timezone }}"
     image: ghcr.io/linuxserver/prowlarr:latest@sha256:5fd3d908378e3b35da0541251cf702a6027df2ba98f3a0555dcd7337ee7a0d0d
     name: prowlarr-web
     volumes:

@@ -3,7 +3,6 @@
     env:
       PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
-      TZ: "{{ global_timezone }}"
     image: ghcr.io/linuxserver/kavita:0.7.8@sha256:a19b2ba68deff8cb2b536320e6ad66eef3a498c34fcd1740c4bf6b110a1034cd
     name: kavita-web
     volumes:

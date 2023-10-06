@@ -2,7 +2,6 @@
   containers.podman.podman_container:
     env:
       WOLWEBVDIR: "/"
-      TZ: "{{ global_timezone }}"
     image: ghcr.io/sameerdhoot/wolweb:latest@sha256:c85828b1bb2c0148c70b5699ae6c234ea25b7d32ddf9ffbb76cd5a40d3452b5d
     name: wol
     network: host

@@ -2,8 +2,6 @@
   containers.podman.podman_container:
     name: paperless-redis
     image: docker.io/redis:7-alpine@sha256:343e6546f35877801de0b8580274a5e3a8e8464cabe545a2dd9f3c78df77542a
-    env:
-      TZ: "{{ global_timezone }}"
     volumes:
       - "{{ paperless_volume_redis_data }}:/data:U,z"
 
@@ -14,7 +12,6 @@
     env:
       POSTGRES_DB: paperless
       POSTGRES_USER: paperless
-      TZ: "{{ global_timezone }}"
     secrets:
       - paperless_dbpass,type=env,target=POSTGRES_PASSWORD
     volumes:
@@ -24,8 +21,6 @@
   containers.podman.podman_container:
     name: paperless-gotenberg
     image: docker.io/gotenberg/gotenberg:7.9@sha256:2e4fcccf5e065bf4d92b0b69c80776505e602dbfb11618c1c4e4e8be8a0630e9
-    env:
-      TZ: "{{ global_timezone }}"
     command:
       - gotenberg
       - "--chromium-disable-javascript=true"
@@ -35,8 +30,6 @@
   containers.podman.podman_container:
     name: paperless-tika
     image: ghcr.io/paperless-ngx/tika:2.9.0-minimal@sha256:b6154c8778cf6fd8ca46ba96f25846241ffdb12d033b578f8cd85893734eb155
-    env:
-      TZ: "{{ global_timezone }}"
 
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=682407
 # Huge picture will cause gs to crash
@@ -57,7 +50,6 @@
       PAPERLESS_TIKA_ENABLED: 1
       PAPERLESS_TIKA_ENDPOINT: http://localhost:9998
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://localhost:3000
-      TZ: "{{ global_timezone }}"
     secrets:
       - paperless_dbpass,type=env,target=PAPERLESS_DBPASS
       - paperless_ocr_language,type=env,target=PAPERLESS_OCR_LANGUAGE

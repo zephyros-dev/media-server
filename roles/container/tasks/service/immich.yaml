@@ -2,8 +2,6 @@
   containers.podman.podman_container:
     name: immich-redis
     image: docker.io/redis:6-alpine@sha256:e582909983ce92291977d864b5a7b2a46bee680c2e515bd12c0ab3415a410b33
-    env:
-      TZ: "{{ global_timezone }}"
 
 - name: Immich Database
   containers.podman.podman_container:
@@ -12,7 +10,6 @@
     env:
       POSTGRES_DB: immich
       POSTGRES_USER: immich
-      TZ: "{{ global_timezone }}"
     secrets:
       - immich_postgres_db,type=env,target=POSTGRES_PASSWORD
     volumes:
@@ -44,7 +41,6 @@
       NODE_ENV: production
       REDIS_HOSTNAME: localhost
       TYPESENSE_URL: "ha://{{ immich_typesense_url | to_json | b64encode }}"
-      TZ: "{{ global_timezone }}"
     secrets:
       - immich_jwt_secret,type=env,target=JWT_SECRET
       - immich_postgres_db,type=env,target=DB_PASSWORD
@@ -65,7 +61,6 @@
       NODE_ENV: production
       REDIS_HOSTNAME: localhost
       TYPESENSE_HOST: localhost
-      TZ: "{{ global_timezone }}"
     secrets:
       - immich_jwt_secret,type=env,target=JWT_SECRET
       - immich_postgres_db,type=env,target=DB_PASSWORD
@@ -80,7 +75,6 @@
       - "immich_volume_ml_cache:/cache:U"
     env:
       NODE_ENV: production
-      TZ: "{{ global_timezone }}"
 
 - name: Immich Web
   containers.podman.podman_container:
@@ -88,4 +82,3 @@
     image: ghcr.io/immich-app/immich-web:v1.81.1@sha256:93ec1c8012da4454aa91a29e37d61c67660d2319f610a582998f7cfe2c816cea
     env:
       IMMICH_SERVER_URL: http://localhost:3001
-      TZ: "{{ global_timezone }}"

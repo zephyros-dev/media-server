@@ -3,7 +3,6 @@
     env:
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
-      TZ: "{{ global_timezone }}"
     image: ghcr.io/linuxserver/lidarr:latest@sha256:ca5b548ecea5d975d3981b6654c39148bada6dc4cd7b50e2b6fcd996a4efd356
     name: lidarr-web
     volumes:

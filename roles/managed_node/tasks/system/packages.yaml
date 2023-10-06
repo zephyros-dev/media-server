@@ -1,5 +1,5 @@
 - name: Setup podman
-  tags: podman_install
+  tags: podman
   become: true
   block:
     - name: Install podman
@@ -16,8 +16,32 @@
         sysctl_set: true
         value: "80"
 
+    - name: Setup podman configuration folder
+      ansible.builtin.file:
+        path: /etc/containers/containers.conf.d
+        owner: root
+        group: root
+        mode: "0755"
+        state: directory
+
+    - name: Setup podman configuration file root
+      ansible.builtin.template:
+        src: templates/podman/containers.conf.j2
+        dest: /etc/containers/containers.conf.d/containers.conf
+        owner: root
+        group: root
+        mode: "0644"
+
 - name: Setup rootless podman
-  tags: podman_rootless
+  tags: podman
+  module_defaults:
+    ansible.builtin.file:
+      owner: "{{ ansible_user_uid }}"
+      group: "{{ ansible_user_gid }}"
+    ansible.builtin.template:
+      owner: "{{ ansible_user_uid }}"
+      group: "{{ ansible_user_gid }}"
+      mode: "0644"
   block:
     - name: Enable podman socket
       ansible.builtin.systemd:
@@ -29,17 +53,16 @@
     - name: Create containers config directory
       ansible.builtin.file:
         path: "{{ ansible_user_dir }}/.config/containers/containers.conf.d"
-        owner: "{{ ansible_user_uid }}"
-        group: "{{ ansible_user_gid }}"
         mode: "0755"
         state: directory
-    - name: Create containers network config file
+    - name: Create containers network config file # noqa: risky-file-permissions args[module]
       ansible.builtin.template:
         src: templates/podman/network.conf.j2
         dest: "{{ ansible_user_dir }}/.config/containers/containers.conf.d/network.conf"
-        owner: "{{ ansible_user_uid }}"
-        group: "{{ ansible_user_gid }}"
-        mode: "0644"
+    - name: Setup podman configuration file user # noqa: risky-file-permissions args[module]
+      ansible.builtin.template:
+        src: templates/podman/containers.conf.j2
+        dest: "{{ ansible_user_dir }}/.config/containers/containers.conf.d/containers.conf"
 
 - name: Install mergerfs
   become: true

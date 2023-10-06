@@ -10,8 +10,6 @@
 
 - name: Filebrowser
   containers.podman.podman_container:
-    env:
-      TZ: "{{ global_timezone }}"
     image: docker.io/filebrowser/filebrowser:latest@sha256:b06f6146754a44a492334947b0caa9ad93509ca1b04da8dacd3a76cdd4a2f471
     name: filebrowser-web
     volumes:

@@ -12,7 +12,6 @@
               POSTGRES_HOST: localhost:5432
               POSTGRES_USER: postgres
               REDIS_HOST: localhost
-              TZ: "{{ global_timezone }}"
             image: docker.io/nextcloud:27.1.1@sha256:c052970f60fc0a2fec08b1777fd40322cf6b680bb1d03e11c0e40bb960ea1536
             name: nextcloud-web
             secrets:
@@ -31,8 +30,6 @@
           # TODO: use acl https://github.com/docker-library/redis/issues/268#issuecomment-812952957
           containers.podman.podman_container:
             command: redis-server --requirepass {{ nextcloud_redis_password }}
-            env:
-              TZ: "{{ global_timezone }}"
             image: docker.io/redis:7-alpine@sha256:343e6546f35877801de0b8580274a5e3a8e8464cabe545a2dd9f3c78df77542a
             name: nextcloud-redis
 
@@ -55,7 +52,6 @@
         env:
           POSTGRES_DB: nextcloud
           POSTGRES_USER: postgres
-          TZ: "{{ global_timezone }}"
         image: docker.io/postgres:14-alpine@sha256:164203503aaebb06ad429105ef32edec228850668f25fec81f9d80cd09f06335
         name: nextcloud-db
         secrets:

@@ -1,7 +1,6 @@
 package applicationSet
 
 import (
-	fact "zephyros.dev/tmp:fact"
 	core "k8s.io/api/core/v1"
 )
 
@@ -40,10 +39,8 @@ import (
 		metadata: {
 			name: "\(#param.name)-env"
 		}
-		type:       "Opaque"
-		stringData: {
-			TZ: fact.global_timezone
-		} & {for k, v in #param.env {
+		type: "Opaque"
+		stringData: {for k, v in #param.env {
 			"\(k)": v
 		}}
 	}
@@ -54,10 +51,8 @@ import (
 		metadata: {
 			name: "\(#param.name)-secret"
 		}
-		type:       "Opaque"
-		stringData: {
-			TZ: fact.global_timezone
-		} & {for k, v in #param.secret {
+		type: "Opaque"
+		stringData: {for k, v in #param.secret {
 			"\(k)": v
 		}}
 	}

@@ -6,7 +6,6 @@
       # https://github.com/jlesage/docker-baseimage-gui#taking-ownership-of-a-directory
       USER_ID: "{{ global_puid }}"
       GROUP_ID: "{{ global_puid }}"
-      TZ: "{{ global_timezone }}"
     image: docker.io/jlesage/jdownloader-2:v23.06.1@sha256:311497d91095b51d26c377b1f87b57d77f375599af305277bcc50b905d27dd40
     name: jdownloader-web
     volumes:
