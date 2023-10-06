@@ -57,7 +57,7 @@ applicationSet & {
 		#param: {
 			name: "caddy"
 			secret: {
-				caddyfile: "\(fact.caddy_secret_caddyfile)"
+				Caddyfile: "\(fact.caddy_secret_caddyfile)"
 			}
 			volume: [
 				"caddy_volume_config",
@@ -90,6 +90,7 @@ applicationSet & {
 						name:      "caddyfile"
 						readOnly:  true
 						mountPath: "/etc/caddy/Caddyfile"
+						subPath:   "Caddyfile"
 					}]
 				}]
 				volumes: [{
@@ -98,6 +99,15 @@ applicationSet & {
 				}, {
 					name: "data"
 					persistentVolumeClaim: claimName: "caddy_volume_data"
+				}, {
+					name: "caddyfile"
+					secret: {
+						secretName: "caddy-secret"
+						items: [{
+							key:  "Caddyfile"
+							path: "Caddyfile"
+						}]
+					}
 				}]
 			}
 		}
