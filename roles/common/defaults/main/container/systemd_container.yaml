@@ -47,8 +47,7 @@ calibre:
   caddy_proxy_port: "8080"
   caddy_proxy_custom: true
   dashy_statusCheckAcceptCodes: "401"
-  ports:
-    - "59090:9090" # This port is used for the calibre wireless device connection
+  quadlet: true
 dashy:
   caddy_proxy_port: "80"
   caddy_sso: true
