@@ -49,18 +49,25 @@
             mode: "0755"
             src: "{{ container_loop_var.key }}/"
             dest: "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/"
+          register: kube_file_container
         - name: Create kube deployment {{ container_loop_var.key }}
           ansible.builtin.copy:
             content: "{{ cue_dump.stdout }}"
             mode: "0600"
             dest: "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/deployment.yaml"
+          register: kube_file_yaml
         - name: Create kube quadlet file {{ container_loop_var.key }}
           ansible.builtin.template:
             src: quadlet/service.kube.j2
             mode: "0600"
             dest: "{{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}.kube"
+          register: kube_file_quadlet
         - name: Start systemd service {{ container_loop_var.key }}
           ansible.builtin.systemd:
+        - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
+          when: kube_file_container.changed or kube_file_yaml.changed or kube_file_quadlet.changed
+          ansible.builtin.systemd:
+            state: restarted
 - name: Remove service {{ container_loop_var.key }}
   when: container_loop_var.value.state == "absent"
   module_defaults:

@@ -8,45 +8,29 @@ import (
 applicationSet & {
 	bazarr: {
 		_
-
 		#param: {
 			name: "bazarr"
 			env: {
 				"PGID": fact.global_pgid
 				"PUID": fact.global_puid
 			}
-		}
-
-		#pod: {
-			metadata: {
-				annotations: {
-					"bind-mount-options": "\(fact.bazarr_web_config):z"
-				}
+			volumes: {
+				config: "\(fact.bazarr_web_config)"
+				home:   "\(fact.global_media)"
 			}
+		}
+		#pod: {
 			spec: {
 				containers: [{
 					image: "bazarr"
 					name:  "web"
 					volumeMounts: [{
 						name:      "config"
-						mountPath: "/config"
+						mountPath: "/config:U,z"
 					}, {
 						name:      "home"
 						mountPath: "/home"
 					}]
-				}]
-				volumes: [{
-					name: "config"
-					hostPath: {
-						path: "\(fact.bazarr_web_config)"
-						type: "Directory"
-					}
-				}, {
-					name: "home"
-					hostPath: {
-						path: "\(fact.global_media)"
-						type: "Directory"
-					}
 				}]
 			}
 		}
@@ -57,12 +41,15 @@ applicationSet & {
 		#param: {
 			name: "caddy"
 			secret: {
-				Caddyfile: "\(fact.caddy_secret_caddyfile)"
+				Caddyfile: {
+					type:    "file"
+					content: "\(fact.caddy_secret_caddyfile)"
+				}
 			}
-			volume: [
-				"caddy_volume_config",
-				"caddy_volume_data",
-			]
+			volumes: {
+				config: "caddy_volume_config"
+				data:   "caddy_volume_data"
+			}
 		}
 		#pod: {
 			spec: {
@@ -87,27 +74,11 @@ applicationSet & {
 						mountPath: "/data"
 						name:      "data"
 					}, {
-						name:      "caddyfile"
+						name:      "Caddyfile"
 						readOnly:  true
 						mountPath: "/etc/caddy/Caddyfile"
 						subPath:   "Caddyfile"
 					}]
-				}]
-				volumes: [{
-					name: "config"
-					persistentVolumeClaim: claimName: "caddy_volume_config"
-				}, {
-					name: "data"
-					persistentVolumeClaim: claimName: "caddy_volume_data"
-				}, {
-					name: "caddyfile"
-					secret: {
-						secretName: "caddy-secret"
-						items: [{
-							key:  "Caddyfile"
-							path: "Caddyfile"
-						}]
-					}
 				}]
 			}
 		}
