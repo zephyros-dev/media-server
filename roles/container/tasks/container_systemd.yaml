@@ -82,6 +82,9 @@
       ansible.builtin.stat:
         path: "{{ container_systemd_path }}/{{ container_loop_var.key }}.service"
       register: container_systemd_file_state
+    - name: Set systemd file list for container {{ container_loop_var.key }}
+      ansible.builtin.set_fact:
+        container_name_list: ["{{ container_loop_var.key }}"]
     - name: Setup systemd file list {{ container_loop_var.key }}
       when:
         - container_systemd_file_state.stat.exists
@@ -93,19 +96,11 @@
               containers.podman.podman_pod_info:
                 name: "{{ container_loop_var.key }}"
               register: container_pod_info
-            - name: Reset list of systemd files {{ container_loop_var.key }}
-              ansible.builtin.set_fact:
-                container_name_list: []
             - name: Set list of systemd files {{ container_loop_var.key }}
               when: container_pod_info.pods and 'pod' not in item.Name
               ansible.builtin.set_fact:
                 container_name_list: "{{ container_name_list + [item.Name] }}"
               loop: "{{ container_pod_info.pods[0].Containers }}"
-
-        - name: Set systemd file list for container {{ container_loop_var.key }}
-          when: not container_final_pod
-          ansible.builtin.set_fact:
-            container_name_list: ["{{ container_loop_var.key }}"]
 
         - name: Stop systemd service {{ container_loop_var.key }}
           ansible.builtin.systemd:

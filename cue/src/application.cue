@@ -111,4 +111,31 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	dashy: {
+		_
+		#param: {
+			name: "dashy"
+			secret: {
+				"conf.yml": {
+					type:    "file"
+					content: "\(fact.dashy_secret_config)"
+				}
+			}
+		}
+		#pod: spec: containers: [{
+			image: "dashy"
+			name:  "web"
+			volumeMounts: [{
+				name:      "conf.yml"
+				readOnly:  true
+				mountPath: "/app/public/conf.yml"
+				subPath:   "conf.yml"
+			}]
+			securityContext: {
+				runAsGroup: 0
+				runAsUser:  0
+			}
+		}]
+	}
 }

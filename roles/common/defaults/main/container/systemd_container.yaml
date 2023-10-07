@@ -52,9 +52,10 @@ dashy:
   caddy_proxy_port: "80"
   caddy_sso: true
   secrets:
-    dashy_config:
+    config:
       type: template
       value: dashy/conf.yml.j2
+  quadlet: true
 filebrowser:
   folder:
     - "{{ filebrowser_volume }}"
