@@ -3,7 +3,7 @@
     env:
       PGID: "{{ global_pgid }}"
       PUID: "{{ global_puid }}"
-    image: ghcr.io/linuxserver/transmission:latest@sha256:2f9b63b872b27b8b7a3defebdfb343b2ee41c8d50d471bedf90a6253ac807e2b
+    image: ghcr.io/linuxserver/transmission:latest@sha256:bd4bbbaab2703a916836de1e4e50477199656ef3d1d1fb2aa9c0ffa0231d0f2d
     name: transmission
     network: webserver
     ports:
