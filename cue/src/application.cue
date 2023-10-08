@@ -15,8 +15,8 @@ applicationSet & {
 				"PUID": fact.global_puid
 			}
 			volumes: {
-				config: "\(fact.bazarr_web_config)"
-				home:   "\(fact.global_media)"
+				config: "\(fact.bazarr_web_config)/"
+				home:   "\(fact.global_media)/"
 			}
 		}
 		#pod: spec: containers: [{
@@ -85,8 +85,8 @@ applicationSet & {
 				"PUID": fact.global_puid
 			}
 			volumes: {
-				config: "\(fact.calibre_volume_config)"
-				books:  "\(fact.calibre_book)"
+				config: "\(fact.calibre_volume_config)/"
+				books:  "\(fact.calibre_book)/"
 				device: "/dev/dri"
 			}
 		}
@@ -136,6 +136,29 @@ applicationSet & {
 				runAsGroup: 0
 				runAsUser:  0
 			}
+		}]
+	}
+
+	filebrowser: {
+		_
+		#param: {
+			name: "filebrowser"
+			volumes: {
+				srv:           "\(fact.global_media)/"
+				"database.db": "\(fact.filebrowser_volume)/database.db"
+			}
+		}
+
+		#pod: spec: containers: [{
+			image: "filebrowser"
+			name:  "web"
+			volumeMounts: [{
+				name:      "srv"
+				mountPath: "/srv"
+			}, {
+				name:      "database.db"
+				mountPath: "/database.db:U,z"
+			}]
 		}]
 	}
 }

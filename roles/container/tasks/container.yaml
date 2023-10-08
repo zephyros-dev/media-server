@@ -58,5 +58,17 @@
 
         - name: Setup container with quadlet {{ container_loop_var.key }}
           when: container_loop_var.value.quadlet
-          ansible.builtin.include_tasks:
-            file: container_quadlet.yaml
+          block:
+            - name: Check if custom setup flow exists {{ container_loop_var.key }}
+              delegate_to: localhost
+              ansible.builtin.stat:
+                path: roles/container/tasks/service/{{ container_loop_var.key }}.yaml
+              register: custom_setup_flow
+            - name: Create container with custom flow {{ container_loop_var.key }}
+              when: custom_setup_flow.stat.exists
+              ansible.builtin.include_tasks:
+                file: service/{{ container_loop_var.key }}.yaml
+            - name: Create container {{ container_loop_var.key }}
+              when: not custom_setup_flow.stat.exists
+              ansible.builtin.include_tasks:
+                file: container_quadlet.yaml

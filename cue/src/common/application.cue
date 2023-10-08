@@ -38,7 +38,13 @@ import (
 				if v !~ "^\/" {
 					persistentVolumeClaim: claimName: v
 				}
-				if v =~ "^\/" {
+				if v =~ "^\/.+[^\/]$" {
+					hostPath: {
+						path: v
+						type: "File"
+					}
+				}
+				if v =~ "^\/.+\/$" {
 					hostPath: {
 						path: v
 						type: "Directory"

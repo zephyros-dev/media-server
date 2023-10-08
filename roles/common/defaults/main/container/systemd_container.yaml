@@ -60,6 +60,7 @@ filebrowser:
   folder:
     - "{{ filebrowser_volume }}"
   caddy_proxy_port: "80"
+  quadlet: true
 immich:
   folder:
     - "{{ immich_volume_database }}"

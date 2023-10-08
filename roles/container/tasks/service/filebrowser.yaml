@@ -8,11 +8,6 @@
     - "{{ filebrowser_volume }}/database.db"
     - "{{ filebrowser_volume }}/.filebrowser.json"
 
-- name: Filebrowser
-  containers.podman.podman_container:
-    image: docker.io/filebrowser/filebrowser:latest@sha256:b06f6146754a44a492334947b0caa9ad93509ca1b04da8dacd3a76cdd4a2f471
-    name: filebrowser-web
-    volumes:
-      - "{{ global_media }}:/srv:ro"
-      - "{{ filebrowser_volume }}/database.db:/database.db:U,z"
-      - "{{ filebrowser_volume }}/.filebrowser.json:/.filebroser.json:U,z"
+- name: Create container {{ container_loop_var.key }}
+  ansible.builtin.include_tasks:
+    file: container_quadlet.yaml
