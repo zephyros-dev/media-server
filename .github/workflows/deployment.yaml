@@ -6,6 +6,7 @@ on:
     paths:
       - .github/workflows/deployment.yaml
       - ci/**
+      - cue/**
       - group_vars/**
       - requirements.yaml
       - roles/**
