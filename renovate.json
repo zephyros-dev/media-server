@@ -24,10 +24,12 @@
     },
     {
       "automerge": false,
+      "excludePackagePatterns": ["actions"],
       "matchPackagePatterns": ["python", "go"],
       "matchUpdateTypes": ["minor"]
     },
     {
+      "excludePackagePatterns": ["actions"],
       "groupName": "python",
       "matchPackagePatterns": ["python"]
     },
