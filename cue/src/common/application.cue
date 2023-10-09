@@ -32,7 +32,8 @@ import (
 				envFrom: [{
 					secretRef: {
 						name: "\(#param.name)-env"
-					}}]}]
+					}}]},
+				...]
 			volumes: [ for k, v in #param.volumes {
 				name: k
 				if v !~ "^\/" {

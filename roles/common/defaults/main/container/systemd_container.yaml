@@ -68,18 +68,17 @@ immich:
     - "{{ immich_volume_upload }}"
   caddy_proxy_port: "8080"
   caddy_proxy_custom: true
+  quadlet: true
   secrets:
-    immich_jwt_secret:
+    jwt_secret:
       type: value
       value: "{{ immich_jwt_secret }}"
-    immich_postgres_db:
+    database_password:
       type: value
       value: "{{ immich_database_password }}"
-    immich_typesense_api_key:
+    typesense_api_key:
       type: value
       value: "{{ immich_typesense_api_key }}"
-  volume:
-    - immich_volume_ml_cache
 jdownloader:
   folder:
     - "{{ global_download }}"
