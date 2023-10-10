@@ -3,7 +3,7 @@
     env:
       PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
-    image: ghcr.io/linuxserver/kavita:0.7.8@sha256:a19b2ba68deff8cb2b536320e6ad66eef3a498c34fcd1740c4bf6b110a1034cd
+    image: ghcr.io/linuxserver/kavita:0.7.8@sha256:95110f9035a9b1f2a1c331472fceccb1f43caa4279158d210b1288e852e4fbf9
     name: kavita-web
     volumes:
       - "{{ global_media }}:/home:ro"
