@@ -22,8 +22,8 @@ applicationSet & {
 			}
 		}
 		#pod: spec: containers: [{
-			image: "bazarr"
 			name:  "web"
+			image: "bazarr"
 			volumeMounts: [{
 				name:      "config"
 				mountPath: "/config:U,z"
@@ -50,8 +50,8 @@ applicationSet & {
 			}
 		}
 		#pod: spec: containers: [{
-			image: "caddy"
 			name:  "instance"
+			image: "caddy"
 			ports: [{
 				containerPort: 80
 				hostPort:      80
@@ -94,8 +94,8 @@ applicationSet & {
 		}
 
 		#pod: spec: containers: [{
-			image: "calibre"
 			name:  "web"
+			image: "calibre"
 			ports: [{
 				// Used for the calibre wireless device connection
 				containerPort: 9090
@@ -126,8 +126,8 @@ applicationSet & {
 			}
 		}
 		#pod: spec: containers: [{
-			image: "dashy"
 			name:  "web"
+			image: "dashy"
 			volumeMounts: [{
 				name:      "conf.yml"
 				readOnly:  true
@@ -152,8 +152,8 @@ applicationSet & {
 		}
 
 		#pod: spec: containers: [{
-			image: "filebrowser"
 			name:  "web"
+			image: "filebrowser"
 			volumeMounts: [{
 				name:      "srv"
 				mountPath: "/srv"
@@ -342,6 +342,39 @@ applicationSet & {
 			env: [{
 				name:  "IMMICH_SERVER_URL"
 				value: "http://localhost:3001"
+			}]
+		}]
+	}
+
+	jdownloader: {
+		_
+		#param: {
+			name: "jdownloader"
+			volumes: {
+				config: "\(fact.jdownloader_volume_config)/"
+				output: "\(fact.global_download)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "jdownloader"
+			// Needed for chown the output directory
+			// https://github.com/jlesage/docker-jdownloader-2/blob/0091b8358fccea902af05fa29d05f567f073543b/rootfs/etc/cont-init.d/55-jdownloader2.sh
+			// https://github.com/jlesage/docker-baseimage-gui#taking-ownership-of-a-directory
+			env: [{
+				name:  "USER_ID"
+				value: "\(fact.global_puid)"
+			}, {
+				name:  "GROUP_ID"
+				value: "\(fact.global_pgid)"
+			}]
+			volumeMounts: [{
+				name:      "config"
+				mountPath: "/config:U,z"
+			}, {
+				name:      "output"
+				mountPath: "/output"
 			}]
 		}]
 	}

@@ -84,6 +84,7 @@ jdownloader:
     - "{{ global_download }}"
     - "{{ jdownloader_volume_config }}"
   caddy_proxy_port: "5800"
+  quadlet: true
 jellyfin:
   folder:
     - "{{ global_media }}"
