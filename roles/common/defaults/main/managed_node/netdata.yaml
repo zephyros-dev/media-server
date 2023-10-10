@@ -29,7 +29,6 @@ dbengine_multihost_disk_space: 2048
 web_mode: static-threaded
 
 netdata_state: present
-# netdata_state: absent
 
 netdata_config:
   - section: web

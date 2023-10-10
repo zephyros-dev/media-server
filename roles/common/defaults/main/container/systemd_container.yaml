@@ -35,9 +35,7 @@ bazarr:
 caddy:
   caddy_proxy_custom: true
   secrets:
-    caddyfile:
-      type: template
-      value: caddy/Caddyfile.j2
+    caddyfile: caddy/Caddyfile.j2
   preserve_volume: true
   quadlet: true
 calibre:
@@ -52,9 +50,7 @@ dashy:
   caddy_proxy_port: "80"
   caddy_sso: true
   secrets:
-    config:
-      type: template
-      value: dashy/conf.yml.j2
+    config: dashy/conf.yml.j2
   quadlet: true
 filebrowser:
   folder:
@@ -69,16 +65,6 @@ immich:
   caddy_proxy_port: "8080"
   caddy_proxy_custom: true
   quadlet: true
-  secrets:
-    jwt_secret:
-      type: value
-      value: "{{ immich_jwt_secret }}"
-    database_password:
-      type: value
-      value: "{{ immich_database_password }}"
-    typesense_api_key:
-      type: value
-      value: "{{ immich_typesense_api_key }}"
 jdownloader:
   folder:
     - "{{ global_download }}"
