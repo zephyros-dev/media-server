@@ -378,4 +378,35 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	jellyfin: {
+		_
+		#param: {
+			name: "jellyfin"
+			volumes: {
+				cache:  "\(fact.jellyfin_volume_cache)/"
+				config: "\(fact.jellyfin_volume_config)/"
+				home:   "\(fact.global_media)/"
+				dev:    "/dev/dri/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "jellyfin"
+			volumeMounts: [{
+				name:      "cache"
+				mountPath: "/cache:U,z"
+			}, {
+				name:      "config"
+				mountPath: "/config:U,z"
+			}, {
+				name:      "home"
+				mountPath: "/home"
+			}, {
+				name:      "dev"
+				mountPath: "/dev/dri"
+			}]
+		}]
+	}
 }

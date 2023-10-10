@@ -88,9 +88,10 @@ jdownloader:
 jellyfin:
   folder:
     - "{{ global_media }}"
-    - "{{ jellyfin_web_cache }}"
-    - "{{ jellyfin_web_config }}"
+    - "{{ jellyfin_volume_cache }}"
+    - "{{ jellyfin_volume_config }}"
   caddy_proxy_port: "8096"
+  quadlet: true
 kavita:
   folder:
     - "{{ kavita_volume_data }}"
