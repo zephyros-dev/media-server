@@ -1,5 +1,5 @@
 ansible-lint==6.20.3
-ansible==8.4.0
+ansible==8.5.0
 black==23.9.1
 dagger-io==0.8.7
 pip-tools==7.3.0
