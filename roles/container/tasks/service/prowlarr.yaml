@@ -1,6 +1,6 @@
 - name: Prowlarr
   containers.podman.podman_container:
-    image: ghcr.io/linuxserver/prowlarr:latest@sha256:5fd3d908378e3b35da0541251cf702a6027df2ba98f3a0555dcd7337ee7a0d0d
+    image: ghcr.io/linuxserver/prowlarr:latest@sha256:8c5d3932109eed7d316d0b9e99285a71df86e85d7a1b9f72d70eb83de79475d1
     name: prowlarr-web
     volumes:
       - "{{ prowlarr_web_config }}:/config:U,z"
