@@ -101,6 +101,17 @@ ansible-playbook partition --check
 - The koreader opds requires `/opds` path to the calibre content server
 - The calibre content server authentication need to be `digest` for the koreader opds
 
+# Maintenance notes
+
+## Python version upgrade
+
+<!-- Waiting for python version manager in renovate -->
+<!-- https://github.com/renovatebot/renovate/issues/22225 -->
+
+- To upgrade python version, update them in the following files:
+  - .devcontainer/Dockerfile
+  - .github/workflows/deployment.yaml
+
 # Troubleshooting
 
 ## Kavita
