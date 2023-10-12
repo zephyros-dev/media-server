@@ -12,7 +12,7 @@
               POSTGRES_HOST: localhost:5432
               POSTGRES_USER: postgres
               REDIS_HOST: localhost
-            image: docker.io/nextcloud:27.1.2@sha256:c27477485e686b4ed54c470bf2d59ee19e7f4dd05f7a6ac9d778f88174175d7e
+            image: docker.io/nextcloud:27.1.2@sha256:8b464b2b0c3912ee2a0c93a7adcbb33db331a983f798069bbcfd66946d8c8ca5
             name: nextcloud-web
             secrets:
               - nextcloud_postgres_password,type=env,target=POSTGRES_PASSWORD
