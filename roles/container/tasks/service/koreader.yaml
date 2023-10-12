@@ -5,7 +5,7 @@
     env:
       PUID: "{{ global_puid }}"
       PGID: "{{ global_pgid }}"
-    image: ghcr.io/zephyros-dev/koreader:v2023.08@sha256:5a4cfc1e2266cb5c5d61356b6a28e141d06e4d941c972b6114d9354cc03f1c8c
+    image: ghcr.io/zephyros-dev/koreader:v2023.08@sha256:45ba72d9111a48bf6471abf056a85f5f9fa098d5545366c687c9a2147d6cb667
     name: koreader-web
     device:
       - /dev/dri/
