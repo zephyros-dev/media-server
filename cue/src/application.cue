@@ -534,4 +534,14 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	librespeed: {
+		_
+		#param: name: "librespeed"
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "librespeed"
+		}]
+	}
 }

@@ -111,6 +111,7 @@ kosync:
   quadlet: true
 librespeed:
   caddy_proxy_port: "80"
+  quadlet: true
 lidarr:
   folder:
     - "{{ global_media }}"
