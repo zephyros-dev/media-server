@@ -1,0 +1,1 @@
+FROM docker.io/koreader/kosync:latest@sha256:5129931e8e5066a109d9baa23e3a9c3568e0fea284ca57c50e372b6434b0e827

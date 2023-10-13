@@ -108,6 +108,7 @@ kosync:
   caddy_proxy_port: "17200"
   dashy_statusCheckAcceptCodes: "412"
   dashy_icon: https://koreader.rocks/koreader.png
+  quadlet: true
 librespeed:
   caddy_proxy_port: "80"
 lidarr:

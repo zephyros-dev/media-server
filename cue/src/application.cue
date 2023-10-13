@@ -91,7 +91,7 @@ applicationSet & {
 			volumes: {
 				config: "\(fact.calibre_volume_config)/"
 				books:  "\(fact.calibre_book)/"
-				device: "/dev/dri"
+				device: "/dev/dri/"
 			}
 		}
 
@@ -498,7 +498,7 @@ applicationSet & {
 			}
 			volumes: {
 				config: "\(fact.koreader_volume_data)/"
-				device: "/dev/dri"
+				device: "/dev/dri/"
 			}
 		}
 
@@ -513,6 +513,25 @@ applicationSet & {
 				mountPath: "/dev/dri"
 			}]
 			securityContext: capabilities: add: ["CAP_NET_RAW"]
+		}]
+	}
+
+	kosync: {
+		_
+		#param: {
+			name: "kosync"
+			volumes: {
+				redis: "\(fact.kosync_volume_redis_data)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "kosync"
+			volumeMounts: [{
+				name:      "redis"
+				mountPath: "/var/lib/redis"
+			}]
 		}]
 	}
 }
