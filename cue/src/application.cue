@@ -15,8 +15,8 @@ applicationSet & {
 		#param: {
 			name: "bazarr"
 			env: {
-				"PGID": fact.global_pgid
-				"PUID": fact.global_puid
+				PGID: fact.global_pgid
+				PUID: fact.global_puid
 			}
 			volumes: {
 				config: "\(fact.bazarr_web_config)/"
@@ -85,8 +85,8 @@ applicationSet & {
 		#param: {
 			name: "calibre"
 			env: {
-				"PGID": fact.global_pgid
-				"PUID": fact.global_puid
+				PGID: fact.global_pgid
+				PUID: fact.global_puid
 			}
 			volumes: {
 				config: "\(fact.calibre_volume_config)/"
@@ -485,6 +485,34 @@ applicationSet & {
 				name:      "home"
 				mountPath: "/home:ro"
 			}]
+		}]
+	}
+
+	koreader: {
+		_
+		#param: {
+			name: "koreader"
+			env: {
+				PUID: fact.global_puid
+				PGID: fact.global_pgid
+			}
+			volumes: {
+				config: "\(fact.koreader_volume_data)/"
+				device: "/dev/dri"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "koreader"
+			volumeMounts: [{
+				name:      "config"
+				mountPath: "/config:U,z"
+			}, {
+				name:      "device"
+				mountPath: "/dev/dri"
+			}]
+			securityContext: capabilities: add: ["CAP_NET_RAW"]
 		}]
 	}
 }

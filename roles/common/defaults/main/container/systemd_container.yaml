@@ -53,7 +53,7 @@ calibre_content:
   caddy_proxy_custom: true
   dashy_only: true
   dashy_icon: "/favicon.png"
-  dashy_statusCheckUrl: "http://calibre:8081"
+  dashy_statusCheckUrl: http://calibre:8081
   dashy_statusCheckAcceptCodes: "401"
 dashy:
   caddy_proxy_port: "80"
@@ -100,13 +100,14 @@ koreader:
   caddy_proxy_port: "3000"
   caddy_sso: true
   dashy_statusCheckAcceptCodes: "401"
-  dashy_icon: "https://koreader.rocks/koreader.png"
+  dashy_icon: https://koreader.rocks/koreader.png
+  quadlet: true
 kosync:
   folder:
     - "{{ kosync_volume_redis_data }}"
   caddy_proxy_port: "17200"
   dashy_statusCheckAcceptCodes: "412"
-  dashy_icon: "https://koreader.rocks/koreader.png"
+  dashy_icon: https://koreader.rocks/koreader.png
 librespeed:
   caddy_proxy_port: "80"
 lidarr:
