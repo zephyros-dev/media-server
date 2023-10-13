@@ -1,0 +1,1 @@
+FROM ghcr.io/navidrome/navidrome:0.49.3@sha256:11a24da08977ebfa4a9a71f8c878d822ffaae74a019f274a75dc6386d523da86

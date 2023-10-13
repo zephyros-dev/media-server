@@ -125,6 +125,7 @@ navidrome:
     - "{{ global_media }}"
     - "{{ navidrome_web_data }}"
   caddy_proxy_port: "4533"
+  quadlet: true
 netdata:
   caddy_proxy_port: "19999"
   dashy_only: true

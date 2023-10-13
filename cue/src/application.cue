@@ -575,4 +575,33 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	navidrome: {
+		_
+		#param: {
+			name: "navidrome"
+			env: {
+				ND_BASEURL:        ""
+				ND_LOGLEVEL:       "info"
+				ND_SCANSCHEDULE:   "1h"
+				ND_SESSIONTIMEOUT: "24h"
+			}
+			volumes: {
+				data:  "\(fact.navidrome_web_data)/"
+				music: "\(fact.navidrome_music)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "navidrome"
+			volumeMounts: [{
+				name:      "data"
+				mountPath: "/data:U,z"
+			}, {
+				name:      "music"
+				mountPath: "/music:ro"
+			}]
+		}]
+	}
 }
