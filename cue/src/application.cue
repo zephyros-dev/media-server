@@ -650,4 +650,35 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	radarr: {
+		_
+		#param: {
+			name: "radarr"
+			env: {
+				PUID: fact.global_puid
+				PGID: fact.global_pgid
+			}
+			volumes: {
+				home:      "\(fact.global_media)/"
+				config:    "\(fact.radarr_web_config)/"
+				downloads: "\(fact.transmission_download)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "radarr"
+			volumeMounts: [{
+				name:      "home"
+				mountPath: "/home"
+			}, {
+				name:      "config"
+				mountPath: "/config:U,z"
+			}, {
+				name:      "downloads"
+				mountPath: "/downloads"
+			}]
+		}]
+	}
 }

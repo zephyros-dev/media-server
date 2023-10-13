@@ -191,6 +191,7 @@ radarr:
     - "{{ transmission_download }}"
   caddy_sso: true
   caddy_proxy_port: "7878"
+  quadlet: true
 samba:
   folder:
     - "{{ global_storage }}"
