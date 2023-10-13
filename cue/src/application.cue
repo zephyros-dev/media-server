@@ -604,4 +604,23 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	prowlarr: {
+		_
+		#param: {
+			name: "prowlarr"
+			volumes: {
+				config: "\(fact.prowlarr_web_config)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "prowlarr"
+			volumeMounts: [{
+				name:      "config"
+				mountPath: "/config:U,z"
+			}]
+		}]
+	}
 }

@@ -1,9 +1,6 @@
-- name: Prowlarr
-  containers.podman.podman_container:
-    image: ghcr.io/linuxserver/prowlarr:latest@sha256:8c5d3932109eed7d316d0b9e99285a71df86e85d7a1b9f72d70eb83de79475d1
-    name: prowlarr-web
-    volumes:
-      - "{{ prowlarr_web_config }}:/config:U,z"
+- name: Create container {{ container_loop_var.key }}
+  ansible.builtin.include_tasks:
+    file: container_quadlet.yaml
 
 # https://wiki.servarr.com/prowlarr/faq
 - name: Disable authentication for prowlarr
@@ -22,5 +19,7 @@
 
 - name: Restart prowlarr # noqa: no-handler
   when: prowlarr_config.changed
-  ansible.builtin.set_fact:
-    container_recreate: true
+  ansible.builtin.systemd:
+    name: prowlarr
+    scope: user
+    state: restarted
