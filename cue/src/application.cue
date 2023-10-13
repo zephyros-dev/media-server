@@ -681,4 +681,54 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	samba: {
+		_
+		#param: {
+			name: "samba"
+			env:  {
+				AVAHI_DISABLE:                            "1"
+				GROUP_root:                               "0"
+				SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes"
+				UID_root:                                 "0"
+				WSDD2_DISABLE:                            "1"
+			} & {
+				for k, v in volumes {
+					"SAMBA_VOLUME_CONFIG_\(k)": "[\(k)]; path=/shares/\(k); \(fact.samba_shares_settings)"
+				}}
+			secret: {
+				ACCOUNT_root: {
+					type:    "env"
+					content: "\(fact.samba_password)"
+				}
+			}
+			volumes: {
+				home:    "\(fact.ansible_user_dir)/"
+				disk:    "\(fact.ansible_user_dir)/disk/"
+				disks:   "\(fact.global_disks_data)/"
+				storage: "\(fact.global_storage)/"
+			}
+		}
+
+		#pod: spec: {
+			containers: [{
+				name:  "instance"
+				image: "samba"
+				volumeMounts: [{
+					name:      "home"
+					mountPath: "/shares/home"
+				}, {
+					name:      "disk"
+					mountPath: "/shares/disk"
+				}, {
+					name:      "disks"
+					mountPath: "/shares/disks"
+				}, {
+					name:      "storage"
+					mountPath: "/shares/storage"
+				}]
+			}]
+			hostNetwork: true
+		}
+	}
 }

@@ -195,13 +195,10 @@ radarr:
 samba:
   folder:
     - "{{ global_storage }}"
-  pod: false
   caddy_proxy_custom: true
   dashy_skip: true
-  secrets:
-    samba_password:
-      type: value
-      value: "{{ samba_password }}"
+  hostNetwork: true
+  quadlet: true
 scrutiny:
   become: true
   pod: false
@@ -259,12 +256,13 @@ container_default:
   caddy_rewrite: []
   caddy_sso: false
   certbot: false
-  dashy_only: false
   dashy_icon: ""
+  dashy_only: false
+  dashy_skip: false
   dashy_statusCheckAcceptCodes: ""
   dashy_statusCheckUrl: ""
-  dashy_skip: false
   folder: []
+  hostNetwork: false
   pod: true
   ports: []
   preserve_volume: false
