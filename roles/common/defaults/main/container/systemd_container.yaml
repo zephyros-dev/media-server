@@ -119,6 +119,7 @@ lidarr:
     - "{{ transmission_download }}"
   caddy_proxy_port: "8686"
   caddy_sso: true
+  quadlet: true
 navidrome:
   folder:
     - "{{ global_media }}"
