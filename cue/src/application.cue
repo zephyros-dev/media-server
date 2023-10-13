@@ -623,4 +623,31 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	pymedusa: {
+		_
+		#param: {
+			name: "pymedusa"
+			volumes: {
+				home:      "\(fact.global_media)/"
+				config:    "\(fact.pymedusa_web_config)/"
+				downloads: "\(fact.transmission_download)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "pymedusa"
+			volumeMounts: [{
+				name:      "home"
+				mountPath: "/home"
+			}, {
+				name:      "config"
+				mountPath: "/config:U,z"
+			}, {
+				name:      "downloads"
+				mountPath: "/downloads"
+			}]
+		}]
+	}
 }

@@ -183,6 +183,7 @@ pymedusa:
   caddy_sso: true
   caddy_proxy_port: "8081"
   dashy_icon: favicon-local
+  quadlet: true
 radarr:
   folder:
     - "{{ global_media }}"

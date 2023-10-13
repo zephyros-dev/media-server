@@ -1,8 +1,0 @@
-- name: Pymedusa
-  containers.podman.podman_container:
-    image: docker.io/pymedusa/medusa:master@sha256:8f8d5b83f0ab575941c0ed74a580eb0827d3b9437be4eb4785caa1e32afe718e
-    name: pymedusa-web
-    volumes:
-      - "{{ global_media }}:/home"
-      - "{{ pymedusa_web_config }}:/config:U,z"
-      - "{{ transmission_download }}:/downloads"
