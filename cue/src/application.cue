@@ -3,6 +3,8 @@ package application
 import (
 	"encoding/base64"
 	"encoding/json"
+	"encoding/yaml"
+	"strings"
 	applicationSet "zephyros.dev/src/common:applicationSet"
 	fact "zephyros.dev/tmp:fact"
 )
@@ -121,10 +123,63 @@ applicationSet & {
 			secret: {
 				"conf.yml": {
 					type:    "file"
-					content: "\(fact.dashy_secret_config)"
+					content: yaml.Marshal({
+						appConfig: {
+							iconSize:    "large"
+							layout:      "vertical"
+							statusCheck: true
+							theme:       "Material"
+						}
+						sections: [{
+							name: "All"
+							items: [
+								for k, v in fact.container
+								if !v.dashy_skip {
+									_url_key:    strings.Replace(k, "_", "-", -1)
+									_url_public: "https://\(_url_key).\(fact.server_domain)"
+									if v.state == "started" || v.state == "present" {
+										title: strings.ToTitle(_url_key)
+										if v.dashy_icon == "" {
+											icon: "hl-\(_url_key)"
+										}
+										if v.dashy_icon != "" {
+											if strings.HasPrefix(v.dashy_icon, "/") {
+												icon: "https://\(_url_key).\(fact.server_domain)\(v.dashy_icon)"
+											}
+											if !strings.HasPrefix(v.dashy_icon, "/") {
+												icon: v.dashy_icon
+											}
+										}
+										if v.caddy_sso {
+											statusCheckAllowInsecure: true
+											if v.dashy_statusCheckUrl == "" {
+												if v.caddy_host_network {
+													statusCheckUrl: "http://\(fact.caddyfile_host_address):\(v.caddy_proxy_port)"
+												}
+												if !v.caddy_host_network {
+													statusCheckUrl: "http://\(_url_key):\(v.caddy_proxy_port)"
+												}
+											}
+											if v.dashy_statusCheckUrl != "" {
+												statusCheckUrl: v.dashy_statusCheckUrl
+											}
+										}
+										if !v.caddy_sso {
+											statusCheckUrl: _url_public
+										}
+										if v.dashy_statusCheckAcceptCodes != "" {
+											statusCheckAcceptCodes: v.dashy_statusCheckAcceptCodes
+										}
+										url: _url_public
+									}
+								},
+							]
+						}]
+					})
 				}
 			}
 		}
+
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "dashy"

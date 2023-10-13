@@ -2,6 +2,7 @@ container:
   bazarr: "{{ container_default | combine(bazarr) }}"
   caddy: "{{ container_default | combine(caddy) }}"
   calibre: "{{ container_default | combine(calibre) }}"
+  calibre_content: "{{ container_default | combine(calibre_content) }}"
   dashy: "{{ container_default | combine(dashy) }}"
   filebrowser: "{{ container_default | combine(filebrowser) }}"
   immich: "{{ container_default | combine(immich) }}"
@@ -34,6 +35,7 @@ bazarr:
   quadlet: true
 caddy:
   caddy_proxy_custom: true
+  dashy_skip: true
   secrets:
     caddyfile: caddy/Caddyfile.j2
   preserve_volume: true
@@ -46,11 +48,16 @@ calibre:
   caddy_proxy_custom: true
   dashy_statusCheckAcceptCodes: "401"
   quadlet: true
+calibre_content:
+  caddy_proxy_port: "8081"
+  dashy_only: true
+  dashy_icon: "/favicon.png"
+  dashy_statusCheckUrl: "http://calibre:8081"
+  dashy_statusCheckAcceptCodes: "401"
 dashy:
   caddy_proxy_port: "80"
   caddy_sso: true
-  secrets:
-    config: dashy/conf.yml.j2
+  dashy_skip: true
   quadlet: true
 filebrowser:
   folder:
@@ -112,6 +119,11 @@ navidrome:
     - "{{ global_media }}"
     - "{{ navidrome_web_data }}"
   caddy_proxy_port: "4533"
+netdata:
+  caddy_proxy_port: "19999"
+  dashy_only: true
+  dashy_statusCheckAcceptCodes: "401"
+  state: "{{ netdata_state }}"
 nextcloud:
   folder:
     - "{{ nextcloud_volume_db_data }}"
@@ -175,6 +187,7 @@ samba:
     - "{{ global_storage }}"
   pod: false
   caddy_proxy_custom: true
+  dashy_skip: true
   secrets:
     samba_password:
       type: value
@@ -232,13 +245,15 @@ container_default:
   become: false
   caddy_host_network: false
   caddy_proxy_custom: false
-  caddy_proxy_port:
+  caddy_proxy_port: ""
   caddy_rewrite: []
   caddy_sso: false
   certbot: false
-  dashy_icon:
-  dashy_statusCheckAcceptCodes:
-  dashy_statusCheckUrl:
+  dashy_only: false
+  dashy_icon: ""
+  dashy_statusCheckAcceptCodes: ""
+  dashy_statusCheckUrl: ""
+  dashy_skip: false
   folder: []
   pod: true
   ports: []

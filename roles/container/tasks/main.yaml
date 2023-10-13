@@ -13,6 +13,7 @@
         dest: "{{ ansible_user_dir }}/.config/containers/systemd/webserver.network"
     - name: Generate facts for container
       delegate_to: localhost
+      tags: always
       block:
         - name: Set fact quadlet container
           when:
@@ -23,8 +24,6 @@
           loop: "{{ container | dict2items }}"
           loop_control:
             loop_var: container_loop_var
-          tags:
-            - always
           no_log: true
         - name: Create tmp cue folder {{ container_loop_var.key }}
           ansible.builtin.file:
@@ -34,7 +33,7 @@
         - name: Export facts to file {{ container_loop_var.key }}
           changed_when: false
           ansible.builtin.copy:
-            content: "{{ vars | to_nice_json }}"
+            content: "{{ lookup('vars', 'vars') | to_nice_json }}"
             mode: "0644"
             dest: cue/tmp/fact.json
         - name: Template fact into concrete value {{ container_loop_var.key }}
@@ -57,6 +56,5 @@
       loop: "{{ container | dict2items }}"
       loop_control:
         loop_var: container_loop_var
-      tags:
-        - always
+      tags: always
       no_log: true

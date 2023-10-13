@@ -1,4 +1,5 @@
 - name: Setup systemd container {{ container_loop_var.key }}
+  when: not container_loop_var.value.dashy_only
   tags:
     - "{{ container_loop_var.key }}"
   block:
