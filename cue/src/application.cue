@@ -464,4 +464,27 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	kavita: {
+		_
+		#param: {
+			name: "kavita"
+			volumes: {
+				config: "\(fact.kavita_volume_data)/"
+				home:   "\(fact.global_media)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "kavita"
+			volumeMounts: [{
+				name:      "config"
+				mountPath: "/config:U,z"
+			}, {
+				name:      "home"
+				mountPath: "/home:ro"
+			}]
+		}]
+	}
 }

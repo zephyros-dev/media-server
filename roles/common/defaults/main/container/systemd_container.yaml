@@ -92,6 +92,7 @@ kavita:
   caddy_rewrite:
     - src: /
       dest: /login
+  quadlet: true
 koreader:
   folder:
     - "{{ koreader_volume_data }}"
