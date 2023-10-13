@@ -50,6 +50,7 @@ calibre:
   quadlet: true
 calibre_content:
   caddy_proxy_port: "8081"
+  caddy_proxy_custom: true
   dashy_only: true
   dashy_icon: "/favicon.png"
   dashy_statusCheckUrl: "http://calibre:8081"
