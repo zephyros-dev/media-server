@@ -51,7 +51,7 @@ auth.{{ server_domain }} {
 }
 {% for key,value in container | dictsort %}
   {% if value.state == 'started' %}
-    {% if not value.caddy_proxy_custom %}
+    {% if not value.caddy_skip %}
 {{ key | replace("_", "-") }}.{{ server_domain }} {
       {% if not value.certbot %}
     import global-config
@@ -63,7 +63,7 @@ auth.{{ server_domain }} {
     rewrite {{ rule.src }} {{ rule.dest }}
           {% endfor %}
         {% endif %}
-        {% if value.caddy_host_network %}
+        {% if value.host_network %}
     reverse_proxy {{ caddyfile_host_address }}:{{ value.caddy_proxy_port }} {
         {% else %}
     reverse_proxy {{ key }}:{{ value.caddy_proxy_port }} {

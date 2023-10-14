@@ -153,10 +153,10 @@ applicationSet & {
 										if v.caddy_sso {
 											statusCheckAllowInsecure: true
 											if v.dashy_statusCheckUrl == "" {
-												if v.caddy_host_network {
+												if v.host_network {
 													statusCheckUrl: "http://\(fact.caddyfile_host_address):\(v.caddy_proxy_port)"
 												}
-												if !v.caddy_host_network {
+												if !v.host_network {
 													statusCheckUrl: "http://\(_url_key):\(v.caddy_proxy_port)"
 												}
 											}

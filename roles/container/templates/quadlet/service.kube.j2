@@ -1,6 +1,6 @@
 #jinja2:lstrip_blocks: True
 [Kube]
-{% if not container_loop_var.value.hostNetwork %}
+{% if not container_loop_var.value.host_network %}
 Network=webserver
 {% endif %}
 Yaml={{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/deployment.yaml

@@ -34,7 +34,7 @@ bazarr:
   caddy_sso: true
   quadlet: true
 caddy:
-  caddy_proxy_custom: true
+  caddy_skip: true
   dashy_skip: true
   secrets:
     caddyfile: caddy/Caddyfile.j2
@@ -45,12 +45,12 @@ calibre:
     - "{{ calibre_book }}"
     - "{{ calibre_volume_config }}"
   caddy_proxy_port: "8080"
-  caddy_proxy_custom: true
+  caddy_skip: true
   dashy_statusCheckAcceptCodes: "401"
   quadlet: true
 calibre_content:
   caddy_proxy_port: "8081"
-  caddy_proxy_custom: true
+  caddy_skip: true
   dashy_only: true
   dashy_icon: "/favicon.png"
   dashy_statusCheckUrl: http://calibre:8081
@@ -71,7 +71,7 @@ immich:
     - "{{ immich_volume_typesense }}"
     - "{{ immich_volume_upload }}"
   caddy_proxy_port: "8080"
-  caddy_proxy_custom: true
+  caddy_skip: true
   quadlet: true
 jdownloader:
   folder:
@@ -195,16 +195,16 @@ radarr:
 samba:
   folder:
     - "{{ global_storage }}"
-  caddy_proxy_custom: true
+  caddy_skip: true
   dashy_skip: true
-  hostNetwork: true
+  host_network: true
   quadlet: true
 scrutiny:
   become: true
   pod: false
   caddy_sso: true
   caddy_proxy_port: "{{ scrutiny_port }}"
-  caddy_host_network: true
+  host_network: true
   secrets:
     scrutiny_config:
       type: value
@@ -215,7 +215,7 @@ syncthing:
   pod: false
   caddy_sso: true
   caddy_proxy_port: "8384"
-  caddy_host_network: true
+  host_network: true
 transmission:
   folder:
     - "{{ transmission_download }}"
@@ -238,7 +238,7 @@ wol:
   pod: false
   caddy_sso: true
   caddy_proxy_port: "8089"
-  caddy_host_network: true
+  host_network: true
   dashy_icon: mdi-desktop-classic
   secrets:
     wol_config_devices:
@@ -250,10 +250,9 @@ wol:
 
 container_default:
   become: false
-  caddy_host_network: false
-  caddy_proxy_custom: false
   caddy_proxy_port: ""
   caddy_rewrite: []
+  caddy_skip: false
   caddy_sso: false
   certbot: false
   dashy_icon: ""
@@ -262,7 +261,7 @@ container_default:
   dashy_statusCheckAcceptCodes: ""
   dashy_statusCheckUrl: ""
   folder: []
-  hostNetwork: false
+  host_network: false
   pod: true
   ports: []
   preserve_volume: false
@@ -270,4 +269,3 @@ container_default:
   secrets: {}
   state: started
   timer: false
-  volume: []
