@@ -11,20 +11,14 @@
         mode: "0644"
         src: quadlet/webserver.network.j2
         dest: "{{ ansible_user_dir }}/.config/containers/systemd/webserver.network"
+    - name: Get custom fact container
+      tags: always
+      ansible.builtin.import_tasks:
+        file: container_facts.yaml
     - name: Generate facts for container
       delegate_to: localhost
       tags: always
       block:
-        - name: Set fact quadlet container
-          when:
-            - container_loop_var.value.secrets
-            - container_loop_var.value.quadlet
-          ansible.builtin.include_tasks:
-            file: container_secrets.yaml
-          loop: "{{ container | dict2items }}"
-          loop_control:
-            loop_var: container_loop_var
-          no_log: true
         - name: Create tmp cue folder {{ container_loop_var.key }}
           ansible.builtin.file:
             path: cue/tmp

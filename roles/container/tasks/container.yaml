@@ -5,12 +5,14 @@
   block:
     - name: Setup variable for user scope {{ container_loop_var.key }}
       ansible.builtin.set_fact:
+        container_quadlet_path: "{{ ansible_user_dir }}/.config/containers/systemd"
         container_systemd_path: "{{ ansible_user_dir }}/.config/systemd/user"
         container_systemd_scope: user
       when: not container_loop_var.value.become
 
     - name: Setup variable for system scope {{ container_loop_var.key }}
       ansible.builtin.set_fact:
+        container_quadlet_path: /etc/containers/systemd
         container_systemd_path: /etc/systemd/system
         container_systemd_scope: system
       when: container_loop_var.value.become

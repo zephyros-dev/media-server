@@ -877,6 +877,51 @@ applicationSet & {
 		}
 	}
 
+	scrutiny: {
+		_
+		#param: {
+			name: "scrutiny"
+			secret: {
+				"scrutiny.yaml": {
+					type:    "file"
+					content: yaml.Marshal(fact.scrutiny_config)
+				}
+			}
+			volumes: {udev: "/run/udev/"} &
+				{for v in fact.scrutiny_device_list {"\(v)": "\(v)"}}
+		}
+
+		#pod: spec: {
+			containers: [{
+				name:  "web"
+				image: "scrutiny"
+				ports: [{
+					containerPort: 8080
+					hostPort:      fact.scrutiny_port
+				}]
+				volumeMounts: [{
+					name:      "udev"
+					mountPath: "/run/udev:ro"
+				}, {
+					name:      "scrutiny.yaml"
+					readOnly:  true
+					mountPath: "/opt/scrutiny/config/scrutiny.yaml"
+					subPath:   "scrutiny.yaml"
+				}] + [ for v in fact.scrutiny_device_list {
+					{
+						name:      v
+						mountPath: v
+					}
+				}]
+				securityContext: {
+					capabilities: add: ["SYS_RAWIO", "SYS_ADMIN"]
+					// Required for nvme drives to work: https://github.com/containers/podman/issues/17833
+					privileged: true
+				}
+			}]
+		}
+	}
+
 	syncthing: {
 		_
 		#param: {

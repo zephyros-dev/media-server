@@ -184,14 +184,16 @@ samba:
   quadlet: true
 scrutiny:
   become: true
-  pod: false
   caddy_sso: true
   caddy_proxy_port: "{{ scrutiny_port }}"
   host_network: true
-  secrets:
-    scrutiny_config:
-      type: value
-      value: "{{ scrutiny_config }}"
+  quadlet: true
+  # state: absent
+  # pod: false
+  # secrets:
+  #   scrutiny_config:
+  #     type: value
+  #     value: "{{ scrutiny_config }}"
 syncthing:
   folder:
     - "{{ syncthing_data }}"

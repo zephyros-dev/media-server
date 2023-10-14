@@ -1,0 +1,18 @@
+- name: Scrutiny facts
+  become: true
+  block:
+    - name: Init list of device
+      ansible.builtin.set_fact:
+        scrutiny_device_list: []
+
+    - name: Get list of symlink devices
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop: "{{ scrutiny_device }}"
+      register: scrutiny_device_name_list
+
+    - name: Setup list of devices
+      ansible.builtin.set_fact:
+        scrutiny_device_list: "{{ scrutiny_device_list + [item.stat.lnk_source] }}"
+      loop: "{{ scrutiny_device_name_list.results }}"
+      no_log: true

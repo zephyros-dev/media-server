@@ -1,4 +1,4 @@
-scrutiny_port: "18080"
+scrutiny_port: 18080
 scrutiny_device:
   - "/dev/disk/by-id/disk_id"
 # scrutiny_discord_token:
