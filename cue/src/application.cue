@@ -605,6 +605,151 @@ applicationSet & {
 		}]
 	}
 
+	paperless: {
+		_
+		#param: {
+			name: "paperless"
+			secret: {
+				paperless_dbpass: {
+					type:    "env"
+					content: "\(fact.paperless_dbpass)"
+				}
+				paperless_ocr_language: {
+					type:    "env"
+					content: "\(fact.paperless_ocr_language)"
+				}
+				paperless_ocr_languages: {
+					type:    "env"
+					content: "\(fact.paperless_ocr_languages)"
+				}
+				paperless_secret_key: {
+					type:    "env"
+					content: "\(fact.paperless_secret_key)"
+				}
+				paperless_url: {
+					type:    "env"
+					content: "https://paperless.\(fact.server_domain)"
+				}
+			}
+			volumes: {
+				redis:    "\(fact.paperless_volume_redis_data)/"
+				database: "\(fact.paperless_volume_database_data)/"
+				consume:  "\(fact.paperless_volume_webserver_consume)/"
+				data:     "\(fact.paperless_volume_webserver_data)/"
+				export:   "\(fact.paperless_volume_webserver_export)/"
+				media:    "\(fact.paperless_volume_webserver_media)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "redis"
+			image: "redis"
+			volumeMounts: [{
+				name:      "redis"
+				mountPath: "/data:U,z"
+			}]
+		}, {
+			name:  "database"
+			image: "database"
+			env: [{
+				name:  "POSTGRES_DB"
+				value: "paperless"
+			}, {
+				name:  "POSTGRES_USER"
+				value: "paperless"
+			}, {
+				name: "POSTGRES_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "paperless-env"
+					key:  "paperless_dbpass"
+				}
+			}]
+			volumeMounts: [{
+				name:      "database"
+				mountPath: "/var/lib/postgresql/data:U,z"
+			}]
+		}, {
+			name:  "gotenberg"
+			image: "gotenberg"
+			args: [
+				"gotenberg",
+				"--chromium-disable-javascript=true",
+				"--chromium-allow-list=file:///tmp/.*",
+			]
+		}, {
+			name:  "tika"
+			image: "tika"
+		}, {
+			// https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=682407
+			// Huge picture will cause gs to crash
+			// TODO: We need to be able to adjust the -r value of gs, but currently I'm not sure how to do it on ocrmypdf
+			name:  "webserver"
+			image: "webserver"
+			env:   [{
+				name:  "PAPERLESS_DBHOST"
+				value: "localhost"
+			}, {
+				name:  "PAPERLESS_OCR_SKIP_ARCHIVE_FILE"
+				value: "always"
+			}, {
+				name:  "PAPERLESS_REDIS"
+				value: "redis://localhost:6379"
+			}, {
+				name:  "PAPERLESS_TIKA_ENABLED"
+				value: "1"
+			}, {
+				name:  "PAPERLESS_TIKA_ENDPOINT"
+				value: "http://localhost:9998"
+			}, {
+				name:  "PAPERLESS_TIKA_GOTENBERG_ENDPOINT"
+				value: "http://localhost:3000"
+			}] + [{
+				name: "PAPERLESS_DBPASS"
+				valueFrom: secretKeyRef: {
+					name: "paperless-env"
+					key:  "paperless_dbpass"
+				}
+			}, {
+				name: "PAPERLESS_OCR_LANGUAGE"
+				valueFrom: secretKeyRef: {
+					name: "paperless-env"
+					key:  "paperless_ocr_language"
+				}
+			}, {
+				name: "PAPERLESS_OCR_LANGUAGES"
+				valueFrom: secretKeyRef: {
+					name: "paperless-env"
+					key:  "paperless_ocr_languages"
+				}
+			}, {
+				name: "PAPERLESS_SECRET_KEY"
+				valueFrom: secretKeyRef: {
+					name: "paperless-env"
+					key:  "paperless_secret_key"
+				}
+			}, {
+				name: "PAPERLESS_URL"
+				valueFrom: secretKeyRef: {
+					name: "paperless-env"
+					key:  "paperless_url"
+				}
+			}]
+			volumeMounts: [{
+				name:      "consume"
+				mountPath: "/usr/src/paperless/consume:U,z"
+			}, {
+				name:      "data"
+				mountPath: "/usr/src/paperless/data:U,z"
+			}, {
+				name:      "export"
+				mountPath: "/usr/src/paperless/export:U,z"
+			}, {
+				name:      "media"
+				mountPath: "/usr/src/paperless/media:U,z"
+			}]
+		}]
+	}
+
 	prowlarr: {
 		_
 		#param: {

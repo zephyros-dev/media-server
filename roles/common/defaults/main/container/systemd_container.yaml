@@ -153,22 +153,7 @@ paperless:
     - "{{ paperless_volume_webserver_export }}"
     - "{{ paperless_volume_webserver_media }}"
   caddy_proxy_port: "8000"
-  secrets:
-    paperless_dbpass:
-      type: value
-      value: "{{ paperless_dbpass }}"
-    paperless_ocr_language:
-      type: value
-      value: "{{ paperless_ocr_language }}"
-    paperless_ocr_languages:
-      type: value
-      value: "{{ paperless_ocr_languages }}"
-    paperless_secret_key:
-      type: value
-      value: "{{ paperless_secret_key }}"
-    paperless_url:
-      type: value
-      value: https://paperless.{{ server_domain }}
+  quadlet: true
 prowlarr:
   folder:
     - "{{ prowlarr_web_config }}"

@@ -1,0 +1,1 @@
+FROM docker.io/gotenberg/gotenberg:7.9@sha256:2e4fcccf5e065bf4d92b0b69c80776505e602dbfb11618c1c4e4e8be8a0630e9

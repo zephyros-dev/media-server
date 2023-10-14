@@ -1,0 +1,1 @@
+FROM ghcr.io/paperless-ngx/tika:2.9.0-minimal@sha256:b6154c8778cf6fd8ca46ba96f25846241ffdb12d033b578f8cd85893734eb155
