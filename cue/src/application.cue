@@ -772,4 +772,38 @@ applicationSet & {
 			}]
 		}]
 	}
+
+	wol: {
+		_
+		#param: {
+			name: "wol"
+			env: {
+				WOLWEBVDIR: "/"
+			}
+			secret: {
+				WOLWEBBCASTIP: {
+					type:    "env"
+					content: fact.wol_bcast_ip
+				}
+				"devices.json": {
+					type:    "file"
+					content: json.Marshal(fact.wol_config_devices)
+				}
+			}
+		}
+
+		#pod: spec: {
+			containers: [{
+				name:  "web"
+				image: "wol"
+				volumeMounts: [{
+					name:      "devices.json"
+					readOnly:  true
+					mountPath: "/wolweb/devices.json"
+					subPath:   "devices.json"
+				}]
+			}]
+			hostNetwork: true
+		}
+	}
 }

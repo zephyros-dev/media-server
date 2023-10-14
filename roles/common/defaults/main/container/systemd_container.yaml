@@ -237,18 +237,11 @@ trilium:
   caddy_proxy_port: "8080"
   quadlet: true
 wol:
-  pod: false
-  caddy_sso: true
   caddy_proxy_port: "8089"
-  host_network: true
+  caddy_sso: true
   dashy_icon: mdi-desktop-classic
-  secrets:
-    wol_config_devices:
-      type: json
-      value: "{{ wol_config_devices }}"
-    wol_bcast_ip:
-      type: value
-      value: "{{ wol_bcast_ip }}:9"
+  host_network: true
+  quadlet: true
 
 container_default:
   become: false
