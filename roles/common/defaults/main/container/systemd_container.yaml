@@ -212,10 +212,11 @@ scrutiny:
 syncthing:
   folder:
     - "{{ syncthing_data }}"
-  pod: false
-  caddy_sso: true
   caddy_proxy_port: "8384"
+  caddy_sso: true
   host_network: true
+  quadlet: true
+  userns: keep-id
 transmission:
   folder:
     - "{{ transmission_download }}"
@@ -269,3 +270,4 @@ container_default:
   secrets: {}
   state: started
   timer: false
+  userns: ""

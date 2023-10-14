@@ -3,6 +3,9 @@
 {% if not container_loop_var.value.host_network %}
 Network=webserver
 {% endif %}
+{% if container_loop_var.value.userns != "" %}
+UserNS={{ container_loop_var.value.userns }}
+{% endif %}
 Yaml={{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/deployment.yaml
 SetWorkingDirectory=yaml
 [Install]

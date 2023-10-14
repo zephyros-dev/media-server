@@ -9,11 +9,6 @@
     - name: Set container default restart state
       ansible.builtin.set_fact:
         container_recreate: false
-    - name: Create volume {{ container_loop_var.key }}
-      when: container_loop_var.value.volume
-      containers.podman.podman_volume:
-        name: "{{ item }}"
-      loop: "{{ container_loop_var.value.volume }}"
     - name: Run service with pod {{ container_loop_var.key }}
       become: "{{ container_loop_var.value.become }}"
       when: container_final_pod
@@ -122,12 +117,6 @@
             name: "{{ item.key }}"
             state: absent
           loop: "{{ container_loop_var.value.secrets | dict2items }}"
-        - name: Remove volume {{ container_loop_var.key }}
-          when: not container_loop_var.value.preserve_volume
-          containers.podman.podman_volume:
-            name: "{{ item }}"
-            state: absent
-          loop: "{{ container_loop_var.value.volume }}"
         - name: Remove systemd files {{ container_loop_var.key }}
           ansible.builtin.file:
             path: "{{ container_systemd_path }}/{{ item }}.service"

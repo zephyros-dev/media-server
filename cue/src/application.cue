@@ -731,4 +731,26 @@ applicationSet & {
 			hostNetwork: true
 		}
 	}
+
+	syncthing: {
+		_
+		#param: {
+			name: "syncthing"
+			volumes: {
+				data: "\(fact.syncthing_data)/"
+			}
+		}
+
+		#pod: spec: {
+			containers: [{
+				name:  "web"
+				image: "syncthing"
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/var/syncthing:U,z"
+				}]
+			}]
+			hostNetwork: true
+		}
+	}
 }
