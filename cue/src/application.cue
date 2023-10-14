@@ -43,7 +43,7 @@ applicationSet & {
 			secret: {
 				Caddyfile: {
 					type:    "file"
-					content: "\(fact.caddy_secret_caddyfile)"
+					content: "\(fact.caddyfile_content)"
 				}
 			}
 			volumes: {

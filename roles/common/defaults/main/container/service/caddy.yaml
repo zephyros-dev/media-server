@@ -5,3 +5,4 @@ caddyfile_host_address: host.containers.internal
 # caddyfile_auth_user:
 # caddyfile_auth_pass:
 # caddyfile_auth_token:
+caddyfile_content: "{{ lookup('ansible.builtin.template', 'caddy/Caddyfile.j2') }}"

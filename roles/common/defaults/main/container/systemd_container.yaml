@@ -36,8 +36,6 @@ bazarr:
 caddy:
   caddy_skip: true
   dashy_skip: true
-  secrets:
-    caddyfile: caddy/Caddyfile.j2
   preserve_volume: true
   quadlet: true
 calibre:
