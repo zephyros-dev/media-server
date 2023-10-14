@@ -753,4 +753,23 @@ applicationSet & {
 			hostNetwork: true
 		}
 	}
+
+	trilium: {
+		_
+		#param: {
+			name: "trilium"
+			volumes: {
+				data: "\(fact.trilium_volume_data)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "trilium"
+			volumeMounts: [{
+				name:      "data"
+				mountPath: "/home/node/trilium-data:U,z"
+			}]
+		}]
+	}
 }

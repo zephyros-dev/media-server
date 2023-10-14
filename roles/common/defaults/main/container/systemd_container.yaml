@@ -235,6 +235,7 @@ trilium:
   folder:
     - "{{ trilium_volume_data }}"
   caddy_proxy_port: "8080"
+  quadlet: true
 wol:
   pod: false
   caddy_sso: true

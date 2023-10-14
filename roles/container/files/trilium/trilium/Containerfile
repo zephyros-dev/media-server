@@ -1,0 +1,1 @@
+FROM ghcr.io/zadam/trilium:0.60.4@sha256:307b926bfed9133b144a4dfdb11c1b2e053c94ac29355ede8cf5ae017a52d8a5
