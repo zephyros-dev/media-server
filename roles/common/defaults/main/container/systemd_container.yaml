@@ -221,16 +221,9 @@ transmission:
   folder:
     - "{{ transmission_download }}"
     - "{{ transmission_web_config }}"
-  pod: false
   caddy_proxy_port: "9091"
   dashy_statusCheckAcceptCodes: "401"
-  secrets:
-    transmission_password:
-      type: value
-      value: "{{ transmission_password }}"
-    transmission_user:
-      type: value
-      value: "{{ transmission_user }}"
+  quadlet: true
 trilium:
   folder:
     - "{{ trilium_volume_data }}"

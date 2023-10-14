@@ -754,6 +754,51 @@ applicationSet & {
 		}
 	}
 
+	transmission: {
+		_
+		#param: {
+			name: "transmission"
+			env: {
+				PUID: fact.global_puid
+				PGID: fact.global_pgid
+			}
+			secret: {
+				USER: {
+					type:    "env"
+					content: "\(fact.transmission_user)"
+				}
+				PASS: {
+					type:    "env"
+					content: "\(fact.transmission_password)"
+				}
+			}
+			volumes: {
+				home:   "\(fact.global_media)/"
+				config: "\(fact.transmission_web_config)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "transmission"
+			ports: [{
+				containerPort: 51413
+				hostPort:      51413
+			}, {
+				containerPort: 51413
+				hostPort:      51413
+				protocol:      "UDP"
+			}]
+			volumeMounts: [{
+				name:      "home"
+				mountPath: "/home"
+			}, {
+				name:      "config"
+				mountPath: "/config:U,z"
+			}]
+		}]
+	}
+
 	trilium: {
 		_
 		#param: {
