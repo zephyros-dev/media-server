@@ -3,7 +3,7 @@
   block:
     - name: Install Netdata
       ansible.builtin.import_tasks: install.yaml
-      when: netdata_state == "present"
+      when: netdata_state == "started"
     - name: Uninstall netdata
       ansible.builtin.import_tasks: uninstall.yaml
       when: netdata_state == "absent"

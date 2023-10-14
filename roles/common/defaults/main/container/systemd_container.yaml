@@ -1,8 +1,8 @@
 container:
   bazarr: "{{ container_default | combine(bazarr) }}"
   caddy: "{{ container_default | combine(caddy) }}"
-  calibre: "{{ container_default | combine(calibre) }}"
   calibre_content: "{{ container_default | combine(calibre_content) }}"
+  calibre: "{{ container_default | combine(calibre) }}"
   dashy: "{{ container_default | combine(dashy) }}"
   filebrowser: "{{ container_default | combine(filebrowser) }}"
   immich: "{{ container_default | combine(immich) }}"
@@ -14,6 +14,7 @@ container:
   librespeed: "{{ container_default | combine(librespeed) }}"
   lidarr: "{{ container_default | combine(lidarr) }}"
   navidrome: "{{ container_default | combine(navidrome) }}"
+  netdata: "{{ container_default | combine(netdata) }}"
   nextcloud: "{{ container_default | combine(nextcloud) }}"
   paperless: "{{ container_default | combine(paperless) }}"
   prowlarr: "{{ container_default | combine(prowlarr) }}"
@@ -126,6 +127,7 @@ navidrome:
   quadlet: true
 netdata:
   caddy_proxy_port: "19999"
+  host_network: true
   dashy_only: true
   dashy_statusCheckAcceptCodes: "401"
   state: "{{ netdata_state }}"
@@ -188,12 +190,6 @@ scrutiny:
   caddy_proxy_port: "{{ scrutiny_port }}"
   host_network: true
   quadlet: true
-  # state: absent
-  # pod: false
-  # secrets:
-  #   scrutiny_config:
-  #     type: value
-  #     value: "{{ scrutiny_config }}"
 syncthing:
   folder:
     - "{{ syncthing_data }}"

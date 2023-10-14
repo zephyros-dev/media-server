@@ -28,7 +28,7 @@ dbengine_multihost_disk_space: 2048
 # https://learn.netdata.cloud/docs/configure/secure-nodes
 web_mode: static-threaded
 
-netdata_state: present
+netdata_state: started
 
 netdata_config:
   - section: web

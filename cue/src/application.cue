@@ -137,7 +137,7 @@ applicationSet & {
 								if !v.dashy_skip {
 									_url_key:    strings.Replace(k, "_", "-", -1)
 									_url_public: "https://\(_url_key).\(fact.server_domain)"
-									if v.state == "started" || v.state == "present" {
+									if v.state == "started" {
 										title: strings.ToTitle(_url_key)
 										if v.dashy_icon == "" {
 											icon: "hl-\(_url_key)"
