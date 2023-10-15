@@ -2,7 +2,6 @@
   module_defaults:
     ansible.builtin.file:
       path: "{{ container_folder_loop.item }}"
-      mode: "0755"
       state: directory
   block:
     - name: Prepare folder if not exists {{ container_folder_loop.item }} # noqa: args[module]
