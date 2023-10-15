@@ -34,7 +34,6 @@
         "yzhang.markdown-all-in-one"
       ],
       "settings": {
-        "cue.moduleRoot": "${workspaceFolder}/cue",
         "[json]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
@@ -50,6 +49,7 @@
         "[yaml]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
+        "cue.moduleRoot": "${workspaceFolder}/cue",
         "editor.codeActionsOnSave": {
           "source.fixAll.sortJSON": true
         },

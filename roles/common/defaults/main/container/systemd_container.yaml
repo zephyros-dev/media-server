@@ -203,5 +203,4 @@ container_default:
   ports: []
   preserve_volume: false
   state: started
-  # state: absent
   userns: ""
