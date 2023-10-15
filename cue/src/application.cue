@@ -750,6 +750,95 @@ applicationSet & {
 		}]
 	}
 
+	nextcloud: {
+		_
+		#param: {
+			name: "nextcloud"
+			secret: {
+				postgres_password: {
+					type:    "env"
+					content: "\(fact.nextcloud_postgres_password)"
+				}
+				redis_password: {
+					type:    "env"
+					content: "\(fact.nextcloud_redis_password)"
+				}
+			}
+			volumes: {
+				data:     "\(fact.nextcloud_volume_web_data)/"
+				database: "\(fact.nextcloud_volume_db_data)/"
+				storage:  "\(fact.nextcloud_volume_web_storage)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "nextcloud"
+			env:   [{
+				name:  "NEXTCLOUD_TRUSTED_DOMAINS"
+				value: "nextcloud.\(fact.server_domain)"
+			}, {
+				name:  "OVERWRITEPROTOCOL"
+				value: "https"
+			}, {
+				name:  "POSTGRES_DB"
+				value: "nextcloud"
+			}, {
+				name:  "POSTGRES_HOST"
+				value: "localhost:5432"
+			}, {
+				name:  "POSTGRES_USER"
+				value: "postgres"
+			}, {
+				name:  "REDIS_HOST"
+				value: "localhost"
+			}] + [{
+				name: "POSTGRES_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "nextcloud-env"
+					key:  "postgres_password"
+				}
+			}, {
+				name: "REDIS_HOST_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "nextcloud-env"
+					key:  "redis_password"
+				}
+			}]
+			volumeMounts: [{
+				name:      "data"
+				mountPath: "/var/www/html:z"
+			}, {
+				name:      "storage"
+				mountPath: "/var/www/html/data:z"
+			}]
+		}, {
+			name:  "redis"
+			image: "redis"
+			args: ["redis-server", "--requirepass", "\(fact.nextcloud_redis_password)"]
+		}, {
+			name:  "postgres"
+			image: "postgres"
+			env:   [{
+				name:  "POSTGRES_DB"
+				value: "nextcloud"
+			}, {
+				name:  "POSTGRES_USER"
+				value: "postgres"
+			}] + [{
+				name: "POSTGRES_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "nextcloud-env"
+					key:  "postgres_password"
+				}
+			}]
+			volumeMounts: [{
+				name:      "database"
+				mountPath: "/var/lib/postgresql/data:U,z"
+			}]
+		}]
+	}
+
 	prowlarr: {
 		_
 		#param: {

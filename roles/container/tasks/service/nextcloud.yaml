@@ -1,109 +1,12 @@
-- name: Nextcloud
-  block:
-    - name: Nextcloud setup
-      when: nextcloud_db_action == "none"
-      block:
-        - name: Nextcloud
-          containers.podman.podman_container:
-            env:
-              NEXTCLOUD_TRUSTED_DOMAINS: nextcloud.{{ server_domain }}
-              OVERWRITEPROTOCOL: https
-              POSTGRES_DB: nextcloud
-              POSTGRES_HOST: localhost:5432
-              POSTGRES_USER: postgres
-              REDIS_HOST: localhost
-            image: docker.io/nextcloud:27.1.2@sha256:cff13b7e3f59dba891b141d8021d10736f4111f68f4367fa131f0464024118a0
-            name: nextcloud-web
-            secrets:
-              - nextcloud_postgres_password,type=env,target=POSTGRES_PASSWORD
-              - nextcloud_redis_password,type=env,target=REDIS_HOST_PASSWORD
-            volumes:
-              - "{{ nextcloud_volume_web_storage }}:/var/www/html/data:z"
-              - "{{ nextcloud_volume_web_data }}:/var/www/html:z"
+- name: Create container {{ container_loop_var.key }}
+  ansible.builtin.include_tasks:
+    file: container_quadlet.yaml
 
-        - name: Nextcloud chown
-          ansible.builtin.command:
-            cmd: podman exec -it nextcloud-web chown -R www-data:www-data ./
-          changed_when: false
-
-        - name: Nextcloud Redis
-          # TODO: use acl https://github.com/docker-library/redis/issues/268#issuecomment-812952957
-          containers.podman.podman_container:
-            command: redis-server --requirepass {{ nextcloud_redis_password }}
-            image: docker.io/redis:7-alpine@sha256:343e6546f35877801de0b8580274a5e3a8e8464cabe545a2dd9f3c78df77542a
-            name: nextcloud-redis
-
-    - name: Clean current database
-      when: nextcloud_db_action == "import"
-      block:
-        - name: Remove current database
-          become: true
-          ansible.builtin.file:
-            path: "{{ nextcloud_volume_db_data }}"
-            state: absent
-        - name: Create empty database folder
-          ansible.builtin.file:
-            path: "{{ nextcloud_volume_db_data }}"
-            state: directory
-            mode: "0755"
-
-    - name: Nextcloud database
-      containers.podman.podman_container:
-        env:
-          POSTGRES_DB: nextcloud
-          POSTGRES_USER: postgres
-        image: docker.io/postgres:14-alpine@sha256:b813930a37e265c414b6cba15ba659e6fb9d63f8929c23f7b521a5492a3a5a17
-        name: nextcloud-db
-        secrets:
-          - nextcloud_postgres_password,type=env,target=POSTGRES_PASSWORD
-        volumes:
-          - "{{ nextcloud_volume_db_data }}:/var/lib/postgresql/data:U,z"
-
-    - name: Ugrade nextcloud
-      ansible.builtin.command:
-        cmd: podman exec --user www-data -it nextcloud-web {{ item }}
-      loop:
-        - php occ upgrade
-        - php occ maintenance:mode --off
-      changed_when: false
-      when: nextcloud_db_action == "none"
-
-- name: Nextcloud database export
-  when: nextcloud_db_action == "export"
-  block:
-    - name: Make backup nextcloud volume folder
-      ansible.builtin.file:
-        path: "{{ nextcloud_volume }}/db_bak"
-        state: directory
-        mode: "0700"
-    - name: Backup nextcloud volume # noqa: risky-file-permissions
-      become: true
-      ansible.builtin.copy:
-        dest: "{{ nextcloud_volume }}//db_bak/{{ ansible_date_time.iso8601_basic_short }}"
-        directory_mode: recursive
-        group: "{{ ansible_user }}"
-        mode: "0700"
-        owner: "{{ ansible_user }}"
-        remote_src: true
-        src: "{{ nextcloud_volume_db_data }}"
-    - name: Create nextcloud db dump
-      changed_when: false
-      ansible.builtin.shell:
-        chdir: "{{ nextcloud_volume }}"
-        cmd: podman exec nextcloud-db pg_dumpall -U {{ nextcloud_postgres_user }} > dump.sql
-    - name: Remove nextcloud container
-      containers.podman.podman_container:
-        name: nextcloud-db
-        state: absent
-
-- name: Nextcloud database import
-  when: nextcloud_db_action == "import"
-  block:
-    - name: Import db into nextcloud
-      ansible.builtin.shell:
-        chdir: "{{ nextcloud_volume }}"
-        cmd: podman exec -i nextcloud-db psql -U {{ nextcloud_postgres_user }} < dump.sql
-      register: import_output
-      until: import_output.rc == 0
-      retries: 10
-      changed_when: false
+- name: Ugrade nextcloud
+  changed_when: false
+  ansible.builtin.command:
+    cmd: podman exec --user www-data -it nextcloud-web {{ item }}
+  loop:
+    - chown -R www-data:www-data ./
+    - php occ upgrade
+    - php occ maintenance:mode --off

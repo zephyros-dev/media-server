@@ -137,13 +137,7 @@ nextcloud:
     - "{{ nextcloud_volume_web_storage }}"
     - "{{ nextcloud_volume_web_data }}"
   caddy_proxy_port: "80"
-  secrets:
-    nextcloud_postgres_password:
-      type: value
-      value: "{{ nextcloud_postgres_password }}"
-    nextcloud_redis_password:
-      type: value
-      value: "{{ nextcloud_redis_password }}"
+  quadlet: true
 paperless:
   folder:
     - "{{ paperless_volume_database_data }}"
