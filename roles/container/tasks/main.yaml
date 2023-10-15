@@ -1,42 +1,31 @@
 - name: Setup container
   tags: container
   block:
-    - name: Create podman systemd folder
-      ansible.builtin.file:
-        mode: "0755"
-        path: "{{ ansible_user_dir }}/.config/containers/systemd"
-        state: directory
-    - name: Create network quadlet
-      ansible.builtin.template:
-        mode: "0644"
-        src: quadlet/webserver.network.j2
-        dest: "{{ ansible_user_dir }}/.config/containers/systemd/webserver.network"
     - name: Get custom fact container
-      tags: always
       ansible.builtin.import_tasks:
         file: container_facts.yaml
     - name: Generate facts for container
       delegate_to: localhost
       tags: always
       block:
-        - name: Create tmp cue folder {{ container_loop_var.key }}
+        - name: Create tmp cue folder
           ansible.builtin.file:
             path: cue/tmp
             state: directory
             mode: "0755"
-        - name: Export facts to file {{ container_loop_var.key }}
+        - name: Export facts to file
           changed_when: false
           ansible.builtin.copy:
             content: "{{ lookup('vars', 'vars') | to_nice_json }}"
             mode: "0644"
             dest: cue/tmp/fact.json
-        - name: Template fact into concrete value {{ container_loop_var.key }}
+        - name: Template fact into concrete value
           changed_when: false
           ansible.builtin.template:
             mode: "0644"
             src: cue/tmp/fact.json
             dest: cue/tmp/fact.json
-        - name: Extract fact to cue {{ container_loop_var.key }}
+        - name: Extract fact to cue
           changed_when: false
           ansible.builtin.command:
             cmd: cue import cue/tmp/fact.json --outfile cue/tmp/fact.cue -p fact -f

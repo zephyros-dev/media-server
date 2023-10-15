@@ -33,12 +33,10 @@ bazarr:
     - "{{ global_media }}"
   caddy_proxy_port: "6767"
   caddy_sso: true
-  quadlet: true
 caddy:
   caddy_skip: true
   dashy_skip: true
   preserve_volume: true
-  quadlet: true
 calibre:
   folder:
     - "{{ calibre_book }}"
@@ -46,7 +44,6 @@ calibre:
   caddy_proxy_port: "8080"
   caddy_skip: true
   dashy_statusCheckAcceptCodes: "401"
-  quadlet: true
 calibre_content:
   caddy_proxy_port: "8081"
   caddy_skip: true
@@ -58,12 +55,10 @@ dashy:
   caddy_proxy_port: "80"
   caddy_sso: true
   dashy_skip: true
-  quadlet: true
 filebrowser:
   folder:
     - "{{ filebrowser_volume }}"
   caddy_proxy_port: "80"
-  quadlet: true
 immich:
   folder:
     - "{{ immich_volume_database }}"
@@ -71,20 +66,17 @@ immich:
     - "{{ immich_volume_upload }}"
   caddy_proxy_port: "8080"
   caddy_skip: true
-  quadlet: true
 jdownloader:
   folder:
     - "{{ global_download }}"
     - "{{ jdownloader_volume_config }}"
   caddy_proxy_port: "5800"
-  quadlet: true
 jellyfin:
   folder:
     - "{{ global_media }}"
     - "{{ jellyfin_volume_cache }}"
     - "{{ jellyfin_volume_config }}"
   caddy_proxy_port: "8096"
-  quadlet: true
 kavita:
   folder:
     - "{{ kavita_volume_data }}"
@@ -92,7 +84,6 @@ kavita:
   caddy_rewrite:
     - src: /
       dest: /login
-  quadlet: true
 koreader:
   folder:
     - "{{ koreader_volume_data }}"
@@ -100,17 +91,14 @@ koreader:
   caddy_sso: true
   dashy_statusCheckAcceptCodes: "401"
   dashy_icon: https://koreader.rocks/koreader.png
-  quadlet: true
 kosync:
   folder:
     - "{{ kosync_volume_redis_data }}"
   caddy_proxy_port: "17200"
   dashy_statusCheckAcceptCodes: "412"
   dashy_icon: https://koreader.rocks/koreader.png
-  quadlet: true
 librespeed:
   caddy_proxy_port: "80"
-  quadlet: true
 lidarr:
   folder:
     - "{{ global_media }}"
@@ -118,13 +106,11 @@ lidarr:
     - "{{ transmission_download }}"
   caddy_proxy_port: "8686"
   caddy_sso: true
-  quadlet: true
 navidrome:
   folder:
     - "{{ global_media }}"
     - "{{ navidrome_web_data }}"
   caddy_proxy_port: "4533"
-  quadlet: true
 netdata:
   caddy_proxy_port: "19999"
   host_network: true
@@ -137,7 +123,6 @@ nextcloud:
     - "{{ nextcloud_volume_web_storage }}"
     - "{{ nextcloud_volume_web_data }}"
   caddy_proxy_port: "80"
-  quadlet: true
 paperless:
   folder:
     - "{{ paperless_volume_database_data }}"
@@ -147,13 +132,11 @@ paperless:
     - "{{ paperless_volume_webserver_export }}"
     - "{{ paperless_volume_webserver_media }}"
   caddy_proxy_port: "8000"
-  quadlet: true
 prowlarr:
   folder:
     - "{{ prowlarr_web_config }}"
   caddy_sso: true
   caddy_proxy_port: "9696"
-  quadlet: true
 pymedusa:
   folder:
     - "{{ global_media }}"
@@ -162,7 +145,6 @@ pymedusa:
   caddy_sso: true
   caddy_proxy_port: "8081"
   dashy_icon: favicon-local
-  quadlet: true
 radarr:
   folder:
     - "{{ global_media }}"
@@ -170,27 +152,23 @@ radarr:
     - "{{ transmission_download }}"
   caddy_sso: true
   caddy_proxy_port: "7878"
-  quadlet: true
 samba:
   folder:
     - "{{ global_storage }}"
   caddy_skip: true
   dashy_skip: true
   host_network: true
-  quadlet: true
 scrutiny:
   become: true
   caddy_sso: true
   caddy_proxy_port: "{{ scrutiny_port }}"
   host_network: true
-  quadlet: true
 syncthing:
   folder:
     - "{{ syncthing_data }}"
   caddy_proxy_port: "8384"
   caddy_sso: true
   host_network: true
-  quadlet: true
   userns: keep-id
 transmission:
   folder:
@@ -198,18 +176,15 @@ transmission:
     - "{{ transmission_web_config }}"
   caddy_proxy_port: "9091"
   dashy_statusCheckAcceptCodes: "401"
-  quadlet: true
 trilium:
   folder:
     - "{{ trilium_volume_data }}"
   caddy_proxy_port: "8080"
-  quadlet: true
 wol:
   caddy_proxy_port: "8089"
   caddy_sso: true
   dashy_icon: mdi-desktop-classic
   host_network: true
-  quadlet: true
 
 container_default:
   become: false
@@ -225,11 +200,8 @@ container_default:
   dashy_statusCheckUrl: ""
   folder: []
   host_network: false
-  pod: true
   ports: []
   preserve_volume: false
-  quadlet: false
-  secrets: {}
   state: started
-  timer: false
+  # state: absent
   userns: ""

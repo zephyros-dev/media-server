@@ -1,4 +1,5 @@
 - name: Scrutiny facts
+  tags: scrutiny
   become: true
   block:
     - name: Init list of device

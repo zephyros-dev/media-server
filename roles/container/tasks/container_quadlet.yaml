@@ -24,12 +24,19 @@
             path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
             state: directory
             mode: "0755"
-        - name: Copy kube files {{ container_loop_var.key }}
-          ansible.builtin.copy:
-            mode: "0755"
+        # Synchronize cannot use sudo https://stackoverflow.com/questions/40331425/synchronize-module-fails-with-become
+        - name: Copy kube files {{ container_loop_var.key }} # noqa: risky-file-permissions
+          when: not container_loop_var.value.become
+          ansible.posix.synchronize:
             src: "{{ container_loop_var.key }}/"
             dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
           register: kube_file_container
+        # Copy works correctly in both cases, however it is slow
+        - name: Copy kube files {{ container_loop_var.key }} # noqa: risky-file-permissions
+          when: container_loop_var.value.become
+          ansible.builtin.copy:
+            src: "{{ container_loop_var.key }}/"
+            dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
         - name: Create kube deployment {{ container_loop_var.key }}
           ansible.builtin.copy:
             content: "{{ cue_dump.stdout }}"
@@ -43,11 +50,47 @@
             dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
           register: kube_file_quadlet
         - name: Start systemd service {{ container_loop_var.key }}
-          ansible.builtin.systemd:
+          block:
+            - name: Start systemd service {{ container_loop_var.key }}
+              ansible.builtin.systemd:
+              register: service_systemd
+          rescue:
+            # Supposedly we could just build the image via the podman kube play
+            # like https://docs.podman.io/en/latest/markdown/podman-kube-play.1.html
+            # But there's a bug that prevent the systemd service to build the image
+            # the first time so we had to build the image manually
+            - name: Prepare image {{ container_loop_var.key }}
+              block:
+                - name: Get list of image to build {{ container_loop_var.key }}
+                  ansible.builtin.find:
+                    paths: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+                    file_type: directory
+                  register: image_list
+                - name: Build images for kube file {{ container_loop_var.key }}
+                  containers.podman.podman_image:
+                    name: "{{ item.path | basename }}"
+                    path: "{{ item.path }}"
+                  loop: "{{ image_list.files }}"
+                  async: 45
+                  poll: 0
+                  register: image_build
+                - name: Check if image_build finished {{ container_loop_var.key }}
+                  ansible.builtin.async_status:
+                    jid: "{{ item.ansible_job_id }}"
+                  loop: "{{ image_build.results }}"
+                  register: async_poll_results
+                  until: async_poll_results.finished
+                  retries: 100
+                - name: Start the systemd service again {{ container_loop_var.key }}
+                  ansible.builtin.systemd:
+                  register: service_systemd
         - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
-          when: kube_file_container.changed or kube_file_yaml.changed or kube_file_quadlet.changed
+          when:
+            - kube_file_container.changed or kube_file_yaml.changed or kube_file_quadlet.changed
+            - not service_systemd.changed
           ansible.builtin.systemd:
             state: restarted
+
 - name: Remove service {{ container_loop_var.key }}
   when: container_loop_var.value.state == "absent"
   module_defaults:

@@ -248,10 +248,10 @@ applicationSet & {
 
 		#pod: spec: containers: [{
 			name:  "redis"
-			image: "redis"
+			image: "immich-redis"
 		}, {
-			name:  "database"
-			image: "postgres"
+			name:  "postgres"
+			image: "immich-postgres"
 			env: [{
 				name:  "POSTGRES_DB"
 				value: "immich"
@@ -271,7 +271,7 @@ applicationSet & {
 			}]
 		}, {
 			name:  "typesense"
-			image: "typesense"
+			image: "immich-typesense"
 			env: [{
 				name:  "TYPESENSE_DATA_DIR"
 				value: "/data"
@@ -288,7 +288,7 @@ applicationSet & {
 			}]
 		}, {
 			name:  "server"
-			image: "server"
+			image: "immich-server"
 			args: ["start-server.sh"]
 			env: [{
 				name:  "DB_DATABASE_NAME"
@@ -334,7 +334,7 @@ applicationSet & {
 			}]
 		}, {
 			name:  "microservices"
-			image: "server"
+			image: "immich-server"
 			args: ["start-microservices.sh"]
 			env: [{
 				name:  "DB_DATABASE_NAME"
@@ -379,7 +379,7 @@ applicationSet & {
 			}]
 		}, {
 			name:  "machine-learning"
-			image: "machine-learning"
+			image: "immich-machine-learning"
 			env: [{
 				name:  "NODE_ENV"
 				value: "production"
@@ -393,7 +393,7 @@ applicationSet & {
 			}]
 		}, {
 			name:  "web"
-			image: "web"
+			image: "immich-web"
 			env: [{
 				name:  "IMMICH_SERVER_URL"
 				value: "http://localhost:3001"
@@ -643,14 +643,14 @@ applicationSet & {
 
 		#pod: spec: containers: [{
 			name:  "redis"
-			image: "redis"
+			image: "paperless-redis"
 			volumeMounts: [{
 				name:      "redis"
 				mountPath: "/data:U,z"
 			}]
 		}, {
-			name:  "database"
-			image: "database"
+			name:  "postgres"
+			image: "paperless-postgres"
 			env: [{
 				name:  "POSTGRES_DB"
 				value: "paperless"
@@ -684,7 +684,7 @@ applicationSet & {
 			// Huge picture will cause gs to crash
 			// TODO: We need to be able to adjust the -r value of gs, but currently I'm not sure how to do it on ocrmypdf
 			name:  "webserver"
-			image: "webserver"
+			image: "paperless-ngx"
 			env:   [{
 				name:  "PAPERLESS_DBHOST"
 				value: "localhost"
@@ -814,11 +814,11 @@ applicationSet & {
 			}]
 		}, {
 			name:  "redis"
-			image: "redis"
+			image: "nextcloud-redis"
 			args: ["redis-server", "--requirepass", "\(fact.nextcloud_redis_password)"]
 		}, {
 			name:  "postgres"
-			image: "postgres"
+			image: "nextcloud-postgres"
 			env:   [{
 				name:  "POSTGRES_DB"
 				value: "nextcloud"

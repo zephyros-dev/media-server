@@ -9,6 +9,7 @@
         group: "{{ ansible_user }}"
         owner: "{{ ansible_user }}"
       when: not container_folder_loop.stat.exists
+
     - name: Preserve folder if already exists {{ container_folder_loop.item }} # noqa: risky-file-permissions args[module]
       become_method: containers.podman.podman_unshare
       become: true

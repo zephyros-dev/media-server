@@ -17,20 +17,10 @@
         container_systemd_scope: system
       when: container_loop_var.value.become
 
-    - name: Setup pod for service {{ container_loop_var.key }}
-      ansible.builtin.set_fact:
-        container_final_pod: "{{ container_loop_var.value.pod }}"
-      when: not container_loop_var.value.timer
-
-    - name: Do not setup pod if service is timer {{ container_loop_var.key }}
-      ansible.builtin.set_fact:
-        container_final_pod: false
-      when: container_loop_var.value.timer
-
     - name: Setup systemd container {{ container_loop_var.key }}
       become: "{{ container_loop_var.value.become }}"
       block:
-        - name: Setup podman container with systemd
+        - name: Setup podman container {{ container_loop_var.key }}
           when: container_loop_var.value.state == "started"
           block:
             - name: Check if folder exists {{ container_loop_var.key }}
@@ -45,22 +35,8 @@
               loop: "{{ container_folder_state.results }}"
               loop_control:
                 loop_var: container_folder_loop
-            - name: Create secrets {{ container_loop_var.key }}
-              when: container_loop_var.value.secrets
-              ansible.builtin.include_tasks:
-                file: container_secrets.yaml
-              loop: "{{ container_loop_var.value.secrets | dict2items }}"
-              loop_control:
-                loop_var: container_secrets_loop
-              no_log: true
-
-        - name: Setup container with generate systemd {{ container_loop_var.key }}
-          when: not container_loop_var.value.quadlet
-          ansible.builtin.include_tasks:
-            file: container_systemd.yaml
 
         - name: Setup container with quadlet {{ container_loop_var.key }}
-          when: container_loop_var.value.quadlet
           block:
             - name: Check if custom setup flow exists {{ container_loop_var.key }}
               delegate_to: localhost
@@ -68,10 +44,12 @@
                 path: roles/container/tasks/service/{{ container_loop_var.key }}.yaml
               register: custom_setup_flow
             - name: Create container with custom flow {{ container_loop_var.key }}
-              when: custom_setup_flow.stat.exists
+              when:
+                - custom_setup_flow.stat.exists
+                - container_loop_var.value.state == "started"
               ansible.builtin.include_tasks:
                 file: service/{{ container_loop_var.key }}.yaml
-            - name: Create container {{ container_loop_var.key }}
-              when: not custom_setup_flow.stat.exists
+            - name: Setup container {{ container_loop_var.key }}
+              when: not custom_setup_flow.stat.exists or container_loop_var.value.state == "absent"
               ansible.builtin.include_tasks:
                 file: container_quadlet.yaml

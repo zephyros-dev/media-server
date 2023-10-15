@@ -1,11 +1,9 @@
 #jinja2:lstrip_blocks: True
 [Kube]
-{% if not container_loop_var.value.host_network %}
-Network=webserver
-{% endif %}
 {% if container_loop_var.value.userns != "" %}
 UserNS={{ container_loop_var.value.userns }}
 {% endif %}
+PodmanArgs=--build
 Yaml={{ container_quadlet_path }}/{{ container_loop_var.key }}/deployment.yaml
 SetWorkingDirectory=yaml
 [Install]
