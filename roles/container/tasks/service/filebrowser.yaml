@@ -6,7 +6,6 @@
     mode: "0600"
   loop:
     - "{{ filebrowser_volume }}/database.db"
-    - "{{ filebrowser_volume }}/.filebrowser.json"
 
 - name: Create container {{ container_loop_var.key }}
   ansible.builtin.include_tasks:
