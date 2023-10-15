@@ -40,7 +40,7 @@ async def ci():
                     "curl",
                     "openssh-client",
                     "openssl",
-                    "rsync"
+                    "rsync",
                     "sshpass",
                     "tar",
                     "whois",
