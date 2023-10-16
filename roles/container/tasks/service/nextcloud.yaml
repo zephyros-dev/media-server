@@ -10,5 +10,5 @@
     - chown -R www-data:www-data ./
     - php occ upgrade
     - php occ maintenance:mode --off
-  retries: 5
-  delay: 5
+  register: nextcloud_update
+  until: nextcloud_update.failed == false
