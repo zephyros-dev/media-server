@@ -54,6 +54,12 @@
             - name: Start systemd service {{ container_loop_var.key }}
               ansible.builtin.systemd:
               register: service_systemd
+            - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
+              when:
+                - kube_file_container.changed or kube_file_yaml.changed or kube_file_quadlet.changed
+                - not service_systemd.changed
+              ansible.builtin.systemd:
+                state: restarted
           rescue:
             # Supposedly we could just build the image via the podman kube play
             # like https://docs.podman.io/en/latest/markdown/podman-kube-play.1.html
@@ -70,6 +76,7 @@
                   containers.podman.podman_image:
                     name: "{{ item.path | basename }}"
                     path: "{{ item.path }}"
+                    force: true
                   loop: "{{ image_list.files }}"
                   async: 45
                   poll: 0
@@ -84,12 +91,6 @@
                 - name: Start the systemd service again {{ container_loop_var.key }}
                   ansible.builtin.systemd:
                   register: service_systemd
-        - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
-          when:
-            - kube_file_container.changed or kube_file_yaml.changed or kube_file_quadlet.changed
-            - not service_systemd.changed
-          ansible.builtin.systemd:
-            state: restarted
 
 - name: Remove service {{ container_loop_var.key }}
   when: container_loop_var.value.state == "absent"
