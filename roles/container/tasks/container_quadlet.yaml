@@ -86,7 +86,7 @@
                     jid: "{{ item.ansible_job_id }}"
                   loop: "{{ image_build.results }}"
                   register: async_poll_results
-                  until: async_poll_results.finished
+                  until: async_poll_results.finished and not async_poll_results.failed
                   retries: 100
                 - name: Start the systemd service again {{ container_loop_var.key }}
                   ansible.builtin.systemd:
