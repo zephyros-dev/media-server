@@ -78,16 +78,6 @@
                     path: "{{ item.path }}"
                     force: true
                   loop: "{{ image_list.files }}"
-                  async: 45
-                  poll: 0
-                  register: image_build
-                - name: Check if image_build finished {{ container_loop_var.key }}
-                  ansible.builtin.async_status:
-                    jid: "{{ item.ansible_job_id }}"
-                  loop: "{{ image_build.results }}"
-                  register: async_poll_results
-                  until: async_poll_results.finished and not async_poll_results.failed
-                  retries: 100
                 - name: Start the systemd service again {{ container_loop_var.key }}
                   ansible.builtin.systemd:
                   register: service_systemd
