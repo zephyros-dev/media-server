@@ -1,1 +1,1 @@
-FROM docker.io/redis:6-alpine@sha256:e582909983ce92291977d864b5a7b2a46bee680c2e515bd12c0ab3415a410b33
+FROM docker.io/redis:6-alpine@sha256:eae76512623bdaa06bcf3b7213cdb055ad2c5ebd08636aba0186948276aee724
