@@ -12,4 +12,4 @@ packages:
   - name: cue-lang/cue@v0.6.0
   - name: getsops/sops@v3.8.1
   - name: golang/go@go1.20.8
-  - name: hashicorp/terraform@v1.6.1
+  - name: hashicorp/terraform@v1.6.2
