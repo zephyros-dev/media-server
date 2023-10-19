@@ -1,1 +1,1 @@
-FROM docker.io/python:3.12-slim@sha256:69ef15451984a34f4708f50bf1c93941ff7b78345dbd8bcaa9682819c0348edc
+FROM docker.io/python:3.12-slim@sha256:64dfccfb6f40f202f731ba02fd4f720f3c619fb475f74ed84eb20272334c404c
