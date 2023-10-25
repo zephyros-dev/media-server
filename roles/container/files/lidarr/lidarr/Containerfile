@@ -1,1 +1,1 @@
-FROM ghcr.io/linuxserver/lidarr:latest@sha256:6b88d18086b91003ef73deb99ac5312f02087bffdb873db62a0d34dd0658e404
+FROM ghcr.io/linuxserver/lidarr:latest@sha256:23e21a8216931cb5420f0bea80854e9c9dfc2fa014e7f259b65ed0a67d96a23a
