@@ -30,6 +30,12 @@
           ansible.posix.synchronize:
             src: "{{ container_loop_var.key }}/"
             dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
+            # Do not check for file timestamp, only check for file content for the CI run
+            # to not trigger changes here
+            # https://stackoverflow.com/a/62112271/13871361
+            recursive: true
+            archive: false
+            checksum: true
           register: kube_file_container
         # Copy works correctly in both cases, however it is slow
         - name: Copy kube files {{ container_loop_var.key }} # noqa: risky-file-permissions
