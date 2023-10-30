@@ -13,3 +13,4 @@
   register: nextcloud_update
   until: nextcloud_update.failed == false
   retries: 10
+  async: 45
