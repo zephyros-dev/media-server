@@ -247,9 +247,6 @@ applicationSet & {
 		}
 
 		#pod: spec: containers: [{
-			name:  "redis"
-			image: "immich-redis"
-		}, {
 			name:  "postgres"
 			image: "immich-postgres"
 			env: [{
@@ -269,6 +266,9 @@ applicationSet & {
 				name:      "database"
 				mountPath: "/var/lib/postgresql/data:U,z"
 			}]
+		}] + [ if fact.container.immich.postgres_action == "none" for v in [{
+			name:  "redis"
+			image: "immich-redis"
 		}, {
 			name:  "typesense"
 			image: "immich-typesense"
@@ -398,7 +398,7 @@ applicationSet & {
 				name:  "IMMICH_SERVER_URL"
 				value: "http://localhost:3001"
 			}]
-		}]
+		}] {v}]
 	}
 
 	jdownloader: {
