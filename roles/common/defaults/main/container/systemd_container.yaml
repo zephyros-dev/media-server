@@ -201,6 +201,7 @@ container_default:
   folder: []
   host_network: false
   ports: []
+  postgres_action: none
   preserve_volume: false
   state: started
   userns: ""

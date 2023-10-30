@@ -1,0 +1,75 @@
+- name: Setup postgres container {{ container_loop_var.key }}
+  module_defaults:
+    ansible.builtin.systemd:
+      name: "{{ container_loop_var.key }}"
+      scope: "{{ container_systemd_scope }}"
+  block:
+    - name: Get list of containers in the pod {{ container_loop_var.key }}
+      containers.podman.podman_container_info:
+        name: "{{ container_loop_var.key }}-postgres"
+      register: podman_container_info
+    - name: Set path to postgres data folder
+      ansible.builtin.set_fact:
+        postgres_data_path: "{{ podman_container_info | json_query('containers[0].Mounts[?Destination==`/var/lib/postgresql/data`].Source') | first }}"
+        postgres_user: "{{ podman_container_info | json_query('containers[0].Config.Env[?contains(@, `POSTGRES_USER`) == `true`]') | first | regex_replace('^POSTGRES_USER=', '') }}"
+    - name: Stop container {{ container_loop_var.key }}
+      ansible.builtin.systemd: # noqa: args[module]
+        state: stopped
+
+    - name: Export the postgres db {{ container_loop_var.key }}
+      when: container_loop_var.value.postgres_action == "export"
+      block:
+        - name: Make backup db folder {{ container_loop_var.key }}
+          ansible.builtin.file:
+            path: "{{ postgres_data_path | dirname }}/postgres_backup"
+            mode: "0700"
+            state: directory
+        - name: Backup volume {{ container_loop_var.key }}
+          become: true
+          become_method: containers.podman.podman_unshare
+          ansible.builtin.copy:
+            dest: "{{ postgres_data_path | dirname }}/postgres_backup/{{ ansible_date_time.iso8601_basic_short }}"
+            directory_mode: recursive
+            mode: "0700"
+            remote_src: true
+            src: "{{ postgres_data_path }}"
+        - name: Start postgres {{ container_loop_var.key }} # noqa: args[module]
+          ansible.builtin.systemd:
+            state: started
+        - name: Create nextcloud db dump
+          changed_when: false
+          ansible.builtin.shell:
+            chdir: "{{ postgres_data_path | dirname }}"
+            cmd: podman exec {{ container_loop_var.key }}-postgres pg_dumpall -U {{ postgres_user }} > dump.sql
+          register: postgres_dump
+          until: postgres_dump.failed == false
+          retries: 10
+        - name: Stop db container # noqa: args[module]
+          ansible.builtin.systemd:
+            state: stopped
+
+    - name: Import the postgres db {{ container_loop_var.key }}
+      when: container_loop_var.value.postgres_action == "import"
+      block:
+        - name: Clean current postgres volume {{ container_loop_var.key }}
+          become: true
+          become_method: containers.podman.podman_unshare
+          ansible.builtin.file:
+            path: "{{ postgres_data_path }}"
+            state: absent
+        - name: Create empty postgres folder {{ container_loop_var.key }}
+          ansible.builtin.file:
+            path: "{{ postgres_data_path }}"
+            mode: "0700"
+            state: directory
+        - name: Start postgres container {{ container_loop_var.key }} # noqa: args[module]
+          ansible.builtin.systemd:
+            state: started
+        - name: Import postgres container {{ container_loop_var.key }}
+          ansible.builtin.shell:
+            chdir: "{{ postgres_data_path | dirname }}"
+            cmd: podman exec -i {{ container_loop_var.key }}-postgres psql -U {{ postgres_user }} < dump.sql
+          register: import_output
+          until: import_output.rc == 0
+          retries: 10
+          changed_when: false

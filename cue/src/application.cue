@@ -267,7 +267,7 @@ applicationSet & {
 			}]
 			volumeMounts: [{
 				name:      "database"
-				mountPath: "/var/lib/postgresql/data"
+				mountPath: "/var/lib/postgresql/data:U,z"
 			}]
 		}, {
 			name:  "typesense"
@@ -772,6 +772,26 @@ applicationSet & {
 		}
 
 		#pod: spec: containers: [{
+			name:  "postgres"
+			image: "nextcloud-postgres"
+			env:   [{
+				name:  "POSTGRES_DB"
+				value: "nextcloud"
+			}, {
+				name:  "POSTGRES_USER"
+				value: "postgres"
+			}] + [{
+				name: "POSTGRES_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "nextcloud-env"
+					key:  "postgres_password"
+				}
+			}]
+			volumeMounts: [{
+				name:      "database"
+				mountPath: "/var/lib/postgresql/data:U,z"
+			}]
+		}] + [ if fact.container.nextcloud.postgres_action == "none" for v in [{
 			name:  "web"
 			image: "nextcloud"
 			env:   [{
@@ -816,27 +836,7 @@ applicationSet & {
 			name:  "redis"
 			image: "nextcloud-redis"
 			args: ["redis-server", "--requirepass", "\(fact.nextcloud_redis_password)"]
-		}, {
-			name:  "postgres"
-			image: "nextcloud-postgres"
-			env:   [{
-				name:  "POSTGRES_DB"
-				value: "nextcloud"
-			}, {
-				name:  "POSTGRES_USER"
-				value: "postgres"
-			}] + [{
-				name: "POSTGRES_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "nextcloud-env"
-					key:  "postgres_password"
-				}
-			}]
-			volumeMounts: [{
-				name:      "database"
-				mountPath: "/var/lib/postgresql/data:U,z"
-			}]
-		}]
+		}] {v}]
 	}
 
 	prowlarr: {

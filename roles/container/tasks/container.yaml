@@ -45,9 +45,14 @@
               when:
                 - custom_setup_flow.stat.exists
                 - container_loop_var.value.state == "started"
+                - container_loop_var.value.postgres_action == "none"
               ansible.builtin.include_tasks:
                 file: service/{{ container_loop_var.key }}.yaml
             - name: Setup container {{ container_loop_var.key }}
-              when: not custom_setup_flow.stat.exists or container_loop_var.value.state == "absent"
+              when: not custom_setup_flow.stat.exists or container_loop_var.value.state == "absent" or container_loop_var.value.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_quadlet.yaml
+            - name: Setup postgres {{ container_loop_var.key }}
+              when: container_loop_var.value.postgres_action != "none"
+              ansible.builtin.include_tasks:
+                file: container_postgres.yaml
