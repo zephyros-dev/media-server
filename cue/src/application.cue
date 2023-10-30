@@ -642,13 +642,6 @@ applicationSet & {
 		}
 
 		#pod: spec: containers: [{
-			name:  "redis"
-			image: "paperless-redis"
-			volumeMounts: [{
-				name:      "redis"
-				mountPath: "/data:U,z"
-			}]
-		}, {
 			name:  "postgres"
 			image: "paperless-postgres"
 			env: [{
@@ -667,6 +660,13 @@ applicationSet & {
 			volumeMounts: [{
 				name:      "database"
 				mountPath: "/var/lib/postgresql/data:U,z"
+			}]
+		}] + [ if fact.container.paperless.postgres_action == "none" for v in [{
+			name:  "redis"
+			image: "paperless-redis"
+			volumeMounts: [{
+				name:      "redis"
+				mountPath: "/data:U,z"
 			}]
 		}, {
 			name:  "gotenberg"
@@ -747,7 +747,7 @@ applicationSet & {
 				name:      "media"
 				mountPath: "/usr/src/paperless/media:U,z"
 			}]
-		}]
+		}] {v}]
 	}
 
 	nextcloud: {

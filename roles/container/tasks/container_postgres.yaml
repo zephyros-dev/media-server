@@ -36,7 +36,7 @@
         - name: Start postgres {{ container_loop_var.key }} # noqa: args[module]
           ansible.builtin.systemd:
             state: started
-        - name: Create nextcloud db dump
+        - name: Create dump {{ container_loop_var.key }}
           changed_when: false
           ansible.builtin.shell:
             chdir: "{{ postgres_data_path | dirname }}"
@@ -44,7 +44,7 @@
           register: postgres_dump
           until: postgres_dump.failed == false
           retries: 10
-        - name: Stop db container # noqa: args[module]
+        - name: Stop postgres container {{ container_loop_var.key }} # noqa: args[module]
           ansible.builtin.systemd:
             state: stopped
 
