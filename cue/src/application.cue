@@ -264,7 +264,7 @@ applicationSet & {
 			}, {
 				name: "POSTGRES_PASSWORD"
 				valueFrom: secretKeyRef: {
-					name: "immich-env"
+					name: "immich"
 					key:  "database_password"
 				}
 			}]
@@ -284,7 +284,7 @@ applicationSet & {
 			}, {
 				name: "TYPESENSE_API_KEY"
 				valueFrom: secretKeyRef: {
-					name: "immich-env"
+					name: "immich"
 					key:  "typesense_api_key"
 				}
 			}]
@@ -318,19 +318,19 @@ applicationSet & {
 			}, {
 				name: "JWT_SECRET"
 				valueFrom: secretKeyRef: {
-					name: "immich-env"
+					name: "immich"
 					key:  "jwt_secret"
 				}
 			}, {
 				name: "DB_PASSWORD"
 				valueFrom: secretKeyRef: {
-					name: "immich-env"
+					name: "immich"
 					key:  "database_password"
 				}
 			}, {
 				name: "TYPESENSE_API_KEY"
 				valueFrom: secretKeyRef: {
-					name: "immich-env"
+					name: "immich"
 					key:  "typesense_api_key"
 				}
 			}]
@@ -363,19 +363,19 @@ applicationSet & {
 			}, {
 				name: "JWT_SECRET"
 				valueFrom: secretKeyRef: {
-					name: "immich-env"
+					name: "immich"
 					key:  "jwt_secret"
 				}
 			}, {
 				name: "DB_PASSWORD"
 				valueFrom: secretKeyRef: {
-					name: "immich-env"
+					name: "immich"
 					key:  "database_password"
 				}
 			}, {
 				name: "TYPESENSE_API_KEY"
 				valueFrom: secretKeyRef: {
-					name: "immich-env"
+					name: "immich"
 					key:  "typesense_api_key"
 				}
 			}]
@@ -672,7 +672,7 @@ applicationSet & {
 			}, {
 				name: "POSTGRES_PASSWORD"
 				valueFrom: secretKeyRef: {
-					name: "paperless-env"
+					name: "paperless"
 					key:  "paperless_dbpass"
 				}
 			}]
@@ -725,31 +725,31 @@ applicationSet & {
 			}] + [{
 				name: "PAPERLESS_DBPASS"
 				valueFrom: secretKeyRef: {
-					name: "paperless-env"
+					name: "paperless"
 					key:  "paperless_dbpass"
 				}
 			}, {
 				name: "PAPERLESS_OCR_LANGUAGE"
 				valueFrom: secretKeyRef: {
-					name: "paperless-env"
+					name: "paperless"
 					key:  "paperless_ocr_language"
 				}
 			}, {
 				name: "PAPERLESS_OCR_LANGUAGES"
 				valueFrom: secretKeyRef: {
-					name: "paperless-env"
+					name: "paperless"
 					key:  "paperless_ocr_languages"
 				}
 			}, {
 				name: "PAPERLESS_SECRET_KEY"
 				valueFrom: secretKeyRef: {
-					name: "paperless-env"
+					name: "paperless"
 					key:  "paperless_secret_key"
 				}
 			}, {
 				name: "PAPERLESS_URL"
 				valueFrom: secretKeyRef: {
-					name: "paperless-env"
+					name: "paperless"
 					key:  "paperless_url"
 				}
 			}]
@@ -802,7 +802,7 @@ applicationSet & {
 			}] + [{
 				name: "POSTGRES_PASSWORD"
 				valueFrom: secretKeyRef: {
-					name: "nextcloud-env"
+					name: "nextcloud"
 					key:  "postgres_password"
 				}
 			}]
@@ -834,13 +834,13 @@ applicationSet & {
 			}] + [{
 				name: "POSTGRES_PASSWORD"
 				valueFrom: secretKeyRef: {
-					name: "nextcloud-env"
+					name: "nextcloud"
 					key:  "postgres_password"
 				}
 			}, {
 				name: "REDIS_HOST_PASSWORD"
 				valueFrom: secretKeyRef: {
-					name: "nextcloud-env"
+					name: "nextcloud"
 					key:  "redis_password"
 				}
 			}]
@@ -981,7 +981,7 @@ applicationSet & {
 				}] + [{
 					name: "ACCOUNT_root"
 					valueFrom: secretKeyRef: {
-						name: "samba-env"
+						name: "samba"
 						key:  "ACCOUNT_root"
 					}}]
 				volumeMounts: [{
@@ -1101,12 +1101,12 @@ applicationSet & {
 			}] + [{
 				name: "USER"
 				valueFrom: secretKeyRef: {
-					name: "transmission-env"
+					name: "transmission"
 					key:  "USER"
 				}}, {
 				name: "PASS"
 				valueFrom: secretKeyRef: {
-					name: "transmission-env"
+					name: "transmission"
 					key:  "PASS"
 				}
 			}]
@@ -1173,7 +1173,7 @@ applicationSet & {
 				}, {
 					name: "WOLWEBBCASTIP"
 					valueFrom: secretKeyRef: {
-						name: "wol-env"
+						name: "wol"
 						key:  "WOLWEBBCASTIP"
 					}
 				}]
