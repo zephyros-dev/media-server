@@ -14,10 +14,6 @@ applicationSet & {
 		_
 		#param: {
 			name: "bazarr"
-			env: {
-				PGID: fact.global_pgid
-				PUID: fact.global_puid
-			}
 			volumes: {
 				config: "\(fact.bazarr_web_config)/"
 				home:   "\(fact.global_media)/"
@@ -26,6 +22,13 @@ applicationSet & {
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "bazarr"
+			env: [{
+				name:  "PGID"
+				value: fact.global_pgid
+			}, {
+				name:  "PUID"
+				value: fact.global_puid
+			}]
 			volumeMounts: [{
 				name:      "config"
 				mountPath: "/config:U,z"
@@ -84,10 +87,6 @@ applicationSet & {
 		_
 		#param: {
 			name: "calibre"
-			env: {
-				PGID: fact.global_pgid
-				PUID: fact.global_puid
-			}
 			volumes: {
 				config: "\(fact.calibre_volume_config)/"
 				books:  "\(fact.calibre_book)/"
@@ -102,6 +101,13 @@ applicationSet & {
 				// Used for the calibre wireless device connection
 				containerPort: 9090
 				hostPort:      59090
+			}]
+			env: [{
+				name:  "PGID"
+				value: fact.global_pgid
+			}, {
+				name:  "PUID"
+				value: fact.global_puid
 			}]
 			volumeMounts: [{
 				name:      "config"
@@ -492,10 +498,6 @@ applicationSet & {
 		_
 		#param: {
 			name: "koreader"
-			env: {
-				PUID: fact.global_puid
-				PGID: fact.global_pgid
-			}
 			volumes: {
 				config: "\(fact.koreader_volume_data)/"
 				device: "/dev/dri/"
@@ -505,6 +507,13 @@ applicationSet & {
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "koreader"
+			env: [{
+				name:  "PGID"
+				value: fact.global_pgid
+			}, {
+				name:  "PUID"
+				value: fact.global_puid
+			}]
 			volumeMounts: [{
 				name:      "config"
 				mountPath: "/config:U,z"
@@ -549,10 +558,6 @@ applicationSet & {
 		_
 		#param: {
 			name: "lidarr"
-			env: {
-				PUID: fact.global_puid
-				PGID: fact.global_pgid
-			}
 			volumes: {
 				home:      "\(fact.global_media)/"
 				config:    "\(fact.lidarr_web_config)/"
@@ -563,6 +568,13 @@ applicationSet & {
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "lidarr"
+			env: [{
+				name:  "PGID"
+				value: fact.global_pgid
+			}, {
+				name:  "PUID"
+				value: fact.global_puid
+			}]
 			volumeMounts: [{
 				name:      "home"
 				mountPath: "/home"
@@ -580,12 +592,6 @@ applicationSet & {
 		_
 		#param: {
 			name: "navidrome"
-			env: {
-				ND_BASEURL:        ""
-				ND_LOGLEVEL:       "info"
-				ND_SCANSCHEDULE:   "1h"
-				ND_SESSIONTIMEOUT: "24h"
-			}
 			volumes: {
 				data:  "\(fact.navidrome_web_data)/"
 				music: "\(fact.navidrome_music)/"
@@ -595,6 +601,19 @@ applicationSet & {
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "navidrome"
+			env: [{
+				name:  "ND_BASEURL"
+				value: ""
+			}, {
+				name:  "ND_LOGLEVEL"
+				value: "info"
+			}, {
+				name:  "ND_SCANSCHEDULE"
+				value: "1h"
+			}, {
+				name:  "ND_SESSIONTIMEOUT"
+				value: "24h"
+			}]
 			volumeMounts: [{
 				name:      "data"
 				mountPath: "/data:U,z"
@@ -889,10 +908,6 @@ applicationSet & {
 		_
 		#param: {
 			name: "radarr"
-			env: {
-				PUID: fact.global_puid
-				PGID: fact.global_pgid
-			}
 			volumes: {
 				home:      "\(fact.global_media)/"
 				config:    "\(fact.radarr_web_config)/"
@@ -903,6 +918,13 @@ applicationSet & {
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "radarr"
+			env: [{
+				name:  "PGID"
+				value: fact.global_pgid
+			}, {
+				name:  "PUID"
+				value: fact.global_puid
+			}]
 			volumeMounts: [{
 				name:      "home"
 				mountPath: "/home"
@@ -920,16 +942,6 @@ applicationSet & {
 		_
 		#param: {
 			name: "samba"
-			env:  {
-				AVAHI_DISABLE:                            "1"
-				GROUP_root:                               "0"
-				SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive: "yes"
-				UID_root:                                 "0"
-				WSDD2_DISABLE:                            "1"
-			} & {
-				for k, v in volumes {
-					"SAMBA_VOLUME_CONFIG_\(k)": "[\(k)]; path=/shares/\(k); \(fact.samba_shares_settings)"
-				}}
 			secret: {
 				ACCOUNT_root: {
 					type:    "env"
@@ -948,6 +960,30 @@ applicationSet & {
 			containers: [{
 				name:  "instance"
 				image: "samba"
+				env:   [{
+					name:  "AVAHI_DISABLE"
+					value: "1"
+				}, {
+					name:  "GROUP_root"
+					value: "0"
+				}, {
+					name:  "SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive"
+					value: "yes"
+				}, {
+					name:  "UID_root"
+					value: "0"
+				}, {
+					name:  "WSDD2_DISABLE"
+					value: "1"
+				}] + [ for k, v in #param.volumes {
+					name:  "SAMBA_VOLUME_CONFIG_\(k)"
+					value: "[\(k)]; path=/shares/\(k); \(fact.samba_shares_settings)"
+				}] + [{
+					name: "ACCOUNT_root"
+					valueFrom: secretKeyRef: {
+						name: "samba-env"
+						key:  "ACCOUNT_root"
+					}}]
 				volumeMounts: [{
 					name:      "home"
 					mountPath: "/shares/home"
@@ -1037,10 +1073,6 @@ applicationSet & {
 		_
 		#param: {
 			name: "transmission"
-			env: {
-				PUID: fact.global_puid
-				PGID: fact.global_pgid
-			}
 			secret: {
 				USER: {
 					type:    "env"
@@ -1060,6 +1092,24 @@ applicationSet & {
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "transmission"
+			env:   [{
+				name:  "PGID"
+				value: fact.global_pgid
+			}, {
+				name:  "PUID"
+				value: fact.global_puid
+			}] + [{
+				name: "USER"
+				valueFrom: secretKeyRef: {
+					name: "transmission-env"
+					key:  "USER"
+				}}, {
+				name: "PASS"
+				valueFrom: secretKeyRef: {
+					name: "transmission-env"
+					key:  "PASS"
+				}
+			}]
 			ports: [{
 				containerPort: 51413
 				hostPort:      51413
@@ -1101,9 +1151,6 @@ applicationSet & {
 		_
 		#param: {
 			name: "wol"
-			env: {
-				WOLWEBVDIR: "/"
-			}
 			secret: {
 				WOLWEBBCASTIP: {
 					type:    "env"
@@ -1120,6 +1167,16 @@ applicationSet & {
 			containers: [{
 				name:  "web"
 				image: "wol"
+				env: [{
+					name:  "WOLWEBVDIR"
+					value: "/"
+				}, {
+					name: "WOLWEBBCASTIP"
+					valueFrom: secretKeyRef: {
+						name: "wol-env"
+						key:  "WOLWEBBCASTIP"
+					}
+				}]
 				volumeMounts: [{
 					name:      "devices.json"
 					readOnly:  true

@@ -7,7 +7,6 @@ import (
 [applicationName=_]: {
 	#param: {
 		name: string
-		env: string?: string
 		secret: {
 			string?: {
 				type:    "file" | "env"
@@ -28,12 +27,6 @@ import (
 			name: "\(#param.name)"
 		}
 		spec: {
-			containers: [{
-				envFrom: [{
-					secretRef: {
-						name: "\(#param.name)-env"
-					}}]},
-				...]
 			volumes: [ for k, v in #param.volumes {
 				name: k
 				if v !~ "^\/" {
@@ -73,11 +66,8 @@ import (
 		metadata: {
 			name: "\(#param.name)-env"
 		}
-		type:       "Opaque"
+		type: "Opaque"
 		stringData: {
-			for k, v in #param.env {
-				"\(k)": v
-			}} & {
 			for k, v in #param.secret if v.type == "env" {
 				"\(k)": v.content
 			}
