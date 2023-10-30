@@ -1,4 +1,4 @@
-mergerfs_version: "2.37.1"
+mergerfs_version: "2.38.0"
 mergerfs_options:
   - cache.files=off
   - category.create=mfs
