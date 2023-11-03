@@ -49,6 +49,7 @@
         "[yaml]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
+        "ansible.python.interpreterPath": "/usr/local/bin/python",
         "cue.moduleRoot": "${workspaceFolder}/cue",
         "editor.codeActionsOnSave": {
           "source.fixAll.sortJSON": true
