@@ -35,5 +35,5 @@ RUN \
     --requirement requirements.txt \
     --user
 
-ENV AQUA_VERSION=v2.16.3
+ENV AQUA_VERSION=v2.16.4
 ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:$PATH
