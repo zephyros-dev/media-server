@@ -45,6 +45,11 @@
     {
       "groupName": "immich",
       "matchPackagePatterns": ["ghcr.io/immich-app"]
+    },
+    {
+      "automerge": false,
+      "matchPackagePatterns": ["koreader"],
+      "matchUpdateTypes": ["minor"]
     }
   ],
   "pinDigests": true,
