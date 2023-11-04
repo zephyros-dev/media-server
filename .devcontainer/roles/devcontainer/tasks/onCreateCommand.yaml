@@ -60,5 +60,6 @@
   changed_when: false
   ansible.builtin.command:
     cmd: "{{ item }}"
+    chdir: "../cue"
   loop:
     - cue get go k8s.io/api/...
