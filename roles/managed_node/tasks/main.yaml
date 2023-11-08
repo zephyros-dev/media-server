@@ -10,6 +10,10 @@
   ansible.builtin.import_tasks: system/packages.yaml
   tags: packages
 
+- name: Setup ansible dependencies
+  ansible.builtin.import_tasks: system/ansible.yaml
+  tags: ansible
+
 - name: Setup restic
   ansible.builtin.import_tasks: system/restic.yaml
   tags: restic
