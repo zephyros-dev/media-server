@@ -1,1 +1,1 @@
-FROM ghcr.io/immich-app/immich-machine-learning:v1.88.0@sha256:bcfb73e45243238e4004380c1daf7e596d14dd81fa75288157e56a51d298531a
+FROM ghcr.io/immich-app/immich-machine-learning:v1.88.1@sha256:68391160d4fca56382a3eb8eff969f1728fed019bd8d737cab5d64950512d333
