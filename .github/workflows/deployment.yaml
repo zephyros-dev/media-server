@@ -42,7 +42,7 @@ jobs:
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install -r ci/requirements.txt
+          pip install -r ci/requirements/host/requirements.txt
       - name: Run Dagger pipeline
         timeout-minutes: 30
         run: |

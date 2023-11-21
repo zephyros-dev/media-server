@@ -49,18 +49,26 @@ async def ci():
         )
 
         ci = (
-            ci.with_mounted_cache(
-                "/root/.cache/pip",
-                cache=client.cache_volume(key="ci-cache-pip"),
-                sharing=dagger.CacheSharingMode.LOCKED,
-            )
-            .with_exec(["pip", "install", "--no-warn-script-location", "ansible"])
-            .with_unix_socket(
+            ci.with_unix_socket(
                 "/ssh-agent.sock",
                 client.host().unix_socket(os.getenv("SSH_AUTH_SOCK")),
             )
             .with_mounted_directory(f"{user_dir}/workspace", workspace)
             .with_workdir(f"{user_dir}/workspace")
+            .with_mounted_cache(
+                "/root/.cache/pip",
+                cache=client.cache_volume(key="ci-cache-pip"),
+                sharing=dagger.CacheSharingMode.LOCKED,
+            )
+            .with_exec(
+                [
+                    "pip",
+                    "install",
+                    "--no-warn-script-location",
+                    "-r",
+                    "ci/requirements/ci/requirements.txt",
+                ]
+            )
         )
 
         ci = await install_aqua(client, ci, user_dir)
