@@ -28,11 +28,13 @@
               register: container_folder_state
             - name: Prepare folder {{ container_loop_var.key }}
               when: not container_folder_state.skipped
-              ansible.builtin.include_tasks:
-                file: container_folder.yaml
-              loop: "{{ container_folder_state.results }}"
-              loop_control:
-                loop_var: container_folder_loop
+              become_method: containers.podman.podman_unshare
+              become: true
+              ansible.builtin.file:
+                path: "{{ item }}"
+                mode: "0755"
+                state: directory
+              loop: "{{ container_folder_state.results | json_query('[?stat.exists == `false`].item') }}"
 
         - name: Setup container with quadlet {{ container_loop_var.key }}
           block:
