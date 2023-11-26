@@ -94,16 +94,6 @@ calibre-content.{{ server_domain }} {
       import security-header
   }
 }
-immich.{{ server_domain }} {
-  import global-config
-  handle /api* {
-      uri strip_prefix /api
-      reverse_proxy immich:3001
-  }
-  handle {
-      reverse_proxy immich:3000
-  }
-}
 {{ caddyfile_lan_address }} {
   import global-config
   reverse_proxy https://{{ caddyfile_host_address }}:9090 {

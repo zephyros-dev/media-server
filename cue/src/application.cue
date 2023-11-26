@@ -287,6 +287,9 @@ applicationSet & {
 					name: "immich"
 					key:  "typesense_api_key"
 				}
+			}, {
+				name:  "GLOG_minloglevel"
+				value: "1"
 			}]
 			volumeMounts: [{
 				name:      "typesense"
@@ -295,7 +298,7 @@ applicationSet & {
 		}, {
 			name:  "server"
 			image: "immich-server"
-			args: ["start-server.sh"]
+			args: ["start.sh", "immich"]
 			env: [{
 				name:  "DB_DATABASE_NAME"
 				value: "immich"
@@ -341,7 +344,7 @@ applicationSet & {
 		}, {
 			name:  "microservices"
 			image: "immich-server"
-			args: ["start-microservices.sh"]
+			args: ["start.sh", "microservices"]
 			env: [{
 				name:  "DB_DATABASE_NAME"
 				value: "immich"
@@ -396,13 +399,6 @@ applicationSet & {
 			}, {
 				name:      "ml_cache"
 				mountPath: "/cache:U"
-			}]
-		}, {
-			name:  "web"
-			image: "immich-web"
-			env: [{
-				name:  "IMMICH_SERVER_URL"
-				value: "http://localhost:3001"
 			}]
 		}] {v}]
 	}
