@@ -120,7 +120,7 @@ ansible-playbook partition --check
   3. Change the `postgres_action` key in variable files to `import` and run the playbook for that container
   4. Change the `postgres_action` key in variable files to `none` and run the playbook for that container
   5. Check if the container startup correctly
-  <!-- 6. Change the `postgres_action` key in variable files to `clean` and run the playbook to cleanup the previous backup -->
+  6. Change the `postgres_action` key in variable files to `clean` and run the playbook to cleanup the previous backup
 
 # Troubleshooting
 

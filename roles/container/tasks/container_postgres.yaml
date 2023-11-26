@@ -8,11 +8,15 @@
       containers.podman.podman_container_info:
         name: "{{ container_loop_var.key }}-postgres"
       register: podman_container_info
-    - name: Set path to postgres data folder
+    - name: Set path to postgres data folder {{ container_loop_var.key }}
       ansible.builtin.set_fact:
         postgres_data_path: "{{ podman_container_info | json_query('containers[0].Mounts[?Destination==`/var/lib/postgresql/data`].Source') | first }}"
         postgres_user: "{{ podman_container_info | json_query('containers[0].Config.Env[?contains(@, `POSTGRES_USER`) == `true`]') | first | regex_replace('^POSTGRES_USER=', '') }}"
+    - name: Set postgres backup path
+      ansible.builtin.set_fact:
+        postgres_backup_path: "{{ postgres_data_path | dirname }}/postgres_backup"
     - name: Stop container {{ container_loop_var.key }}
+      when: container_loop_var.value.postgres_action != "clean"
       ansible.builtin.systemd: # noqa: args[module]
         state: stopped
 
@@ -21,14 +25,14 @@
       block:
         - name: Make backup db folder {{ container_loop_var.key }}
           ansible.builtin.file:
-            path: "{{ postgres_data_path | dirname }}/postgres_backup"
+            path: "{{ postgres_backup_path }}"
             mode: "0700"
             state: directory
         - name: Backup volume {{ container_loop_var.key }}
           become: true
           become_method: containers.podman.podman_unshare
           ansible.builtin.copy:
-            dest: "{{ postgres_data_path | dirname }}/postgres_backup/{{ ansible_date_time.iso8601_basic_short }}"
+            dest: "{{ postgres_backup_path }}/{{ ansible_date_time.iso8601_basic_short }}"
             directory_mode: recursive
             mode: "0700"
             remote_src: true
@@ -39,7 +43,7 @@
         - name: Create dump {{ container_loop_var.key }}
           changed_when: false
           ansible.builtin.shell:
-            chdir: "{{ postgres_data_path | dirname }}"
+            chdir: "{{ postgres_backup_path }}"
             cmd: podman exec {{ container_loop_var.key }}-postgres pg_dumpall -U {{ postgres_user }} > dump.sql
           register: postgres_dump
           until: postgres_dump.failed == false
@@ -67,9 +71,19 @@
             state: started
         - name: Import postgres container {{ container_loop_var.key }}
           ansible.builtin.shell:
-            chdir: "{{ postgres_data_path | dirname }}"
+            chdir: "{{ postgres_backup_path }}"
             cmd: podman exec -i {{ container_loop_var.key }}-postgres psql -U {{ postgres_user }} < dump.sql
           register: import_output
           until: import_output.rc == 0
           retries: 10
           changed_when: false
+
+    - name: Clean postgres backup {{ container_loop_var.key }}
+      when: container_loop_var.value.postgres_action == "clean"
+      block:
+        - name: Clean backup db {{ container_loop_var.key }}
+          become: true
+          become_method: containers.podman.podman_unshare
+          ansible.builtin.file:
+            path: "{{ postgres_backup_path }}"
+            state: absent
