@@ -1,5 +1,7 @@
 - name: Setup server
   hosts: server
+  vars:
+    debug: false
   tasks:
     - name: Setup server
       ansible.builtin.import_role:

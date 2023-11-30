@@ -851,7 +851,14 @@ applicationSet & {
 			name:  "redis"
 			image: "nextcloud-redis"
 			args: ["redis-server", "--requirepass", "\(fact.nextcloud_redis_password)"]
-		}] {v}]
+		}] {v}] + [ if fact.debug {
+			name:  "adminer"
+			image: "docker.io/adminer"
+			ports: [{
+				containerPort: 8080
+				hostPort:      38080
+			}]
+		}]
 	}
 
 	prowlarr: {

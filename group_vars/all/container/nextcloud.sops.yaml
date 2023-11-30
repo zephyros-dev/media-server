@@ -1,5 +1,6 @@
 nextcloud_postgres_password: ENC[AES256_GCM,data:JWL4jdOuKgH5mAcQl7/MlqU7ztE=,iv:PlOcCHpWMZHyoYI8dExRQr7noyMwfCLCB3IGP4ONetM=,tag:hg+TFRECPA1XN6EEkycBvw==,type:str]
 nextcloud_redis_password: ENC[AES256_GCM,data:/WLPOB8mJK25kBww5S1KeWWM0/k=,iv:3xSY1wFGdQEoU4FP+KjvPyIXdj6yKaaL1MstFSR7klg=,tag:0nuAX2qQCGsjb8jn/rpkUw==,type:str]
+nextcloud_admin_user: ENC[AES256_GCM,data:/R2QrLlfwE3JXTS+Ow==,iv:9VGgVRvs3UaBR87/smrvbxuQLTJ3tCFaA+ZahClXhik=,tag:Q5cMPi0Pa0u2NGDMU+KY5w==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -15,8 +16,8 @@ sops:
             K2U0N2JuazZCOUpJVzhtMS9PclMvSEEK8zJ+TEnXMuGxjYWpLENP5hbKSJV7xPbR
             xwuRJ2ffC7eXy+Jh52SVZV4hTZCNHt31XwJeNu2l7jAKxTALgIP+TA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-03-03T13:01:29Z"
-    mac: ENC[AES256_GCM,data:skJFdnVsUt+Nve3OdnDG3A4XzWfrqyykTy9DsMDeQ81GliaqmNboJfYMkPxDgF+8UO0KAiS0y1yGnVtOaEVP0BFMFEEoCz8l9zX7rB97uPkyU+HkEtNXSMXocD4ncdR8eTakupmWj/lz2KSfhZjyu/ZvzBP9O9WIcQAIqhBkqYE=,iv:sj/BtQWkXCSjLNoPxpCP6Qwqvma+sPQyvcLD4TDpxLU=,tag:iDpnXEEudoipDgSvwsgSNA==,type:str]
+    lastmodified: "2023-11-30T14:02:47Z"
+    mac: ENC[AES256_GCM,data:+PgvXKLDAnsL+nGCYc/hdojlsmC8Qvsbrb/azcYHlq7jL0+nFHYVVcqQxzzEO9GZVI0yZRCzWk/x0Zm+DH6VG4osaXzGwyiOP1zkNn+RLl0bTd5BQX+LHF0wEKbU/yftXFpV+Pjs6oObi/VjlpYUQSnln/9OP21l83wvk9umr2M=,iv:MyfWToT+T38KUJOEhex3djDfqbMNLUFj0QWop5LR6kE=,tag:rma1plEu5t6D2ylmGeFqQA==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
-    version: 3.7.3
+    version: 3.8.1

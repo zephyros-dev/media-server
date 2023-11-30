@@ -2,6 +2,13 @@
   ansible.builtin.include_tasks:
     file: container_quadlet.yaml
 
+# https://github.com/nextcloud/docker/issues/1880#issuecomment-1344309058
+- name: Fix permission error nextcloud with postgres 15
+  changed_when: false
+  ansible.builtin.command:
+    cmd: podman exec -it nextcloud-postgres /bin/sh -c 'psql --user $POSTGRES_USER -c "GRANT ALL ON SCHEMA public TO oc_{{ nextcloud_admin_user }};"'
+  retries: 10
+
 - name: Ugrade nextcloud
   changed_when: false
   ansible.builtin.command:
@@ -10,7 +17,4 @@
     - chown -R www-data:www-data ./
     - php occ upgrade
     - php occ maintenance:mode --off
-  register: nextcloud_update
-  until: nextcloud_update.failed == false
   retries: 10
-  async: 45

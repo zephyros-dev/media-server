@@ -140,6 +140,14 @@ ansible-playbook partition --check
 ansible-playbook container_run.yaml --tags nextcloud
 ```
 
+### Debug postgres
+
+1. Run the following command to enable adminer container for accessing postgres database
+
+```
+ansible-playbook main.yaml --tags nextcloud --extra-vars '{"debug":true}'
+```
+
 ## Container name with pod exists
 
 - Check if the container exists as external storage in podman then remove that container
