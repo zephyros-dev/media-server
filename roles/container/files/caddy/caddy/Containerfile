@@ -1,1 +1,1 @@
-FROM docker.io/caddy:2.7.5-alpine@sha256:92161de201f3335fdada7a8a0c26280d692309995c1a57dcc2c9a9f290c173b6
+FROM docker.io/caddy:2.7.5-alpine@sha256:8e3595ce7a7ebd91a4e91eb41ee367a10e18eb9a711fb28e47f611a7882b3dcc
