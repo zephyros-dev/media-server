@@ -1,2 +1,2 @@
 # Postgres version: https://github.com/immich-app/immich/blob/main/docker/docker-compose.prod.yml
-FROM docker.io/postgres:15-alpine@sha256:4e1db6aa7fcb9226213f407dc2b5b0d8982ff018099f09d1c0ef7f198767f88c
+FROM docker.io/postgres:15-alpine@sha256:8f7d37ec5efca55c894112c9c2180ed5f389710b90510668d86f24a5095d7ff8
