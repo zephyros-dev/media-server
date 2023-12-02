@@ -76,6 +76,7 @@ jellyfin:
     - "{{ jellyfin_volume_cache }}"
     - "{{ jellyfin_volume_config }}"
   caddy_proxy_port: "8096"
+  kind: container
 kavita:
   folder:
     - "{{ kavita_volume_data }}"
@@ -199,6 +200,7 @@ container_default:
   dashy_statusCheckUrl: ""
   folder: []
   host_network: false
+  kind: kube
   ports: []
   postgres_action: none
   preserve_volume: false

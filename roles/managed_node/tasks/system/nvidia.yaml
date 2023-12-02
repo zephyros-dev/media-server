@@ -19,6 +19,7 @@
           - akmod-nvidia
           - xorg-x11-drv-nvidia-cuda # For cuda/nvdec/nvenc support
         state: latest
+      register: nvidia_driver
     # https://forums.developer.nvidia.com/t/nvidia-powerd-fails-to-start-on-fedora-36-510-68-02-driver/218254
     - name: Disable nvidia powerd service
       ansible.builtin.systemd:
@@ -54,6 +55,11 @@
         path: /etc/nvidia-container-runtime/config.toml
         regexp: ^#no-cgroups = false
         line: no-cgroups = true
+    # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/cdi-support.html
+    - name: Setup CDI for nvidia gpu container runtime
+      changed_when: false
+      ansible.builtin.command:
+        cmd: nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
     - name: Setup nvidia limit removal script
       block:
         - name: Install nvidia limit removal script

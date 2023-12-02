@@ -7,19 +7,9 @@
       state: started
       scope: "{{ container_systemd_scope }}"
   block:
-    - name: Prepare kube deployment {{ container_loop_var.key }}
-      become: false
-      delegate_to: localhost
+    - name: Prepare image files {{ container_loop_var.key }}
       block:
-        - name: Render kube deployment {{ container_loop_var.key }}
-          changed_when: false
-          ansible.builtin.command:
-            chdir: cue
-            cmd: cue dump --inject applicationName={{ container_loop_var.key }}
-          register: cue_dump
-    - name: Setup kube deployment {{ container_loop_var.key }}
-      block:
-        - name: Create kube deployment folder {{ container_loop_var.key }}
+        - name: Create deployment folder {{ container_loop_var.key }}
           ansible.builtin.file:
             path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
             state: directory
@@ -36,57 +26,81 @@
             recursive: true
             archive: false
             checksum: true
-          register: kube_file_container
+          register: image_file
         # Copy works correctly in both cases, however it is slow
-        - name: Copy kube files {{ container_loop_var.key }} # noqa: risky-file-permissions
+        - name: Copy image files {{ container_loop_var.key }} # noqa: risky-file-permissions
           when: container_loop_var.value.become
           ansible.builtin.copy:
             src: "{{ container_loop_var.key }}/"
             dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
-        - name: Create kube deployment {{ container_loop_var.key }}
-          ansible.builtin.copy:
-            content: "{{ cue_dump.stdout }}"
-            mode: "0600"
-            dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/deployment.yaml"
-          register: kube_file_yaml
-        - name: Create kube quadlet file {{ container_loop_var.key }}
-          ansible.builtin.template:
-            src: quadlet/service.kube.j2
-            mode: "0600"
-            dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
-          register: kube_file_quadlet
-        - name: Start systemd service {{ container_loop_var.key }}
+        # For kube: supposedly we could just build the image via the podman kube play
+        # like https://docs.podman.io/en/latest/markdown/podman-kube-play.1.html
+        # But there's a bug that prevent the systemd service to build the image
+        # the first time so we had to build the image manually
+        # https://github.com/containers/podman/issues/20432
+        # For container: Copy the container file and build it on remote so that the image tag
+        # can be updated via renovate
+        - name: Get list of image to build {{ container_loop_var.key }}
+          ansible.builtin.find:
+            paths: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+            file_type: directory
+          register: image_list
+        - name: Build images for kube file {{ container_loop_var.key }}
+          containers.podman.podman_image:
+            name: "{{ item.path | basename }}"
+            path: "{{ item.path }}"
+            force: true
+          loop: "{{ image_list.files }}"
+
+    - name: Create kube service {{ container_loop_var.key }}
+      when: container_loop_var.value.kind == "kube"
+      block:
+        - name: Prepare kube deployment {{ container_loop_var.key }}
+          become: false
+          delegate_to: localhost
           block:
+            - name: Render kube deployment {{ container_loop_var.key }}
+              changed_when: false
+              ansible.builtin.command:
+                chdir: cue
+                cmd: cue dump --inject applicationName={{ container_loop_var.key }}
+              register: cue_dump
+        - name: Setup kube deployment {{ container_loop_var.key }}
+          block:
+            - name: Create kube deployment {{ container_loop_var.key }}
+              ansible.builtin.copy:
+                content: "{{ cue_dump.stdout }}"
+                mode: "0600"
+                dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/deployment.yaml"
+              register: kube_file_yaml
+            - name: Create kube quadlet file {{ container_loop_var.key }}
+              ansible.builtin.template:
+                src: quadlet/service.kube.j2
+                mode: "0600"
+                dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
+              register: kube_file_quadlet
             - name: Start systemd service {{ container_loop_var.key }}
-              ansible.builtin.systemd:
-              register: service_systemd
-            - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
-              when:
-                - kube_file_container.changed or kube_file_yaml.changed or kube_file_quadlet.changed
-                - not service_systemd.changed
-              ansible.builtin.systemd:
-                state: restarted
-          rescue:
-            # Supposedly we could just build the image via the podman kube play
-            # like https://docs.podman.io/en/latest/markdown/podman-kube-play.1.html
-            # But there's a bug that prevent the systemd service to build the image
-            # the first time so we had to build the image manually
-            - name: Prepare image {{ container_loop_var.key }}
               block:
-                - name: Get list of image to build {{ container_loop_var.key }}
-                  ansible.builtin.find:
-                    paths: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
-                    file_type: directory
-                  register: image_list
-                - name: Build images for kube file {{ container_loop_var.key }}
-                  containers.podman.podman_image:
-                    name: "{{ item.path | basename }}"
-                    path: "{{ item.path }}"
-                    force: true
-                  loop: "{{ image_list.files }}"
-                - name: Start the systemd service again {{ container_loop_var.key }}
+                - name: Start systemd service {{ container_loop_var.key }}
                   ansible.builtin.systemd:
                   register: service_systemd
+                - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
+                  when:
+                    - image_file.changed or kube_file_yaml.changed or kube_file_quadlet.changed
+                    - not service_systemd.changed
+                  ansible.builtin.systemd:
+                    state: restarted
+
+    - name: Create container service {{ container_loop_var.key }}
+      when: container_loop_var.value.kind == "container"
+      block:
+        - name: Create container quadlet file {{ container_loop_var.key }}
+          ansible.builtin.template:
+            src: container/{{ container_loop_var.key }}.container.j2
+            mode: "0644"
+            dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.container"
+        - name: Start systemd service {{ container_loop_var.key }}
+          ansible.builtin.systemd:
 
 - name: Remove service {{ container_loop_var.key }}
   when: container_loop_var.value.state == "absent"
@@ -97,17 +111,38 @@
       scope: "{{ container_systemd_scope }}"
       state: stopped
   block:
-    - name: Check if kube file exists {{ container_loop_var.key }}
-      ansible.builtin.stat:
-        path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
-      register: kube_file_exists
-    - name: Stop systemd service {{ container_loop_var.key }}
-      when: kube_file_exists.stat.exists
-      ansible.builtin.systemd:
-    - name: Remove kube file {{ container_loop_var.key }}
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      loop:
-        - "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
-        - "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+    - name: Remove kube service {{ container_loop_var.key }}
+      when: container_loop_var.value.kind == "kube"
+      block:
+        - name: Check if kube file exists {{ container_loop_var.key }}
+          ansible.builtin.stat:
+            path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
+          register: kube_file_exists
+        - name: Stop systemd service {{ container_loop_var.key }}
+          when: kube_file_exists.stat.exists
+          ansible.builtin.systemd:
+        - name: Remove kube file {{ container_loop_var.key }}
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop:
+            - "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
+            - "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+
+    - name: Remove container service {{ container_loop_var.key }}
+      when: container_loop_var.value.kind == "container"
+      block:
+        - name: Check if container file exists {{ container_loop_var.key }}
+          ansible.builtin.stat:
+            path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+          register: container_file_exists
+        - name: Stop systemd service {{ container_loop_var.key }}
+          when: container_file_exists.stat.exists
+          ansible.builtin.systemd:
+        - name: Remove container file {{ container_loop_var.key }}
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop:
+            - "{{ container_quadlet_path }}/{{ container_loop_var.key }}.container"
+            - "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
