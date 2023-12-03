@@ -4,6 +4,7 @@ container:
   calibre_content: "{{ container_default | combine(calibre_content) }}"
   calibre: "{{ container_default | combine(calibre) }}"
   dashy: "{{ container_default | combine(dashy) }}"
+  ddns: "{{ container_default | combine(ddns) }}"
   filebrowser: "{{ container_default | combine(filebrowser) }}"
   immich: "{{ container_default | combine(immich) }}"
   jdownloader: "{{ container_default | combine(jdownloader) }}"
@@ -55,6 +56,10 @@ dashy:
   caddy_proxy_port: "80"
   caddy_sso: true
   dashy_skip: true
+ddns:
+  caddy_skip: true
+  dashy_skip: true
+  preserve_volume: true
 filebrowser:
   folder:
     - "{{ filebrowser_volume }}"

@@ -39,6 +39,52 @@ applicationSet & {
 		}]
 	}
 
+	ddns: {
+		_
+		#param: {
+			name: "ddns"
+			secret: {
+				Caddyfile: {
+					type:    "file"
+					content: """
+						{
+							dynamic_dns {
+								provider dynv6 \(fact.ddns_dynv6_token)
+								domains {
+									\(fact.dynv6_zone) *.\(fact.server_subdomain)
+								}
+							}
+						}
+						"""
+				}
+			}
+			volumes: {
+				config: "ddns_volume_config"
+				data:   "ddns_volume_data"
+			}
+		}
+
+		#pod: spec: {
+			hostNetwork: true
+			containers: [{
+				name:  "instance"
+				image: "ddns"
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config"
+				}, {
+					name:      "data"
+					mountPath: "/data"
+				}, {
+					name:      "Caddyfile"
+					readOnly:  true
+					mountPath: "/etc/caddy/Caddyfile"
+					subPath:   "Caddyfile"
+				}]
+			}]
+		}
+	}
+
 	caddy: {
 		_
 		#param: {
