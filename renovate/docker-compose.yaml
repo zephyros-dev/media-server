@@ -1,6 +1,6 @@
 services:
   renovate:
-    image: ghcr.io/renovatebot/renovate:37.89.3@sha256:e78f3b2427d899f0f37cbd4a9ab804d9630de565747e389bb4228d770f4db3dc
+    image: ghcr.io/renovatebot/renovate:37.89.4@sha256:329b9a86cfc8cf8cb03dffccf4e87e2d129fed1de5973cbbef8461fbd2779f9a
     environment:
       GITHUB_COM_TOKEN: ${RENOVATE_TOKEN}
       LOG_LEVEL: ${LOG_LEVEL:-info}
