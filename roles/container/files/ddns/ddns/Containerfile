@@ -1,4 +1,4 @@
-FROM docker.io/caddy:2.7.6-builder@sha256:f8967cdaa88861666901ae1b8d67db040a4bb767f48a3684fb1197c951db20e1 AS builder
+FROM docker.io/caddy:2.7.6-builder@sha256:d643d2dc2eb872ff82886ce48b01404a8c146bf91a3a7cabf58a4615f4c36d1c AS builder
 
 RUN xcaddy build \
     --with github.com/caddy-dns/dynv6 \
