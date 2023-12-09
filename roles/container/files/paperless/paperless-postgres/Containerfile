@@ -1,2 +1,2 @@
 # Postgres version: https://github.com/paperless-ngx/paperless-ngx/blob/dev/docker/compose/docker-compose.postgres.yml
-FROM docker.io/postgres:15-alpine@sha256:6d66512f38f92cf2cb75584bbd280de1b3f8a6f73e1f684a361ea6af7360256b
+FROM docker.io/postgres:15-alpine@sha256:fc4e9deea1dcb603af0a2241dbd36c0b3e81ee4c697367098e25e48eee8e2891
