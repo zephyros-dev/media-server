@@ -1,9 +1,9 @@
-FROM docker.io/caddy:2.7.5-builder@sha256:dfd9af513214974c6a77e5e89c7cd3c6d2ddddb226bd21f95118958d47c0c537 AS builder
+FROM docker.io/caddy:2.7.6-builder@sha256:1bad661ef08b648af7c9c79e708965d3a69434285f24de76111124fdf5d339d0 AS builder
 
 RUN xcaddy build \
     --with github.com/caddy-dns/dynv6 \
     --with github.com/mholt/caddy-dynamicdns
 
-FROM docker.io/caddy:2.7.5-alpine@sha256:9821d1ef822957bf0ac22f9c6e26ad6a3198604f29b3b79194acba7ccaff4532
+FROM docker.io/caddy:2.7.6-alpine@sha256:eabac2898cf9fc7dc94d3fb03ac84c9c923aa6cc6f04874937d2f525e0d2f006
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
