@@ -1,4 +1,5 @@
 container:
+  audiobookshelf: "{{ container_default | combine(audiobookshelf) }}"
   bazarr: "{{ container_default | combine(bazarr) }}"
   caddy: "{{ container_default | combine(caddy) }}"
   calibre_content: "{{ container_default | combine(calibre_content) }}"
@@ -28,6 +29,13 @@ container:
   trilium: "{{ container_default | combine(trilium) }}"
   wol: "{{ container_default | combine(wol) }}"
 
+audiobookshelf:
+  folder:
+    - "{{ audiobookshelf_volume_audiobooks }}"
+    - "{{ audiobookshelf_volume_config }}"
+    - "{{ audiobookshelf_volume_metadata }}"
+    - "{{ audiobookshelf_volume_podcasts }}"
+  caddy_proxy_port: "80"
 bazarr:
   folder:
     - "{{ bazarr_web_config }}"

@@ -10,6 +10,37 @@ import (
 )
 
 applicationSet & {
+	audiobookshelf: {
+		_
+		#param: {
+			name: "audiobookshelf"
+			volumes: {
+				audiobooks: "\(fact.audiobookshelf_volume_audiobooks)/"
+				config:     "\(fact.audiobookshelf_volume_config)/"
+				metadata:   "\(fact.audiobookshelf_volume_metadata)/"
+				podcasts:   "\(fact.audiobookshelf_volume_podcasts)/"
+			}
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "audiobookshelf"
+			volumeMounts: [{
+				name:      "audiobooks"
+				mountPath: "/audiobooks"
+			}, {
+				name:      "config"
+				mountPath: "/config:U,z"
+			}, {
+				name:      "metadata"
+				mountPath: "/metadata:U,z"
+			}, {
+				name:      "podcasts"
+				mountPath: "/podcasts"
+			}]
+		}]
+	}
+
 	bazarr: {
 		_
 		#param: {
@@ -174,7 +205,7 @@ applicationSet & {
 			name: "dashy"
 			secret: {
 				"conf.yml": {
-					type:    "file"
+					type: "file"
 					content: yaml.Marshal({
 						appConfig: {
 							iconSize:    "large"
@@ -274,7 +305,7 @@ applicationSet & {
 	immich: {
 		_
 		#param: {
-			name:    "immich"
+			name: "immich"
 			volumes: {
 				database:  "\(fact.immich_volume_database)/"
 				typesense: "\(fact.immich_volume_typesense)/"
@@ -318,7 +349,7 @@ applicationSet & {
 				name:      "database"
 				mountPath: "/var/lib/postgresql/data:U,z"
 			}]
-		}] + [ if fact.container.immich.postgres_action == "none" for v in [{
+		}] + [if fact.container.immich.postgres_action == "none" for v in [{
 			name:  "redis"
 			image: "immich-redis"
 		}, {
@@ -481,39 +512,6 @@ applicationSet & {
 			}]
 		}]
 	}
-
-	// Waiting for nvidia device support in kubernetes resources plugin
-	// https://github.com/containers/podman/issues/17833
-	// jellyfin: {
-	// 	_
-	// 	#param: {
-	// 		name: "jellyfin"
-	// 		volumes: {
-	// 			cache:  "\(fact.jellyfin_volume_cache)/"
-	// 			config: "\(fact.jellyfin_volume_config)/"
-	// 			home:   "\(fact.global_media)/"
-	// 			dev:    "/dev/dri/"
-	// 		}
-	// 	}
-
-	// 	#pod: spec: containers: [{
-	// 		name:  "web"
-	// 		image: "jellyfin"
-	// 		volumeMounts: [{
-	// 			name:      "cache"
-	// 			mountPath: "/cache:U,z"
-	// 		}, {
-	// 			name:      "config"
-	// 			mountPath: "/config:U,z"
-	// 		}, {
-	// 			name:      "home"
-	// 			mountPath: "/home"
-	// 		}, {
-	// 			name:      "dev"
-	// 			mountPath: "/dev/dri"
-	// 		}]
-	// 	}]
-	// }
 
 	kavita: {
 		_
@@ -724,7 +722,7 @@ applicationSet & {
 				name:      "database"
 				mountPath: "/var/lib/postgresql/data:U,z"
 			}]
-		}] + [ if fact.container.paperless.postgres_action == "none" for v in [{
+		}] + [if fact.container.paperless.postgres_action == "none" for v in [{
 			name:  "redis"
 			image: "paperless-redis"
 			volumeMounts: [{
@@ -748,7 +746,7 @@ applicationSet & {
 			// TODO: We need to be able to adjust the -r value of gs, but currently I'm not sure how to do it on ocrmypdf
 			name:  "webserver"
 			image: "paperless-ngx"
-			env:   [{
+			env: [{
 				name:  "PAPERLESS_DBHOST"
 				value: "localhost"
 			}, {
@@ -837,7 +835,7 @@ applicationSet & {
 		#pod: spec: containers: [{
 			name:  "postgres"
 			image: "nextcloud-postgres"
-			env:   [{
+			env: [{
 				name:  "POSTGRES_DB"
 				value: "nextcloud"
 			}, {
@@ -854,10 +852,10 @@ applicationSet & {
 				name:      "database"
 				mountPath: "/var/lib/postgresql/data:U,z"
 			}]
-		}] + [ if fact.container.nextcloud.postgres_action == "none" for v in [{
+		}] + [if fact.container.nextcloud.postgres_action == "none" for v in [{
 			name:  "web"
 			image: "nextcloud"
-			env:   [{
+			env: [{
 				name:  "NEXTCLOUD_TRUSTED_DOMAINS"
 				value: "nextcloud.\(fact.server_domain)"
 			}, {
@@ -899,7 +897,7 @@ applicationSet & {
 			name:  "redis"
 			image: "nextcloud-redis"
 			args: ["redis-server", "--requirepass", "\(fact.nextcloud_redis_password)"]
-		}] {v}] + [ if fact.debug {
+		}] {v}] + [if fact.debug {
 			name:  "adminer"
 			image: "docker.io/adminer"
 			ports: [{
@@ -1011,7 +1009,7 @@ applicationSet & {
 			containers: [{
 				name:  "instance"
 				image: "samba"
-				env:   [{
+				env: [{
 					name:  "AVAHI_DISABLE"
 					value: "1"
 				}, {
@@ -1026,7 +1024,7 @@ applicationSet & {
 				}, {
 					name:  "WSDD2_DISABLE"
 					value: "1"
-				}] + [ for k, v in #param.volumes {
+				}] + [for k, v in #param.volumes {
 					name:  "SAMBA_VOLUME_CONFIG_\(k)"
 					value: "[\(k)]; path=/shares/\(k); \(fact.samba_shares_settings)"
 				}] + [{
@@ -1083,7 +1081,7 @@ applicationSet & {
 					readOnly:  true
 					mountPath: "/opt/scrutiny/config/scrutiny.yaml"
 					subPath:   "scrutiny.yaml"
-				}] + [ for v in fact.scrutiny_device_list {
+				}] + [for v in fact.scrutiny_device_list {
 					{
 						name:      v
 						mountPath: v
@@ -1143,7 +1141,7 @@ applicationSet & {
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "transmission"
-			env:   [{
+			env: [{
 				name:  "PGID"
 				value: fact.global_pgid
 			}, {
