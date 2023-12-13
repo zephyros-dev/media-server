@@ -1,1 +1,1 @@
-FROM ghcr.io/linuxserver/prowlarr:latest@sha256:b2ff779f9a9cdcfe2b5df1a0ef2cd4b9fbd4a4ebbde38cee134b54a8f0478709
+FROM ghcr.io/linuxserver/prowlarr:latest@sha256:20d1a1248d480494ee553392cb986e2e90b027628c950968d2765b275c75f4a6
