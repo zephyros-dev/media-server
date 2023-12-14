@@ -3,6 +3,7 @@
   module_defaults:
     ansible.builtin.systemd:
       name: "{{ container_loop_var.key }}"
+      enabled: true
       daemon_reload: true
       state: started
       scope: "{{ container_systemd_scope }}"
