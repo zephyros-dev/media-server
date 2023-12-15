@@ -26,4 +26,4 @@ repos:
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     hooks:
       - id: terraform_fmt
-    rev: v1.84.0
+    rev: v1.85.0
