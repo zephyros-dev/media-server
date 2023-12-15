@@ -7,7 +7,7 @@
 #   require_checksum: true
 registries:
   - type: standard
-    ref: v4.103.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v4.104.0 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: cue-lang/cue@v0.7.0
   - name: getsops/sops@v3.8.1
