@@ -1,7 +1,6 @@
 package application
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"encoding/yaml"
 	"strings"
@@ -307,9 +306,8 @@ applicationSet & {
 		#param: {
 			name: "immich"
 			volumes: {
-				database:  "\(fact.immich_volume_database)/"
-				typesense: "\(fact.immich_volume_typesense)/"
-				upload:    "\(fact.immich_volume_upload)/"
+				database: "\(fact.immich_volume_database)/"
+				upload:   "\(fact.immich_volume_upload)/"
 			} & {
 				ml_cache: "immich_volume_ml_cache"
 			}
@@ -317,10 +315,6 @@ applicationSet & {
 				database_password: {
 					type:    "env"
 					content: "\(fact.immich_database_password)"
-				}
-				typesense_api_key: {
-					type:    "env"
-					content: "\(fact.immich_typesense_api_key)"
 				}
 				jwt_secret: {
 					type:    "env"
@@ -353,26 +347,6 @@ applicationSet & {
 			name:  "redis"
 			image: "immich-redis"
 		}, {
-			name:  "typesense"
-			image: "immich-typesense"
-			env: [{
-				name:  "TYPESENSE_DATA_DIR"
-				value: "/data"
-			}, {
-				name: "TYPESENSE_API_KEY"
-				valueFrom: secretKeyRef: {
-					name: "immich"
-					key:  "typesense_api_key"
-				}
-			}, {
-				name:  "GLOG_minloglevel"
-				value: "1"
-			}]
-			volumeMounts: [{
-				name:      "typesense"
-				mountPath: "/data:U,z"
-			}]
-		}, {
 			name:  "server"
 			image: "immich-server"
 			args: ["start.sh", "immich"]
@@ -392,10 +366,6 @@ applicationSet & {
 				name:  "REDIS_HOSTNAME"
 				value: "localhost"
 			}, {
-				name:           "TYPESENSE_URL"
-				_typesense_url: base64.Encode(null, json.Marshal(fact.immich_typesense_url))
-				value:          "ha://\(_typesense_url)"
-			}, {
 				name: "JWT_SECRET"
 				valueFrom: secretKeyRef: {
 					name: "immich"
@@ -406,12 +376,6 @@ applicationSet & {
 				valueFrom: secretKeyRef: {
 					name: "immich"
 					key:  "database_password"
-				}
-			}, {
-				name: "TYPESENSE_API_KEY"
-				valueFrom: secretKeyRef: {
-					name: "immich"
-					key:  "typesense_api_key"
 				}
 			}]
 			volumeMounts: [{
@@ -438,9 +402,6 @@ applicationSet & {
 				name:  "REDIS_HOSTNAME"
 				value: "localhost"
 			}, {
-				name:  "TYPESENSE_HOST"
-				value: "localhost"
-			}, {
 				name: "JWT_SECRET"
 				valueFrom: secretKeyRef: {
 					name: "immich"
@@ -451,12 +412,6 @@ applicationSet & {
 				valueFrom: secretKeyRef: {
 					name: "immich"
 					key:  "database_password"
-				}
-			}, {
-				name: "TYPESENSE_API_KEY"
-				valueFrom: secretKeyRef: {
-					name: "immich"
-					key:  "typesense_api_key"
 				}
 			}]
 			volumeMounts: [{

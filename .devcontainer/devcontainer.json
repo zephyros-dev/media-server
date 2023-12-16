@@ -14,7 +14,6 @@
         "charliermarsh.ruff",
         "eamodio.gitlens",
         "esbenp.prettier-vscode",
-        "GitHub.copilot-labs",
         "GitHub.copilot",
         "GitHub.vscode-pull-request-github",
         "hashicorp.terraform",

@@ -75,7 +75,6 @@ filebrowser:
 immich:
   folder:
     - "{{ immich_volume_database }}"
-    - "{{ immich_volume_typesense }}"
     - "{{ immich_volume_upload }}"
   caddy_proxy_port: "3001"
 jdownloader:
