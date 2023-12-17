@@ -4,11 +4,98 @@ import (
 	"encoding/json"
 	"encoding/yaml"
 	"strings"
-	applicationSet "zephyros.dev/src/common:applicationSet"
+	core "k8s.io/api/core/v1"
 	fact "zephyros.dev/tmp:fact"
 )
 
-applicationSet & {
+_applicationSet: [applicationName=_]: {
+	#param: {
+		name: string
+		secret: {
+			string?: {
+				type:    "file" | "env"
+				content: string
+			}
+		}
+		volumes: string?: string
+	}
+
+	#pod: core.#Pod & {
+		apiVersion: "v1"
+		kind:       "Pod"
+		metadata: {
+			annotations: {
+				"io.podman.annotations.infra.name": "\(#param.name)-pod"
+			}
+			labels: app: "\(#param.name)"
+			name: "\(#param.name)"
+		}
+		spec: {
+			volumes: [for k, v in #param.volumes {
+				name: k
+				if v !~ "^\/" {
+					persistentVolumeClaim: claimName: v
+				}
+				if v =~ "^\/.+[^\/]$" {
+					hostPath: {
+						path: v
+						type: "File"
+					}
+				}
+				if v =~ "^\/.+\/$" {
+					hostPath: {
+						path: v
+						type: "Directory"
+					}
+				}
+			}] + [for k, v in #param.secret if v.type == "file" {
+				name: k
+				secret: {
+					secretName: "\(#param.name)"
+					items: [{
+						key:  k
+						path: k
+					}]
+				}
+			}]
+		}
+	}
+
+	// Waiting for the function to check existence and concrete value
+	// https://github.com/cue-lang/cue/issues/943
+
+	#secret: core.#Secret & {
+		apiVersion: "v1"
+		kind:       "Secret"
+		metadata: {
+			name: "\(#param.name)"
+		}
+		type: "Opaque"
+		stringData: {
+			for k, v in #param.secret if v.type == "file" {
+				"\(k)": v.content
+			}
+		} & {
+			for k, v in #param.secret if v.type == "env" {
+				"\(k)": v.content
+			}
+		}
+	}
+
+	#volume: [for k, v in #param.volumes if v !~ "^\/" {
+		core.#PersistentVolumeClaim & {
+			apiVersion: "v1"
+			kind:       "PersistentVolumeClaim"
+			metadata: {
+				name: v
+			}
+		}
+	}]
+
+	[#pod, #secret] + #volume
+}
+
+_applicationSet & {
 	audiobookshelf: {
 		_
 		#param: {
@@ -77,15 +164,15 @@ applicationSet & {
 				Caddyfile: {
 					type:    "file"
 					content: """
-						{
-							dynamic_dns {
-								provider dynv6 \(fact.ddns_dynv6_token)
-								domains {
-									\(fact.dynv6_zone) *.\(fact.server_subdomain)
-								}
+					{
+						dynamic_dns {
+							provider dynv6 \(fact.ddns_dynv6_token)
+							domains {
+								\(fact.dynv6_zone) *.\(fact.server_subdomain)
 							}
 						}
-						"""
+					}
+					"""
 				}
 			}
 			volumes: {
