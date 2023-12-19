@@ -56,10 +56,32 @@
         regexp: ^#no-cgroups = false
         line: no-cgroups = true
     # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/cdi-support.html
-    - name: Setup CDI for nvidia gpu container runtime
-      changed_when: false
-      ansible.builtin.command:
-        cmd: nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+    # We need to rerun the cdi config generate service after a nvidia driver updates
+    # But since we update the nvidia driver automatically, the simplest solution is to just
+    # run the cdi config generate service on boot
+    - name: Setup CID config generate service
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          Description=Generate nvidia cdi config
+          After=network-online.target
+          Wants=network-online.target
+
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          ExecStart=/usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/nvidia-cdi-generate.service
+        mode: "0644"
+    - name: Enable CID config generate service
+      ansible.builtin.systemd:
+        name: nvidia-cdi-generate
+        state: started
+        daemon_reload: true
+        enabled: true
     - name: Setup nvidia limit removal script
       block:
         - name: Install nvidia limit removal script
