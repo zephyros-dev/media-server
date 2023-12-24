@@ -69,7 +69,6 @@
 
           [Service]
           Type=oneshot
-          RemainAfterExit=yes
           ExecStart=/usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 
           [Install]
@@ -77,6 +76,7 @@
         dest: /etc/systemd/system/nvidia-cdi-generate.service
         mode: "0644"
     - name: Enable CID config generate service
+      changed_when: false
       ansible.builtin.systemd:
         name: nvidia-cdi-generate
         state: started
