@@ -1,0 +1,22 @@
+miniflux_admin_password: ENC[AES256_GCM,data:JhutTIwgqjewIRtfMuw/5cUdmuvYQwbuWrVKPAbFWoE=,iv:hk9dW8Q0mNux0v1NjWItZhKjS6LMEjcb9U9ghFzBfsU=,tag:sggeloWH/aaTA3nrR8OuaQ==,type:str]
+miniflux_postgres_password: ENC[AES256_GCM,data:1uFVIKz4bMVpPCYa4pX9Gxl9ZnZLoduR3zThvU7zIUw=,iv:foVq2nwaJnyxFOc5JS9zjJdg5OYPDvRCCwcVQZngiCw=,tag:L/MBiHHQNbQ+44MqcxI5eA==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBraitEK2ZRczhFNHB3TlZE
+            RXk4dG4yc2diWEh2TXZhOHZKc3BwZzNweVU0CnoyOHRwRXNmUUtubHVSUWhudllz
+            SkVVd0Z5dkxsM0NiWHRrZkRtL2tIYmsKLS0tIGZ4Q0oxNWxVTmlJaURrSlNqMDNJ
+            QkM0b0FVbzhDVEJtL2ZqRGY0YzJHRmcKEpYmWAByr9JpH/9lWlwfxwrPf3oCociw
+            D+DEuN0reTnJ6b4nO/Uyvpv02r6i7r246ixc29aeGaCeCZvqNloXeA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2023-12-24T02:59:00Z"
+    mac: ENC[AES256_GCM,data:gZuiVexox5N1CGjaZN3K0Z94vUiPZiSNRgsjMhQgSZc6djbpeNs5WVvPeaA8vrEfBYtN2c5tcBhYZF6JMBFZRswHDttUR66C6yU8CY86Q4dHJ+QSWOKjcrKVWXkYff1OJiZSCT3wXpfYYBi3JX2lPSCsh4OloZKWDszpnv2tMu8=,iv:Y5Ve7apH/gAETpjiFVZvZKbsPAnvp1Jsl8sDPIhTtJM=,tag:CfFXAW0uIRfLX6bIxtos4g==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.8.1

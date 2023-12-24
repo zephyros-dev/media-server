@@ -1,0 +1,2 @@
+miniflux_volume: "{{ global_volume_path }}/miniflux"
+miniflux_volume_database: "{{ miniflux_volume }}/database"

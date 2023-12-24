@@ -15,6 +15,7 @@ container:
   kosync: "{{ container_default | combine(kosync) }}"
   librespeed: "{{ container_default | combine(librespeed) }}"
   lidarr: "{{ container_default | combine(lidarr) }}"
+  miniflux: "{{ container_default | combine(miniflux) }}"
   navidrome: "{{ container_default | combine(navidrome) }}"
   netdata: "{{ container_default | combine(netdata) }}"
   nextcloud: "{{ container_default | combine(nextcloud) }}"
@@ -118,6 +119,10 @@ lidarr:
     - "{{ transmission_download }}"
   caddy_proxy_port: "8686"
   caddy_sso: true
+miniflux:
+  folder:
+    - "{{ miniflux_volume_database }}"
+  caddy_proxy_port: "8080"
 navidrome:
   folder:
     - "{{ global_media }}"

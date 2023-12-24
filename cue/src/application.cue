@@ -672,6 +672,73 @@ _applicationSet & {
 		}]
 	}
 
+	miniflux: {
+		_
+		#param: {
+			name: "miniflux"
+			secret: {
+				miniflux_postgres_password: {
+					type:    "env"
+					content: "\(fact.miniflux_postgres_password)"
+				}
+				miniflux_admin_password: {
+					type:    "env"
+					content: "\(fact.miniflux_admin_password)"
+				}
+				miniflux_database_url: {
+					type:    "env"
+					content: "postgres://miniflux:\(fact.miniflux_postgres_password)@localhost:5432/miniflux?sslmode=disable"
+				}
+			}
+			volumes: {
+				database: "\(fact.miniflux_volume_database)/"
+			}
+		}
+		#pod: spec: containers: [{
+			name:  "postgres"
+			image: "miniflux-postgres"
+			env: [{
+				name:  "POSTGRES_USER"
+				value: "miniflux"
+			}] + [{
+				name: "POSTGRES_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "miniflux"
+					key:  "miniflux_postgres_password"
+				}
+			}]
+			volumeMounts: [{
+				name:      "database"
+				mountPath: "/var/lib/postgresql/data:U,z"
+			}]
+		}] + [if fact.container.miniflux.postgres_action == "none" for v in [{
+			name:  "web"
+			image: "miniflux"
+			env: [{
+				name:  "RUN_MIGRATIONS"
+				value: "1"
+			}, {
+				name:  "CREATE_ADMIN"
+				value: "1"
+			}, {
+				name:  "ADMIN_USERNAME"
+				value: "admin"
+			}] + [{
+				name: "ADMIN_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "miniflux"
+					key:  "miniflux_admin_password"
+				}
+			}, {
+				name: "DATABASE_URL"
+				valueFrom: secretKeyRef: {
+					name: "miniflux"
+					key:  "miniflux_database_url"
+				}
+			}]
+		}] {v}]
+	}
+
 	navidrome: {
 		_
 		#param: {

@@ -2,13 +2,5 @@ nextcloud_volume: "{{ global_volume_path }}/nextcloud"
 nextcloud_volume_web_data: "{{ nextcloud_volume }}/web/data"
 nextcloud_volume_web_storage: "{{ nextcloud_volume }}/web/storage"
 nextcloud_volume_db_data: "{{ nextcloud_volume }}/db/data"
-
 # nextcloud_postgres_password:
 # nextcloud_redis_password:
-
-# Setup for upgrading the database
-# none: run normally
-# export: only run the db container, export db to sql file and backup the db volume folder
-# import: only run db container, import the sql file
-# Upgrade procedure: set to export, upgrade db image version, set to import, set to none
-nextcloud_db_action: none
