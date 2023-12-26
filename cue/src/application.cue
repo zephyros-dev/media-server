@@ -303,7 +303,7 @@ _applicationSet & {
 							name: "All"
 							items: [
 								for k, v in fact.container
-								if !v.dashy_skip {
+								if v.caddy_proxy_port > 0 {
 									_url_key:    strings.Replace(k, "_", "-", -1)
 									_url_public: "https://\(_url_key).\(fact.server_domain)"
 									if v.state == "started" {
@@ -1166,8 +1166,14 @@ _applicationSet & {
 			name: "scrutiny"
 			secret: {
 				"scrutiny.yaml": {
-					type:    "file"
-					content: yaml.Marshal(fact.scrutiny_config)
+					type: "file"
+					content: yaml.Marshal({
+						notify: {
+							urls: [
+								"discord://\(fact.scrutiny_discord_token)@\(fact.scrutiny_discord_channel)",
+							]
+						}
+					})
 				}
 			}
 			volumes: {udev: "/run/udev/"} &

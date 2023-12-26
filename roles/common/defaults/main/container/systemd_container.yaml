@@ -36,100 +36,94 @@ audiobookshelf:
     - "{{ audiobookshelf_volume_config }}"
     - "{{ audiobookshelf_volume_metadata }}"
     - "{{ audiobookshelf_volume_podcasts }}"
-  caddy_proxy_port: "80"
+  caddy_proxy_port: 80
 bazarr:
   folder:
     - "{{ bazarr_web_config }}"
     - "{{ global_media }}"
-  caddy_proxy_port: "6767"
+  caddy_proxy_port: 6767
   caddy_sso: true
 caddy:
-  caddy_skip: true
-  dashy_skip: true
   preserve_volume: true
 calibre:
   folder:
     - "{{ calibre_book }}"
     - "{{ calibre_volume_config }}"
-  caddy_proxy_port: "8080"
-  caddy_skip: true
+  caddy_proxy_port: 8080
+  caddy_sso: true
   dashy_statusCheckAcceptCodes: "401"
 calibre_content:
-  caddy_proxy_port: "8081"
-  caddy_skip: true
+  caddy_proxy_port: 8081
   dashy_only: true
   dashy_icon: "/favicon.png"
   dashy_statusCheckUrl: http://calibre:8081
   dashy_statusCheckAcceptCodes: "401"
 dashy:
-  caddy_proxy_port: "80"
+  caddy_proxy_port: 80
   caddy_sso: true
-  dashy_skip: true
 ddns:
-  caddy_skip: true
-  dashy_skip: true
   preserve_volume: true
 filebrowser:
   folder:
     - "{{ filebrowser_volume }}"
-  caddy_proxy_port: "80"
+  caddy_proxy_port: 80
 immich:
   folder:
     - "{{ immich_volume_database }}"
     - "{{ immich_volume_upload }}"
-  caddy_proxy_port: "3001"
+  caddy_proxy_port: 3001
 jdownloader:
   folder:
     - "{{ global_download }}"
     - "{{ jdownloader_volume_config }}"
-  caddy_proxy_port: "5800"
+  caddy_proxy_port: 5800
 jellyfin:
   folder:
     - "{{ global_media }}"
     - "{{ jellyfin_volume_cache }}"
     - "{{ jellyfin_volume_config }}"
-  caddy_proxy_port: "8096"
+  caddy_proxy_port: 8096
   kind: container
 kavita:
   folder:
     - "{{ kavita_volume_data }}"
-  caddy_proxy_port: "5000"
+  caddy_proxy_port: 5000
   caddy_rewrite:
     - src: /
       dest: /login
 koreader:
   folder:
     - "{{ koreader_volume_data }}"
-  caddy_proxy_port: "3000"
+  caddy_proxy_port: 3000
   caddy_sso: true
   dashy_statusCheckAcceptCodes: "401"
   dashy_icon: https://koreader.rocks/koreader.png
 kosync:
   folder:
     - "{{ kosync_volume_redis_data }}"
-  caddy_proxy_port: "17200"
+  caddy_proxy_port: 17200
   dashy_statusCheckAcceptCodes: "412"
   dashy_icon: https://koreader.rocks/koreader.png
 librespeed:
-  caddy_proxy_port: "80"
+  caddy_proxy_port: 80
 lidarr:
   folder:
     - "{{ global_media }}"
     - "{{ lidarr_web_config }}"
     - "{{ transmission_download }}"
-  caddy_proxy_port: "8686"
+  caddy_proxy_port: 8686
   caddy_sso: true
 miniflux:
   folder:
     - "{{ miniflux_volume_database }}"
-  caddy_proxy_port: "8080"
+  caddy_proxy_port: 8080
 navidrome:
   folder:
     - "{{ global_media }}"
     - "{{ navidrome_web_data }}"
-  caddy_proxy_port: "4533"
+  caddy_proxy_port: 4533
 netdata:
-  caddy_proxy_port: "19999"
+  caddy_proxy_port: 19999
   host_network: true
   dashy_only: true
   dashy_statusCheckAcceptCodes: "401"
@@ -139,7 +133,7 @@ nextcloud:
     - "{{ nextcloud_volume_db_data }}"
     - "{{ nextcloud_volume_web_storage }}"
     - "{{ nextcloud_volume_web_data }}"
-  caddy_proxy_port: "80"
+  caddy_proxy_port: 80
 paperless:
   folder:
     - "{{ paperless_volume_database_data }}"
@@ -148,19 +142,19 @@ paperless:
     - "{{ paperless_volume_webserver_data }}"
     - "{{ paperless_volume_webserver_export }}"
     - "{{ paperless_volume_webserver_media }}"
-  caddy_proxy_port: "8000"
+  caddy_proxy_port: 8000
 prowlarr:
   folder:
     - "{{ prowlarr_web_config }}"
   caddy_sso: true
-  caddy_proxy_port: "9696"
+  caddy_proxy_port: 9696
 pymedusa:
   folder:
     - "{{ global_media }}"
     - "{{ pymedusa_web_config }}"
     - "{{ transmission_download }}"
   caddy_sso: true
-  caddy_proxy_port: "8081"
+  caddy_proxy_port: 8081
   dashy_icon: favicon-local
 radarr:
   folder:
@@ -168,12 +162,10 @@ radarr:
     - "{{ radarr_web_config }}"
     - "{{ transmission_download }}"
   caddy_sso: true
-  caddy_proxy_port: "7878"
+  caddy_proxy_port: 7878
 samba:
   folder:
     - "{{ global_storage }}"
-  caddy_skip: true
-  dashy_skip: true
   host_network: true
 scrutiny:
   become: true
@@ -183,7 +175,7 @@ scrutiny:
 syncthing:
   folder:
     - "{{ syncthing_data }}"
-  caddy_proxy_port: "8384"
+  caddy_proxy_port: 8384
   caddy_sso: true
   host_network: true
   userns: keep-id
@@ -191,34 +183,30 @@ transmission:
   folder:
     - "{{ transmission_download }}"
     - "{{ transmission_web_config }}"
-  caddy_proxy_port: "9091"
+  caddy_proxy_port: 9091
   dashy_statusCheckAcceptCodes: "401"
 trilium:
   folder:
     - "{{ trilium_volume_data }}"
-  caddy_proxy_port: "8080"
+  caddy_proxy_port: 8080
 wol:
-  caddy_proxy_port: "8089"
+  caddy_proxy_port: 8089
   caddy_sso: true
   dashy_icon: mdi-desktop-classic
   host_network: true
 
 container_default:
   become: false
-  caddy_proxy_port: ""
+  caddy_proxy_port: 0
   caddy_rewrite: []
-  caddy_skip: false
   caddy_sso: false
-  certbot: false
   dashy_icon: ""
   dashy_only: false
-  dashy_skip: false
   dashy_statusCheckAcceptCodes: ""
   dashy_statusCheckUrl: ""
   folder: []
   host_network: false
   kind: kube
-  ports: []
   postgres_action: none
   preserve_volume: false
   state: started

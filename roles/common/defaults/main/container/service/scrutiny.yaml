@@ -3,7 +3,3 @@ scrutiny_device:
   - "/dev/disk/by-id/disk_id"
 # scrutiny_discord_token:
 # scrutiny_discord_channel:
-scrutiny_config:
-  notify:
-    urls:
-      - "discord://{{ scrutiny_discord_token }}@{{ scrutiny_discord_channel }}"

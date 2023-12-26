@@ -51,9 +51,8 @@ auth.{{ server_domain }} {
 }
 {% for key,value in container | dictsort %}
   {% if value.state == 'started' %}
-    {% if not value.caddy_skip %}
+    {% if value.caddy_proxy_port > 0 %}
 {{ key | replace("_", "-") }}.{{ server_domain }} {
-      {% if not value.certbot %}
     import global-config
         {% if value.caddy_sso %}
     import proxy-auth
@@ -74,26 +73,10 @@ auth.{{ server_domain }} {
     redir /.well-known/carddav /remote.php/carddav 301
     redir /.well-known/caldav /remote.php/caldav 301
         {% endif %}
-        {% else %}
-
-      {% endif %}
 }
     {% endif %}
   {% endif %}
 {% endfor %}
-calibre.{{ server_domain }} {
-  import global-config
-  import proxy-auth
-  reverse_proxy calibre:8080 {
-      import security-header
-  }
-}
-calibre-content.{{ server_domain }} {
-  import global-config
-  reverse_proxy calibre:8081 {
-      import security-header
-  }
-}
 {{ caddyfile_lan_address }} {
   import global-config
   reverse_proxy https://{{ caddyfile_host_address }}:9090 {
