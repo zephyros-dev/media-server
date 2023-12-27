@@ -303,7 +303,7 @@ _applicationSet & {
 							name: "All"
 							items: [
 								for k, v in fact.container
-								if v.caddy_proxy_port > 0 {
+								if v.caddy_proxy_port > 0 && k != "dashy" {
 									_url_key:    strings.Replace(k, "_", "-", -1)
 									_url_public: "https://\(_url_key).\(fact.server_domain)"
 									if v.state == "started" {
