@@ -1,1 +1,1 @@
-FROM docker.io/jlesage/jdownloader-2:v23.12.1@sha256:7c4674a18be578a494767838b287cb4517f5a3a789278ba1043104c486b8ce6b
+FROM docker.io/jlesage/jdownloader-2:v23.12.2@sha256:6f17493bfb2f87e4ead997b13b0f597d6169097f168b30c60ef892f7881a0619
