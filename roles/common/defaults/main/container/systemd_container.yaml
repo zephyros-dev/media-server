@@ -53,10 +53,9 @@ calibre:
   caddy_sso: true
   dashy_statusCheckAcceptCodes: "401"
 calibre_content:
-  caddy_proxy_port: 8081
+  caddy_proxy_url: http://calibre:8081
   dashy_only: true
   dashy_icon: "/favicon.png"
-  dashy_statusCheckUrl: http://calibre:8081
   dashy_statusCheckAcceptCodes: "401"
 dashy:
   caddy_proxy_port: 80
@@ -198,12 +197,12 @@ wol:
 container_default:
   become: false
   caddy_proxy_port: 0
+  caddy_proxy_url: ""
   caddy_rewrite: []
   caddy_sso: false
   dashy_icon: ""
   dashy_only: false
   dashy_statusCheckAcceptCodes: ""
-  dashy_statusCheckUrl: ""
   folder: []
   host_network: false
   kind: kube

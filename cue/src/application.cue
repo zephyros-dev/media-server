@@ -321,7 +321,7 @@ _applicationSet & {
 										}
 										if v.caddy_sso {
 											statusCheckAllowInsecure: true
-											if v.dashy_statusCheckUrl == "" {
+											if v.caddy_proxy_url == "" {
 												if v.host_network {
 													statusCheckUrl: "http://\(fact.caddyfile_host_address):\(v.caddy_proxy_port)"
 												}
@@ -329,8 +329,8 @@ _applicationSet & {
 													statusCheckUrl: "http://\(_url_key):\(v.caddy_proxy_port)"
 												}
 											}
-											if v.dashy_statusCheckUrl != "" {
-												statusCheckUrl: v.dashy_statusCheckUrl
+											if v.caddy_proxy_url != "" {
+												statusCheckUrl: v.caddy_proxy_url
 											}
 										}
 										if !v.caddy_sso {

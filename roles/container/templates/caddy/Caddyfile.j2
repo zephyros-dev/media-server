@@ -51,7 +51,7 @@ auth.{{ server_domain }} {
 }
 {% for key,value in container | dictsort %}
   {% if value.state == 'started' %}
-    {% if value.caddy_proxy_port > 0 %}
+    {% if value.caddy_proxy_port > 0 or value.caddy_proxy_url != "" %}
 {{ key | replace("_", "-") }}.{{ server_domain }} {
     import global-config
         {% if value.caddy_sso %}
@@ -63,10 +63,14 @@ auth.{{ server_domain }} {
           {% endfor %}
         {% endif %}
         {% if value.host_network %}
-    reverse_proxy {{ caddyfile_host_address }}:{{ value.caddy_proxy_port }} {
+        {# Use ~ instead of + to auto convert int port to string #}
+          {% set reverse_proxy = caddyfile_host_address ~ ":" ~ value.caddy_proxy_port %}
+        {% elif value.caddy_proxy_url != "" %}
+          {% set reverse_proxy = value.caddy_proxy_url %}
         {% else %}
-    reverse_proxy {{ key }}:{{ value.caddy_proxy_port }} {
+          {% set reverse_proxy = key ~ ":" ~ value.caddy_proxy_port %}
         {% endif %}
+    reverse_proxy {{ reverse_proxy }} {
         import security-header
     }
         {% if key == 'nextcloud' %}
