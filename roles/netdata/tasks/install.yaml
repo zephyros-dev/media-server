@@ -1,11 +1,12 @@
 - name: Setup netdata
   become: true
   block:
-    - name: Download the installation script
+    - name: Download the installation script # noqa: ignore-errors
       ansible.builtin.get_url:
         url: https://my-netdata.io/kickstart.sh
         dest: /kickstart.sh
         mode: +x
+      ignore_errors: true
 
     - name: Install Netdata
       changed_when: false
