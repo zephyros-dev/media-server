@@ -4,6 +4,7 @@ container:
   caddy: "{{ container_default | combine(caddy) }}"
   calibre_content: "{{ container_default | combine(calibre_content) }}"
   calibre: "{{ container_default | combine(calibre) }}"
+  cockpit: "{{ container_default | combine(cockpit) }}"
   dashy: "{{ container_default | combine(dashy) }}"
   ddns: "{{ container_default | combine(ddns) }}"
   filebrowser: "{{ container_default | combine(filebrowser) }}"
@@ -57,6 +58,9 @@ calibre_content:
   dashy_only: true
   dashy_icon: "/favicon.png"
   dashy_statusCheckAcceptCodes: "401"
+cockpit:
+  caddy_proxy_url: https://{{ caddyfile_host_address }}:9090
+  dashy_only: true
 dashy:
   caddy_proxy_port: 80
   caddy_sso: true

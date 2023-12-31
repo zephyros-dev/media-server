@@ -81,13 +81,15 @@ auth.{{ server_domain }} {
     {% endif %}
   {% endif %}
 {% endfor %}
-{{ caddyfile_lan_address }} {
+server.{{ dynv6_zone }} {
   import global-config
   reverse_proxy https://{{ caddyfile_host_address }}:9090 {
       import security-header
-      transport http {
+       transport http {
           tls_insecure_skip_verify
           }
       }
-  tls internal
+  tls me@outlook.com {
+    dns dynv6 {{ ddns_dynv6_token }}
+  }
 }
