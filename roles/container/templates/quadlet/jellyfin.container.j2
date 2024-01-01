@@ -7,10 +7,4 @@ Volume={{ jellyfin_volume_cache }}:/cache:U,z
 Volume={{ jellyfin_volume_config }}:/config:U,z
 Volume={{ global_media }}:/home
 Network=podman-default-kube-network
-[Install]
-# Start by default on boot
-{% if container_loop_var.value.become %}
-WantedBy=multi-user.target
-{% else %}
-WantedBy=default.target
-{% endif %}
+{% include 'common.j2' %}
