@@ -40,7 +40,8 @@
     },
     {
       "groupName": "renovate",
-      "matchPackagePatterns": ["renovate"]
+      "matchPackagePatterns": ["renovate"],
+      "schedule": ["every weekend"]
     },
     {
       "groupName": "immich",
