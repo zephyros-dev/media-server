@@ -1,6 +1,6 @@
 FROM docker.io/caddy:2.7.6-builder@sha256:aabf71f1af81f2de3ccf8a1b6bd22ba245265a25b4bd759ee93531ebb141b34f AS builder
 
-RUN RUN --mount=type=cache,target=/go/pkg,sharing=locked \
+RUN --mount=type=cache,target=/go/pkg,sharing=locked \
     xcaddy build \
     --with github.com/caddy-dns/dynv6 \
     --with github.com/mholt/caddy-dynamicdns
