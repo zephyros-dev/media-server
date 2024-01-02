@@ -1,6 +1,5 @@
 import argparse
 import json
-import os
 from pathlib import Path
 
 parser = argparse.ArgumentParser(
@@ -18,7 +17,7 @@ args = parser.parse_args()
 
 def create_dirtree_without_files(src, dst):
     Path(dst).mkdir(parents=True, exist_ok=True)
-    for root, dirs, files in os.walk(src):
+    for root, dirs, files in Path.walk(src):
         for dirname in dirs:
             dirpath = Path(dst, Path(root, dirname).relative_to(src))
             Path(dirpath).mkdir(parents=True, exist_ok=True)
@@ -39,7 +38,6 @@ def mergerfs_mkdir(
 
 
 if __name__ == "__main__":
-
     with open(args.config_file, "r") as config_file:
         config = json.load(config_file)
 

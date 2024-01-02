@@ -1,7 +1,5 @@
 import json
-import os
 import shutil
-import unittest
 from pathlib import Path
 
 import main as main
@@ -53,53 +51,46 @@ def cleanup():
 
 def recursive_dir_list(path):
     folder_list = []
-    for root, dirs, files in os.walk(path):
+    for root, dirs, files in Path.walk(path):
         for dirname in dirs:
             dirpath = Path(Path(root, dirname).relative_to(path))
             folder_list.append(dirpath)
     return folder_list
 
 
-class Test(unittest.TestCase):
-    def test_mkdir(self):
-        with open("config.json", "r") as config_file:
-            config = json.load(config_file)
+def test_mkdir():
+    with open("config.json", "r") as config_file:
+        config = json.load(config_file)
 
-        data_directory_0_file, disk_0_data_directory_file = prepare_test(config)
+    data_directory_0_file, disk_0_data_directory_file = prepare_test(config)
 
-        for i in range(2):
-            # Run multiple time to see if it works with existing directories
-            main.mergerfs_mkdir(
-                mergerfs_disks_names=config["mergerfs_disks_names"],
-                mergerfs_disks_storage_path=config["mergerfs_disks_storage_path"],
-                mergerfs_storage_path=config["mergerfs_storage_path"],
-                mkdir_paths=config["mkdir_paths"],
-            )
+    for i in range(2):
+        # Run multiple time to see if it works with existing directories
+        main.mergerfs_mkdir(
+            mergerfs_disks_names=config["mergerfs_disks_names"],
+            mergerfs_disks_storage_path=config["mergerfs_disks_storage_path"],
+            mergerfs_storage_path=config["mergerfs_storage_path"],
+            mkdir_paths=config["mkdir_paths"],
+        )
 
-        storage_dir_list = []
+    storage_dir_list = []
+    for mkdir_path in config["mkdir_paths"]:
+        storage_dir_list.append(
+            recursive_dir_list(Path(config["mergerfs_storage_path"], mkdir_path))
+        )
+    for mergerfs_disks_name in config["mergerfs_disks_names"]:
+        disk_dir_list = []
         for mkdir_path in config["mkdir_paths"]:
-            storage_dir_list.append(
-                recursive_dir_list(Path(config["mergerfs_storage_path"], mkdir_path))
-            )
-        for mergerfs_disks_name in config["mergerfs_disks_names"]:
-            disk_dir_list = []
-            for mkdir_path in config["mkdir_paths"]:
-                disk_dir_list.append(
-                    recursive_dir_list(
-                        Path(
-                            config["mergerfs_disks_storage_path"],
-                            mergerfs_disks_name,
-                            mkdir_path,
-                        )
+            disk_dir_list.append(
+                recursive_dir_list(
+                    Path(
+                        config["mergerfs_disks_storage_path"],
+                        mergerfs_disks_name,
+                        mkdir_path,
                     )
                 )
-            assert disk_dir_list == storage_dir_list
-        # Check if dir_0 file is differnt from the one in storage since it was created manually
-        assert (
-            data_directory_0_file.read_text() != disk_0_data_directory_file.read_text()
-        )
-        cleanup()
-
-
-if __name__ == "__main__":
-    unittest.main()
+            )
+        assert disk_dir_list == storage_dir_list
+    # Check if dir_0 file is differnt from the one in storage since it was created manually
+    assert data_directory_0_file.read_text() != disk_0_data_directory_file.read_text()
+    cleanup()
