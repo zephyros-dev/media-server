@@ -1219,7 +1219,8 @@ _applicationSet & {
 		#param: {
 			name: "syncthing"
 			volumes: {
-				data: "\(fact.syncthing_data)/"
+				koreader_book: "\(fact.koreader_volume_data)/book/"
+				data:          "\(fact.syncthing_data)/"
 			}
 		}
 
@@ -1230,6 +1231,9 @@ _applicationSet & {
 				volumeMounts: [{
 					name:      "data"
 					mountPath: "/var/syncthing:U,z"
+				}, {
+					name:      "koreader_book"
+					mountPath: "/var/syncthing/koreader/book"
 				}]
 			}]
 			hostNetwork: true
