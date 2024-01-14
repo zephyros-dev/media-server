@@ -12,6 +12,7 @@ on:
       - roles/**
       - secret/*
       - submodules/**
+      - "!submodules/zapret"
 jobs:
   deploy:
     concurrency: deployment
