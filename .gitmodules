@@ -10,3 +10,7 @@
 	path = submodules/nvidia-patch
 	url = https://github.com/keylase/nvidia-patch.git
 	branch = master
+[submodule "submodules/zapret"]
+	path = submodules/zapret
+	url = https://github.com/bol-van/zapret
+	branch = master
