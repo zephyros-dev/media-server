@@ -13,7 +13,6 @@ container:
   jellyfin: "{{ container_default | combine(jellyfin) }}"
   kavita: "{{ container_default | combine(kavita) }}"
   koreader: "{{ container_default | combine(koreader) }}"
-  kosync: "{{ container_default | combine(kosync) }}"
   librespeed: "{{ container_default | combine(librespeed) }}"
   lidarr: "{{ container_default | combine(lidarr) }}"
   miniflux: "{{ container_default | combine(miniflux) }}"
@@ -100,12 +99,6 @@ koreader:
   caddy_proxy_port: 3000
   caddy_sso: true
   dashy_statusCheckAcceptCodes: "401"
-  dashy_icon: https://koreader.rocks/koreader.png
-kosync:
-  folder:
-    - "{{ kosync_volume_redis_data }}"
-  caddy_proxy_port: 17200
-  dashy_statusCheckAcceptCodes: "412"
   dashy_icon: https://koreader.rocks/koreader.png
 librespeed:
   caddy_proxy_port: 80

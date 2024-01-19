@@ -612,25 +612,6 @@ _applicationSet & {
 		}]
 	}
 
-	kosync: {
-		_
-		#param: {
-			name: "kosync"
-			volumes: {
-				redis: "\(fact.kosync_volume_redis_data)/"
-			}
-		}
-
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "kosync"
-			volumeMounts: [{
-				name:      "redis"
-				mountPath: "/var/lib/redis"
-			}]
-		}]
-	}
-
 	librespeed: {
 		_
 		#param: name: "librespeed"
