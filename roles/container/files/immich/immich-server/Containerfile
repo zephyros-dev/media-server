@@ -1,1 +1,1 @@
-FROM ghcr.io/immich-app/immich-server:v1.93.0@sha256:315a1b4d982a61c2126463b0c068076749bbece6a757e8b7e21378240b51b346
+FROM ghcr.io/immich-app/immich-server:v1.93.1@sha256:d0f2001c00723979fe0b589ecc08c52580b710a345c340d5dedb38142f2ca700
