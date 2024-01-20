@@ -88,8 +88,8 @@
     "source=terraform-plugin-cache,target=/home/vscode/.terraform-plugin-cache,type=volume"
   ],
   "name": "Infra",
-  "onCreateCommand": "ansible-playbook .devcontainer/playbook.yaml --tags onCreateCommand",
-  "postAttachCommand": "ansible-playbook .devcontainer/playbook.yaml --tags postAttachCommand",
+  "onCreateCommand": ".devcontainer/main.py --stage onCreateCommand",
+  "postAttachCommand": ".devcontainer/main.py --stage postAttachCommand",
   "postStartCommand": "nohup bash -c 'sudo guix-daemon &' > /dev/null && guix package -m guix.scm",
   "remoteEnv": {
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",

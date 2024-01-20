@@ -1,9 +1,0 @@
-- name: Run onCreateCommand
-  tags: onCreateCommand
-  ansible.builtin.import_tasks:
-    file: onCreateCommand.yaml
-
-- name: Run postAttachCommand
-  tags: postAttachCommand
-  ansible.builtin.import_tasks:
-    file: postAttachCommand.yaml

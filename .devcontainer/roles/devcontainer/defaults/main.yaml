@@ -1,9 +1,0 @@
-gitignore_list:
-  - ansible
-  - dotenv
-  - go
-  - intellij+all
-  - macOS
-  - node
-  - python
-  - VisualStudioCode

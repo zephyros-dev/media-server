@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/ansible,dotenv,go,intellij+all,macOS,node,python,terraform,VisualStudioCode
-# Edit at https://www.toptal.com/developers/gitignore?templates=ansible,dotenv,go,intellij+all,macOS,node,python,terraform,VisualStudioCode
+# Created by https://www.toptal.com/developers/gitignore/api/ansible,dotenv,go,intellij+all,node,python,terraform,VisualStudioCode
+# Edit at https://www.toptal.com/developers/gitignore?templates=ansible,dotenv,go,intellij+all,node,python,terraform,VisualStudioCode
 
 ### Ansible ###
 *.retry
@@ -117,39 +117,6 @@ fabric.properties
 
 !.idea/codeStyles
 !.idea/runConfigurations
-
-### macOS ###
-# General
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-### macOS Patch ###
-# iCloud generated files
-*.icloud
 
 ### Node ###
 # Logs
@@ -513,7 +480,7 @@ terraform.rc
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/ansible,dotenv,go,intellij+all,macOS,node,python,terraform,VisualStudioCode
+# End of https://www.toptal.com/developers/gitignore/api/ansible,dotenv,go,intellij+all,node,python,terraform,VisualStudioCode
 
 ### Custom ###
 # Ignore wifiqr generated code
