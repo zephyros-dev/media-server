@@ -54,6 +54,15 @@ if args.stage == "all" or args.stage == "onCreateCommand":
         )
 
     subprocess.run("aqua install --all", shell=True)
+
+    # Fix cue vscode extension
+    cue_path = subprocess.run(
+        "aqua which cue", shell=True, capture_output=True, text=True
+    ).stdout.strip()
+    cue_home_path = home_path / ".local/bin/cue"
+    if not cue_home_path.is_symlink():
+        cue_home_path.symlink_to(cue_path)
+
     subprocess.run("cue get go k8s.io/api/...", shell=True, cwd="cue")
 
 if args.stage == "all" or args.stage == "postAttachCommand":
@@ -77,7 +86,9 @@ if args.stage == "all" or args.stage == "postAttachCommand":
         f"https://www.toptal.com/developers/gitignore/api/{','.join(gitignore_list)}"
     )
 
-    environment = Environment(loader=FileSystemLoader(".devcontainer/templates"), keep_trailing_newline=True)
+    environment = Environment(
+        loader=FileSystemLoader(".devcontainer/templates"), keep_trailing_newline=True
+    )
     template = environment.get_template(".gitignore.j2")
     Path(".gitignore").write_text(
         template.render(git_ignore_template=git_ignore_remote.text)

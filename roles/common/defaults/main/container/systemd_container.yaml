@@ -25,6 +25,7 @@ container:
   radarr: "{{ container_default | combine(radarr) }}"
   samba: "{{ container_default | combine(samba) }}"
   scrutiny: "{{ container_default | combine(scrutiny) }}"
+  speedtest: "{{ container_default | combine(speedtest) }}"
   syncthing: "{{ container_default | combine(syncthing) }}"
   transmission: "{{ container_default | combine(transmission) }}"
   trilium: "{{ container_default | combine(trilium) }}"
@@ -168,6 +169,11 @@ scrutiny:
   caddy_sso: true
   caddy_proxy_port: "{{ scrutiny_port }}"
   host_network: true
+speedtest:
+  folder:
+    - "{{ speedtest_volume_config }}"
+    - "{{ speedtest_volume_db_data }}"
+  caddy_proxy_port: 80
 syncthing:
   folder:
     - "{{ syncthing_data }}"
