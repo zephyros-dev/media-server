@@ -174,6 +174,7 @@ speedtest:
     - "{{ speedtest_volume_config }}"
     - "{{ speedtest_volume_db_data }}"
   caddy_proxy_port: 80
+  dashy_icon: favicon-local
 syncthing:
   folder:
     - "{{ syncthing_data }}"
