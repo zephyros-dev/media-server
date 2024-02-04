@@ -1,5 +1,6 @@
 container:
   audiobookshelf: "{{ container_default | combine(audiobookshelf) }}"
+  baikal: "{{ container_default | combine(baikal) }}"
   bazarr: "{{ container_default | combine(bazarr) }}"
   caddy: "{{ container_default | combine(caddy) }}"
   calibre_content: "{{ container_default | combine(calibre_content) }}"
@@ -38,6 +39,11 @@ audiobookshelf:
     - "{{ audiobookshelf_volume_metadata }}"
     - "{{ audiobookshelf_volume_podcasts }}"
   caddy_proxy_port: 80
+baikal:
+  caddy_proxy_port: 80
+  volumes:
+    config: "./web/config/"
+    data: "./web/data/"
 bazarr:
   folder:
     - "{{ bazarr_web_config }}"
@@ -214,3 +220,9 @@ container_default:
   preserve_volume: false
   state: started
   userns: ""
+  # TODO: Migrate folder to Volume, which has 4 types:
+  # - "": create volumes with #param.name and volumes name
+  # - ./: Create volume folder with {{ global_volume_path }}/{{ #param.name }}/{{ whatever behind ./ }}
+  # - / with no /: File
+  # - / with /: Folder
+  volumes: {}

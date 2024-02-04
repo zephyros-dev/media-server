@@ -18,6 +18,26 @@ _applicationSet: [applicationName=_]: {
 			}
 		}
 		volumes: string?: string
+		_rendered_volumes: {
+			for k, v in volumes {"\(k)": {
+				if v =~ "^\\w" {
+					type:  "pvc"
+					value: "\(#param.name)-\(k)"
+				}
+				if v =~ "^\/.+[^\/]$" {
+					type:  "file"
+					value: v
+				}
+				if v =~ "^\/.+\/$" {
+					type:  "absolutePath"
+					value: v
+				}
+				if v =~ "^\\.\/.+\/$" {
+					type:  "relativePath"
+					value: "\(fact.global_volume_path)/\(#param.name)/\(strings.Replace(v, "./", "", -1))"
+				}
+			}}
+		}
 	}
 
 	#pod: core.#Pod & {
@@ -31,20 +51,20 @@ _applicationSet: [applicationName=_]: {
 			name: "\(#param.name)"
 		}
 		spec: {
-			volumes: [for k, v in #param.volumes {
+			volumes: [for k, v in #param._rendered_volumes {
 				name: k
-				if v !~ "^\/" {
-					persistentVolumeClaim: claimName: v
+				if v.type == "pvc" {
+					persistentVolumeClaim: claimName: v.value
 				}
-				if v =~ "^\/.+[^\/]$" {
+				if v.type == "file" {
 					hostPath: {
-						path: v
+						path: v.value
 						type: "File"
 					}
 				}
-				if v =~ "^\/.+\/$" {
+				if v.type == "absolutePath" || v.type == "relativePath" {
 					hostPath: {
-						path: v
+						path: v.value
 						type: "Directory"
 					}
 				}
@@ -82,12 +102,12 @@ _applicationSet: [applicationName=_]: {
 		}
 	}
 
-	#volume: [for k, v in #param.volumes if v !~ "^\/" {
+	#volume: [for k, v in #param.volumes if v =~ "^\\w" {
 		core.#PersistentVolumeClaim & {
 			apiVersion: "v1"
 			kind:       "PersistentVolumeClaim"
 			metadata: {
-				name: v
+				name: "\(#param.name)-\(k)"
 			}
 		}
 	}]
@@ -123,6 +143,25 @@ _applicationSet & {
 			}, {
 				name:      "podcasts"
 				mountPath: "/podcasts"
+			}]
+		}]
+	}
+
+	baikal: {
+		_
+		#param: {
+			name:    "baikal"
+			volumes: fact.container.baikal.volumes
+		}
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "baikal"
+			volumeMounts: [{
+				name:      "config"
+				mountPath: "/var/www/baikal/config:U,z"
+			}, {
+				name:      "data"
+				mountPath: "/var/www/baikal/Specific:U,z"
 			}]
 		}]
 	}

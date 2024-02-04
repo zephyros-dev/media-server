@@ -21,6 +21,29 @@
         - name: Setup podman container {{ container_loop_var.key }}
           when: container_loop_var.value.state == "started"
           block:
+            - name: Set folder list {{ container_loop_var.key }}
+              when: container_loop_var.value.folder
+              ansible.builtin.set_fact:
+                container_folder_list: "{{ container_loop_var.value.folder }}"
+            - name: Set volume list {{ container_loop_var.key }}
+              when: container_loop_var.value.volumes
+              block:
+                - name: Get volume list {{ container_loop_var.key }}
+                  changed_when: false
+                  delegate_to: localhost
+                  ansible.builtin.command:
+                    chdir: cue
+                    cmd: cue eval src/application.cue -e {{ container_loop_var.key }}.#param._rendered_volumes --out json
+                  register: volume_list
+                - name: Prepare volume {{ container_loop_var.key }}
+                  ansible.builtin.file:
+                    path: "{{ item }}"
+                    mode: "0755"
+                    state: directory
+                  loop: "{{ volume_list.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
+                  vars:
+                    container_volume_list_query: "* | [?type=='relativePath' || type=='absolutePath'].value"
+
             - name: Check if folder exists {{ container_loop_var.key }}
               ansible.builtin.stat:
                 path: "{{ item }}"
