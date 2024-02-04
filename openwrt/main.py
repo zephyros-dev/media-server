@@ -17,7 +17,7 @@ openwrt_config = json.loads(
 
 # Copy the repo
 subprocess.run(
-    f"rsync --chown root:root -a --delete --exclude '.git' --exclude 'config' ../submodules/zapret/ root@{openwrt_config['router']}:/opt/zapret",
+    f"rsync --mkpath --chown root:root -a --delete --exclude '.git' --exclude 'config' ../submodules/zapret/ root@{openwrt_config['router']}:/opt/zapret",
     shell=True,
 )
 
