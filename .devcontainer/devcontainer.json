@@ -41,7 +41,7 @@
         },
         "[python]": {
           "editor.codeActionsOnSave": {
-            "source.organizeImports": true
+            "source.organizeImports": "always"
           },
           "editor.defaultFormatter": "ms-python.black-formatter"
         },
@@ -51,7 +51,7 @@
         "ansible.python.interpreterPath": "/usr/local/bin/python",
         "cue.moduleRoot": "${workspaceFolder}/cue",
         "editor.codeActionsOnSave": {
-          "source.fixAll.sortJSON": true
+          "source.fixAll.sortJSON": "always"
         },
         "editor.formatOnSave": true,
         "files.associations": {
