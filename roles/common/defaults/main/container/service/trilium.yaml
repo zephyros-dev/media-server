@@ -1,2 +1,0 @@
-trilium_volume: "{{ global_volume_path }}/trilium"
-trilium_volume_data: "{{ trilium_volume }}/data"

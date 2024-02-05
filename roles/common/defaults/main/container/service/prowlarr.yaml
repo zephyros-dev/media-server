@@ -1,2 +1,0 @@
-prowlarr_data: "{{ global_volume_path }}/prowlarr"
-prowlarr_web_config: "{{ prowlarr_data }}/web/config"

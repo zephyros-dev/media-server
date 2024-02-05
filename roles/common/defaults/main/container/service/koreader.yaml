@@ -1,2 +1,0 @@
-koreader_volume: "{{ global_volume_path }}/koreader"
-koreader_volume_data: "{{ koreader_volume }}/data"

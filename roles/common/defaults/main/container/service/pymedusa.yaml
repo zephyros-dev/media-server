@@ -1,2 +1,0 @@
-pymedusa_data: "{{ global_volume_path }}/pymedusa"
-pymedusa_web_config: "{{ pymedusa_data }}/web/config"

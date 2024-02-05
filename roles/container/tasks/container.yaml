@@ -21,12 +21,8 @@
         - name: Setup podman container {{ container_loop_var.key }}
           when: container_loop_var.value.state == "started"
           block:
-            - name: Set folder list {{ container_loop_var.key }}
-              when: container_loop_var.value.folder
-              ansible.builtin.set_fact:
-                container_folder_list: "{{ container_loop_var.value.folder }}"
-            - name: Set volume list {{ container_loop_var.key }}
-              when: container_loop_var.value.volumes
+            - name: Setup volumes {{ container_loop_var.key }}
+              when: container_loop_var.value.volumes != {}
               block:
                 - name: Get volume list {{ container_loop_var.key }}
                   changed_when: false
@@ -35,29 +31,57 @@
                     chdir: cue
                     cmd: cue eval src/application.cue -e {{ container_loop_var.key }}.#param._rendered_volumes --out json
                   register: volume_list
+                - name: Set volume directory lists {{ container_loop_var.key }}
+                  ansible.builtin.set_fact:
+                    container_volume_list: "{{ volume_list.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
+                  vars:
+                    container_volume_list_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
+                - name: Check if volume exists {{ container_loop_var.key }}
+                  ansible.builtin.stat:
+                    path: "{{ item }}"
+                  loop: "{{ container_volume_list }}"
+                  register: container_volume_state
                 - name: Prepare volume {{ container_loop_var.key }}
+                  when: not container_volume_state.skipped
+                  become_method: containers.podman.podman_unshare
+                  become: true
                   ansible.builtin.file:
                     path: "{{ item }}"
                     mode: "0755"
                     state: directory
+                  loop: "{{ container_volume_state.results | json_query('[?stat.exists == `false`].item') }}"
+                - name: Prepare files {{ container_loop_var.key }}
+                  ansible.builtin.copy:
+                    content: ""
+                    dest: "{{ item }}"
+                    force: false
+                    mode: "0600"
                   loop: "{{ volume_list.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
                   vars:
-                    container_volume_list_query: "* | [?type=='relativePath' || type=='absolutePath'].value"
+                    container_volume_list_query: "* | [?type=='file'].value"
+                - name: Disable auth for arr container {{ container_loop_var.key }}
+                  when: "'arr' in container_loop_var.key"
+                  block:
+                    - name: Disable authentication for {{ container_loop_var.key }}
+                      become_method: containers.podman.podman_unshare
+                      become: true
+                      community.general.xml:
+                        path: "{{ global_volume_path }}/{{ container_loop_var.key }}/{{ container[container_loop_var.key].volumes.config | regex_replace('\\./', '') }}/config.xml"
+                        xpath: "{{ item.key }}"
+                        value: "{{ item.value }}"
+                      loop:
+                        - key: /Config/AuthenticationMethod
+                          value: Basic
+                        - key: /Config/AuthenticationRequired
+                          value: DisabledForLocalAddresses
+                      register: arr_config
 
-            - name: Check if folder exists {{ container_loop_var.key }}
-              ansible.builtin.stat:
-                path: "{{ item }}"
-              loop: "{{ container_loop_var.value.folder }}"
-              register: container_folder_state
-            - name: Prepare folder {{ container_loop_var.key }}
-              when: not container_folder_state.skipped
-              become_method: containers.podman.podman_unshare
-              become: true
-              ansible.builtin.file:
-                path: "{{ item }}"
-                mode: "0755"
-                state: directory
-              loop: "{{ container_folder_state.results | json_query('[?stat.exists == `false`].item') }}"
+                    - name: Restart {{ container_loop_var.key }} # noqa: no-handler
+                      when: arr_config.changed
+                      ansible.builtin.systemd:
+                        name: "{{ container_loop_var.key }}"
+                        scope: user
+                        state: restarted
 
         - name: Setup container with quadlet {{ container_loop_var.key }}
           block:

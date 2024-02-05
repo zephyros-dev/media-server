@@ -28,7 +28,8 @@
         - name: Extract fact to cue
           changed_when: false
           ansible.builtin.command:
-            cmd: cue import cue/tmp/fact.json --outfile cue/tmp/fact.cue -p fact -f
+            chdir: cue
+            cmd: cue import tmp/fact.json --outfile tmp/fact.cue -p fact -f
     - name: Run podman container with systemd
       ansible.builtin.include_tasks:
         file: container.yaml

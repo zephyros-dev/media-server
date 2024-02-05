@@ -1,6 +1,0 @@
-nextcloud_volume: "{{ global_volume_path }}/nextcloud"
-nextcloud_volume_web_data: "{{ nextcloud_volume }}/web/data"
-nextcloud_volume_web_storage: "{{ nextcloud_volume }}/web/storage"
-nextcloud_volume_db_data: "{{ nextcloud_volume }}/db/data"
-# nextcloud_postgres_password:
-# nextcloud_redis_password:

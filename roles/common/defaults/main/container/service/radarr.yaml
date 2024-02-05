@@ -1,2 +1,0 @@
-radarr_data: "{{ global_volume_path }}/radarr"
-radarr_web_config: "{{ radarr_data }}/web/config"

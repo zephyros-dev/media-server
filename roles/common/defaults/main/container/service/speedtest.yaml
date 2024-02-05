@@ -1,3 +1,0 @@
-speedtest_volume: "{{ global_volume_path }}/speedtest"
-speedtest_volume_config: "{{ speedtest_volume }}/config"
-speedtest_volume_db_data: "{{ speedtest_volume }}/db/data"

@@ -20,20 +20,25 @@ _applicationSet: [applicationName=_]: {
 		volumes: string?: string
 		_rendered_volumes: {
 			for k, v in volumes {"\(k)": {
-				if v =~ "^\\w" {
+				if v == "pvc" {
 					type:  "pvc"
 					value: "\(#param.name)-\(k)"
 				}
-				if v =~ "^\/.+[^\/]$" {
-					type:  "file"
-					value: v
+				if v =~ "\/.+[^\/]$" {
+					type: "file"
+					if v =~ "^\/" {
+						value: v
+					}
+					if v =~ "^\\.\/" {
+						value: "\(fact.global_volume_path)/\(#param.name)/\(strings.Replace(v, "./", "", -1))"
+					}
 				}
 				if v =~ "^\/.+\/$" {
-					type:  "absolutePath"
+					type:  "absolutePathDir"
 					value: v
 				}
-				if v =~ "^\\.\/.+\/$" {
-					type:  "relativePath"
+				if v =~ "^\\.\/.+\/$" || v == "./" {
+					type:  "relativePathDir"
 					value: "\(fact.global_volume_path)/\(#param.name)/\(strings.Replace(v, "./", "", -1))"
 				}
 			}}
@@ -62,7 +67,7 @@ _applicationSet: [applicationName=_]: {
 						type: "File"
 					}
 				}
-				if v.type == "absolutePath" || v.type == "relativePath" {
+				if v.type == "absolutePathDir" || v.type == "relativePathDir" {
 					hostPath: {
 						path: v.value
 						type: "Directory"
@@ -119,13 +124,8 @@ _applicationSet & {
 	audiobookshelf: {
 		_
 		#param: {
-			name: "audiobookshelf"
-			volumes: {
-				audiobooks: "\(fact.audiobookshelf_volume_audiobooks)/"
-				config:     "\(fact.audiobookshelf_volume_config)/"
-				metadata:   "\(fact.audiobookshelf_volume_metadata)/"
-				podcasts:   "\(fact.audiobookshelf_volume_podcasts)/"
-			}
+			name:    "audiobookshelf"
+			volumes: fact.container.audiobookshelf.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -169,11 +169,8 @@ _applicationSet & {
 	bazarr: {
 		_
 		#param: {
-			name: "bazarr"
-			volumes: {
-				config: "\(fact.bazarr_web_config)/"
-				home:   "\(fact.global_media)/"
-			}
+			name:    "bazarr"
+			volumes: fact.container.bazarr.volumes
 		}
 		#pod: spec: containers: [{
 			name:  "web"
@@ -195,52 +192,6 @@ _applicationSet & {
 		}]
 	}
 
-	ddns: {
-		_
-		#param: {
-			name: "ddns"
-			secret: {
-				Caddyfile: {
-					type:    "file"
-					content: """
-					{
-						dynamic_dns {
-							provider dynv6 \(fact.ddns_dynv6_token)
-							domains {
-								\(fact.dynv6_zone) *.\(fact.server_subdomain)
-							}
-						}
-					}
-					"""
-				}
-			}
-			volumes: {
-				config: "ddns_volume_config"
-				data:   "ddns_volume_data"
-			}
-		}
-
-		#pod: spec: {
-			hostNetwork: true
-			containers: [{
-				name:  "instance"
-				image: "ddns"
-				volumeMounts: [{
-					name:      "config"
-					mountPath: "/config"
-				}, {
-					name:      "data"
-					mountPath: "/data"
-				}, {
-					name:      "Caddyfile"
-					readOnly:  true
-					mountPath: "/etc/caddy/Caddyfile"
-					subPath:   "Caddyfile"
-				}]
-			}]
-		}
-	}
-
 	caddy: {
 		_
 		#param: {
@@ -251,10 +202,7 @@ _applicationSet & {
 					content: "\(fact.caddyfile_content)"
 				}
 			}
-			volumes: {
-				config: "caddy_volume_config"
-				data:   "caddy_volume_data"
-			}
+			volumes: fact.container.caddy.volumes
 		}
 		#pod: spec: containers: [{
 			name:  "instance"
@@ -288,12 +236,8 @@ _applicationSet & {
 	calibre: {
 		_
 		#param: {
-			name: "calibre"
-			volumes: {
-				config: "\(fact.calibre_volume_config)/"
-				books:  "\(fact.calibre_book)/"
-				device: "/dev/dri/"
-			}
+			name:    "calibre"
+			volumes: fact.container.calibre.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -407,14 +351,54 @@ _applicationSet & {
 		}]
 	}
 
+	ddns: {
+		_
+		#param: {
+			name: "ddns"
+			secret: {
+				Caddyfile: {
+					type:    "file"
+					content: """
+					{
+						dynamic_dns {
+							provider dynv6 \(fact.ddns_dynv6_token)
+							domains {
+								\(fact.dynv6_zone) *.\(fact.server_subdomain)
+							}
+						}
+					}
+					"""
+				}
+			}
+			volumes: fact.container.ddns.volumes
+		}
+
+		#pod: spec: {
+			hostNetwork: true
+			containers: [{
+				name:  "instance"
+				image: "ddns"
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config"
+				}, {
+					name:      "data"
+					mountPath: "/data"
+				}, {
+					name:      "Caddyfile"
+					readOnly:  true
+					mountPath: "/etc/caddy/Caddyfile"
+					subPath:   "Caddyfile"
+				}]
+			}]
+		}
+	}
+
 	filebrowser: {
 		_
 		#param: {
-			name: "filebrowser"
-			volumes: {
-				srv:           "\(fact.global_media)/"
-				"database.db": "\(fact.filebrowser_volume)/database.db"
-			}
+			name:    "filebrowser"
+			volumes: fact.container.filebrowser.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -434,12 +418,6 @@ _applicationSet & {
 		_
 		#param: {
 			name: "immich"
-			volumes: {
-				database: "\(fact.immich_volume_database)/"
-				upload:   "\(fact.immich_volume_upload)/"
-			} & {
-				ml_cache: "immich_volume_ml_cache"
-			}
 			secret: {
 				database_password: {
 					type:    "env"
@@ -450,6 +428,7 @@ _applicationSet & {
 					content: "\(fact.immich_jwt_secret)"
 				}
 			}
+			volumes: fact.container.immich.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -558,7 +537,7 @@ _applicationSet & {
 				name:      "upload"
 				mountPath: "/usr/src/app/upload"
 			}, {
-				name:      "ml_cache"
+				name:      "ml-cache"
 				mountPath: "/cache:U"
 			}]
 		}] {v}]
@@ -567,11 +546,8 @@ _applicationSet & {
 	jdownloader: {
 		_
 		#param: {
-			name: "jdownloader"
-			volumes: {
-				config: "\(fact.jdownloader_volume_config)/"
-				output: "\(fact.global_download)/"
-			}
+			name:    "jdownloader"
+			volumes: fact.container.jdownloader.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -597,14 +573,18 @@ _applicationSet & {
 		}]
 	}
 
+	jellyfin: {
+		_
+		#param: {
+			volumes: fact.container.jellyfin.volumes
+		}
+	}
+
 	kavita: {
 		_
 		#param: {
-			name: "kavita"
-			volumes: {
-				config: "\(fact.kavita_volume_data)/"
-				home:   "\(fact.global_media)/"
-			}
+			name:    "kavita"
+			volumes: fact.container.kavita.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -623,11 +603,8 @@ _applicationSet & {
 	koreader: {
 		_
 		#param: {
-			name: "koreader"
-			volumes: {
-				config: "\(fact.koreader_volume_data)/"
-				device: "/dev/dri/"
-			}
+			name:    "koreader"
+			volumes: fact.container.koreader.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -664,12 +641,8 @@ _applicationSet & {
 	lidarr: {
 		_
 		#param: {
-			name: "lidarr"
-			volumes: {
-				home:      "\(fact.global_media)/"
-				config:    "\(fact.lidarr_web_config)/"
-				downloads: "\(fact.transmission_download)/"
-			}
+			name:    "lidarr"
+			volumes: fact.container.lidarr.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -688,9 +661,6 @@ _applicationSet & {
 			}, {
 				name:      "config"
 				mountPath: "/config:U,z"
-			}, {
-				name:      "downloads"
-				mountPath: "/downloads"
 			}]
 		}]
 	}
@@ -713,9 +683,7 @@ _applicationSet & {
 					content: "postgres://miniflux:\(fact.miniflux_postgres_password)@localhost:5432/miniflux?sslmode=disable"
 				}
 			}
-			volumes: {
-				database: "\(fact.miniflux_volume_database)/"
-			}
+			volumes: fact.container.miniflux.volumes
 		}
 		#pod: spec: containers: [{
 			name:  "postgres"
@@ -765,11 +733,8 @@ _applicationSet & {
 	navidrome: {
 		_
 		#param: {
-			name: "navidrome"
-			volumes: {
-				data:  "\(fact.navidrome_web_data)/"
-				music: "\(fact.navidrome_music)/"
-			}
+			name:    "navidrome"
+			volumes: fact.container.navidrome.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -794,6 +759,98 @@ _applicationSet & {
 			}, {
 				name:      "music"
 				mountPath: "/music:ro"
+			}]
+		}]
+	}
+
+	nextcloud: {
+		_
+		#param: {
+			name: "nextcloud"
+			secret: {
+				postgres_password: {
+					type:    "env"
+					content: "\(fact.nextcloud_postgres_password)"
+				}
+				redis_password: {
+					type:    "env"
+					content: "\(fact.nextcloud_redis_password)"
+				}
+			}
+			volumes: fact.container.nextcloud.volumes
+		}
+
+		#pod: spec: containers: [{
+			name:  "postgres"
+			image: "nextcloud-postgres"
+			env: [{
+				name:  "POSTGRES_DB"
+				value: "nextcloud"
+			}, {
+				name:  "POSTGRES_USER"
+				value: "postgres"
+			}] + [{
+				name: "POSTGRES_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "nextcloud"
+					key:  "postgres_password"
+				}
+			}]
+			volumeMounts: [{
+				name:      "database"
+				mountPath: "/var/lib/postgresql/data:U,z"
+			}]
+		}] + [if fact.container.nextcloud.postgres_action == "none" for v in [{
+			name:  "web"
+			image: "nextcloud"
+			env: [{
+				name:  "NEXTCLOUD_TRUSTED_DOMAINS"
+				value: "nextcloud.\(fact.server_domain)"
+			}, {
+				name:  "OVERWRITEPROTOCOL"
+				value: "https"
+			}, {
+				name:  "POSTGRES_DB"
+				value: "nextcloud"
+			}, {
+				name:  "POSTGRES_HOST"
+				value: "localhost:5432"
+			}, {
+				name:  "POSTGRES_USER"
+				value: "postgres"
+			}, {
+				name:  "REDIS_HOST"
+				value: "localhost"
+			}] + [{
+				name: "POSTGRES_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "nextcloud"
+					key:  "postgres_password"
+				}
+			}, {
+				name: "REDIS_HOST_PASSWORD"
+				valueFrom: secretKeyRef: {
+					name: "nextcloud"
+					key:  "redis_password"
+				}
+			}]
+			volumeMounts: [{
+				name:      "data"
+				mountPath: "/var/www/html:z"
+			}, {
+				name:      "storage"
+				mountPath: "/var/www/html/data:z"
+			}]
+		}, {
+			name:  "redis"
+			image: "nextcloud-redis"
+			args: ["redis-server", "--requirepass", "\(fact.nextcloud_redis_password)"]
+		}] {v}] + [if fact.debug {
+			name:  "adminer"
+			image: "docker.io/adminer"
+			ports: [{
+				containerPort: 8080
+				hostPort:      38080
 			}]
 		}]
 	}
@@ -824,14 +881,7 @@ _applicationSet & {
 					content: "https://paperless.\(fact.server_domain)"
 				}
 			}
-			volumes: {
-				redis:    "\(fact.paperless_volume_redis_data)/"
-				database: "\(fact.paperless_volume_database_data)/"
-				consume:  "\(fact.paperless_volume_webserver_consume)/"
-				data:     "\(fact.paperless_volume_webserver_data)/"
-				export:   "\(fact.paperless_volume_webserver_export)/"
-				media:    "\(fact.paperless_volume_webserver_media)/"
-			}
+			volumes: fact.container.paperless.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -943,109 +993,11 @@ _applicationSet & {
 		}] {v}]
 	}
 
-	nextcloud: {
-		_
-		#param: {
-			name: "nextcloud"
-			secret: {
-				postgres_password: {
-					type:    "env"
-					content: "\(fact.nextcloud_postgres_password)"
-				}
-				redis_password: {
-					type:    "env"
-					content: "\(fact.nextcloud_redis_password)"
-				}
-			}
-			volumes: {
-				data:     "\(fact.nextcloud_volume_web_data)/"
-				database: "\(fact.nextcloud_volume_db_data)/"
-				storage:  "\(fact.nextcloud_volume_web_storage)/"
-			}
-		}
-
-		#pod: spec: containers: [{
-			name:  "postgres"
-			image: "nextcloud-postgres"
-			env: [{
-				name:  "POSTGRES_DB"
-				value: "nextcloud"
-			}, {
-				name:  "POSTGRES_USER"
-				value: "postgres"
-			}] + [{
-				name: "POSTGRES_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "nextcloud"
-					key:  "postgres_password"
-				}
-			}]
-			volumeMounts: [{
-				name:      "database"
-				mountPath: "/var/lib/postgresql/data:U,z"
-			}]
-		}] + [if fact.container.nextcloud.postgres_action == "none" for v in [{
-			name:  "web"
-			image: "nextcloud"
-			env: [{
-				name:  "NEXTCLOUD_TRUSTED_DOMAINS"
-				value: "nextcloud.\(fact.server_domain)"
-			}, {
-				name:  "OVERWRITEPROTOCOL"
-				value: "https"
-			}, {
-				name:  "POSTGRES_DB"
-				value: "nextcloud"
-			}, {
-				name:  "POSTGRES_HOST"
-				value: "localhost:5432"
-			}, {
-				name:  "POSTGRES_USER"
-				value: "postgres"
-			}, {
-				name:  "REDIS_HOST"
-				value: "localhost"
-			}] + [{
-				name: "POSTGRES_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "nextcloud"
-					key:  "postgres_password"
-				}
-			}, {
-				name: "REDIS_HOST_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "nextcloud"
-					key:  "redis_password"
-				}
-			}]
-			volumeMounts: [{
-				name:      "data"
-				mountPath: "/var/www/html:z"
-			}, {
-				name:      "storage"
-				mountPath: "/var/www/html/data:z"
-			}]
-		}, {
-			name:  "redis"
-			image: "nextcloud-redis"
-			args: ["redis-server", "--requirepass", "\(fact.nextcloud_redis_password)"]
-		}] {v}] + [if fact.debug {
-			name:  "adminer"
-			image: "docker.io/adminer"
-			ports: [{
-				containerPort: 8080
-				hostPort:      38080
-			}]
-		}]
-	}
-
 	prowlarr: {
 		_
 		#param: {
-			name: "prowlarr"
-			volumes: {
-				config: "\(fact.prowlarr_web_config)/"
-			}
+			name:    "prowlarr"
+			volumes: fact.container.prowlarr.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -1061,12 +1013,8 @@ _applicationSet & {
 	pymedusa: {
 		_
 		#param: {
-			name: "pymedusa"
-			volumes: {
-				home:      "\(fact.global_media)/"
-				config:    "\(fact.pymedusa_web_config)/"
-				downloads: "\(fact.transmission_download)/"
-			}
+			name:    "pymedusa"
+			volumes: fact.container.pymedusa.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -1078,9 +1026,6 @@ _applicationSet & {
 			}, {
 				name:      "config"
 				mountPath: "/config:U,z"
-			}, {
-				name:      "downloads"
-				mountPath: "/downloads"
 			}]
 		}]
 	}
@@ -1088,12 +1033,8 @@ _applicationSet & {
 	radarr: {
 		_
 		#param: {
-			name: "radarr"
-			volumes: {
-				home:      "\(fact.global_media)/"
-				config:    "\(fact.radarr_web_config)/"
-				downloads: "\(fact.transmission_download)/"
-			}
+			name:    "radarr"
+			volumes: fact.container.radarr.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -1112,9 +1053,6 @@ _applicationSet & {
 			}, {
 				name:      "config"
 				mountPath: "/config:U,z"
-			}, {
-				name:      "downloads"
-				mountPath: "/downloads"
 			}]
 		}]
 	}
@@ -1129,12 +1067,7 @@ _applicationSet & {
 					content: "\(fact.samba_password)"
 				}
 			}
-			volumes: {
-				home:    "\(fact.ansible_user_dir)/"
-				disk:    "\(fact.ansible_user_dir)/disk/"
-				disks:   "\(fact.global_disks_data)/"
-				storage: "\(fact.global_storage)/"
-			}
+			volumes: fact.container.samba.volumes
 		}
 
 		#pod: spec: {
@@ -1244,10 +1177,7 @@ _applicationSet & {
 					content: "\(fact.speedtest_db_password)"
 				}
 			}
-			volumes: {
-				config: "\(fact.speedtest_volume_config)/"
-				db:     "\(fact.speedtest_volume_db_data)/"
-			}
+			volumes: fact.container.speedtest.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -1309,11 +1239,8 @@ _applicationSet & {
 	syncthing: {
 		_
 		#param: {
-			name: "syncthing"
-			volumes: {
-				koreader_book: "\(fact.koreader_volume_data)/book/"
-				data:          "\(fact.syncthing_data)/"
-			}
+			name:    "syncthing"
+			volumes: fact.container.syncthing.volumes
 		}
 
 		#pod: spec: {
@@ -1324,7 +1251,7 @@ _applicationSet & {
 					name:      "data"
 					mountPath: "/var/syncthing:U,z"
 				}, {
-					name:      "koreader_book"
+					name:      "koreader-book"
 					mountPath: "/var/syncthing/koreader/book"
 				}]
 			}]
@@ -1346,10 +1273,7 @@ _applicationSet & {
 					content: "\(fact.transmission_password)"
 				}
 			}
-			volumes: {
-				home:   "\(fact.global_media)/"
-				config: "\(fact.transmission_web_config)/"
-			}
+			volumes: fact.container.transmission.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -1394,10 +1318,8 @@ _applicationSet & {
 	trilium: {
 		_
 		#param: {
-			name: "trilium"
-			volumes: {
-				data: "\(fact.trilium_volume_data)/"
-			}
+			name:    "trilium"
+			volumes: fact.container.trilium.volumes
 		}
 
 		#pod: spec: containers: [{

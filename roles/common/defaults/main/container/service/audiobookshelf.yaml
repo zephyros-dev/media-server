@@ -1,5 +1,0 @@
-audiobookshelf_volume: "{{ global_volume_path }}/audiobookshelf"
-audiobookshelf_volume_audiobooks: "{{ global_storage }}/Audiobooks"
-audiobookshelf_volume_config: "{{ audiobookshelf_volume }}/config"
-audiobookshelf_volume_metadata: "{{ audiobookshelf_volume }}/metadata"
-audiobookshelf_volume_podcasts: "{{ global_storage }}/Podcasts"

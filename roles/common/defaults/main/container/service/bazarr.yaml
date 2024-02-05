@@ -1,2 +1,0 @@
-bazarr_data: "{{ global_volume_path }}/bazarr"
-bazarr_web_config: "{{ bazarr_data }}/web/config"
