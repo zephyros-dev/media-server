@@ -60,7 +60,9 @@
                   vars:
                     container_volume_list_query: "* | [?type=='file'].value"
                 - name: Disable auth for arr container {{ container_loop_var.key }}
-                  when: "'arr' in container_loop_var.key"
+                  when:
+                    - "'arr' in container_loop_var.key"
+                    - container_loop_var.key != "bazarr"
                   block:
                     - name: Disable authentication for {{ container_loop_var.key }}
                       become_method: containers.podman.podman_unshare
