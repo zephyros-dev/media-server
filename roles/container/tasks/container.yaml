@@ -29,14 +29,15 @@
                   delegate_to: localhost
                   ansible.builtin.command:
                     chdir: cue
-                    cmd: cue eval src/application.cue -e {{ container_loop_var.key }}.#param._rendered_volumes --out json
-                  register: volume_list
+                    cmd: "{{ cue_path }} eval src/application.cue -e {{ container_loop_var.key }}.#param.volumes --out json" # Need this since cue is not installed globaly, and we may need to run this with sudo
+                  register: volume_map
                 - name: Set volume directory lists {{ container_loop_var.key }}
                   ansible.builtin.set_fact:
-                    container_volume_list: "{{ volume_list.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
+                    container_volume_list: "{{ volume_map.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
                   vars:
                     container_volume_list_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
                 - name: Check if volume exists {{ container_loop_var.key }}
+                  when: "'/dev/' not in item"
                   ansible.builtin.stat:
                     path: "{{ item }}"
                   loop: "{{ container_volume_list }}"
@@ -56,7 +57,7 @@
                     dest: "{{ item }}"
                     force: false
                     mode: "0600"
-                  loop: "{{ volume_list.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
+                  loop: "{{ volume_map.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
                   vars:
                     container_volume_list_query: "* | [?type=='file'].value"
                 - name: Disable auth for arr container {{ container_loop_var.key }}

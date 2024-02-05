@@ -1,13 +1,18 @@
 - name: Setup container
   tags: container
   block:
-    - name: Get custom fact container
-      ansible.builtin.import_tasks:
-        file: container_facts.yaml
     - name: Generate facts for container
       delegate_to: localhost
       tags: always
       block:
+        - name: Get cue binary path
+          changed_when: false
+          ansible.builtin.command:
+            cmd: which cue
+          register: cue_path
+        - name: Set cue binary path
+          ansible.builtin.set_fact:
+            cue_path: "{{ cue_path.stdout | trim }}"
         - name: Create tmp cue folder
           ansible.builtin.file:
             path: cue/tmp

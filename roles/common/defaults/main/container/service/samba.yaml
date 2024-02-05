@@ -1,2 +1,0 @@
-# samba_password:
-samba_shares_settings: valid users = root; guest ok = no; read only = no; browseable = yes;

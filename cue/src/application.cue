@@ -17,9 +17,8 @@ _applicationSet: [applicationName=_]: {
 				content: string
 			}
 		}
-		volumes: string?: string
-		_rendered_volumes: {
-			for k, v in volumes {"\(k)": {
+		volumes: {
+			for k, v in fact.container[#param.name].volumes {"\(k)": {
 				if v == "pvc" {
 					type:  "pvc"
 					value: "\(#param.name)-\(k)"
@@ -56,7 +55,7 @@ _applicationSet: [applicationName=_]: {
 			name: "\(#param.name)"
 		}
 		spec: {
-			volumes: [for k, v in #param._rendered_volumes {
+			volumes: [for k, v in #param.volumes {
 				name: k
 				if v.type == "pvc" {
 					persistentVolumeClaim: claimName: v.value
@@ -107,7 +106,7 @@ _applicationSet: [applicationName=_]: {
 		}
 	}
 
-	#volume: [for k, v in #param.volumes if v =~ "^\\w" {
+	#volume: [for k, v in #param.volumes if v.type == "pvc" {
 		core.#PersistentVolumeClaim & {
 			apiVersion: "v1"
 			kind:       "PersistentVolumeClaim"
@@ -124,8 +123,7 @@ _applicationSet & {
 	audiobookshelf: {
 		_
 		#param: {
-			name:    "audiobookshelf"
-			volumes: fact.container.audiobookshelf.volumes
+			name: "audiobookshelf"
 		}
 
 		#pod: spec: containers: [{
@@ -150,8 +148,7 @@ _applicationSet & {
 	baikal: {
 		_
 		#param: {
-			name:    "baikal"
-			volumes: fact.container.baikal.volumes
+			name: "baikal"
 		}
 		#pod: spec: containers: [{
 			name:  "web"
@@ -169,8 +166,7 @@ _applicationSet & {
 	bazarr: {
 		_
 		#param: {
-			name:    "bazarr"
-			volumes: fact.container.bazarr.volumes
+			name: "bazarr"
 		}
 		#pod: spec: containers: [{
 			name:  "web"
@@ -202,7 +198,6 @@ _applicationSet & {
 					content: "\(fact.caddyfile_content)"
 				}
 			}
-			volumes: fact.container.caddy.volumes
 		}
 		#pod: spec: containers: [{
 			name:  "instance"
@@ -236,8 +231,7 @@ _applicationSet & {
 	calibre: {
 		_
 		#param: {
-			name:    "calibre"
-			volumes: fact.container.calibre.volumes
+			name: "calibre"
 		}
 
 		#pod: spec: containers: [{
@@ -370,7 +364,6 @@ _applicationSet & {
 					"""
 				}
 			}
-			volumes: fact.container.ddns.volumes
 		}
 
 		#pod: spec: {
@@ -397,8 +390,7 @@ _applicationSet & {
 	filebrowser: {
 		_
 		#param: {
-			name:    "filebrowser"
-			volumes: fact.container.filebrowser.volumes
+			name: "filebrowser"
 		}
 
 		#pod: spec: containers: [{
@@ -428,7 +420,6 @@ _applicationSet & {
 					content: "\(fact.immich_jwt_secret)"
 				}
 			}
-			volumes: fact.container.immich.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -546,8 +537,7 @@ _applicationSet & {
 	jdownloader: {
 		_
 		#param: {
-			name:    "jdownloader"
-			volumes: fact.container.jdownloader.volumes
+			name: "jdownloader"
 		}
 
 		#pod: spec: containers: [{
@@ -576,15 +566,14 @@ _applicationSet & {
 	jellyfin: {
 		_
 		#param: {
-			volumes: fact.container.jellyfin.volumes
+			name: "jellyfin"
 		}
 	}
 
 	kavita: {
 		_
 		#param: {
-			name:    "kavita"
-			volumes: fact.container.kavita.volumes
+			name: "kavita"
 		}
 
 		#pod: spec: containers: [{
@@ -603,8 +592,7 @@ _applicationSet & {
 	koreader: {
 		_
 		#param: {
-			name:    "koreader"
-			volumes: fact.container.koreader.volumes
+			name: "koreader"
 		}
 
 		#pod: spec: containers: [{
@@ -641,8 +629,7 @@ _applicationSet & {
 	lidarr: {
 		_
 		#param: {
-			name:    "lidarr"
-			volumes: fact.container.lidarr.volumes
+			name: "lidarr"
 		}
 
 		#pod: spec: containers: [{
@@ -683,7 +670,6 @@ _applicationSet & {
 					content: "postgres://miniflux:\(fact.miniflux_postgres_password)@localhost:5432/miniflux?sslmode=disable"
 				}
 			}
-			volumes: fact.container.miniflux.volumes
 		}
 		#pod: spec: containers: [{
 			name:  "postgres"
@@ -733,8 +719,7 @@ _applicationSet & {
 	navidrome: {
 		_
 		#param: {
-			name:    "navidrome"
-			volumes: fact.container.navidrome.volumes
+			name: "navidrome"
 		}
 
 		#pod: spec: containers: [{
@@ -777,7 +762,6 @@ _applicationSet & {
 					content: "\(fact.nextcloud_redis_password)"
 				}
 			}
-			volumes: fact.container.nextcloud.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -881,7 +865,6 @@ _applicationSet & {
 					content: "https://paperless.\(fact.server_domain)"
 				}
 			}
-			volumes: fact.container.paperless.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -996,8 +979,7 @@ _applicationSet & {
 	prowlarr: {
 		_
 		#param: {
-			name:    "prowlarr"
-			volumes: fact.container.prowlarr.volumes
+			name: "prowlarr"
 		}
 
 		#pod: spec: containers: [{
@@ -1013,8 +995,7 @@ _applicationSet & {
 	pymedusa: {
 		_
 		#param: {
-			name:    "pymedusa"
-			volumes: fact.container.pymedusa.volumes
+			name: "pymedusa"
 		}
 
 		#pod: spec: containers: [{
@@ -1033,8 +1014,7 @@ _applicationSet & {
 	radarr: {
 		_
 		#param: {
-			name:    "radarr"
-			volumes: fact.container.radarr.volumes
+			name: "radarr"
 		}
 
 		#pod: spec: containers: [{
@@ -1067,7 +1047,6 @@ _applicationSet & {
 					content: "\(fact.samba_password)"
 				}
 			}
-			volumes: fact.container.samba.volumes
 		}
 
 		#pod: spec: {
@@ -1091,7 +1070,7 @@ _applicationSet & {
 					value: "1"
 				}] + [for k, v in #param.volumes {
 					name:  "SAMBA_VOLUME_CONFIG_\(k)"
-					value: "[\(k)]; path=/shares/\(k); \(fact.samba_shares_settings)"
+					value: "[\(k)]; path=/shares/\(k); valid users = root; guest ok = no; read only = no; browseable = yes;"
 				}] + [{
 					name: "ACCOUNT_root"
 					valueFrom: secretKeyRef: {
@@ -1132,8 +1111,6 @@ _applicationSet & {
 					})
 				}
 			}
-			volumes: {udev: "/run/udev/"} &
-				{for v in fact.scrutiny_device_list {"\(v)": "\(v)"}}
 		}
 
 		#pod: spec: {
@@ -1152,11 +1129,9 @@ _applicationSet & {
 					readOnly:  true
 					mountPath: "/opt/scrutiny/config/scrutiny.yaml"
 					subPath:   "scrutiny.yaml"
-				}] + [for v in fact.scrutiny_device_list {
-					{
-						name:      v
-						mountPath: v
-					}
+				}, {
+					name:      "device"
+					mountPath: "/dev/"
 				}]
 				securityContext: {
 					capabilities: add: ["SYS_RAWIO", "SYS_ADMIN"]
@@ -1177,7 +1152,6 @@ _applicationSet & {
 					content: "\(fact.speedtest_db_password)"
 				}
 			}
-			volumes: fact.container.speedtest.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -1239,8 +1213,7 @@ _applicationSet & {
 	syncthing: {
 		_
 		#param: {
-			name:    "syncthing"
-			volumes: fact.container.syncthing.volumes
+			name: "syncthing"
 		}
 
 		#pod: spec: {
@@ -1273,7 +1246,6 @@ _applicationSet & {
 					content: "\(fact.transmission_password)"
 				}
 			}
-			volumes: fact.container.transmission.volumes
 		}
 
 		#pod: spec: containers: [{
@@ -1318,8 +1290,7 @@ _applicationSet & {
 	trilium: {
 		_
 		#param: {
-			name:    "trilium"
-			volumes: fact.container.trilium.volumes
+			name: "trilium"
 		}
 
 		#pod: spec: containers: [{

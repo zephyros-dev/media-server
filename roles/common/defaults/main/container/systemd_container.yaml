@@ -189,6 +189,9 @@ scrutiny:
   caddy_sso: true
   caddy_proxy_port: "{{ scrutiny_port }}"
   host_network: true
+  volumes:
+    udev: /run/udev/
+    device: /dev/
 speedtest:
   caddy_proxy_port: 80
   dashy_icon: favicon-local
