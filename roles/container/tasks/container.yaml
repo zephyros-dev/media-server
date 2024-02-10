@@ -3,46 +3,51 @@
   tags:
     - "{{ container_loop_var.key }}"
   block:
-    - name: Setup variable for user scope {{ container_loop_var.key }}
+    - name: Setup name for service {{ container_loop_var.key }}
+      ansible.builtin.set_fact:
+        container_service_name: "{{ container_loop_var.key | regex_replace('_', '-') }}"
+    - name: Setup variable for user scope {{ container_service_name }}
       ansible.builtin.set_fact:
         container_quadlet_path: "{{ ansible_user_dir }}/.config/containers/systemd"
         container_systemd_scope: user
       when: not container_loop_var.value.become
 
-    - name: Setup variable for system scope {{ container_loop_var.key }}
+    - name: Setup variable for system scope {{ container_service_name }}
       ansible.builtin.set_fact:
         container_quadlet_path: /etc/containers/systemd
         container_systemd_scope: system
       when: container_loop_var.value.become
 
-    - name: Setup systemd container {{ container_loop_var.key }}
+    - name: Setup systemd container {{ container_service_name }}
       become: "{{ container_loop_var.value.become }}"
       block:
-        - name: Setup podman container {{ container_loop_var.key }}
+        - name: Setup podman container {{ container_service_name }}
           when: container_loop_var.value.state == "started"
           block:
-            - name: Setup volumes {{ container_loop_var.key }}
+            - name: Setup volumes {{ container_service_name }}
               when: container_loop_var.value.volumes != {}
               block:
-                - name: Get volume list {{ container_loop_var.key }}
+                - name: Get volume list {{ container_service_name }}
                   changed_when: false
                   delegate_to: localhost
                   ansible.builtin.command:
                     chdir: cue
-                    cmd: "{{ cue_path }} eval src/application.cue -e {{ container_loop_var.key }}.#param.volumes --out json" # Need this since cue is not installed globaly, and we may need to run this with sudo
+                    # Need {{ cue_path }} this since cue is not installed globaly, and we may need to run this with sudo
+                    # Use container_loop_var.key since the key in cue use _ instead of -
+                    cmd: "{{ cue_path }} eval src/application.cue -e  {{ container_loop_var.key }}.#param.volumes --out json"
                   register: volume_map
-                - name: Set volume directory lists {{ container_loop_var.key }}
+                - name: Set volume directory lists {{ container_service_name }}
                   ansible.builtin.set_fact:
-                    container_volume_list: "{{ volume_map.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
+                    container_volume_list: "{{ volume_map.stdout | from_json | json_query(container_volume_list_query) }}"
                   vars:
                     container_volume_list_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
-                - name: Check if volume exists {{ container_loop_var.key }}
+                - name: Check if volume exists {{ container_service_name }}
                   when: "'/dev/' not in item"
                   ansible.builtin.stat:
                     path: "{{ item }}"
                   loop: "{{ container_volume_list }}"
                   register: container_volume_state
-                - name: Prepare volume {{ container_loop_var.key }}
+                - name: Prepare volume {{ container_service_name }}
                   when: not container_volume_state.skipped
                   become_method: containers.podman.podman_unshare
                   become: true
@@ -51,7 +56,7 @@
                     mode: "0755"
                     state: directory
                   loop: "{{ container_volume_state.results | json_query('[?stat.exists == `false`].item') }}"
-                - name: Prepare files {{ container_loop_var.key }}
+                - name: Prepare files {{ container_service_name }}
                   ansible.builtin.copy:
                     content: ""
                     dest: "{{ item }}"
@@ -60,16 +65,16 @@
                   loop: "{{ volume_map.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
                   vars:
                     container_volume_list_query: "* | [?type=='file'].value"
-                - name: Disable auth for arr container {{ container_loop_var.key }}
+                - name: Disable auth for arr container {{ container_service_name }}
                   when:
-                    - "'arr' in container_loop_var.key"
-                    - container_loop_var.key != "bazarr"
+                    - "'arr' in container_service_name"
+                    - container_service_name != "bazarr"
                   block:
-                    - name: Disable authentication for {{ container_loop_var.key }}
+                    - name: Disable authentication for {{ container_service_name }}
                       become_method: containers.podman.podman_unshare
                       become: true
                       community.general.xml:
-                        path: "{{ global_volume_path }}/{{ container_loop_var.key }}/{{ container[container_loop_var.key].volumes.config | regex_replace('\\./', '') }}/config.xml"
+                        path: "{{ global_volume_path }}/{{ container_service_name }}/{{ container[container_service_name].volumes.config | regex_replace('\\./', '') }}/config.xml"
                         xpath: "{{ item.key }}"
                         value: "{{ item.value }}"
                       loop:
@@ -79,32 +84,32 @@
                           value: DisabledForLocalAddresses
                       register: arr_config
 
-                    - name: Restart {{ container_loop_var.key }} # noqa: no-handler
+                    - name: Restart {{ container_service_name }} # noqa: no-handler
                       when: arr_config.changed
                       ansible.builtin.systemd:
-                        name: "{{ container_loop_var.key }}"
+                        name: "{{ container_service_name }}"
                         scope: user
                         state: restarted
 
-        - name: Setup container with quadlet {{ container_loop_var.key }}
+        - name: Setup container with quadlet {{ container_service_name }}
           block:
-            - name: Check if custom setup flow exists {{ container_loop_var.key }}
+            - name: Check if custom setup flow exists {{ container_service_name }}
               delegate_to: localhost
               ansible.builtin.stat:
-                path: roles/container/tasks/service/{{ container_loop_var.key }}.yaml
+                path: roles/container/tasks/service/{{ container_service_name }}.yaml
               register: custom_setup_flow
-            - name: Create container with custom flow {{ container_loop_var.key }}
+            - name: Create container with custom flow {{ container_service_name }}
               when:
                 - custom_setup_flow.stat.exists
                 - container_loop_var.value.state == "started"
                 - container_loop_var.value.postgres_action == "none"
               ansible.builtin.include_tasks:
-                file: service/{{ container_loop_var.key }}.yaml
-            - name: Setup container {{ container_loop_var.key }}
+                file: service/{{ container_service_name }}.yaml
+            - name: Setup container {{ container_service_name }}
               when: not custom_setup_flow.stat.exists or container_loop_var.value.state == "absent" or container_loop_var.value.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_quadlet.yaml
-            - name: Setup postgres {{ container_loop_var.key }}
+            - name: Setup postgres {{ container_service_name }}
               when: container_loop_var.value.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_postgres.yaml

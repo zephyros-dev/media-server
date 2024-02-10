@@ -18,7 +18,7 @@ _applicationSet: [applicationName=_]: {
 			}
 		}
 		volumes: {
-			for k, v in fact.container[#param.name].volumes {"\(k)": {
+			for k, v in fact.container[strings.Replace(#param.name, "-", "_", -1)].volumes {"\(k)": {
 				if v == "pvc" {
 					type:  "pvc"
 					value: "\(#param.name)-\(k)"

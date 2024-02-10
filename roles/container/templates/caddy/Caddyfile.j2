@@ -52,7 +52,8 @@ auth.{{ server_domain }} {
 {% for key,value in container | dictsort %}
   {% if value.state == 'started' %}
     {% if value.caddy_proxy_port > 0 or value.caddy_proxy_url != "" %}
-{{ key | replace("_", "-") }}.{{ server_domain }} {
+{% set name = key | replace("_", "-") %}
+{{ name }}.{{ server_domain }} {
     import global-config
         {% if value.caddy_sso %}
     import proxy-auth
@@ -68,12 +69,12 @@ auth.{{ server_domain }} {
         {% elif value.caddy_proxy_url != "" %}
           {% set reverse_proxy = value.caddy_proxy_url %}
         {% else %}
-          {% set reverse_proxy = key ~ ":" ~ value.caddy_proxy_port %}
+          {% set reverse_proxy = name ~ ":" ~ value.caddy_proxy_port %}
         {% endif %}
     reverse_proxy {{ reverse_proxy }} {
         import security-header
     }
-        {% if key == 'nextcloud' %}
+        {% if name == 'nextcloud' %}
     redir /.well-known/carddav /remote.php/carddav 301
     redir /.well-known/caldav /remote.php/caldav 301
         {% endif %}
