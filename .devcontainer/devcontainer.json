@@ -95,5 +95,7 @@
     "CONTAINER_HOST": "unix:///run/user/1000/podman/podman.sock"
   },
   "remoteUser": "vscode",
-  "runArgs": ["--userns=keep-id"]
+  "runArgs": ["--userns=keep-id"],
+  "workspaceFolder": "${localWorkspaceFolder}",
+  "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind"
 }

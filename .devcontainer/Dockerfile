@@ -5,12 +5,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt update \
     && apt install -y --no-install-recommends \
-    podman-docker \
+    docker-compose \
     fish \
     gettext-base \
     guix \
     openssl \
     podman \
+    podman-docker \
     sshpass \
     tmux \
     whois
