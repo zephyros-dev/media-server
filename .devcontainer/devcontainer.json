@@ -64,11 +64,6 @@
       }
     }
   },
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "dockerDashComposeVersion": "v2"
-    }
-  },
   "initializeCommand": "./.devcontainer/initializeCommand.sh",
   "mounts": [
     "source=/mnt,target=/mnt,type=bind",
@@ -85,7 +80,8 @@
     "source=npm-global-pkg-cache,target=/home/vscode/node_modules,type=volume,chown=true",
     "source=nvm-cache,target=/usr/local/share/nvm/versions/node,type=volume,chown=true",
     "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
-    "source=terraform-plugin-cache,target=/home/vscode/.terraform-plugin-cache,type=volume"
+    "source=terraform-plugin-cache,target=/home/vscode/.terraform-plugin-cache,type=volume",
+    "source=${localEnv:XDG_RUNTIME_DIR}/podman/podman.sock,target=/run/user/1000/podman/podman.sock,type=bind"
   ],
   "name": "Infra",
   "onCreateCommand": ".devcontainer/main.py --stage onCreateCommand",
@@ -95,7 +91,8 @@
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
     "EDITOR": "code --wait",
     "GUIX_LOCPATH": "/home/vscode/.guix-profile/lib/locale",
-    "GUIX_PROFILE": "/home/vscode/.config/guix/current"
+    "GUIX_PROFILE": "/home/vscode/.config/guix/current",
+    "CONTAINER_HOST": "unix:///run/user/1000/podman/podman.sock"
   },
   "remoteUser": "vscode",
   "runArgs": ["--userns=keep-id"]
