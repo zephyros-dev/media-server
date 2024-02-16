@@ -4,6 +4,8 @@
 
 Code for running self-hosted services using podman and ansible
 
+Want to know more about selfhosting a media server? Checkout the docs [here](docs/README.md)
+
 # Infrastructure graph
 
 ## Networking
