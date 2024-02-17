@@ -80,7 +80,7 @@ graph TD
 - Hypervisor based
   - Proxmox
     - This is a fan favorite for selfhoster, use this if you want to tinker around. But if you're like me and just want to run services, I suggest sticking with the above options as adding a hypervisor adds complexity
-- NixOS
+- NixOS/Guix
   - Very advanced options, but probably the best one if you can stick with it. This one allows you to configure the whole OS using code.
 
 ### Container runtime
@@ -125,3 +125,28 @@ graph TD
   - Image hostings (like Google Photos, etc.)
     - Immich
       - I use this one since it has client for both iOS and Android, with multi-user support. There's probably some other options, but I personally find this one to be good enough.
+
+### Setup code
+
+- You can setup your server manually, and many do. But if you intend to maintain the system for years to come and not just for a few months, you need to use code to setup your server. If you want to read more on this, checkout [Infrastructure as Code](https://en.wikipedia.org/wiki/Infrastructure_as_code)
+- Personally I use [Ansible](https://www.ansible.com/) for this purpose. It has issues, but it's the most popular one so you can find plenty of resources online.
+- Once you uses code to setup your server, you will want to setup a CD pipeline to deploy your code to the server. I use Github action for this.
+- You will also need some way to manage secrets (think Token, API keys, etc...). I recommend using [sops](https://github.com/getsops/sops)
+
+# Setup process
+
+## Service setup
+
+- Most service that I listed above has their own guide for setup. I recommend using docker/podman options for them
+- Once you managed to reach your services from your LAN, you can move to the next stage
+
+## Expose to the internet
+
+- Once you have setup the services, you will want to expose them to the internet. This is done by port forwarding in your router. You can checkout a concept explanation [here](https://www.youtube.com/watch?v=2G1ueMDgwxw)
+  - Regarding the port forwarding, you will want to setup a static IP assignment from the router doing DHCP to your server. You can find more info on how to do this in your router's manual.
+  - You may have more than 1 NAT in your home (like an internet router -> another wifi router -> your server). In this case you can setup the internet router to forward every traffic to the wifi router instead using a feature called DMZ. Then you can setup the wifi router to port forward to your server. Or you can setup port forward twice for both router. The first one is easier but the second one is more secure. This setup also requires you to setup the static IP DHCP assignment on both router: the internet router to the wifi router, and the wifi router to the server.
+  - Once done you can check if the port is open using port checker tools like [this](https://www.yougetsignal.com/tools/open-ports/)
+  - My recommendation is that you only expose port 80, 443 of your server to the internet since it is used for HTTP services. You can use a reverse proxy to expose multiple services using the same port
+- Once you setup the port forward, you will want to setup a domain to point to your public IP address. This is done by either buying a domain or using a free subdomain service. I personally use [Dynv6](https://dynv6.com/)
+- A typical home network will not have static IP address. This means that your public IP address will change over time. So you will need a ddns client. Given that most router has barebone settings for this, I recommend setting it up on your server instead. I use [Caddy ddns client](https://github.com/mholt/caddy-dynamicdns) since I use Caddy as my reverse proxy.
+- Regarding the reverse proxy, you will want to use one to expose your services to the internet. Nginx is probably your first result on google, but I recommend using Caddy for this purpose. It's easy to use and has automatic SSL certificate generation. You can find more info on how to setup Caddy as a reverse proxy [here](https://caddyserver.com/docs/quick-starts/reverse-proxy)
