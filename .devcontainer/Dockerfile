@@ -10,7 +10,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     gettext-base \
     guix \
     openssl \
-    podman \
     podman-docker \
     sshpass \
     tmux \
@@ -40,3 +39,5 @@ RUN \
 
 ENV AQUA_VERSION=v2.23.1
 ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:$PATH
+
+ENV PODMAN_VERSION=v4.9.3

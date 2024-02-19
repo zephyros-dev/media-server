@@ -71,6 +71,7 @@
     "source=${localEnv:HOME}/.config/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind",
     "source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
+    "source=${localEnv:XDG_RUNTIME_DIR}/podman/podman.sock,target=/run/user/1000/podman/podman.sock,type=bind",
     "source=aqua-bin,target=/home/vscode/.local/share/aquaproj-aqua/bin,type=volume,chown=true",
     "source=aqua-pkgs,target=/home/vscode/.local/share/aquaproj-aqua/pkgs,type=volume,chown=true",
     "source=aqua-registries,target=/home/vscode/.local/share/aquaproj-aqua/registries,type=volume,chown=true",
@@ -80,8 +81,7 @@
     "source=npm-global-pkg-cache,target=/home/vscode/node_modules,type=volume,chown=true",
     "source=nvm-cache,target=/usr/local/share/nvm/versions/node,type=volume,chown=true",
     "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
-    "source=terraform-plugin-cache,target=/home/vscode/.terraform-plugin-cache,type=volume",
-    "source=${localEnv:XDG_RUNTIME_DIR}/podman/podman.sock,target=/run/user/1000/podman/podman.sock,type=bind"
+    "source=terraform-plugin-cache,target=/home/vscode/.terraform-plugin-cache,type=volume"
   ],
   "name": "Infra",
   "onCreateCommand": ".devcontainer/main.py --stage onCreateCommand",
@@ -89,10 +89,11 @@
   "postStartCommand": "nohup bash -c 'sudo guix-daemon &' > /dev/null && guix package -m guix.scm",
   "remoteEnv": {
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
+    "CONTAINER_HOST": "unix:///run/user/1000/podman/podman.sock",
+    "DOCKER_HOST": "unix:///run/user/1000/podman/podman.sock",
     "EDITOR": "code --wait",
     "GUIX_LOCPATH": "/home/vscode/.guix-profile/lib/locale",
-    "GUIX_PROFILE": "/home/vscode/.config/guix/current",
-    "CONTAINER_HOST": "unix:///run/user/1000/podman/podman.sock"
+    "GUIX_PROFILE": "/home/vscode/.config/guix/current"
   },
   "remoteUser": "vscode",
   "runArgs": ["--userns=keep-id"],

@@ -70,6 +70,12 @@
     },
     {
       "datasourceTemplate": "github-releases",
+      "depNameTemplate": "containers/podman",
+      "fileMatch": ["Dockerfile"],
+      "matchStrings": ["PODMAN_VERSION=(?<currentValue>.*?)\n"]
+    },
+    {
+      "datasourceTemplate": "github-releases",
       "depNameTemplate": "trapexit/mergerfs",
       "fileMatch": ["mergerfs.yaml"],
       "matchStrings": ["mergerfs_version: \"(?<currentValue>.*?)\"\n"]

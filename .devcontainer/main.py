@@ -23,6 +23,10 @@ args = parser.parse_args()
 home_path = Path("/home/vscode")
 
 if args.stage == "all" or args.stage == "onCreateCommand":
+    if platform.machine() == "x86_64":
+        architecture = "amd64"
+    elif platform.machine() == "aarch64":
+        architecture = "arm64"
     aqua_bin_path = home_path / ".local/share/aquaproj-aqua/bin/aqua"
     aqua_version = subprocess.run(
         "aqua --version", shell=True, capture_output=True, text=True
@@ -32,12 +36,8 @@ if args.stage == "all" or args.stage == "onCreateCommand":
         aqua_version.stdout,
     ).group(0) != os.environ["AQUA_VERSION"].strip("v"):
         print("Installing aqua")
-        if platform.machine() == "x86_64":
-            aqua_architecture = "amd64"
-        elif platform.machine() == "aarch64":
-            aqua_architecture = "arm64"
         subprocess.run(
-            f"curl -Lo {home_path / 'aqua.tar.gz'} https://github.com/aquaproj/aqua/releases/download/{os.environ['AQUA_VERSION']}/aqua_linux_{aqua_architecture}.tar.gz",
+            f"curl -Lo {home_path / 'aqua.tar.gz'} https://github.com/aquaproj/aqua/releases/download/{os.environ['AQUA_VERSION']}/aqua_linux_{architecture}.tar.gz",
             shell=True,
         )
         subprocess.run(
@@ -54,6 +54,20 @@ if args.stage == "all" or args.stage == "onCreateCommand":
         )
 
     subprocess.run("aqua install --all", shell=True)
+
+    # Install latest version of podman
+    podman_path = "/usr/bin/podman"
+    subprocess.run(
+        f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{os.environ['PODMAN_VERSION']}/podman-remote-static-linux_{architecture}.tar.gz",
+        shell=True,
+    )
+    subprocess.run(
+        f"tar -zxvf {home_path / 'podman.tar.gz'} -C {home_path}", shell=True
+    )
+    subprocess.run(
+        f"sudo mv {home_path}/bin/podman-remote-static-linux_{architecture} {podman_path}",
+        shell=True,
+    )
 
     # Fix cue vscode extension
     cue_path = subprocess.run(
