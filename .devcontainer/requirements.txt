@@ -3,7 +3,6 @@ ansible==9.2.0
 black==24.2.0
 dagger-io==0.9.10
 jmespath==1.0.1
-pip-tools==7.4.0
 pre-commit==3.6.2
 python-dotenv==1.0.1
 ruff==0.2.2
