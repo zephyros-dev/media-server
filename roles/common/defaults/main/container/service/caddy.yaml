@@ -1,7 +1,6 @@
 # server_domain: secret_example.com
-caddyfile_lan_address: server.lan
 # This is the address to reach the host when using podman
-caddyfile_host_address: host.containers.internal
+caddyfile_host_address: server.lan
 # caddyfile_auth_user:
 # caddyfile_auth_pass:
 # caddyfile_auth_token:

@@ -1,6 +1,6 @@
 wifiqr_wifi:
-    12C_GamCau:
-        password: ENC[AES256_GCM,data:djYAD47ootfjACylcHhpYA==,iv:7ulgXN6ztOQz3uaEcbv+lIStJ/OdHeQv4mvucphDTjY=,tag:RGlgx14sEqGsUID/AyIdQg==,type:str]
+    home:
+        password: ENC[AES256_GCM,data:dGQJtgXnDr4aah+8il4YKA==,iv:MsO3u+pBNXNWpPchxbLClkilzO1lYJzRioV1AQxe9n4=,tag:5GWJjeZebE91/72Pj1uyrw==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -16,8 +16,8 @@ sops:
             czJtYU45TklzZExsbVo1R0NQcVk2b0UK1wMy3qua+cI8oW1GhZTRhI8zA/BPOmZi
             aWshtusMY8qdfnU8EEntEK7NzjP3cCon5Nz/6I8lqlbsFT+9P2M6eQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2022-04-09T10:23:45Z"
-    mac: ENC[AES256_GCM,data:h1rcoTDbhY8yjTsqq7ItGnchPJE1Mxz0IVZ/yPVrSFoaTDDLabL1hLYR1gjhO2WdTFsGF5CZ7sic4s/+LhBvlvYZU8QP/QMgah7Lchg48kZIbOCyWPMxA+zKEG9HMZC430FYoEpe+vH8hIucCzO2HxzGaq3/xEd+TOl8TBa9Q7Y=,iv:C5Bd3rdRahdhqtXOZYUJsM+4lfR4eEHgU5LibDxBGDo=,tag:xCG68AE2rvdYgHy3n57MWQ==,type:str]
+    lastmodified: "2024-02-19T07:06:59Z"
+    mac: ENC[AES256_GCM,data:NCZE6kS8J0B4XNex/GptOAYX6bp/oSbL+zzjX2W5q08qULqq6Gj4ANcQydXT1BoKvsx9QaaWryq6WEGDvVwVGSXfmcvteXKFiwpjpE6dXFP6I61W/QAscXMnM8UYgNHKItw7iULbjmW/HzlJZpcTnpO9ME4bekAX5VF8caGqAEs=,iv:2ZlYf/bdU+DYyvy4gaoMnCYRXqhqEq5jlBQV9KPEnuA=,tag:jS0wiZpIOIw76Hx33n1TRw==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
-    version: 3.7.1
+    version: 3.8.1

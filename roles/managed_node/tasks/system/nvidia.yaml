@@ -8,6 +8,11 @@
   when: lspci.stdout is search("NVIDIA")
   become: true
   block:
+    - name: Get fedora version
+      ansible.builtin.command: # noqa: command-instead-of-module
+        cmd: rpm -E %fedora
+      changed_when: false
+      register: common_fedora_version_output
     - name: Add rpm fusion repo non-free
       ansible.builtin.dnf:
         name: https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ common_fedora_version_output.stdout }}.noarch.rpm

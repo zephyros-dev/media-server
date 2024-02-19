@@ -9,9 +9,3 @@
       ansible.builtin.set_fact:
         custom_fact_ansible_alternative_architecture: arm64
       when: ansible_architecture == 'aarch64'
-
-    - name: Get fedora version
-      ansible.builtin.command: # noqa: command-instead-of-module
-        cmd: rpm -E %fedora
-      changed_when: false
-      register: common_fedora_version_output

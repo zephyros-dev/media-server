@@ -55,7 +55,7 @@
                     path: "{{ item }}"
                     mode: "0755"
                     state: directory
-                  loop: "{{ container_volume_state.results | json_query('[?stat.exists == `false`].item') }}"
+                  loop: "{{ container_volume_state.results | default([]) | json_query('[?stat.exists == `false`].item') }}"
                 - name: Prepare files {{ container_service_name }}
                   ansible.builtin.copy:
                     content: ""

@@ -1,8 +1,6 @@
-caddyfile_zerossl_email: ENC[AES256_GCM,data:sY2mg5BteUMSXp9haqWxChMMvnDK1i8=,iv:iTZ202WsUN/fH2U4/oSyt5ewK8n/hWnMgCIMEcO4dDA=,tag:pm9OGWJr0E/g9ew5xebGAA==,type:str]
 caddyfile_auth_user: ENC[AES256_GCM,data:TNyfWOE=,iv:DTngxkSMyrKkNpzXn4VZIqd7UXakJMkLD3FkLuntilI=,tag:1RXLxH8cXpSxewTY/pUrLA==,type:str]
 caddyfile_auth_pass: ENC[AES256_GCM,data:z63Taep6ULwCCtgQeovEzYOLuW5LdGicXtIJDqpmhZSkC7p5xMzQgt6ZYZP1SSyLldyDO1nL5M1VzVW4bWzhKxs3KNWWGAG0B2QsSCM1svQ=,iv:M9vfH+ydEN13GtZsyyVftQSkNbDADFViwX0oApkRrVQ=,tag:e+6cSGMvvBXlmKke/TfDBg==,type:str]
 caddyfile_auth_token: ENC[AES256_GCM,data:lbCVkD+zmMsnV8WqBunPfl65KZls/ewh1CsfhQXAOeoqlkde,iv:xHFMphw5Sho/MYmwgfnWJnZRgmHrfU+qziHn+SYRqgA=,tag:JO8FtxbGYeHeJjPFYHNNog==,type:str]
-caddyfile_host_address: ENC[AES256_GCM,data:jrT0kXgpktEVJVdj7YOFc8J/8V5DF6tiwp5F,iv:WfxJJkCk3sXkdHbXndRJ4cwQYDxaa7O6E0UfqLzBbto=,tag:1ra/rRyKPbuorUa3VNIPJA==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -18,8 +16,8 @@ sops:
             NVFTc2NXdkJWUUo1dTlwNENUOXJVT1kKSLU0kBDyViaTLoyF76jShsOd21SFNngk
             Ez1GQtVUd271ufVDYQUz+SGBh2Nch/VwkPXVmOzy434guwB6eW6LxA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-12-03T09:24:26Z"
-    mac: ENC[AES256_GCM,data:D7XkrVsyYKLFSDMtH1epiMZGuMxcHFd+lbjgxb7tOvzfss3tFKOQkMhek3xzRE0q+cFdUpHDI1hVlLNYW88Y+ek4UnldNpr9gcHQah7qYzDMt7brtNgZI7NhqRVWtvYOPeir+b5LerOclH0KUuONmpqZlHcnW0VwMzfHho2yhUs=,iv:dArfCmIUSPvhLjQt7XGHuyzgXgFjzX6Bueoq3SgHcGY=,tag:hz4ipFQsuc82aR6EcBz8eg==,type:str]
+    lastmodified: "2024-02-19T07:56:34Z"
+    mac: ENC[AES256_GCM,data:O71ShUS6/q0/5mOSrLjPaEGvCIGs27ROqKBJFZriuZbrI/h6/iokDx+SeN/3kjJzWo/PJPOaZ3P1nFtN754CF01Ly+7FsdxgGs1Tn8QK2eMrDvFu6CxxmNLVQkQeNPqxVeyXD07HF/lkZbdHxJZM834v2X/n4POuRotgXOu4av4=,iv:Pxkclzsi60XdTCFX1cvgV3+yPRYzQNECMydJjngzkSY=,tag:XFV5TlKD+J4ZOHl/VmI8pQ==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.8.1
