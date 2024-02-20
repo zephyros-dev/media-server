@@ -1,1 +1,1 @@
-FROM ghcr.io/linuxserver/bazarr:latest@sha256:2886d8946830b6772b82e4533cd32265233d90c053ac2118cc5216726ddc5e38
+FROM ghcr.io/linuxserver/bazarr:latest@sha256:f89c2ef6202252a2442061f47e68f33cb3b40902a9d0929659cb7447547e80da
