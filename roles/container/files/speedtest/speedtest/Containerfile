@@ -1,1 +1,1 @@
-FROM ghcr.io/alexjustesen/speedtest-tracker:v0.15.5@sha256:d3af98a4b27508f42e0892563cd1ba9797028ac3b77a852bf945f46fae91bed1
+FROM ghcr.io/alexjustesen/speedtest-tracker:v0.16.3@sha256:fbf23dc3966c8fe88f1abafbad4ee78229c511142ac61c006acab6e53fdfa0a5
