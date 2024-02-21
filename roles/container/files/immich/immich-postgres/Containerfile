@@ -1,2 +1,2 @@
 # Postgres version: https://github.com/immich-app/immich/blob/main/docker/docker-compose.prod.yml
-FROM docker.io/tensorchord/pgvecto-rs:pg15-v0.1.11@sha256:ba8c89a8067dcfa9f6f2f62697b60a0076e0f40878707eb01bea5d46a6a64c37
+FROM docker.io/tensorchord/pgvecto-rs:pg15-v0.2.0@sha256:d9847b0db25f3f00c6910e7b1e34085717f74f01da5f5a8cb7cdfe8d0267058b
