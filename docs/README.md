@@ -122,6 +122,8 @@ graph TD
       - This is a software that can automatically download movies.
     - Sonarr or Pymedusa
       - This is a software that can automatically download TV shows. Personally I used Pymedusa for reasons that I forgot, I believe it was because Pymedusa allows me to use custom name for the TV show post-processing
+    - Bazarr
+      - For automated subtitle download
   - Image hostings (like Google Photos, etc.)
     - Immich
       - I use this one since it has client for both iOS and Android, with multi-user support. There's probably some other options, but I personally find this one to be good enough.
