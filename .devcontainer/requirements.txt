@@ -5,5 +5,5 @@ dagger-io==0.10.0
 jmespath==1.0.1
 pre-commit==3.6.2
 python-dotenv==1.0.1
-ruff==0.2.2
+ruff==0.3.0
 transmission-rpc==7.0.3
