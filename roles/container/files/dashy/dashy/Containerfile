@@ -1,1 +1,1 @@
-FROM ghcr.io/lissy93/dashy:2.1.2@sha256:b5b6396bd8f59e66b38ebecbe725bb77bd84493032353e57db0b1e403e9f65a4
+FROM ghcr.io/lissy93/dashy:2.1.2@sha256:d54921ad4c8e206c8550af400ae9eb7d8607153ba17f62123d9aedc435f003f1
