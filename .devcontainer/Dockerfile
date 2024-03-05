@@ -38,6 +38,6 @@ RUN \
     --user
 
 ENV AQUA_VERSION=v2.23.2
-ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:$PATH
+ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:/home/${USERNAME}/bin:$PATH
 
 ENV PODMAN_VERSION=v4.9.3
