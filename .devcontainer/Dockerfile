@@ -27,7 +27,8 @@ RUN mkdir -p \
     ~/.local/share/aquaproj-aqua/pkgs \
     ~/.local/share/aquaproj-aqua/registries \
     ~/.local/share/fish \
-    ~/.ssh
+    ~/.ssh \
+    ~/bin
 
 COPY --chown=${USERNAME}:${USERNAME} requirements.txt .
 RUN \
