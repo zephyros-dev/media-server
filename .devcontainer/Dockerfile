@@ -6,6 +6,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt update \
     && apt install -y --no-install-recommends \
     docker-compose \
+    emacs-nox \
     fish \
     gettext-base \
     guix \
