@@ -1,1 +1,1 @@
-FROM ghcr.io/zephyros-dev/koreader:v2024.03.1@sha256:688d5f539c09b9cb156ce08af452b5b6e032e79076f3d1b5cabcf30248579cea
+FROM ghcr.io/zephyros-dev/koreader:v2024.03.1@sha256:58542376443ae5d812894e572b3bb9b8cf83dba6c4bfc4d473cfaa2276354bc9
