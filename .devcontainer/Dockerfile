@@ -39,7 +39,7 @@ RUN \
     --requirement requirements.txt \
     --user
 
-ENV AQUA_VERSION=v2.23.2
+ENV AQUA_VERSION=v2.24.0
 ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:/home/${USERNAME}/bin:$PATH
 
 ENV PODMAN_VERSION=v4.9.3
