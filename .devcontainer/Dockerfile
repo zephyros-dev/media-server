@@ -11,7 +11,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     gettext-base \
     guix \
     openssl \
-    podman-docker \
     sshpass \
     tmux \
     whois
