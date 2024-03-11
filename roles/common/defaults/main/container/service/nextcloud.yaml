@@ -1,0 +1,10 @@
+nextcloud_app:
+  richdocuments: "{{ nextcloud_app_default | combine(nextcloud_richdocuments) }}"
+nextcloud_richdocuments:
+  config:
+    public_wopi_url: https://nextcloud-office.{{ server_domain }}
+    wopi_allowlist: 0.0.0.0/0
+    wopi_url: https://nextcloud-office.{{ server_domain }}
+nextcloud_app_default:
+  state: present
+  config: {}

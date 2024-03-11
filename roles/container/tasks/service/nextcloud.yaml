@@ -2,6 +2,10 @@
   ansible.builtin.include_tasks:
     file: container_quadlet.yaml
 
+- name: Setup php nextcloud command
+  ansible.builtin.set_fact:
+    nextcloud_app_command: podman exec --user www-data -it nextcloud-web php occ
+
 # https://github.com/nextcloud/docker/issues/1880#issuecomment-1344309058
 - name: Fix permission error nextcloud with postgres 15
   changed_when: false
@@ -9,12 +13,22 @@
     cmd: podman exec -it nextcloud-postgres /bin/sh -c 'psql --user $POSTGRES_USER -c "GRANT ALL ON SCHEMA public TO oc_{{ nextcloud_admin_user }};"'
   retries: 10
 
-- name: Ugrade nextcloud
+- name: Upgrade nextcloud
   changed_when: false
   ansible.builtin.command:
-    cmd: podman exec --user www-data -it nextcloud-web {{ item }}
+    cmd: "{{ nextcloud_app_command }} {{ item }}"
   loop:
-    - chown -R www-data:www-data ./
-    - php occ upgrade
-    - php occ maintenance:mode --off
+    - upgrade
+    - maintenance:mode --off
+    - app:update --all
+    - background:cron
+    - db:add-missing-indices
+    - config:system:set maintenance_window_start --type=integer --value=6
   retries: 10
+
+- name: Setup nextcloud app
+  ansible.builtin.include_tasks:
+    file: nextcloud_app_setup.yaml
+  loop: "{{ nextcloud_app | dict2items }}"
+  loop_control:
+    loop_var: nextcloud_app_loop_var

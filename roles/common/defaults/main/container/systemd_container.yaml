@@ -20,6 +20,7 @@ container:
   navidrome: "{{ container_default | combine(navidrome) }}"
   netdata: "{{ container_default | combine(netdata) }}"
   nextcloud: "{{ container_default | combine(nextcloud) }}"
+  nextcloud_office: "{{ container_default | combine(nextcloud_office) }}"
   paperless: "{{ container_default | combine(paperless) }}"
   prowlarr: "{{ container_default | combine(prowlarr) }}"
   pymedusa: "{{ container_default | combine(pymedusa) }}"
@@ -150,6 +151,8 @@ nextcloud:
     data: "./web/data/"
     database: "./db/data/"
     storage: "./web/storage/"
+nextcloud_office:
+  caddy_proxy_url: http://nextcloud:9980
 paperless:
   caddy_proxy_port: 8000
   volumes:

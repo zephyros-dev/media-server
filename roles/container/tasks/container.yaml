@@ -1,5 +1,7 @@
 - name: Setup systemd container {{ container_loop_var.key }}
-  when: not container_loop_var.value.dashy_only
+  when:
+    - not container_loop_var.value.dashy_only
+    - container_loop_var.value.caddy_proxy_url == ""
   tags:
     - "{{ container_loop_var.key }}"
   block:
