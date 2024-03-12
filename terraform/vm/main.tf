@@ -2,7 +2,7 @@
 resource "libvirt_volume" "guix" {
   name   = "guix-server.qcow2"
   pool   = "default"
-  source = "/mnt/storage/Media/Download/download/guix-system-vm-image-1.4.0.x86_64-linux.qcow2" # This need to be downloaded manually first
+  source = ".decrypted/guix.qcow2"
   format = "qcow2"
 }
 

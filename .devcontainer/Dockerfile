@@ -6,7 +6,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt update \
     && apt install -y --no-install-recommends \
     docker-compose \
-    emacs-nox \
     fish \
     gettext-base \
     guix \
@@ -39,6 +38,6 @@ RUN \
     --user
 
 ENV AQUA_VERSION=v2.24.0
-ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:/home/${USERNAME}/bin:$PATH
+ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:/home/${USERNAME}/bin:/home/${USERNAME}/.guix-profile/bin:$PATH
 
 ENV PODMAN_VERSION=v4.9.3

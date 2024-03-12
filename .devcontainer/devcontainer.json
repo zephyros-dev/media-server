@@ -17,6 +17,7 @@
         "GitHub.copilot",
         "GitHub.vscode-pull-request-github",
         "hashicorp.terraform",
+        "jimpjorps.strict-paredit-more",
         "mhutchie.git-graph",
         "mikestead.dotenv",
         "ms-azuretools.vscode-docker",
@@ -27,7 +28,6 @@
         "richie5um2.vscode-sort-json",
         "samuelcolvin.jinjahtml",
         "signageos.signageos-vscode-sops",
-        "sjhuangx.vscode-scheme",
         "vivaxy.vscode-conventional-commits",
         "wholroyd.jinja",
         "yzhang.markdown-all-in-one"
@@ -97,7 +97,7 @@
     "GUIX_PROFILE": "/home/vscode/.config/guix/current"
   },
   "remoteUser": "vscode",
-  "runArgs": ["--userns=keep-id"],
+  "runArgs": ["--userns=keep-id", "--privileged"],
   "workspaceFolder": "${localWorkspaceFolder}",
   "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind"
 }

@@ -22,9 +22,12 @@ args = parser.parse_args()
 
 home_path = Path("/home/vscode")
 
+
 def check_version(command, desired_version):
     # Install the tools if tools is not installed or current version is different
-    current_version = subprocess.run(command, shell=True, capture_output=True, text=True)
+    current_version = subprocess.run(
+        command, shell=True, capture_output=True, text=True
+    )
     if "not found" in current_version.stderr or re.search(
         r"\d+\.\d+\.\d+",
         current_version.stdout,
@@ -32,6 +35,11 @@ def check_version(command, desired_version):
         return True
     else:
         return False
+
+
+environment = Environment(
+    loader=FileSystemLoader(".devcontainer/templates"), keep_trailing_newline=True
+)
 
 if args.stage == "all" or args.stage == "onCreateCommand":
     if platform.machine() == "x86_64":
@@ -88,6 +96,14 @@ if args.stage == "all" or args.stage == "onCreateCommand":
 
     subprocess.run("cue get go k8s.io/api/...", shell=True, cwd="cue")
 
+    # Guix
+    template = environment.get_template("channels.scm.j2")
+    Path(home_path / ".config/guix/channels.scm").write_text(template.render())
+    # Emacs
+    (Path(home_path) / ".config/emacs").mkdir(parents=True, exist_ok=True)
+    template = environment.get_template("init.el.j2")
+    (Path(home_path) / ".config/emacs/init.el").write_text(template.render())
+
 if args.stage == "all" or args.stage == "postAttachCommand":
     subprocess.run("git config --global init.templateDir ~/.git-template", shell=True)
     subprocess.run(
@@ -109,9 +125,6 @@ if args.stage == "all" or args.stage == "postAttachCommand":
         f"https://www.toptal.com/developers/gitignore/api/{','.join(gitignore_list)}"
     )
 
-    environment = Environment(
-        loader=FileSystemLoader(".devcontainer/templates"), keep_trailing_newline=True
-    )
     template = environment.get_template(".gitignore.j2")
     Path(".gitignore").write_text(
         template.render(git_ignore_template=git_ignore_remote.text)
