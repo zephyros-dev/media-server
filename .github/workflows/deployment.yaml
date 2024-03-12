@@ -21,7 +21,7 @@ jobs:
     env:
       DEBUG_MODE: ${{ vars.DEBUG_MODE }}
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
         with:
           submodules: true
       - uses: aquaproj/aqua-installer@7c7338067bdb97d5bea2acc82b5870afca470d18 # v2.3.0
