@@ -5,6 +5,6 @@ RUN --mount=type=cache,target=/go/pkg,sharing=locked \
     --with github.com/caddy-dns/dynv6 \
     --with github.com/mholt/caddy-dynamicdns
 
-FROM docker.io/caddy:2.7.6-alpine@sha256:35baf177e2bb199a8f46c3dd5010635fce0958a2df01c14aff2cb5e9cd458492
+FROM docker.io/caddy:2.7.6-alpine@sha256:8822ed5bff4b9f6028b25796aeced1d2d7ac111ce2530ed005e9bb0e7e026648
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
