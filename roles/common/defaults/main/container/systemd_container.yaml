@@ -1,6 +1,5 @@
 container:
   audiobookshelf: "{{ container_default | combine(audiobookshelf) }}"
-  baikal: "{{ container_default | combine(baikal) }}"
   bazarr: "{{ container_default | combine(bazarr) }}"
   caddy: "{{ container_default | combine(caddy) }}"
   calibre_content: "{{ container_default | combine(calibre_content) }}"
@@ -40,11 +39,6 @@ audiobookshelf:
     config: ./config/
     metadata: ./metadata/
     podcasts: "{{ global_storage }}/Podcasts/"
-baikal:
-  caddy_proxy_port: 80
-  volumes:
-    config: ./web/config/
-    data: ./web/data/
 bazarr:
   caddy_proxy_port: 6767
   caddy_sso: true

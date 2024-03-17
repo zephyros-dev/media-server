@@ -145,24 +145,6 @@ _applicationSet & {
 		}]
 	}
 
-	baikal: {
-		_
-		#param: {
-			name: "baikal"
-		}
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "baikal"
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/var/www/baikal/config:U,z"
-			}, {
-				name:      "data"
-				mountPath: "/var/www/baikal/Specific:U,z"
-			}]
-		}]
-	}
-
 	bazarr: {
 		_
 		#param: {
