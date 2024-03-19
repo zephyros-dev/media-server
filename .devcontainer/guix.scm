@@ -5,4 +5,12 @@
 ;; See the "Replicating Guix" section in the manual.
 
 (specifications->manifest
-  (list "emacs" "glibc-locales"))
+  (list "emacs-paredit"
+        "emacs-magit"
+        "emacs-guix"
+        "fish"
+        "emacs-geiser-guile"
+        "emacs-geiser"
+        "guile"
+        "emacs"
+        "glibc-locales"))
