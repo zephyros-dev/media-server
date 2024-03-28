@@ -1,5 +1,5 @@
 ansible-lint==24.2.1
-ansible==9.3.0
+ansible==9.4.0
 black==24.3.0
 dagger-io==0.10.3
 jmespath==1.0.1
