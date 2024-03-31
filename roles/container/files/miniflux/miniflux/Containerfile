@@ -1,1 +1,1 @@
-FROM ghcr.io/miniflux/miniflux:2.1.1-distroless@sha256:b6f29f068aa59e6f3df42065a56f040606333a7704746c6820b51dbaf2d9797a
+FROM ghcr.io/miniflux/miniflux:2.1.2-distroless@sha256:ffce74bf9a9a9dba213adfa0c818aedb5176e0b3c696a27c418cc018e6d83305
