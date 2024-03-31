@@ -4,8 +4,6 @@ systemd_services:
     become: true
   - name: podman-prune
     schedule: Sat 19:00:00
-  - name: podman-renumber
-    schedule: "20:00:00"
   - name: add-executable
     schedule: "20:00:00"
   - name: mergerfs-directory
