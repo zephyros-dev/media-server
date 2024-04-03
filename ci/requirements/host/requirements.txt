@@ -1,1 +1,2 @@
 dagger-io==0.10.3
+beartype==0.17.2
