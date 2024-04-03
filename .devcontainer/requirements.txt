@@ -7,4 +7,4 @@ pre-commit==3.7.0
 python-dotenv==1.0.1
 ruff==0.3.5
 transmission-rpc==7.0.3
-beartype==0.18.0
+beartype==0.18.1
