@@ -11,5 +11,5 @@ registries:
 packages:
   - name: cue-lang/cue@v0.8.1
   - name: getsops/sops@v3.8.1
-  - name: golang/go@go1.22.1
+  - name: golang/go@go1.22.2
   - name: hashicorp/terraform@v1.7.5
