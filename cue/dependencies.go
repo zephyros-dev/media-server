@@ -2,4 +2,7 @@
 
 package main
 
-import ("k8s.io/api/apps/v1")
+import (
+	"k8s.io/api"
+	"k8s.io/apimachinery"
+)

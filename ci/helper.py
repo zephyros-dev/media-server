@@ -57,6 +57,6 @@ async def cue_setup(client: dagger.Client, ci: dagger.Container, user_dir):
     return (
         ci.with_workdir(f"{user_dir}/workspace/cue")
         .with_exec(["go", "mod", "download"])
-        .with_exec(["cue", "get", "go", "k8s.io/api/..."])
+        .with_exec(["cue", "get", "go", "k8s.io/api/...", "k8s.io/apimachinery/..."])
         .with_workdir(f"{user_dir}/workspace")
     )

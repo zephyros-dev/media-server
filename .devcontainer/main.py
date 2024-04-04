@@ -94,7 +94,9 @@ if args.stage == "all" or args.stage == "onCreateCommand":
     if not cue_home_path.is_symlink():
         cue_home_path.symlink_to(cue_path)
 
-    subprocess.run("cue get go k8s.io/api/...", shell=True, cwd="cue")
+    subprocess.run(
+        "cue get go k8s.io/api/... k8s.io/apimachinery/...", shell=True, cwd="cue"
+    )
 
     # Guix
     template = environment.get_template("channels.scm.j2")
