@@ -35,7 +35,7 @@ RUN \
     --requirement requirements.txt \
     --user
 
-ENV AQUA_VERSION=v2.26.0
+ENV AQUA_VERSION=v2.27.0
 ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:/home/${USERNAME}/bin:/home/${USERNAME}/.guix-profile/bin:$PATH
 
 ENV PODMAN_VERSION=v5.0.1
