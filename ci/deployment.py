@@ -3,7 +3,6 @@ import sys
 
 import anyio
 import dagger
-from helper import cue_setup, install_aqua, sops_loader
 
 
 async def ci():
@@ -71,9 +70,26 @@ async def ci():
             )
         )
 
-        ci = await install_aqua(client, ci, user_dir)
+        container_path = await ci.env_variable("PATH")
 
-        ci = await cue_setup(client, ci, user_dir)
+        ci = (
+            ci.with_env_variable(
+                "PATH", f"{user_dir}/.local/share/aquaproj-aqua/bin:{container_path}"
+            )
+            .with_mounted_cache(
+                f"{user_dir}/.local/share/aquaproj-aqua/pkgs",
+                client.cache_volume("aqua-pkgs"),
+            )
+            .with_mounted_cache(
+                f"{user_dir}/.local/share/aquaproj-aqua/registries",
+                client.cache_volume("aqua-registries"),
+            )
+            .with_mounted_cache(
+                f"{user_dir}/.local/share/aquaproj-aqua/bin",
+                client.cache_volume("aqua-bin"),
+            )
+            .with_exec([".devcontainer/main.py", "--stage=dependency"])
+        )
 
         ci = (
             ci.with_mounted_cache(
@@ -95,7 +111,17 @@ async def ci():
             for key, value in ansible_config.items():
                 ci = ci.with_env_variable(key, value)
 
-        ci = sops_loader(client, ci, user_dir)
+        age_key_path = f"{os.environ['HOME']}/.config/sops/age/keys.txt"
+        if os.path.exists(age_key_path):
+            ci = ci.with_mounted_directory(
+                f"{user_dir}/.config/sops/age",
+                client.host().directory(os.path.dirname(age_key_path)),
+            )
+        else:
+            secret_sops_env = client.set_secret(
+                "secret_sops_env", os.getenv("SOPS_AGE_KEY")
+            )
+            ci = ci.with_secret_variable("SOPS_AGE_KEY", secret_sops_env)
 
         ci = ci.with_exec(["ansible-playbook", "main.yaml"])
 

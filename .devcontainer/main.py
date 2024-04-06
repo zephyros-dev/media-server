@@ -7,6 +7,7 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
+import json
 
 import requests
 from jinja2 import Environment, FileSystemLoader
@@ -20,7 +21,9 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-home_path = Path("/home/vscode")
+home_path = Path(os.getenv("HOME"))
+
+dependencies_version = json.loads(Path(".devcontainer/dependencies.json").read_text())
 
 
 def check_version(command, desired_version):
@@ -37,20 +40,16 @@ def check_version(command, desired_version):
         return False
 
 
-environment = Environment(
-    loader=FileSystemLoader(".devcontainer/templates"), keep_trailing_newline=True
-)
-
-if args.stage == "all" or args.stage == "onCreateCommand":
+def dependency_setup():
+    AQUA_VERSION = dependencies_version["aqua"]
     if platform.machine() == "x86_64":
-        architecture = "amd64"
+        aqua_architecture = "amd64"
     elif platform.machine() == "aarch64":
-        architecture = "arm64"
+        aqua_architecture = "arm64"
     aqua_bin_path = home_path / ".local/share/aquaproj-aqua/bin/aqua"
-    if check_version("aqua --version", os.environ["AQUA_VERSION"]):
-        print("Installing aqua")
+    if check_version("aqua --version", AQUA_VERSION):
         subprocess.run(
-            f"curl -Lo {home_path / 'aqua.tar.gz'} https://github.com/aquaproj/aqua/releases/download/{os.environ['AQUA_VERSION']}/aqua_linux_{architecture}.tar.gz",
+            f"curl -Lo {home_path / 'aqua.tar.gz'} https://github.com/aquaproj/aqua/releases/download/{AQUA_VERSION}/aqua_linux_{aqua_architecture}.tar.gz",
             shell=True,
         )
         subprocess.run(
@@ -68,19 +67,37 @@ if args.stage == "all" or args.stage == "onCreateCommand":
 
     subprocess.run("aqua install --all", shell=True)
 
+    # Cue setup
+    subprocess.run(
+        "cue get go k8s.io/api/... k8s.io/apimachinery/...", shell=True, cwd="cue"
+    )
+
+
+environment = Environment(
+    loader=FileSystemLoader(".devcontainer/templates"), keep_trailing_newline=True
+)
+
+if args.stage == "all" or args.stage == "onCreateCommand":
+    dependency_setup()
+
     # Install latest version of podman
     podman_path = f"{home_path}/bin/podman"
 
+    if platform.machine() == "x86_64":
+        podman_architecture = "amd64"
+    elif platform.machine() == "aarch64":
+        podman_architecture = "arm64"
+
     if check_version("podman --version", os.environ["PODMAN_VERSION"]):
         subprocess.run(
-            f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{os.environ['PODMAN_VERSION']}/podman-remote-static-linux_{architecture}.tar.gz",
+            f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{os.environ['PODMAN_VERSION']}/podman-remote-static-linux_{podman_architecture}.tar.gz",
             shell=True,
         )
         subprocess.run(
             f"tar -zxvf {home_path / 'podman.tar.gz'} -C {home_path}", shell=True
         )
         subprocess.run(
-            f"sudo mv {home_path}/bin/podman-remote-static-linux_{architecture} {podman_path}",
+            f"sudo mv {home_path}/bin/podman-remote-static-linux_{podman_architecture} {podman_path}",
             shell=True,
         )
 
@@ -93,10 +110,6 @@ if args.stage == "all" or args.stage == "onCreateCommand":
     cue_home_path = home_path / ".local/bin/cue"
     if not cue_home_path.is_symlink():
         cue_home_path.symlink_to(cue_path)
-
-    subprocess.run(
-        "cue get go k8s.io/api/... k8s.io/apimachinery/...", shell=True, cwd="cue"
-    )
 
     # Guix
     template = environment.get_template("channels.scm.j2")
@@ -143,3 +156,6 @@ GUIX_PROFILE="$HOME/.config/.guix/current"
 . "$GUIX_PROFILE/etc/profile"
           """
     Path(home_path / ".zshenv").write_text(guix_env)
+
+if args.stage == "dependency":
+    dependency_setup()
