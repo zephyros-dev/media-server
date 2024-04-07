@@ -7,5 +7,5 @@ Yaml={{ container_quadlet_path }}/{{ container_loop_var.key }}/deployment.yaml
 SetWorkingDirectory=yaml
 [Service]
 # Extend Timeout to allow time to pull the image
-TimeoutStartSec=900
+TimeoutStartSec=1200
 {% include 'common.j2' %}
