@@ -1,6 +1,11 @@
 - name: Setup netdata
   tags: netdata
   block:
+    - name: Download the installation script # noqa: ignore-errors
+      ansible.builtin.get_url:
+        url: https://get.netdata.cloud/kickstart.sh
+        dest: /kickstart.sh
+        mode: +x
     - name: Install Netdata
       ansible.builtin.import_tasks: install.yaml
       when: netdata_state == "started"

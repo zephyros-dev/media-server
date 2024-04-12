@@ -35,5 +35,3 @@ netdata_config:
     option: bind to
     value: null
     state: absent
-
-netdata_root: /opt/netdata
