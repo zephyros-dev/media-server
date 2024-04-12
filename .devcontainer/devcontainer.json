@@ -21,7 +21,6 @@
         "mhutchie.git-graph",
         "mikestead.dotenv",
         "ms-azuretools.vscode-docker",
-        "ms-python.black-formatter",
         "njpwerner.autodocstring",
         "pascalreitermann93.vscode-yaml-sort",
         "redhat.ansible",
@@ -43,7 +42,7 @@
           "editor.codeActionsOnSave": {
             "source.organizeImports": "always"
           },
-          "editor.defaultFormatter": "ms-python.black-formatter"
+          "editor.defaultFormatter": "charliermarsh.ruff"
         },
         "[yaml]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
