@@ -1,7 +1,7 @@
 - name: Uninstall Netdata
   changed_when: false
   ansible.builtin.shell:
-    cmd: /kickstart.sh --uninstall
+    cmd: /tmp/kickstart.sh --uninstall
 
 - name: Remove netdata config
   become: true

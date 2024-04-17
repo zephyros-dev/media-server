@@ -4,7 +4,7 @@
     - name: Install Netdata
       changed_when: false
       ansible.builtin.shell:
-        cmd: /kickstart.sh
+        cmd: /tmp/kickstart.sh
 
     - name: Configure Netdata
       ansible.builtin.import_tasks: configure.yaml
