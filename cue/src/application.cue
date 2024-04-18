@@ -1144,68 +1144,20 @@ _applicationSet & {
 		_
 		#param: {
 			name: "speedtest"
-			secret: {
-				db_password: {
-					type:    "env"
-					content: "\(fact.speedtest_db_password)"
-				}
-			}
 		}
 
 		#pod: spec: containers: [{
-			name:  "postgres"
-			image: "immich-postgres"
-			env: [{
-				name:  "POSTGRES_DB"
-				value: "speedtest"
-			}, {
-				name:  "POSTGRES_USER"
-				value: "speedtest"
-			}, {
-				name: "POSTGRES_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "speedtest"
-					key:  "db_password"
-				}
-			}]
-			volumeMounts: [{
-				name:      "db"
-				mountPath: "/var/lib/postgresql/data:U,z"
-			}]
-		}] + [if fact.container.immich.postgres_action == "none" for v in [{
 			name:  "web"
 			image: "speedtest"
 			env: [{
-				// https://github.com/alexjustesen/speedtest-tracker/issues/1066
-				name:  "CACHE_DRIVER"
-				value: "file"
-			}, {
 				name:  "DB_CONNECTION"
-				value: "pgsql"
-			}, {
-				name:  "DB_HOST"
-				value: "localhost"
-			}, {
-				name:  "DB_PORT"
-				value: "5432"
-			}, {
-				name:  "DB_DATABASE"
-				value: "speedtest"
-			}, {
-				name:  "DB_USERNAME"
-				value: "speedtest"
-			}] + [{
-				name: "DB_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "speedtest"
-					key:  "db_password"
-				}
+				value: "sqlite"
 			}]
 			volumeMounts: [{
 				name:      "config"
 				mountPath: "/config:U,z"
 			}]
-		}] {v}]
+		}]
 	}
 
 	syncthing: {
