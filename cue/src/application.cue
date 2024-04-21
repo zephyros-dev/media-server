@@ -317,7 +317,7 @@ _applicationSet & {
 			volumeMounts: [{
 				name:      "conf.yml"
 				readOnly:  true
-				mountPath: "/app/public/conf.yml"
+				mountPath: "/app/user-data/conf.yml"
 				subPath:   "conf.yml"
 			}]
 			securityContext: {

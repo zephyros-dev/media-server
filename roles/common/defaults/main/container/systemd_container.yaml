@@ -67,7 +67,7 @@ cockpit:
   caddy_proxy_url: https://{{ caddyfile_host_address }}:9090
   dashy_only: true
 dashy:
-  caddy_proxy_port: 80
+  caddy_proxy_port: 8080
   caddy_sso: true
 ddns:
   preserve_volume: true
