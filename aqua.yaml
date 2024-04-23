@@ -9,7 +9,7 @@ registries:
   - type: standard
     ref: v4.164.0 # renovate: depName=aquaproj/aqua-registry
 packages:
-  - name: astral-sh/uv@0.1.35
+  - name: astral-sh/uv@0.1.36
   - name: cue-lang/cue@v0.8.1
   - name: getsops/sops@v3.8.1
   - name: golang/go@go1.22.2
