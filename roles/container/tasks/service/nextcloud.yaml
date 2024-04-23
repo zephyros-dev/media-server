@@ -9,8 +9,10 @@
 # https://github.com/nextcloud/docker/issues/1880#issuecomment-1344309058
 - name: Fix permission error nextcloud with postgres 15
   changed_when: false
-  ansible.builtin.command:
-    cmd: podman exec -it nextcloud-postgres /bin/sh -c 'psql --user $POSTGRES_USER -c "GRANT ALL ON SCHEMA public TO oc_{{ nextcloud_admin_user }};"'
+  containers.podman.podman_container_exec:
+    name: nextcloud-postgres
+    detach: true
+    command: psql --user $POSTGRES_USER -c "GRANT ALL ON SCHEMA public TO oc_{{ nextcloud_admin_user }};"
   retries: 10
 
 - name: Upgrade nextcloud
