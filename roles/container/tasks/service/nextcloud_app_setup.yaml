@@ -8,10 +8,11 @@
       ansible.builtin.command:
         cmd: "{{ nextcloud_app_command }} app:install {{ nextcloud_app_loop_var.key }}"
 
+    # Force enable app even if it is not available for new nextcloud version
     - name: Enable app {{ nextcloud_app_loop_var.key }}
       changed_when: false
       ansible.builtin.command:
-        cmd: "{{ nextcloud_app_command }} app:enable {{ nextcloud_app_loop_var.key }}"
+        cmd: "{{ nextcloud_app_command }} app:enable --force {{ nextcloud_app_loop_var.key }}"
 
     - name: Configure app {{ nextcloud_app_loop_var.key }}
       changed_when: false
