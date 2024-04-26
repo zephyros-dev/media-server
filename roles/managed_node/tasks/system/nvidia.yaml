@@ -97,7 +97,8 @@
         - name: Reboot to apply nvidia driver
           ansible.builtin.reboot:
             reboot_timeout: 600
-        - name: Reinstall nvidia limit removal script
+        - name: Reinstall nvidia limit removal script # noqa: ignore-errors
+          ignore_errors: true
           changed_when: false
           ansible.builtin.script:
             cmd: submodules/nvidia-patch/patch.sh

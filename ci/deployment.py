@@ -1,12 +1,11 @@
 import os
-import sys
 
 import anyio
 import dagger
 
 
 async def ci():
-    async with dagger.Connection(dagger.Config(log_output=sys.stderr)) as client:
+    async with dagger.Connection(dagger.Config()) as client:
         user_dir = "/root"
         workspace = client.host().directory(".")
 
