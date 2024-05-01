@@ -91,7 +91,9 @@
       block:
         - name: Install nvidia limit removal script
           changed_when: false
-          failed_when: not (nvidia_patch.stdout | regex_search("Patch for this \(.*\) nvidia driver not found"))
+          failed_when:
+            - not (nvidia_patch.stdout | regex_search("Patch for this \(.*\) nvidia driver not found"))
+            - nvidia_patch.rc != 0
           ansible.builtin.script:
             cmd: submodules/nvidia-patch/patch.sh
           register: nvidia_patch
