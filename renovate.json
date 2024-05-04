@@ -46,6 +46,10 @@
     {
       "groupName": "immich",
       "matchPackagePatterns": ["ghcr.io/immich-app"]
+    },
+    {
+      "additionalBranchPrefix": "{{parentDir}}/",
+      "matchPackagePatterns": ["postgres"]
     }
   ],
   "pinDigests": true,
