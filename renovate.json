@@ -49,6 +49,7 @@
     },
     {
       "additionalBranchPrefix": "{{parentDir}}/",
+      "commitMessageAction": "({{parentDir}})",
       "matchPackagePatterns": ["postgres"]
     }
   ],
