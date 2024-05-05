@@ -1,5 +1,7 @@
 nextcloud_app:
+  bookmarks: "{{ nextcloud_app_default }}"
   richdocuments: "{{ nextcloud_app_default | combine(nextcloud_richdocuments) }}"
+  tasks: "{{ nextcloud_app_default }}"
 nextcloud_richdocuments:
   config:
     public_wopi_url: https://nextcloud-office.{{ server_domain }}
