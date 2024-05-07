@@ -86,6 +86,6 @@
             mode: "0644"
         - name: Enable smartd monitoring netdata # noqa: args[module] risky-file-permissions
           ansible.builtin.copy:
-            dest: "/etc/netdata/python.d/smartd_log.conf"
-            src: "/usr/lib/netdata/conf.d/python.d/smartd_log.conf"
+            src: /usr/lib/netdata/conf.d/go.d/smartctl.conf
+            dest: /etc/netdata/go.d/smartctl.conf
           notify: Restart Netdata
