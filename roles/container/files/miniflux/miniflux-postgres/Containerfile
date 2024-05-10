@@ -1,1 +1,1 @@
-FROM docker.io/postgres:15-alpine@sha256:6c2118c2e7c6ad2f627f626bd18fc9b5b7b417f680a7a77a81ded84b6aeff154
+FROM docker.io/postgres:16-alpine@sha256:7f7832dfb7770c7256fe3f8c4cb57617caee45e2494cc0a736594135237ed9bf
