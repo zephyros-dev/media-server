@@ -8,6 +8,8 @@
       containers.podman.podman_container_info:
         name: "{{ container_loop_var.key }}-postgres"
       register: podman_container_info
+      retries: 10 # Waiting for container to start
+      until: podman_container_info.containers | length > 0
     - name: Set path to postgres data folder {{ container_loop_var.key }}
       ansible.builtin.set_fact:
         postgres_data_path: "{{ podman_container_info | json_query('containers[0].Mounts[?Destination==`/var/lib/postgresql/data`].Source') | first }}"
@@ -40,7 +42,7 @@
         - name: Start postgres {{ container_loop_var.key }} # noqa: args[module]
           ansible.builtin.systemd:
             state: started
-        - name: Create dump {{ container_loop_var.key }}
+        - name: Create dump postgres {{ container_loop_var.key }}
           changed_when: false
           ansible.builtin.shell:
             chdir: "{{ postgres_backup_path }}"
