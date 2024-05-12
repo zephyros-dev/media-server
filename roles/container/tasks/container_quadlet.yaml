@@ -104,8 +104,22 @@
           ansible.builtin.template:
             src: "quadlet/{{ container_loop_var.key }}.container.j2"
             dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.container"
+          register: container_file_state
         - name: Start systemd service {{ container_loop_var.key }}
+          changed_when: false
+          when:
+            - not (image_file.changed or container_file_state.changed)
           ansible.builtin.systemd:
+          async: 45
+          poll: 0
+        - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
+          changed_when: false
+          when:
+            - image_file.changed or container_file_state.changed
+          ansible.builtin.systemd:
+            state: restarted
+          async: 45
+          poll: 0
 
 - name: Remove service {{ container_loop_var.key }}
   when: container_loop_var.value.state == "absent"
