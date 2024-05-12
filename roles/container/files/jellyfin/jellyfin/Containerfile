@@ -1,1 +1,1 @@
-FROM docker.io/jellyfin/jellyfin:10.9.0@sha256:ed2836a12fdff987a97cb6d5201ec2e2c420951f64c88a480dcf94ed747f3265
+FROM docker.io/jellyfin/jellyfin:10.9.0@sha256:d659991fdbda4d2963c807747fbd1ee237bfd15971a3923158719eb248ddea67
