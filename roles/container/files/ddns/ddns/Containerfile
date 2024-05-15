@@ -1,4 +1,4 @@
-FROM docker.io/caddy:2.7.6-builder-alpine@sha256:71a775f0c06400a8202b5f699c838ec546c8d6fd00cba50334f210c916be4130 AS builder
+FROM docker.io/caddy:2.7.6-builder-alpine@sha256:b4781b9d54ebb158db512e74e1c78bb9e52bdc4b55965bff717c8fd8a50b75f5 AS builder
 
 # Using specific build version until caddy release a new version: https://github.com/caddyserver/caddy/issues/6209
 RUN --mount=type=cache,target=/go/pkg,sharing=locked \
