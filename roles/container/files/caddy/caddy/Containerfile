@@ -1,4 +1,4 @@
-FROM docker.io/caddy:2.7.6-builder@sha256:599f4145971a46caf127b3428eabca3eedb4c3d3267ed57fd128e16c24dd46b0 AS builder
+FROM docker.io/caddy:2.7.6-builder@sha256:c4ca919a359a82291778345c9886a9cf948d4e4613aee402066f0be8819179ff AS builder
 
 RUN --mount=type=cache,target=/go/pkg,sharing=locked \
     xcaddy build \
