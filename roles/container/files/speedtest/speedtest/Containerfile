@@ -1,1 +1,1 @@
-FROM lscr.io/linuxserver/speedtest-tracker:0.19.0@sha256:ddb25f2355d573b77ee7f29c775ba1371e554ce25a3dc1d0ccff05eae8881bbf
+FROM lscr.io/linuxserver/speedtest-tracker:0.19.0@sha256:54c6e827c2d2e20561caafeef359a288a49b57d9a2390fc7110cba376bdd54fb
