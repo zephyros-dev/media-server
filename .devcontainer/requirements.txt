@@ -1,5 +1,5 @@
 ansible-lint==24.5.0
-ansible==9.5.1
+ansible==9.6.0
 dagger-io==0.11.4
 jmespath==1.0.1
 pre-commit==3.7.1
