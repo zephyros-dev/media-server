@@ -129,8 +129,6 @@ if args.stage == "all" or args.stage == "postAttachCommand":
         "ansible",
         "dotenv",
         "go",
-        "intellij+all",
-        "node",
         "python",
         "terraform",
         "VisualStudioCode",
