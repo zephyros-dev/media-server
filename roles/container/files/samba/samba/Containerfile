@@ -1,1 +1,1 @@
-FROM ghcr.io/servercontainers/samba:latest@sha256:d2b2748cfbc2a7b0e423efdaf8e51d53c5d546cc7748ffb4186a8e77cdf84d37
+FROM ghcr.io/servercontainers/samba:latest@sha256:28e0e6ed0c0a110cbd90c51985f22c0405b3c98c7d153748fad563d4a32c746c
