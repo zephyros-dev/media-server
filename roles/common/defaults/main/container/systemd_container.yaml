@@ -8,6 +8,7 @@ container:
   dashy: "{{ container_default | combine(dashy) }}"
   ddns: "{{ container_default | combine(ddns) }}"
   filebrowser: "{{ container_default | combine(filebrowser) }}"
+  flaresolverr: "{{ container_default | combine(flaresolverr) }}"
   immich: "{{ container_default | combine(immich) }}"
   jdownloader: "{{ container_default | combine(jdownloader) }}"
   jellyfin: "{{ container_default | combine(jellyfin) }}"
@@ -79,6 +80,7 @@ filebrowser:
   volumes:
     "database.db": "./database.db"
     srv: "{{ global_media }}/"
+flaresolverr:
 immich:
   caddy_proxy_port: 3001
   volumes:

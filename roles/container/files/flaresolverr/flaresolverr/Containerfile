@@ -1,0 +1,1 @@
+FROM ghcr.io/flaresolverr/flaresolverr:latest@sha256:0bdf9ed48f3c54c998bc160be46244ce3a88a7783b6cfd31eec9c1667786152f

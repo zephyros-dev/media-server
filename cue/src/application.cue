@@ -388,6 +388,18 @@ _applicationSet & {
 		}]
 	}
 
+	flaresolverr: {
+		_
+		#param: {
+			name: "flaresolverr"
+		}
+
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "flaresolverr"
+		}]
+	}
+
 	immich: {
 		_
 		#param: {
