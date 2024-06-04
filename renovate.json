@@ -49,6 +49,10 @@
       "matchPackagePatterns": ["ghcr.io/immich-app"]
     },
     {
+      "groupName": "caddy",
+      "matchPackagePatterns": ["caddy"]
+    },
+    {
       "additionalBranchPrefix": "{{parentDir}}/",
       "commitMessageAction": "({{parentDir}})",
       "matchPackagePatterns": ["postgres"]
