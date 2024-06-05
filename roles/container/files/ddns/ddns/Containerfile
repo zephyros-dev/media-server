@@ -1,4 +1,4 @@
-FROM docker.io/caddy:2.8.4-builder-alpine@sha256:e6708cc774abf0b1e3a2e68314267765b874f9b6d4384d197dbd138f011842e7 AS builder
+FROM docker.io/caddy:2.8.4-builder-alpine@sha256:5165bfa57942527efe8832020e1f454f442ed3b3304c0bbc1ee8ecdff526dda8 AS builder
 
 # Using specific build version until caddy release a new version: https://github.com/caddyserver/caddy/issues/6209
 RUN --mount=type=cache,target=/go/pkg,sharing=locked \
@@ -6,6 +6,6 @@ RUN --mount=type=cache,target=/go/pkg,sharing=locked \
     --with github.com/caddy-dns/dynv6 \
     --with github.com/mholt/caddy-dynamicdns
 
-FROM docker.io/caddy:2.8.4-alpine@sha256:ff19025e3865a65d732147cb62499b6178e6aad1eea0b3969a9dfffa6f3ce914
+FROM docker.io/caddy:2.8.4-alpine@sha256:e1907e29d6abf9aea25be92287e6ee1e1c2a6afa220a41984e37c6f9fe9248aa
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy

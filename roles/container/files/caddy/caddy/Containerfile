@@ -1,9 +1,9 @@
-FROM docker.io/caddy:2.8.4-builder@sha256:583e6f8a43c2628a2ca6fbcd1f25a325c8bc80515f2dfc2101fd448c055b8353 AS builder
+FROM docker.io/caddy:2.8.4-builder@sha256:40330ad5468664d2b6cd50a5831e119b26fa61c3bff844680357ce943ec3db4e AS builder
 
 RUN --mount=type=cache,target=/go/pkg,sharing=locked \
     xcaddy build \
     --with github.com/caddy-dns/dynv6
 
-FROM docker.io/caddy:2.8.4-alpine@sha256:ff19025e3865a65d732147cb62499b6178e6aad1eea0b3969a9dfffa6f3ce914
+FROM docker.io/caddy:2.8.4-alpine@sha256:e1907e29d6abf9aea25be92287e6ee1e1c2a6afa220a41984e37c6f9fe9248aa
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
