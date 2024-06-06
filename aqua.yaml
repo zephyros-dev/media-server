@@ -7,7 +7,7 @@
 #   require_checksum: true
 registries:
   - type: standard
-    ref: v4.189.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v4.190.0 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: astral-sh/uv@0.2.6
   - name: cue-lang/cue@v0.8.2
