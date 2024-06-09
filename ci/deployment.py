@@ -1,11 +1,12 @@
 import os
+from sys import stdout
 
 import anyio
 import dagger
 
 
 async def ci():
-    async with dagger.Connection(dagger.Config()) as client:
+    async with dagger.Connection(dagger.Config(log_output=stdout)) as client:
         user_dir = "/root"
         workspace = client.host().directory(".")
 
@@ -73,7 +74,8 @@ async def ci():
 
         ci = (
             ci.with_env_variable(
-                "PATH", f"{user_dir}/.local/share/aquaproj-aqua/bin:{container_path}"
+                "PATH", f"{
+                    user_dir}/.local/share/aquaproj-aqua/bin:{container_path}"
             )
             .with_mounted_cache(
                 f"{user_dir}/.local/share/aquaproj-aqua/pkgs",
