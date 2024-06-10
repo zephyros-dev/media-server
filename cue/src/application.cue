@@ -1156,6 +1156,12 @@ _applicationSet & {
 		_
 		#param: {
 			name: "speedtest"
+			secret: {
+				speedtest_app_key: {
+					type:    "env"
+					content: "\(fact.speedtest_app_key)"
+				}
+			}
 		}
 
 		#pod: spec: containers: [{
@@ -1164,6 +1170,12 @@ _applicationSet & {
 			env: [{
 				name:  "DB_CONNECTION"
 				value: "sqlite"
+			}, {
+				name: "APP_KEY"
+				valueFrom: secretKeyRef: {
+					name: "speedtest"
+					key:  "speedtest_app_key"
+				}
 			}]
 			volumeMounts: [{
 				name:      "config"
