@@ -51,8 +51,8 @@ _applicationSet: [applicationName=_]: {
 			annotations: {
 				"io.podman.annotations.infra.name": "\(#param.name)-pod"
 			}
-			labels: app: "\(#param.name)"
-			name: "\(#param.name)"
+			labels: app: #param.name
+			name: #param.name
 		}
 		spec: {
 			volumes: [for k, v in #param.volumes {
@@ -75,7 +75,7 @@ _applicationSet: [applicationName=_]: {
 			}] + [for k, v in #param.secret if v.type == "file" {
 				name: k
 				secret: {
-					secretName: "\(#param.name)"
+					secretName: #param.name
 					items: [{
 						key:  k
 						path: k
@@ -92,7 +92,7 @@ _applicationSet: [applicationName=_]: {
 		apiVersion: "v1"
 		kind:       "Secret"
 		metadata: {
-			name: "\(#param.name)"
+			name: #param.name
 		}
 		type: "Opaque"
 		stringData: {
@@ -177,7 +177,7 @@ _applicationSet & {
 			secret: {
 				Caddyfile: {
 					type:    "file"
-					content: "\(fact.caddyfile_content)"
+					content: fact.caddyfile_content
 				}
 			}
 		}
@@ -407,11 +407,11 @@ _applicationSet & {
 			secret: {
 				database_password: {
 					type:    "env"
-					content: "\(fact.immich_database_password)"
+					content: fact.immich_database_password
 				}
 				jwt_secret: {
 					type:    "env"
-					content: "\(fact.immich_jwt_secret)"
+					content: fact.immich_jwt_secret
 				}
 			}
 		}
@@ -542,10 +542,10 @@ _applicationSet & {
 			// https://github.com/jlesage/docker-baseimage-gui#taking-ownership-of-a-directory
 			env: [{
 				name:  "USER_ID"
-				value: "\(fact.global_puid)"
+				value: fact.global_puid
 			}, {
 				name:  "GROUP_ID"
-				value: "\(fact.global_pgid)"
+				value: fact.global_pgid
 			}]
 			volumeMounts: [{
 				name:      "config"
@@ -653,11 +653,11 @@ _applicationSet & {
 			secret: {
 				miniflux_postgres_password: {
 					type:    "env"
-					content: "\(fact.miniflux_postgres_password)"
+					content: fact.miniflux_postgres_password
 				}
 				miniflux_admin_password: {
 					type:    "env"
-					content: "\(fact.miniflux_admin_password)"
+					content: fact.miniflux_admin_password
 				}
 				miniflux_database_url: {
 					type:    "env"
@@ -749,11 +749,11 @@ _applicationSet & {
 			secret: {
 				postgres_password: {
 					type:    "env"
-					content: "\(fact.nextcloud_postgres_password)"
+					content: fact.nextcloud_postgres_password
 				}
 				redis_password: {
 					type:    "env"
-					content: "\(fact.nextcloud_redis_password)"
+					content: fact.nextcloud_redis_password
 				}
 			}
 		}
@@ -822,7 +822,7 @@ _applicationSet & {
 		}, {
 			name:  "redis"
 			image: "nextcloud-redis"
-			args: ["redis-server", "--requirepass", "\(fact.nextcloud_redis_password)"]
+			args: ["redis-server", "--requirepass", fact.nextcloud_redis_password]
 		}, {
 			name:  "office"
 			image: "nextcloud-office"
@@ -856,19 +856,19 @@ _applicationSet & {
 			secret: {
 				paperless_dbpass: {
 					type:    "env"
-					content: "\(fact.paperless_dbpass)"
+					content: fact.paperless_dbpass
 				}
 				paperless_ocr_language: {
 					type:    "env"
-					content: "\(fact.paperless_ocr_language)"
+					content: fact.paperless_ocr_language
 				}
 				paperless_ocr_languages: {
 					type:    "env"
-					content: "\(fact.paperless_ocr_languages)"
+					content: fact.paperless_ocr_languages
 				}
 				paperless_secret_key: {
 					type:    "env"
-					content: "\(fact.paperless_secret_key)"
+					content: fact.paperless_secret_key
 				}
 				paperless_url: {
 					type:    "env"
@@ -1054,7 +1054,7 @@ _applicationSet & {
 			secret: {
 				ACCOUNT_root: {
 					type:    "env"
-					content: "\(fact.samba_password)"
+					content: fact.samba_password
 				}
 			}
 		}
@@ -1159,7 +1159,7 @@ _applicationSet & {
 			secret: {
 				speedtest_app_key: {
 					type:    "env"
-					content: "\(fact.speedtest_app_key)"
+					content: fact.speedtest_app_key
 				}
 			}
 		}
@@ -1170,6 +1170,15 @@ _applicationSet & {
 			env: [{
 				name:  "DB_CONNECTION"
 				value: "sqlite"
+			}, {
+				name:  "DISPLAY_TIMEZONE"
+				value: fact.ansible_date_time.tz
+			}, {
+				name:  "SPEEDTEST_SCHEDULE"
+				value: "0 * * * *"
+			}, {
+				name:  "PRUNE_RESULTS_OLDER_THAN"
+				value: "365"
 			}, {
 				name: "APP_KEY"
 				valueFrom: secretKeyRef: {
@@ -1213,11 +1222,11 @@ _applicationSet & {
 			secret: {
 				USER: {
 					type:    "env"
-					content: "\(fact.transmission_user)"
+					content: fact.transmission_user
 				}
 				PASS: {
 					type:    "env"
-					content: "\(fact.transmission_password)"
+					content: fact.transmission_password
 				}
 			}
 		}

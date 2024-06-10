@@ -64,7 +64,7 @@
               changed_when: false
               ansible.builtin.command:
                 chdir: cue
-                cmd: cue dump --inject applicationName={{ container_loop_var.key }}
+                cmd: cue cmd --inject applicationName={{ container_loop_var.key }} dump
               register: cue_dump
         - name: Setup kube deployment {{ container_loop_var.key }}
           block:
