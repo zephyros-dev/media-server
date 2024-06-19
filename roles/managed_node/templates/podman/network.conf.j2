@@ -1,2 +1,3 @@
-[engine]
-network_cmd_options=[ "port_handler=slirp4netns" ]
+{# Use slirp4netns since pasta (default) network is broken https://github.com/containers/podman/issues/23003 #}
+[network]
+default_rootless_network_cmd="slirp4netns"

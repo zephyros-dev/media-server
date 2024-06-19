@@ -50,6 +50,7 @@
         name: podman.socket
         scope: user
         state: started
+    # TODO: Merge the config into a single file
     - name: Create containers config directory
       ansible.builtin.file:
         path: "{{ ansible_user_dir }}/.config/containers/containers.conf.d"
@@ -121,15 +122,6 @@
   tags: snapraid
   become: true
   block:
-    - name: Add copr support
-      ansible.builtin.dnf:
-        name: dnf-plugins-core
-        state: latest
-    - name: Add snapraid repository
-      changed_when: false
-      ansible.builtin.command:
-        stdin: "y"
-        cmd: dnf copr enable pauken/SnapRAID centos-stream-9-x86_64
     - name: Install snapraid and dependencies
       ansible.builtin.dnf:
         name:
