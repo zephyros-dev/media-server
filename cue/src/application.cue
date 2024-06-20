@@ -348,6 +348,8 @@ _applicationSet & {
 			}
 		}
 
+		// Have to make a separate container with host network since ipv6 setup with pod does not work
+		// May try again once pasta ipv6 is fixed https://github.com/containers/podman/issues/23003
 		#pod: spec: {
 			hostNetwork: true
 			containers: [{
