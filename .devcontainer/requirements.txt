@@ -1,6 +1,6 @@
 ansible-lint==24.6.0
 ansible==10.1.0
-dagger-io==0.11.7
+dagger-io==0.11.8
 jmespath==1.0.1
 pre-commit==3.7.1
 python-dotenv==1.0.1
