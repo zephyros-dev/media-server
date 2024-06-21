@@ -1,6 +1,8 @@
 - name: Setup podman
   tags: podman
   become: true
+  vars:
+    podman_config_dir_path: /etc/containers/containers.conf.d
   block:
     - name: Install podman
       ansible.builtin.dnf:
@@ -18,30 +20,20 @@
 
     - name: Setup podman configuration folder
       ansible.builtin.file:
-        path: /etc/containers/containers.conf.d
-        owner: root
-        group: root
+        path: "{{ podman_config_dir_path }}"
         mode: "0755"
         state: directory
 
     - name: Setup podman configuration file root
       ansible.builtin.template:
         src: templates/podman/containers.conf.j2
-        dest: /etc/containers/containers.conf.d/containers.conf
-        owner: root
-        group: root
+        dest: "{{ podman_config_dir_path }}/containers.conf"
         mode: "0644"
 
 - name: Setup rootless podman
   tags: podman
-  module_defaults:
-    ansible.builtin.file:
-      owner: "{{ ansible_user_uid }}"
-      group: "{{ ansible_user_gid }}"
-    ansible.builtin.template:
-      owner: "{{ ansible_user_uid }}"
-      group: "{{ ansible_user_gid }}"
-      mode: "0644"
+  vars:
+    podman_config_dir_path: "{{ ansible_user_dir }}/.config/containers/containers.conf.d"
   block:
     - name: Enable podman socket
       ansible.builtin.systemd:
@@ -50,20 +42,16 @@
         name: podman.socket
         scope: user
         state: started
-    # TODO: Merge the config into a single file
     - name: Create containers config directory
       ansible.builtin.file:
-        path: "{{ ansible_user_dir }}/.config/containers/containers.conf.d"
+        path: "{{ podman_config_dir_path }}"
         mode: "0755"
         state: directory
-    - name: Create containers network config file # noqa: risky-file-permissions args[module]
-      ansible.builtin.template:
-        src: templates/podman/network.conf.j2
-        dest: "{{ ansible_user_dir }}/.config/containers/containers.conf.d/network.conf"
-    - name: Setup podman configuration file user # noqa: risky-file-permissions args[module]
+    - name: Setup podman configuration file user
       ansible.builtin.template:
         src: templates/podman/containers.conf.j2
-        dest: "{{ ansible_user_dir }}/.config/containers/containers.conf.d/containers.conf"
+        dest: "{{ podman_config_dir_path }}/containers.conf"
+        mode: "0644"
 
 - name: Install mergerfs
   become: true
