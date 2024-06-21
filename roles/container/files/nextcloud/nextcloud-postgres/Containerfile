@@ -1,2 +1,2 @@
 # Postgres version: https://github.com/nextcloud/documentation/blob/master/admin_manual/installation/system_requirements.rst
-FROM docker.io/postgres:16-alpine@sha256:bef56cc3097647c98b6d6cfcad72013f959d51fa995746a755262a7ef8085b6e
+FROM docker.io/postgres:16-alpine@sha256:3aa9fa50595938bc2eafe613add45375eb781360faee787d33fe55aac3c00a4c
