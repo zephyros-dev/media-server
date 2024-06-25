@@ -72,6 +72,8 @@ dashy:
   caddy_sso: true
 ddns:
   preserve_volume: true
+  kube_quadlet_options:
+    Network: pasta # Use pasta network instead of host since it can preserve the IP address from the host machine
   volumes:
     config: pvc
     data: pvc

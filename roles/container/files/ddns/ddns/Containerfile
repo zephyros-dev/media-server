@@ -1,8 +1,7 @@
 FROM docker.io/caddy:2.8.4-builder-alpine@sha256:0030fe883629b7c7923e2b8b2ff76608346e08ab88192c5e78ab290e8ca7046f AS builder
 
-# Using specific build version until caddy release a new version: https://github.com/caddyserver/caddy/issues/6209
 RUN --mount=type=cache,target=/go/pkg,sharing=locked \
-    xcaddy build e1f4b83ffaa861e8f383ba52108e6449b53217f2 \
+    xcaddy build \
     --with github.com/caddy-dns/dynv6 \
     --with github.com/mholt/caddy-dynamicdns
 
