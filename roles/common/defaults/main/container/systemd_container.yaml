@@ -201,7 +201,8 @@ syncthing:
   caddy_proxy_port: 8384
   caddy_sso: true
   host_network: true
-  userns: keep-id
+  kube_quadlet_options:
+    UserNS: keep-id
   volumes:
     data: ./
     koreader-book: "{{ global_volume_path }}/koreader/{{ koreader.volumes.config | regex_replace('\\./', '') }}book/"
@@ -235,7 +236,8 @@ container_default:
   postgres_action: none
   preserve_volume: false
   state: started
-  userns: ""
+  # Template extra entries for quadlet file
+  kube_quadlet_options: {}
   # - "": create volumes with #param.name and volumes name
   # - ./: Create volume directory with {{ global_volume_path }}/{{ #param.name }}/{{ whatever behind ./ }}
   # - / with no /: File

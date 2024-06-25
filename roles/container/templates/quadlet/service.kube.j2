@@ -1,7 +1,7 @@
 [Kube]
-{% if container_loop_var.value.userns != "" %}
-UserNS={{ container_loop_var.value.userns }}
-{% endif %}
+{% for key,value in container_loop_var.value.kube_quadlet_options | dictsort %}
+{{ key }}={{ value }}
+{% endfor %}
 PodmanArgs=--build
 Yaml={{ container_quadlet_path }}/{{ container_loop_var.key }}/deployment.yaml
 SetWorkingDirectory=yaml
