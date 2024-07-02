@@ -1,1 +1,1 @@
-FROM docker.io/syncthing/syncthing:1.27.8@sha256:aa3eb7f97528cd1a3fd492658a62bfaf50c4f7e39f62cacfd8853ebed369bc93
+FROM docker.io/syncthing/syncthing:1.27.9@sha256:626d7b7bbd2f3a44125c7060a1a5786ad8df56f4d06b419e082cc8c6f4921ff2
