@@ -204,6 +204,7 @@ syncthing:
   caddy_sso: true
   host_network: true
   kube_quadlet_options:
+    Network: pasta
     UserNS: keep-id
   volumes:
     data: ./

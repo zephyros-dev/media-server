@@ -1204,6 +1204,23 @@ _applicationSet & {
 			containers: [{
 				name:  "web"
 				image: "syncthing"
+				// https://docs.syncthing.net/users/firewall.html
+				ports: [{
+					containerPort: 8384
+					hostPort:      8384
+				}, {
+					containerPort: 22000
+					hostPort:      22000
+					protocol:      "TCP"
+				}, {
+					containerPort: 22000
+					hostPort:      22000
+					protocol:      "UDP"
+				}, {
+					containerPort: 21027
+					hostPort:      21027
+					protocol:      "UDP"
+				}]
 				volumeMounts: [{
 					name:      "data"
 					mountPath: "/var/syncthing:U,z"
@@ -1212,7 +1229,6 @@ _applicationSet & {
 					mountPath: "/var/syncthing/koreader/book"
 				}]
 			}]
-			hostNetwork: true
 		}
 	}
 
