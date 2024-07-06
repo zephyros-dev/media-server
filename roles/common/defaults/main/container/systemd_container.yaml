@@ -179,7 +179,8 @@ radarr:
     config: ./web/config/
     home: "{{ global_media }}/"
 samba:
-  host_network: true
+  kube_quadlet_options:
+    Network: pasta
   volumes:
     disk: "{{ ansible_user_dir }}/disk/"
     disks: "{{ global_disks_data }}/"

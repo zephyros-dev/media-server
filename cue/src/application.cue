@@ -1064,6 +1064,10 @@ _applicationSet & {
 			containers: [{
 				name:  "instance"
 				image: "samba"
+				ports: [{
+					containerPort: 445
+					hostPort:      445
+				}]
 				env: [{
 					name:  "AVAHI_DISABLE"
 					value: "1"
@@ -1102,7 +1106,6 @@ _applicationSet & {
 					mountPath: "/shares/storage"
 				}]
 			}]
-			hostNetwork: true
 		}
 	}
 
