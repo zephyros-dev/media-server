@@ -25,6 +25,7 @@ RUN mkdir -p \
     ~/.local/share/aquaproj-aqua/registries \
     ~/.local/share/fish \
     ~/.ssh \
+    ~/.terraform.d/plugin-cache \
     ~/bin
 
 COPY --chown=${USERNAME}:${USERNAME} requirements.txt .

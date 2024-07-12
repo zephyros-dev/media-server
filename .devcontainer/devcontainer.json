@@ -79,7 +79,7 @@
     "source=guix-store,target=/gnu,type=volume",
     "source=guix-var,target=/var/guix,type=volume",
     "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
-    "source=terraform-plugin-cache,target=/home/vscode/.terraform-plugin-cache,type=volume"
+    "source=terraform-plugin-cache,target=/home/vscode/.terraform.d/plugin-cache,type=volume,chown=true"
   ],
   "name": "Infra",
   "onCreateCommand": ".devcontainer/main.py --stage onCreateCommand",

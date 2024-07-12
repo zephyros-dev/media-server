@@ -144,7 +144,7 @@ if args.stage == "all" or args.stage == "postAttachCommand":
     )
 
     (Path(home_path) / ".terraformrc").write_text(
-        'plugin_cache_dir = "~/.terraform.d/plugin-cache"'
+        'plugin_cache_dir = "/home/vscode/.terraform.d/plugin-cache"'
     )
 
     subprocess.run("pre-commit install", shell=True)
