@@ -1,3 +1,4 @@
+@extern(embed)
 package application
 
 import (
@@ -5,8 +6,14 @@ import (
 	"encoding/yaml"
 	"strings"
 	core "k8s.io/api/core/v1"
-	fact "zephyros.dev/tmp:fact"
 )
+
+_applicationName: string @tag(name)
+
+// Have to use MarshalStream since cue export does not make stream yaml
+yaml.MarshalStream(_application[_applicationName])
+
+_fact: _ @embed(file="tmp/fact.json")
 
 _applicationSet: [applicationName=_]: {
 	#param: {
@@ -18,7 +25,7 @@ _applicationSet: [applicationName=_]: {
 			}
 		}
 		volumes: {
-			for k, v in fact.container[strings.Replace(#param.name, "-", "_", -1)].volumes {"\(k)": {
+			for k, v in _fact.container[strings.Replace(#param.name, "-", "_", -1)].volumes {"\(k)": {
 				if v == "pvc" {
 					type:  "pvc"
 					value: "\(#param.name)-\(k)"
@@ -29,7 +36,7 @@ _applicationSet: [applicationName=_]: {
 						value: v
 					}
 					if v =~ "^\\.\/" {
-						value: "\(fact.global_volume_path)/\(#param.name)/\(strings.Replace(v, "./", "", -1))"
+						value: "\(_fact.global_volume_path)/\(#param.name)/\(strings.Replace(v, "./", "", -1))"
 					}
 				}
 				if v =~ "^\/.+\/$" {
@@ -38,7 +45,7 @@ _applicationSet: [applicationName=_]: {
 				}
 				if v =~ "^\\.\/.+\/$" || v == "./" {
 					type:  "relativePathDir"
-					value: "\(fact.global_volume_path)/\(#param.name)/\(strings.Replace(v, "./", "", -1))"
+					value: "\(_fact.global_volume_path)/\(#param.name)/\(strings.Replace(v, "./", "", -1))"
 				}
 			}}
 		}
@@ -119,7 +126,7 @@ _applicationSet: [applicationName=_]: {
 	[#pod, #secret] + #volume
 }
 
-_applicationSet & {
+_application: _applicationSet & {
 	audiobookshelf: {
 		_
 		#param: {
@@ -155,10 +162,10 @@ _applicationSet & {
 			image: "bazarr"
 			env: [{
 				name:  "PGID"
-				value: fact.global_pgid
+				value: _fact.global_pgid
 			}, {
 				name:  "PUID"
-				value: fact.global_puid
+				value: _fact.global_puid
 			}]
 			volumeMounts: [{
 				name:      "config"
@@ -177,7 +184,7 @@ _applicationSet & {
 			secret: {
 				Caddyfile: {
 					type:    "file"
-					content: fact.caddyfile_content
+					content: _fact.caddyfile_content
 				}
 			}
 		}
@@ -226,10 +233,10 @@ _applicationSet & {
 			}]
 			env: [{
 				name:  "PGID"
-				value: fact.global_pgid
+				value: _fact.global_pgid
 			}, {
 				name:  "PUID"
-				value: fact.global_puid
+				value: _fact.global_puid
 			}]
 			volumeMounts: [{
 				name:      "config"
@@ -261,12 +268,12 @@ _applicationSet & {
 						sections: [{
 							name: "All"
 							items: [
-								for k, v in fact.container
+								for k, v in _fact.container
 								if (v.dashy_only || v.caddy_proxy_port > 0) && k != "dashy" {
 									_url_key:    strings.Replace(k, "_", "-", -1)
-									_url_public: string | *"https://\(_url_key).\(fact.server_domain)"
+									_url_public: string | *"https://\(_url_key).\(_fact.server_domain)"
 									if k == "cockpit" {
-										_url_public: "https://server.\(fact.dynv6_zone)"
+										_url_public: "https://server.\(_fact.dynv6_zone)"
 									}
 									if v.state == "started" {
 										title: strings.ToTitle(_url_key)
@@ -275,7 +282,7 @@ _applicationSet & {
 										}
 										if v.dashy_icon != "" {
 											if strings.HasPrefix(v.dashy_icon, "/") {
-												icon: "https://\(_url_key).\(fact.server_domain)\(v.dashy_icon)"
+												icon: "https://\(_url_key).\(_fact.server_domain)\(v.dashy_icon)"
 											}
 											if !strings.HasPrefix(v.dashy_icon, "/") {
 												icon: v.dashy_icon
@@ -285,7 +292,7 @@ _applicationSet & {
 											statusCheckAllowInsecure: true
 											if v.caddy_proxy_url == "" {
 												if v.host_network {
-													statusCheckUrl: "http://\(fact.caddyfile_host_address):\(v.caddy_proxy_port)"
+													statusCheckUrl: "http://\(_fact.caddyfile_host_address):\(v.caddy_proxy_port)"
 												}
 												if !v.host_network {
 													statusCheckUrl: "http://\(_url_key):\(v.caddy_proxy_port)"
@@ -337,9 +344,9 @@ _applicationSet & {
 					content: """
 					{
 						dynamic_dns {
-							provider dynv6 \(fact.ddns_dynv6_token)
+							provider dynv6 \(_fact.ddns_dynv6_token)
 							domains {
-								\(fact.dynv6_zone) *.\(fact.server_subdomain)
+								\(_fact.dynv6_zone) *.\(_fact.server_subdomain)
 							}
 						}
 					}
@@ -408,11 +415,11 @@ _applicationSet & {
 			secret: {
 				database_password: {
 					type:    "env"
-					content: fact.immich_database_password
+					content: _fact.immich_database_password
 				}
 				jwt_secret: {
 					type:    "env"
-					content: fact.immich_jwt_secret
+					content: _fact.immich_jwt_secret
 				}
 			}
 		}
@@ -437,7 +444,7 @@ _applicationSet & {
 				name:      "database"
 				mountPath: "/var/lib/postgresql/data:U,z"
 			}]
-		}] + [if fact.container.immich.postgres_action == "none" for v in [{
+		}] + [if _fact.container.immich.postgres_action == "none" for v in [{
 			name:  "redis"
 			image: "immich-redis"
 		}, {
@@ -543,10 +550,10 @@ _applicationSet & {
 			// https://github.com/jlesage/docker-baseimage-gui#taking-ownership-of-a-directory
 			env: [{
 				name:  "USER_ID"
-				value: fact.global_puid
+				value: _fact.global_puid
 			}, {
 				name:  "GROUP_ID"
-				value: fact.global_pgid
+				value: _fact.global_pgid
 			}]
 			volumeMounts: [{
 				name:      "config"
@@ -595,10 +602,10 @@ _applicationSet & {
 			image: "koreader"
 			env: [{
 				name:  "PGID"
-				value: fact.global_pgid
+				value: _fact.global_pgid
 			}, {
 				name:  "PUID"
-				value: fact.global_puid
+				value: _fact.global_puid
 			}]
 			volumeMounts: [{
 				name:      "config"
@@ -632,10 +639,10 @@ _applicationSet & {
 			image: "lidarr"
 			env: [{
 				name:  "PGID"
-				value: fact.global_pgid
+				value: _fact.global_pgid
 			}, {
 				name:  "PUID"
-				value: fact.global_puid
+				value: _fact.global_puid
 			}]
 			volumeMounts: [{
 				name:      "home"
@@ -654,15 +661,15 @@ _applicationSet & {
 			secret: {
 				miniflux_postgres_password: {
 					type:    "env"
-					content: fact.miniflux_postgres_password
+					content: _fact.miniflux_postgres_password
 				}
 				miniflux_admin_password: {
 					type:    "env"
-					content: fact.miniflux_admin_password
+					content: _fact.miniflux_admin_password
 				}
 				miniflux_database_url: {
 					type:    "env"
-					content: "postgres://miniflux:\(fact.miniflux_postgres_password)@localhost:5432/miniflux?sslmode=disable"
+					content: "postgres://miniflux:\(_fact.miniflux_postgres_password)@localhost:5432/miniflux?sslmode=disable"
 				}
 			}
 		}
@@ -683,7 +690,7 @@ _applicationSet & {
 				name:      "database"
 				mountPath: "/var/lib/postgresql/data:U,z"
 			}]
-		}] + [if fact.container.miniflux.postgres_action == "none" for v in [{
+		}] + [if _fact.container.miniflux.postgres_action == "none" for v in [{
 			name:  "web"
 			image: "miniflux"
 			env: [{
@@ -750,11 +757,11 @@ _applicationSet & {
 			secret: {
 				postgres_password: {
 					type:    "env"
-					content: fact.nextcloud_postgres_password
+					content: _fact.nextcloud_postgres_password
 				}
 				redis_password: {
 					type:    "env"
-					content: fact.nextcloud_redis_password
+					content: _fact.nextcloud_redis_password
 				}
 			}
 		}
@@ -779,12 +786,12 @@ _applicationSet & {
 				name:      "database"
 				mountPath: "/var/lib/postgresql/data:U,z"
 			}]
-		}] + [if fact.container.nextcloud.postgres_action == "none" for v in [{
+		}] + [if _fact.container.nextcloud.postgres_action == "none" for v in [{
 			name:  "web"
 			image: "nextcloud"
 			env: [{
 				name:  "NEXTCLOUD_TRUSTED_DOMAINS"
-				value: "nextcloud.\(fact.server_domain)"
+				value: "nextcloud.\(_fact.server_domain)"
 			}, {
 				name:  "OVERWRITEPROTOCOL"
 				value: "https"
@@ -823,16 +830,16 @@ _applicationSet & {
 		}, {
 			name:  "redis"
 			image: "nextcloud-redis"
-			args: ["redis-server", "--requirepass", fact.nextcloud_redis_password]
+			args: ["redis-server", "--requirepass", _fact.nextcloud_redis_password]
 		}, {
 			name:  "office"
 			image: "nextcloud-office"
 			env: [{
 				name:  "server_name"
-				value: "nextcloud-office.\(fact.server_domain)"
+				value: "nextcloud-office.\(_fact.server_domain)"
 			}, {
 				name:  "aliasgroup1"
-				value: "nextcloud.\(fact.server_domain)"
+				value: "nextcloud.\(_fact.server_domain)"
 			}, {
 				name:  "extra_params"
 				value: "--o:ssl.enable=false --o:ssl.termination=true"
@@ -840,7 +847,7 @@ _applicationSet & {
 			securityContext: {
 				capabilities: add: ["MKNOD"]
 			}
-		}] {v}] + [if fact.debug {
+		}] {v}] + [if _fact.debug {
 			name:  "adminer"
 			image: "docker.io/adminer"
 			ports: [{
@@ -857,23 +864,23 @@ _applicationSet & {
 			secret: {
 				paperless_dbpass: {
 					type:    "env"
-					content: fact.paperless_dbpass
+					content: _fact.paperless_dbpass
 				}
 				paperless_ocr_language: {
 					type:    "env"
-					content: fact.paperless_ocr_language
+					content: _fact.paperless_ocr_language
 				}
 				paperless_ocr_languages: {
 					type:    "env"
-					content: fact.paperless_ocr_languages
+					content: _fact.paperless_ocr_languages
 				}
 				paperless_secret_key: {
 					type:    "env"
-					content: fact.paperless_secret_key
+					content: _fact.paperless_secret_key
 				}
 				paperless_url: {
 					type:    "env"
-					content: "https://paperless.\(fact.server_domain)"
+					content: "https://paperless.\(_fact.server_domain)"
 				}
 			}
 		}
@@ -898,7 +905,7 @@ _applicationSet & {
 				name:      "database"
 				mountPath: "/var/lib/postgresql/data:U,z"
 			}]
-		}] + [if fact.container.paperless.postgres_action == "none" for v in [{
+		}] + [if _fact.container.paperless.postgres_action == "none" for v in [{
 			name:  "redis"
 			image: "paperless-redis"
 			volumeMounts: [{
@@ -1033,10 +1040,10 @@ _applicationSet & {
 			image: "radarr"
 			env: [{
 				name:  "PGID"
-				value: fact.global_pgid
+				value: _fact.global_pgid
 			}, {
 				name:  "PUID"
-				value: fact.global_puid
+				value: _fact.global_puid
 			}]
 			volumeMounts: [{
 				name:      "home"
@@ -1055,7 +1062,7 @@ _applicationSet & {
 			secret: {
 				ACCOUNT_root: {
 					type:    "env"
-					content: fact.samba_password
+					content: _fact.samba_password
 				}
 			}
 		}
@@ -1119,7 +1126,7 @@ _applicationSet & {
 					content: yaml.Marshal({
 						notify: {
 							urls: [
-								"discord://\(fact.scrutiny_discord_token)@\(fact.scrutiny_discord_channel)",
+								"discord://\(_fact.scrutiny_discord_token)@\(_fact.scrutiny_discord_channel)",
 							]
 						}
 					})
@@ -1133,7 +1140,7 @@ _applicationSet & {
 				image: "scrutiny"
 				ports: [{
 					containerPort: 8080
-					hostPort:      fact.scrutiny_port
+					hostPort:      _fact.scrutiny_port
 				}]
 				volumeMounts: [{
 					name:      "udev"
@@ -1163,7 +1170,7 @@ _applicationSet & {
 			secret: {
 				speedtest_app_key: {
 					type:    "env"
-					content: fact.speedtest_app_key
+					content: _fact.speedtest_app_key
 				}
 			}
 		}
@@ -1176,7 +1183,7 @@ _applicationSet & {
 				value: "sqlite"
 			}, {
 				name:  "DISPLAY_TIMEZONE"
-				value: fact.ansible_date_time.tz
+				value: _fact.ansible_date_time.tz
 			}, {
 				name:  "SPEEDTEST_SCHEDULE"
 				value: "0 * * * *"
@@ -1242,11 +1249,11 @@ _applicationSet & {
 			secret: {
 				USER: {
 					type:    "env"
-					content: fact.transmission_user
+					content: _fact.transmission_user
 				}
 				PASS: {
 					type:    "env"
-					content: fact.transmission_password
+					content: _fact.transmission_password
 				}
 			}
 		}
@@ -1256,10 +1263,10 @@ _applicationSet & {
 			image: "transmission"
 			env: [{
 				name:  "PGID"
-				value: fact.global_pgid
+				value: _fact.global_pgid
 			}, {
 				name:  "PUID"
-				value: fact.global_puid
+				value: _fact.global_puid
 			}] + [{
 				name: "USER"
 				valueFrom: secretKeyRef: {
@@ -1313,11 +1320,11 @@ _applicationSet & {
 			secret: {
 				WOLWEBBCASTIP: {
 					type:    "env"
-					content: fact.wol_bcast_ip
+					content: _fact.wol_bcast_ip
 				}
 				"devices.json": {
 					type:    "file"
-					content: json.Marshal(fact.wol_config_devices)
+					content: json.Marshal(_fact.wol_config_devices)
 				}
 			}
 		}

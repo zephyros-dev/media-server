@@ -62,9 +62,9 @@
           block:
             - name: Render kube deployment {{ container_loop_var.key }}
               changed_when: false
-              ansible.builtin.command:
+              ansible.builtin.shell:
                 chdir: cue
-                cmd: cue cmd --inject applicationName={{ container_loop_var.key }} dump
+                cmd: CUE_EXPERIMENT=embed cue export --inject name={{ container_loop_var.key }} --out text
               register: cue_dump
         - name: Setup kube deployment {{ container_loop_var.key }}
           block:

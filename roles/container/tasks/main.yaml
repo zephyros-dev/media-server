@@ -30,11 +30,6 @@
             mode: "0644"
             src: cue/tmp/fact.json
             dest: cue/tmp/fact.json
-        - name: Extract fact to cue
-          changed_when: false
-          ansible.builtin.command:
-            chdir: cue
-            cmd: cue import tmp/fact.json --outfile tmp/fact.cue -p fact -f
     - name: Run podman container with systemd
       ansible.builtin.include_tasks:
         file: container.yaml

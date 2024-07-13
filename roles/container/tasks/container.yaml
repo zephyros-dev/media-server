@@ -36,7 +36,7 @@
                     chdir: cue
                     # Need {{ cue_path }} this since cue is not installed globaly, and we may need to run this with sudo
                     # Use container_loop_var.key since the key in cue use _ instead of -
-                    cmd: "{{ cue_path }} eval src/application.cue -e  {{ container_loop_var.key }}.#param.volumes --out json"
+                    cmd: "{{ cue_path }} eval application.cue -e  _application.{{ container_loop_var.key }}.#param.volumes --out json"
                   register: volume_map
                 - name: Set volume directory lists {{ container_service_name }}
                   ansible.builtin.set_fact:
