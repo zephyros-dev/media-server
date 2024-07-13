@@ -89,13 +89,14 @@
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
     "CONTAINER_HOST": "unix:///run/user/1000/podman/podman.sock",
     "CUE_EXPERIMENT": "embed", // Remove once out of alpha
+    "DEBUG_MODE": "true",
     "DOCKER_HOST": "unix:///run/user/1000/podman/podman.sock",
     "EDITOR": "code --wait",
     "GUIX_LOCPATH": "/home/vscode/.guix-profile/lib/locale",
     "GUIX_PROFILE": "/home/vscode/.config/guix/current"
   },
   "remoteUser": "vscode",
-  "runArgs": ["--userns=keep-id", "--privileged", "--network", "slirp4netns"], // https://github.com/containers/podman/issues/22653
+  "runArgs": ["--userns=keep-id", "--privileged"],
   "workspaceFolder": "${localWorkspaceFolder}",
   "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind"
 }
