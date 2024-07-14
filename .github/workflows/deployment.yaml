@@ -34,6 +34,7 @@ jobs:
       - name: Set up WireGuard
         run: |
           sudo apt update && sudo apt install wireguard
+          sudo apt install openresolv # Missing deps for wgquick
           sops -d secret/deployment/wg0.sops.ini | sudo tee /etc/wireguard/wg0.conf > /dev/null
           wg-quick up wg0 &> /dev/null
         env:
