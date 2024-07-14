@@ -12,7 +12,7 @@ on:
       - inventory/**
       - requirements.yaml
       - roles/**
-      - secret/*
+      - secret/**
       - submodules/**
 jobs:
   deploy:
