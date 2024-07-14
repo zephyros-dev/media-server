@@ -34,8 +34,8 @@ jobs:
       - name: Set up WireGuard
         run: |
           sudo apt update && sudo apt install wireguard
-          sudo apt install openresolv # Missing deps for wgquick
           sops -d secret/deployment/wg0.sops.ini | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          wg-quick up wg0 &> /dev/null
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5
@@ -50,7 +50,6 @@ jobs:
         run: |
           eval `ssh-agent`
           sops -d secret/deployment/ssh_key.sops | ssh-add - &> /dev/null
-          wg-quick up wg0 &> /dev/null # The wireguard dns config seem to lost if run in another step, so move it here
           python ci/deployment.py
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
