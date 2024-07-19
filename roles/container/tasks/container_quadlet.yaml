@@ -17,22 +17,10 @@
             path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
             state: directory
             mode: "0755"
-        # Synchronize cannot use sudo https://stackoverflow.com/questions/40331425/synchronize-module-fails-with-become
-        - name: Copy kube files {{ container_loop_var.key }} # noqa: risky-file-permissions
-          when: not container_loop_var.value.become
-          ansible.posix.synchronize:
-            src: "{{ container_loop_var.key }}/"
-            dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
-            # Do not check for file timestamp, only check for file content for the CI run
-            # to not trigger changes here
-            # https://stackoverflow.com/a/62112271/13871361
-            recursive: true
-            archive: false
-            checksum: true
-          register: image_file
-        # Copy works correctly in both cases, however it is slow
+        # We stopped using synchronized since there are not that many files,
+        # and synchronize create new ssh connection every time so it's very slow on the CI server
+        # https://stackoverflow.com/a/62776037
         - name: Copy image files {{ container_loop_var.key }} # noqa: risky-file-permissions
-          when: container_loop_var.value.become
           ansible.builtin.copy:
             src: "{{ container_loop_var.key }}/"
             dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
@@ -83,15 +71,13 @@
               block:
                 - name: Start systemd service {{ container_loop_var.key }}
                   changed_when: false
-                  when:
-                    - not (image_file.changed or kube_file_yaml.changed or kube_file_quadlet.changed)
+                  when: not (kube_file_yaml.changed or kube_file_quadlet.changed)
                   ansible.builtin.systemd:
                   async: 45
                   poll: 0
                 - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
                   changed_when: false
-                  when:
-                    - image_file.changed or kube_file_yaml.changed or kube_file_quadlet.changed
+                  when: kube_file_yaml.changed or kube_file_quadlet.changed
                   ansible.builtin.systemd:
                     state: restarted
                   async: 45
@@ -107,15 +93,13 @@
           register: container_file_state
         - name: Start systemd service {{ container_loop_var.key }}
           changed_when: false
-          when:
-            - not (image_file.changed or container_file_state.changed)
+          when: not container_file_state.changed
           ansible.builtin.systemd:
           async: 45
           poll: 0
-        - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
+        - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module] no-handler
           changed_when: false
-          when:
-            - image_file.changed or container_file_state.changed
+          when: container_file_state.changed
           ansible.builtin.systemd:
             state: restarted
           async: 45
