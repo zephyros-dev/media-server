@@ -841,8 +841,10 @@ _application: _applicationSet & {
 				name:  "aliasgroup1"
 				value: "nextcloud.\(_fact.server_domain)"
 			}, {
+				// https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html#reverse-proxy-settings-in-apache2-config-ssl-termination
+				// https://github.com/CollaboraOnline/online/issues/9534
 				name:  "extra_params"
-				value: "--o:ssl.enable=false --o:ssl.termination=true"
+				value: "--o:ssl.enable=false --o:ssl.termination=true --o:mount_namespaces=false"
 			}]
 			securityContext: {
 				capabilities: add: ["MKNOD"]
