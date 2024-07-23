@@ -56,7 +56,7 @@
       "additionalBranchPrefix": "{{parentDir}}/",
       "commitMessageAction": "({{parentDir}})",
       "matchPackagePatterns": ["postgres"],
-      "matchUpdateTypes": ["major", "minor"]
+      "matchUpdateTypes": ["major"]
     }
   ],
   "pinDigests": true,
