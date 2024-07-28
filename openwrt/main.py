@@ -15,24 +15,25 @@ openwrt_config = json.loads(
     subprocess.run(["sops", "-d", "config.sops.json"], capture_output=True).stdout
 )
 
-# Copy the repo
-subprocess.run(
-    f"rsync --mkpath --chown root:root -a --delete --exclude '.git' --exclude 'config' ../submodules/zapret/ root@{openwrt_config['router']}:/opt/zapret",
-    shell=True,
-)
+for router in openwrt_config["router_list"]:
+    # Copy the repo
+    subprocess.run(
+        f"rsync -4 --mkpath --chown root:root -a --delete --exclude '.git' --exclude 'config' ../submodules/zapret/ root@{router}:/opt/zapret",
+        shell=True,
+    )
 
-# Copy tmp config
-shutil.copy("../submodules/zapret/config", ".env")
+    # Copy tmp config
+    shutil.copy("../submodules/zapret/config", ".env")
 
-# Change the config
-for key, value in openwrt_config["config"].items():
-    set_key(".env", key, value)
+    # Change the config
+    for key, value in openwrt_config["config"].items():
+        set_key(".env", key, value)
 
-# Copy the config
-subprocess.run(
-    f"rsync --chown root:root -a --delete .env root@{openwrt_config['router']}:/opt/zapret/config",
-    shell=True,
-)
+        # Copy the config
+        subprocess.run(
+            f"rsync -4 --chown root:root -a --delete .env root@{router}:/opt/zapret/config",
+            shell=True,
+        )
 
 # TODO: Run non-interactive
 # Run the script
