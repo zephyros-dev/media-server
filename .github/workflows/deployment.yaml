@@ -5,7 +5,6 @@ on:
       - main
     paths:
       - .github/workflows/deployment.yaml
-      - "!submodules/zapret"
       - ci/**
       - cue/**
       - group_vars/**
@@ -14,6 +13,7 @@ on:
       - roles/**
       - secret/**
       - submodules/**
+      - "!submodules/zapret"
 jobs:
   deploy:
     concurrency: deployment
