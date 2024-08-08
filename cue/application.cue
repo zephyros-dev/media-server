@@ -355,8 +355,7 @@ _application: _applicationSet & {
 			}
 		}
 
-		// Have to make a separate container with host network since ipv6 setup with pod does not work
-		// May try again once pasta ipv6 is fixed https://github.com/containers/podman/issues/23003
+		// ddns has to be ran separately since caddy is ran inside a podman network, so it does not have the IP address of the host
 		#pod: spec: {
 			containers: [{
 				name:  "instance"
@@ -842,9 +841,8 @@ _application: _applicationSet & {
 				value: "nextcloud.\(_fact.server_domain)"
 			}, {
 				// https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html#reverse-proxy-settings-in-apache2-config-ssl-termination
-				// https://github.com/CollaboraOnline/online/issues/9534
 				name:  "extra_params"
-				value: "--o:ssl.enable=false --o:ssl.termination=true --o:mount_namespaces=false"
+				value: "--o:ssl.enable=false --o:ssl.termination=true"
 			}]
 			securityContext: {
 				capabilities: add: ["MKNOD"]
