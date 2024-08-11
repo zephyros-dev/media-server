@@ -39,8 +39,8 @@ auth.{{ server_domain }} {
 (global-config) {
     encode gzip
 }
+# https://owasp.org/www-project-secure-headers/index.html#div-bestpractices
 (security-header) {
-  # https://owasp.org/www-project-secure-headers/index.html#div-bestpractices
   header_down Strict-Transport-Security "max-age=31536000; includeSubDomains"
   header_down Referrer-Policy "strict-origin-when-cross-origin"
   header_down X-Content-Type-Options "nosniff"
@@ -56,9 +56,6 @@ auth.{{ server_domain }} {
 {% set name = key | replace("_", "-") %}
 {{ name }}.{{ server_domain }} {
     import global-config
-    #     {% if name == "netdata" %}
-    # import cors https://app.netdata.cloud # Netdata cannot fetch even with no header
-    #     {% endif %}
         {% if value.caddy_sso %}
     import proxy-auth
         {% endif %}
