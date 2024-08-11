@@ -1,1 +1,1 @@
-FROM docker.io/gotenberg/gotenberg:8.9@sha256:06d369426a3dcecd15f71b8ac9a81dc26819c5825fc72559c16c4c45c8aea8fc
+FROM docker.io/gotenberg/gotenberg:8.9@sha256:9b1beb40d4bc088ceceab6b7c55a097c8530da8e23b122d5f1fdf768c5cd77a7
