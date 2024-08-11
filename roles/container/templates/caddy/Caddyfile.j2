@@ -1,14 +1,9 @@
 #jinja2:lstrip_blocks: True
-(basic-auth) {
-  basicauth / {
-    {{ caddyfile_auth_user }} {{ caddyfile_auth_pass }}
-  }
-}
 # CORS snippet
 # https://caddyserver.com/docs/caddyfile/directives/import#examples
 (cors) {
-	@origin header Origin {args.0}
-	header @origin Access-Control-Allow-Origin "{args.0}"
+	@origin header Origin {args[0]}
+	header @origin Access-Control-Allow-Origin "{args[0]}"
 	header @origin Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
 }
 # A snippet to check if a cookie token is set. if not, store the current page as the referer and redirect to auth site
@@ -28,7 +23,9 @@
 auth.{{ server_domain }} {
   route {
     # require authentication
-    import basic-auth
+    basic_auth / {
+      {{ caddyfile_auth_user }} {{ caddyfile_auth_pass }}
+    }
     # upon successful auth, set a client token
     header Set-Cookie "myid={{ caddyfile_auth_token }}; Domain={{ server_domain }}; Path=/; Max-Age=3600; HttpOnly; SameSite=Strict; Secure"
     # delete the referer cookie
@@ -43,11 +40,15 @@ auth.{{ server_domain }} {
     encode gzip
 }
 (security-header) {
-  header_down Strict-Transport-Security "max-age=15552000;"
+  # https://owasp.org/www-project-secure-headers/index.html#div-bestpractices
+  header_down Strict-Transport-Security "max-age=31536000; includeSubDomains"
   header_down Referrer-Policy "strict-origin-when-cross-origin"
-  header_down X-XSS-Protection "1; mode=block"
   header_down X-Content-Type-Options "nosniff"
   header_down X-Frame-Options "SAMEORIGIN"
+  header_down Permissions-Policy "accelerometer=(), autoplay=(), camera=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(self), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(), gamepad=(), hid=(), idle-detection=(), interest-cohort=(), serial=(), unload=()"
+  header_down Cross-Origin-Embedder-Policy "require-corp"
+  header_down Cross-Origin-Opener-Policy "same-origin"
+  header_down Cross-Origin-Resource-Policy "cross-origin"
 }
 {% for key,value in container | dictsort %}
   {% if value.state == 'started' %}
@@ -55,6 +56,9 @@ auth.{{ server_domain }} {
 {% set name = key | replace("_", "-") %}
 {{ name }}.{{ server_domain }} {
     import global-config
+    #     {% if name == "netdata" %}
+    # import cors https://app.netdata.cloud # Netdata cannot fetch even with no header
+    #     {% endif %}
         {% if value.caddy_sso %}
     import proxy-auth
         {% endif %}
@@ -85,11 +89,11 @@ auth.{{ server_domain }} {
 server.{{ dynv6_zone }} {
   import global-config
   reverse_proxy https://{{ caddyfile_host_address }}:9090 {
-      import security-header
-       transport http {
-          tls_insecure_skip_verify
-          }
-      }
+    import security-header
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
   tls me@outlook.com {
     dns dynv6 {{ ddns_dynv6_token }}
   }
