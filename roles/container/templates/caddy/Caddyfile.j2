@@ -46,9 +46,10 @@ auth.{{ server_domain }} {
   header_down X-Content-Type-Options "nosniff"
   header_down X-Frame-Options "SAMEORIGIN"
   header_down Permissions-Policy "accelerometer=(), autoplay=(), camera=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(self), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(), gamepad=(), hid=(), idle-detection=(), interest-cohort=(), serial=(), unload=()"
-  header_down Cross-Origin-Embedder-Policy "require-corp"
-  header_down Cross-Origin-Opener-Policy "same-origin"
-  header_down Cross-Origin-Resource-Policy "cross-origin"
+  # These header blocks all resources from external sites including images
+  # header_down Cross-Origin-Embedder-Policy "require-corp"
+  # header_down Cross-Origin-Opener-Policy "same-origin"
+  # header_down Cross-Origin-Resource-Policy "cross-origin"
 }
 {% for key,value in container | dictsort %}
   {% if value.state == 'started' %}
