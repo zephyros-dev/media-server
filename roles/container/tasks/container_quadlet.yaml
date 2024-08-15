@@ -20,26 +20,24 @@
         # We stopped using synchronized since there are not that many files,
         # and synchronize create new ssh connection every time so it's very slow on the CI server
         # https://stackoverflow.com/a/62776037
-        - name: Copy image files {{ container_loop_var.key }} # noqa: risky-file-permissions
+        - name: Copy image build files {{ container_loop_var.key }} # noqa: risky-file-permissions
           ansible.builtin.copy:
             src: "{{ container_loop_var.key }}/"
             dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
         # For container: Copy the container file and build it on remote so that the image tag
         # can be updated via renovate
-        - name: Build image for container {{ container_loop_var.key }}
-          when: container_loop_var.value.kind == "container"
-          block:
-            - name: Get list of image to build {{ container_loop_var.key }}
-              ansible.builtin.find:
-                paths: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
-                file_type: directory
-              register: image_list
-            - name: Build images for kube file {{ container_loop_var.key }}
-              containers.podman.podman_image:
-                name: "{{ item.path | basename }}"
-                path: "{{ item.path }}"
-                force: true
-              loop: "{{ image_list.files }}"
+        - name: Get list of image to build {{ container_loop_var.key }}
+          ansible.builtin.find:
+            paths: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+            file_type: directory
+          register: image_list
+        # We use build image service since its build can be cached, unlike using podman kube build flag
+        - name: Create build images services {{ container_loop_var.key }} # noqa: risky-file-permissions
+          ansible.builtin.template:
+            src: quadlet/image.build.j2
+            dest: "{{ container_quadlet_path }}/{{ item.path | basename }}.build"
+          loop: "{{ image_list.files }}"
+          register: image_build_state
 
     - name: Create kube service {{ container_loop_var.key }}
       when: container_loop_var.value.kind == "kube"
@@ -77,7 +75,7 @@
                   poll: 0
                 - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
                   changed_when: false
-                  when: kube_file_yaml.changed or kube_file_quadlet.changed
+                  when: kube_file_yaml.changed or kube_file_quadlet.changed or image_build_state.changed
                   ansible.builtin.systemd:
                     state: restarted
                   async: 45
@@ -114,38 +112,40 @@
       scope: "{{ container_systemd_scope }}"
       state: stopped
   block:
-    - name: Remove kube service {{ container_loop_var.key }}
-      when: container_loop_var.value.kind == "kube"
-      block:
-        - name: Check if kube file exists {{ container_loop_var.key }}
-          ansible.builtin.stat:
-            path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
-          register: kube_file_exists
-        - name: Stop systemd service {{ container_loop_var.key }}
-          when: kube_file_exists.stat.exists
-          ansible.builtin.systemd:
-        - name: Remove kube file {{ container_loop_var.key }}
-          ansible.builtin.file:
-            path: "{{ item }}"
-            state: absent
-          loop:
-            - "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
-            - "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+    - name: Check if container or kube service exists {{ container_loop_var.key }}
+      ansible.builtin.find:
+        paths: "{{ container_quadlet_path }}/"
+        patterns:
+          - "{{ container_loop_var.key }}.kube"
+          - "{{ container_loop_var.key }}.container"
+      register: service_file_exists
 
-    - name: Remove container service {{ container_loop_var.key }}
-      when: container_loop_var.value.kind == "container"
-      block:
-        - name: Check if container file exists {{ container_loop_var.key }}
-          ansible.builtin.stat:
-            path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
-          register: container_file_exists
-        - name: Stop systemd service {{ container_loop_var.key }}
-          when: container_file_exists.stat.exists
-          ansible.builtin.systemd:
-        - name: Remove container file {{ container_loop_var.key }}
-          ansible.builtin.file:
-            path: "{{ item }}"
-            state: absent
-          loop:
-            - "{{ container_quadlet_path }}/{{ container_loop_var.key }}.container"
-            - "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+    - name: Stop container service {{ container_loop_var.key }}
+      when: service_file_exists.files | length > 0
+      ansible.builtin.systemd:
+
+    - name: Find list of build service {{ container_loop_var.key }}
+      ansible.builtin.find:
+        paths: "{{ container_quadlet_path }}/"
+        file_type: any
+        patterns: "{{ container_loop_var.key }}*.build"
+      register: build_service_list
+
+    - name: Stop build service {{ container_loop_var.key }}
+      when: build_service_list.files | length > 0
+      ansible.builtin.systemd:
+        name: "{{ item.path | basename }}"
+        state: stopped
+      loop: "{{ build_service_list.files }}"
+
+    - name: Find container systemd files {{ container_loop_var.key }}
+      ansible.builtin.find:
+        paths: "{{ container_quadlet_path }}/"
+        file_type: any
+        patterns: "{{ container_loop_var.key }}*"
+      register: files_removal_list
+    - name: Remove files {{ container_loop_var.key }}
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ files_removal_list.files }}"

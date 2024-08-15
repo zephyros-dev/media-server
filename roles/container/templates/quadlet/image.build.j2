@@ -1,0 +1,5 @@
+[Build]
+ImageTag={{ item.path | basename }}
+SetWorkingDirectory={{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/{{ item.path | basename }}
+[Install]
+WantedBy={{ container_loop_var.key }}.service
