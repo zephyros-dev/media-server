@@ -1,5 +1,7 @@
 [Build]
 ImageTag={{ item.path | basename }}
-SetWorkingDirectory={{ ansible_user_dir }}/.config/containers/systemd/{{ container_loop_var.key }}/{{ item.path | basename }}
+SetWorkingDirectory={{ container_quadlet_path }}/{{ container_loop_var.key }}/{{ item.path | basename }}
+[Unit]
+BindsTo={{ container_loop_var.key }}.service # This restart the image build when the kube service is restarted, which apply the new image if exists
 [Install]
 WantedBy={{ container_loop_var.key }}.service

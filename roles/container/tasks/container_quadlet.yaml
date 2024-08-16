@@ -1,6 +1,8 @@
 - name: Create service {{ container_loop_var.key }}
   when: container_loop_var.value.state == "started"
   module_defaults:
+    ansible.builtin.copy:
+      mode: "0600"
     ansible.builtin.template:
       lstrip_blocks: true
       mode: "0600"
@@ -17,13 +19,37 @@
             path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
             state: directory
             mode: "0755"
-        # We stopped using synchronized since there are not that many files,
-        # and synchronize create new ssh connection every time so it's very slow on the CI server
+        # Synchronize create new ssh connection every time so it's very slow on the CI server
         # https://stackoverflow.com/a/62776037
-        - name: Copy image build files {{ container_loop_var.key }} # noqa: risky-file-permissions
+        # Synchronize does not work with root however, so we have to use the copy module
+        # - name: Copy image build files {{ container_loop_var.key }} # noqa: risky-file-permissions
+        #   ansible.posix.synchronize:
+        #     use_ssh_args: true
+        #     rsync_opts: ["-4"] # Use this since the VPN on the CI server is IPv4 only
+        #     src: "{{ container_loop_var.key }}/"
+        #     dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
+        #   register: image_containerfile_state
+        # The ansible.builtin.copy has bugs that does not detect file changes when only 1 file is copied
+        # https://github.com/ansible/ansible/issues/38938
+        # - name: Copy Containerfiles {{ container_loop_var.key }} # noqa: risky-file-permissions
+        #   ansible.builtin.copy:
+        #     src: "{{ container_loop_var.key }}/"
+        #     dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
+        #   register: image_containerfile_state
+        # So we have to list the files and copy them one by one
+        - name: Get list of Containerfiles to copy {{ container_loop_var.key }}
+          delegate_to: localhost
+          ansible.builtin.find:
+            paths: roles/container/files/{{ container_loop_var.key }}
+            file_type: file
+            recurse: true
+          register: image_containerfile_list
+        - name: Copy Containerfiles {{ container_loop_var.key }} # noqa: risky-file-permissions
           ansible.builtin.copy:
-            src: "{{ container_loop_var.key }}/"
-            dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
+            src: "{{ item.path }}"
+            dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/{{ item.path | dirname | basename }}/{{ item.path | basename }}"
+          loop: "{{ image_containerfile_list.files }}"
+          register: image_containerfile_state
         # For container: Copy the container file and build it on remote so that the image tag
         # can be updated via renovate
         - name: Get list of image to build {{ container_loop_var.key }}
@@ -37,7 +63,7 @@
             src: quadlet/image.build.j2
             dest: "{{ container_quadlet_path }}/{{ item.path | basename }}.build"
           loop: "{{ image_list.files }}"
-          register: image_build_state
+          register: image_build_service_state
 
     - name: Create kube service {{ container_loop_var.key }}
       when: container_loop_var.value.kind == "kube"
@@ -54,10 +80,9 @@
               register: cue_dump
         - name: Setup kube deployment {{ container_loop_var.key }}
           block:
-            - name: Create kube deployment {{ container_loop_var.key }}
+            - name: Create kube deployment {{ container_loop_var.key }} # noqa: risky-file-permissions
               ansible.builtin.copy:
                 content: "{{ cue_dump.stdout }}"
-                mode: "0600"
                 dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/deployment.yaml"
               register: kube_file_yaml
             - name: Create kube quadlet file {{ container_loop_var.key }} # noqa: risky-file-permissions
@@ -75,7 +100,7 @@
                   poll: 0
                 - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
                   changed_when: false
-                  when: kube_file_yaml.changed or kube_file_quadlet.changed or image_build_state.changed
+                  when: kube_file_yaml.changed or kube_file_quadlet.changed or image_build_service_state.changed or image_containerfile_state.changed
                   ansible.builtin.systemd:
                     state: restarted
                   async: 45
