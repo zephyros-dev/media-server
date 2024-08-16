@@ -23,7 +23,7 @@ for router in openwrt_config["router_list"]:
     )
 
     # Copy tmp config
-    shutil.copy("../submodules/zapret/config", ".env")
+    shutil.copy("../submodules/zapret/config.default", ".env")
 
     # Change the config
     for key, value in openwrt_config["config"].items():
