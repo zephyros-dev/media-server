@@ -1,13 +1,13 @@
 #!/usr/local/bin/python
 
 import argparse
+import json
 import os
 import platform
 import re
 import shutil
 import subprocess
 from pathlib import Path
-import json
 
 import requests
 from jinja2 import Environment, FileSystemLoader
@@ -68,9 +68,7 @@ def dependency_setup():
     subprocess.run("aqua install --all", shell=True)
 
     # Cue setup
-    subprocess.run(
-        "cue get go k8s.io/api/... k8s.io/apimachinery/...", shell=True, cwd="cue"
-    )
+    subprocess.run("cue get go k8s.io/api/core/...", shell=True, cwd="cue")
 
 
 environment = Environment(

@@ -24,12 +24,6 @@
             content: "{{ lookup('vars', 'vars') | to_nice_json }}"
             mode: "0644"
             dest: cue/tmp/fact.json
-        - name: Template fact into concrete value
-          changed_when: false
-          ansible.builtin.template:
-            mode: "0644"
-            src: cue/tmp/fact.json
-            dest: cue/tmp/fact.json
     - name: Run podman container with systemd
       ansible.builtin.include_tasks:
         file: container.yaml

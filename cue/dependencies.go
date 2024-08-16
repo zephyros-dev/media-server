@@ -4,5 +4,4 @@ package main
 
 import (
 	"k8s.io/api"
-	"k8s.io/apimachinery"
 )
