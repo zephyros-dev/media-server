@@ -35,7 +35,6 @@
       "matchPackagePatterns": ["python"]
     },
     {
-      "automerge": false,
       "matchDepPatterns": ["mergerfs"],
       "minimumReleaseAge": "7"
     },
@@ -57,6 +56,12 @@
       "commitMessageAction": "({{parentDir}})",
       "matchPackagePatterns": ["postgres"],
       "matchUpdateTypes": ["major"]
+    },
+    {
+      "automerge": false,
+      "groupName": "cue-lang-k8s-api",
+      "matchPaths": ["cue/"],
+      "matchUpdateTypes": ["major", "minor"]
     }
   ],
   "pinDigests": true,
