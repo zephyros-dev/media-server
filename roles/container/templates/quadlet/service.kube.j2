@@ -2,9 +2,9 @@
 {% for key,value in container_loop_var.value.kube_quadlet_options | dictsort %}
 {{ key }}={{ value }}
 {% endfor %}
-Yaml={{ container_quadlet_path }}/{{ container_loop_var.key }}/deployment.yaml
+Yaml=./{{ container_loop_var.key }}/deployment.yaml
 SetWorkingDirectory=yaml
 [Service]
-# Extend Timeout to allow time to pull the image
+{# Extend Timeout to allow time to pull the image #}
 TimeoutStartSec=1800
 {% include 'common.j2' %}
