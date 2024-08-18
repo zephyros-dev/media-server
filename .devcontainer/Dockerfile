@@ -6,8 +6,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt update \
     && apt install -y --no-install-recommends \
     docker-compose \
+    fish \
     gettext-base \
-    guix \
+    # guix \
     openssl \
     sshpass \
     whois
