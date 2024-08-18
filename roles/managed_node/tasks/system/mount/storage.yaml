@@ -1,15 +1,16 @@
-- name: Mount storage root
-  ansible.posix.mount:
-    path: /mnt/disks/storage/root/{{ storage_loop_var }}
-    src: /dev/disk/by-id/{{ storage_loop_var }}-part1
-    fstype: btrfs
-    state: mounted
-
+# https://wiki.selfhosted.show/tools/snapraid-btrfs/
 - name: Manage storage subvolume
   ansible.builtin.include_tasks:
     file: subvolume.yaml
   loop:
-    - data
-    - content
+    - data # for actual data
+    - content # for the snapraid content
   loop_control:
     loop_var: subvolume_loop_var
+
+- name: Unmount storage root
+  ansible.posix.mount:
+    path: /mnt/disks/storage/root/{{ storage_loop_var }}
+    src: /dev/disk/by-id/{{ storage_loop_var }}-part1
+    fstype: btrfs
+    state: absent
