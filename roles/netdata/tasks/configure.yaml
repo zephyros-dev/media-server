@@ -65,25 +65,6 @@
 
     - name: Setup smartd monitoring
       block:
-        - name: Create smartd log directory
-          ansible.builtin.file:
-            path: /var/log/smartd
-            state: directory
-            mode: "0755"
-        - name: Setup smartd options
-          community.general.ini_file:
-            path: /etc/sysconfig/smartmontools
-            section: null
-            option: smartd_opts
-            no_extra_spaces: true
-            value: '"-A /var/log/smartd/ -i 600 -q never"'
-            mode: "0644"
-          notify: Restart smartd
-        - name: Create logrotate config file
-          ansible.builtin.template:
-            src: smartd.j2
-            dest: /etc/logrotate.d/smartd
-            mode: "0644"
         - name: Enable smartd monitoring netdata # noqa: args[module] risky-file-permissions
           ansible.builtin.copy:
             src: /usr/lib/netdata/conf.d/go.d/smartctl.conf
