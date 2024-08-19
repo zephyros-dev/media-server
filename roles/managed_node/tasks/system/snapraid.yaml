@@ -12,7 +12,6 @@
         apply:
           become: true
       vars:
-        snapper_timer_timeline_enabled: false
         snapper_configs:
           - path: "{{ global_disks_storage_path }}/{{ snapper_loop_var }}"
             name: "{{ snapper_loop_var }}"
@@ -25,6 +24,24 @@
       loop: "{{ disks.storage.disks_list }}"
       loop_control:
         loop_var: snapper_loop_var
+    - name: Setup snapper for /home auto snapshots
+      ansible.builtin.include_role:
+        name: aisbergg.snapper
+        apply:
+          become: true
+      vars:
+        snapper_configs:
+          - path: /home
+            name: home
+            vars:
+              ALLOW_USERS: "{{ ansible_env.USER }}"
+              ALLOW_GROUPS: "{{ ansible_env.USER }}"
+              SYNC_ACL: true
+              TIMELINE_LIMIT_HOURLY: "6"
+              TIMELINE_LIMIT_DAILY: "7"
+              TIMELINE_LIMIT_WEEKLY: "0"
+              TIMELINE_LIMIT_MONTHLY: "0"
+              TIMELINE_LIMIT_YEARLY: "0"
     - name: Setup snapraid-btrfs-runner
       become: true
       tags: snapraid_runner
