@@ -978,18 +978,19 @@ _application: _applicationSet & {
 					key:  "paperless_url"
 				}
 			}]
+			// Do not chown paperless volume as it is chowned by the container process
 			volumeMounts: [{
 				name:      "consume"
-				mountPath: "/usr/src/paperless/consume:U,z"
+				mountPath: "/usr/src/paperless/consume:z"
 			}, {
 				name:      "data"
-				mountPath: "/usr/src/paperless/data:U,z"
+				mountPath: "/usr/src/paperless/data:z"
 			}, {
 				name:      "export"
-				mountPath: "/usr/src/paperless/export:U,z"
+				mountPath: "/usr/src/paperless/export:z"
 			}, {
 				name:      "media"
-				mountPath: "/usr/src/paperless/media:U,z"
+				mountPath: "/usr/src/paperless/media:z"
 			}]
 		}] {v}]
 	}
