@@ -1,3 +1,17 @@
+- name: Setup virtualization
+  tags: virt
+  become: true
+  block:
+    - name: Install the 'virtualization' package group
+      ansible.builtin.dnf:
+        name: "@virtualization"
+        state: latest
+    - name: Allow virt to use fuse.mergerfs
+      ansible.posix.seboolean:
+        name: virt_use_fusefs
+        state: true
+        persistent: true
+
 - name: Setup podman
   tags: podman
   become: true
