@@ -24,6 +24,7 @@ resource "libvirt_domain" "this" {
 
   network_interface {
     bridge = "bridge0"
+    mac    = local.secret.mac_address
   }
 
   disk {
