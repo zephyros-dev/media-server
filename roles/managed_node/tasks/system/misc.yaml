@@ -2,6 +2,10 @@
   tags: misc
   become: true
   block:
+    - name: Enable SELinux
+      ansible.posix.selinux:
+        policy: targeted
+        state: enforcing
     # Reference: https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
     - name: Increase buffer size for HTTP/3 perfomance in caddy
       ansible.posix.sysctl:
