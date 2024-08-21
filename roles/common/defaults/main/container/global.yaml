@@ -6,11 +6,6 @@ global_media: "/path/to/global/media"
 
 global_download: "/path/to/global/download"
 
-# PID and GID mapping for LSIO container
-# 0 means root inside the rootless container, which map to the user running the container
-global_puid: "0"
-global_pgid: "0"
-
 # Network
 network_state: "present"
 
