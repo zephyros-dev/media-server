@@ -112,3 +112,8 @@
             state: started
             daemon_reload: true
             enabled: true
+    - name: Allow container to access device
+      ansible.posix.seboolean:
+        name: container_use_devices
+        state: true
+        persistent: true
