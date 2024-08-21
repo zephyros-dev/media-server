@@ -539,6 +539,14 @@ _application: _applicationSet & {
 		}] {v}]
 	}
 
+	// Placeholder for getting volume list
+	jellyfin: {
+		_
+		#param: {
+			name: "jellyfin"
+		}
+	}
+
 	jdownloader: {
 		_
 		#param: {
