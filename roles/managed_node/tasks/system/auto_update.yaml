@@ -6,14 +6,6 @@
         name: dnf-automatic
         state: latest
 
-    - name: Edit timer for automatic update
-      community.general.ini_file:
-        path: /usr/lib/systemd/system/dnf-automatic-install.timer
-        section: Timer
-        option: OnCalendar
-        value: "{{ auto_update.timer }}"
-        mode: "0600"
-
     - name: Enable automatic update timer # noqa: args[module]
       ansible.builtin.systemd:
         name: dnf-automatic-install.timer
