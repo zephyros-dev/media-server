@@ -1,1 +1,1 @@
-FROM docker.io/collabora/code:24.04.6.1.1@sha256:6fbd1fd525ecd8d3b7f07934c7fbd97388542221bf32a6f30ff15ea881a481ef
+FROM docker.io/collabora/code:24.04.6.2.1@sha256:10e388453b9eb80a1586658af0c8d0dd712b76a090fb5e4b0e6d39f86f0178a7
