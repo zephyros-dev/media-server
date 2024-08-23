@@ -67,6 +67,7 @@
                   loop: "{{ volume_map.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
                   vars:
                     container_volume_list_query: "* | [?type=='file'].value"
+
                 - name: Disable auth for arr container {{ container_service_name }}
                   when:
                     - "'arr' in container_service_name"

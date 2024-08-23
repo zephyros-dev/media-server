@@ -105,8 +105,8 @@ jellyfin:
   # Once podman support mounting nvidia gpu in quadlet kubernetes we can remove this
   # https://github.com/containers/podman/issues/17833
   volumes:
-    config: "{{ jellyfin_volume_config }}/"
-    cache: "{{ jellyfin_volume_cache }}/"
+    cache: ./cache/
+    config: ./config/
     media: "{{ global_media }}/"
 kavita:
   caddy_proxy_port: 5000

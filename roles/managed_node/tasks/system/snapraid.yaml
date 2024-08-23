@@ -45,6 +45,8 @@
     - name: Setup snapraid-btrfs-runner
       become: true
       tags: snapraid_runner
+      vars:
+        snapraid_runner_path: /opt/snapraid-btrfs-runner/
       block:
         - name: Setup snapraid-btrfs-runner folder
           ansible.builtin.file:
@@ -76,7 +78,19 @@
             option: "{{ item.option }}"
             value: "{{ item.value }}"
             mode: "0600"
-          loop: "{{ snapraid_runner_configuration }}"
+          loop:
+            - section: snapraid-btrfs
+              option: executable
+              value: /usr/local/bin/snapraid-btrfs
+            - section: snapper
+              option: executable
+              value: /usr/bin/snapper
+            - section: snapraid
+              option: executable
+              value: /usr/bin/snapraid
+            - section: snapraid
+              option: config
+              value: /etc/snapraid.conf
         - name: Template snapraid runner systemd
           ansible.builtin.template:
             src: "snapraid/snapraid-runner.{{ item }}.j2"

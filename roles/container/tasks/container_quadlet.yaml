@@ -109,6 +109,11 @@
     - name: Create container service {{ container_loop_var.key }}
       when: container_loop_var.value.kind == "container"
       block:
+        - name: Register volumes variables {{ container_loop_var.key }}
+          when: container_loop_var.value.volumes != {}
+          ansible.builtin.set_fact:
+            "{{ container_loop_var.key }}_volume_{{ item.key }}": "{{ item.value.value }}"
+          loop: "{{ volume_map.stdout | from_json | dict2items }}"
         - name: Create container quadlet file {{ container_loop_var.key }} # noqa: risky-file-permissions
           ansible.builtin.template:
             src: "quadlet/{{ container_loop_var.key }}.container.j2"

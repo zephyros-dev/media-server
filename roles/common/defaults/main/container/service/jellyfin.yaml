@@ -1,3 +1,0 @@
-jellyfin_volume: "{{ global_volume_path }}/jellyfin"
-jellyfin_volume_config: "{{ jellyfin_volume }}/web/config"
-jellyfin_volume_cache: "{{ jellyfin_volume }}/web/cache"

@@ -1,13 +1,6 @@
 # Root volume folder
 global_volume_path: "/path/to/global/volume"
 
-# Media folder, shared among Jellyfin, Pymedusa, Radarr, bazarr, headphones for hardlink
+# Media folder, shared among Jellyfin, Pymedusa, Radarr, bazarr for hardlink
 global_media: "/path/to/global/media"
-
 global_download: "/path/to/global/download"
-
-# Network
-network_state: "present"
-
-# Timezone
-global_timezone: "Etc/UTC"

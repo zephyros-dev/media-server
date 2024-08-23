@@ -31,6 +31,6 @@
 - name: Setup nextcloud app
   ansible.builtin.include_tasks:
     file: nextcloud_app_setup.yaml
-  loop: "{{ nextcloud_app | dict2items }}"
   loop_control:
     loop_var: nextcloud_app_loop_var
+  loop: "{{ nextcloud_app | dict2items }}"

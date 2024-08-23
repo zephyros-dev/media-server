@@ -11,4 +11,4 @@
         name: dnf-automatic-install.timer
         daemon_reload: true
         enabled: true
-        state: "{{ auto_update.state }}"
+        state: started
