@@ -23,6 +23,7 @@ resource "libvirt_domain" "this" {
   memory = "4096"
   vcpu   = 2
 
+  autostart = true
   cpu {
     mode = "host-passthrough"
   }
