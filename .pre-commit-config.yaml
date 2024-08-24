@@ -27,3 +27,11 @@ repos:
     hooks:
       - id: terraform_fmt
     rev: v1.92.2
+  - repo: local
+    hooks:
+      - id: cue-fmt
+        name: cue fmt
+        entry: cue
+        files: \.cue$
+        args: [fmt]
+        language: golang

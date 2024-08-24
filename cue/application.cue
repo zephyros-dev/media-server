@@ -195,6 +195,10 @@ _application: _applicationSet & {
 		#pod: spec: containers: [{
 			name:  "instance"
 			image: "caddy"
+			securityContext: {
+				runAsUser: _fact.ansible_user_uid
+				capabilities: add: ["CAP_NET_BIND_SERVICE"]
+			}
 			ports: [{
 				containerPort: 80
 				hostPort:      80
@@ -207,11 +211,11 @@ _application: _applicationSet & {
 				protocol:      "UDP"
 			}]
 			volumeMounts: [{
-				mountPath: "/config"
 				name:      "config"
+				mountPath: "/config:U"
 			}, {
-				mountPath: "/data"
 				name:      "data"
+				mountPath: "/data:U"
 			}, {
 				name:      "Caddyfile"
 				readOnly:  true
@@ -255,6 +259,7 @@ _application: _applicationSet & {
 		}]
 	}
 
+	// Already set to run as rootless in image build
 	dashy: {
 		_
 		#param: {
@@ -360,12 +365,15 @@ _application: _applicationSet & {
 			containers: [{
 				name:  "instance"
 				image: "ddns"
+				securityContext: {
+					runAsUser: _fact.ansible_user_uid
+				}
 				volumeMounts: [{
 					name:      "config"
-					mountPath: "/config"
+					mountPath: "/config:U"
 				}, {
 					name:      "data"
-					mountPath: "/data"
+					mountPath: "/data:U"
 				}, {
 					name:      "Caddyfile"
 					readOnly:  true
@@ -408,6 +416,9 @@ _application: _applicationSet & {
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "flaresolverr"
+			securityContext: {
+				runAsUser: _fact.ansible_user_uid
+			}
 		}]
 	}
 	// TODO: rootless?
@@ -445,7 +456,7 @@ _application: _applicationSet & {
 			}]
 			volumeMounts: [{
 				name:      "database"
-				mountPath: "/var/lib/postgresql/data:U,z"
+				mountPath: "/var/lib/postgresql/data:z"
 			}]
 		}] + [if _fact.container.immich.postgres_action == "none" for v in [{
 			name:  "redis"
@@ -658,6 +669,7 @@ _application: _applicationSet & {
 		}]
 	}
 
+	// Already rootless
 	miniflux: {
 		_
 		#param: {
@@ -692,7 +704,7 @@ _application: _applicationSet & {
 			}]
 			volumeMounts: [{
 				name:      "database"
-				mountPath: "/var/lib/postgresql/data:U,z"
+				mountPath: "/var/lib/postgresql/data:z"
 			}]
 		}] + [if _fact.container.miniflux.postgres_action == "none" for v in [{
 			name:  "web"
@@ -792,7 +804,7 @@ _application: _applicationSet & {
 			}]
 			volumeMounts: [{
 				name:      "database"
-				mountPath: "/var/lib/postgresql/data:U,z"
+				mountPath: "/var/lib/postgresql/data:z"
 			}]
 		}] + [if _fact.container.nextcloud.postgres_action == "none" for v in [{
 			name:  "web"
@@ -913,7 +925,7 @@ _application: _applicationSet & {
 			}]
 			volumeMounts: [{
 				name:      "database"
-				mountPath: "/var/lib/postgresql/data:U,z"
+				mountPath: "/var/lib/postgresql/data:z"
 			}]
 		}] + [if _fact.container.paperless.postgres_action == "none" for v in [{
 			name:  "redis"
@@ -1170,7 +1182,6 @@ _application: _applicationSet & {
 					mountPath: "/dev/"
 				}]
 				securityContext: {
-					capabilities: add: ["SYS_RAWIO", "SYS_ADMIN"]
 					// Required for nvme drives to work: https://github.com/containers/podman/issues/17833
 					privileged: true
 				}
@@ -1178,6 +1189,7 @@ _application: _applicationSet & {
 		}
 	}
 
+	// LSIO
 	speedtest: {
 		_
 		#param: {
@@ -1219,6 +1231,7 @@ _application: _applicationSet & {
 		}]
 	}
 
+	// Already rootless
 	syncthing: {
 		_
 		#param: {
@@ -1322,9 +1335,10 @@ _application: _applicationSet & {
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "trilium"
-			// securityContext: {
-			// 	runAsUser: _fact.ansible_user_uid
-			// }
+			securityContext: {
+				runAsUser: _fact.ansible_user_uid
+				capabilities: add: ["CAP_SETGID"]
+			}
 			volumeMounts: [{
 				name:      "data"
 				mountPath: "/home/node/trilium-data:U,z"

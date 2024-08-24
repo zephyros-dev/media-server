@@ -32,6 +32,7 @@
                 - name: Get volume list {{ container_service_name }}
                   changed_when: false
                   delegate_to: localhost
+                  become: false
                   ansible.builtin.shell:
                     chdir: cue
                     # Need {{ cue_path }} this since cue is not installed globaly, and we may need to run this with sudo
