@@ -593,17 +593,19 @@ _application: _applicationSet & {
 			name: "kavita"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "kavita"
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/config:U,z" // Need :U for some reason, will investigate
-			}, {
-				name:      "home"
-				mountPath: "/home:ro"
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "kavita"
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:z"
+				}, {
+					name:      "home"
+					mountPath: "/home:ro"
+				}]
 			}]
-		}]
+		}
 	}
 
 	koreader: {
@@ -612,20 +614,18 @@ _application: _applicationSet & {
 			name: "koreader"
 		}
 
-		#pod: _profile.lsio & {
-			spec: containers: [{
-				name:  "web"
-				image: "koreader"
-				volumeMounts: [{
-					name:      "config"
-					mountPath: "/config:z"
-				}, {
-					name:      "device"
-					mountPath: "/dev/dri"
-				}]
-				securityContext: capabilities: add: ["CAP_NET_RAW"]
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "koreader"
+			volumeMounts: [{
+				name:      "config"
+				mountPath: "/config:z"
+			}, {
+				name:      "device"
+				mountPath: "/dev/dri"
 			}]
-		}
+			securityContext: capabilities: add: ["CAP_NET_RAW"]
+		}]
 	}
 
 	librespeed: {
@@ -1072,15 +1072,15 @@ _application: _applicationSet & {
 		#param: {
 			name: "samba"
 			secret: {
-				ACCOUNT_root: {
+				"ACCOUNT_\(_fact.ansible_user)": {
 					type:    "env"
 					content: _fact.samba_password
 				}
 			}
 		}
 
-		#pod: spec: {
-			containers: [{
+		#pod: _profile.lsio & {
+			spec: containers: [{
 				name:  "instance"
 				image: "samba"
 				ports: [{
@@ -1091,25 +1091,22 @@ _application: _applicationSet & {
 					name:  "AVAHI_DISABLE"
 					value: "1"
 				}, {
-					name:  "GROUP_root"
-					value: "0"
-				}, {
 					name:  "SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive"
 					value: "yes"
 				}, {
-					name:  "UID_root"
-					value: "0"
+					name:  "UID_\(_fact.ansible_user)"
+					value: "911"
 				}, {
 					name:  "WSDD2_DISABLE"
 					value: "1"
 				}] + [for k, v in #param.volumes {
 					name:  "SAMBA_VOLUME_CONFIG_\(k)"
-					value: "[\(k)]; path=/shares/\(k); valid users = root; guest ok = no; read only = no; browseable = yes;"
+					value: "[\(k)]; path=/shares/\(k); valid users = \(_fact.ansible_user); guest ok = no; read only = no; browseable = yes;"
 				}] + [{
-					name: "ACCOUNT_root"
+					name: "ACCOUNT_\(_fact.ansible_user)"
 					valueFrom: secretKeyRef: {
 						name: "samba"
-						key:  "ACCOUNT_root"
+						key:  "ACCOUNT_\(_fact.ansible_user)"
 					}}]
 				volumeMounts: [{
 					name:      "home"
@@ -1174,7 +1171,6 @@ _application: _applicationSet & {
 		}
 	}
 
-	// LSIO
 	speedtest: {
 		_
 		#param: {

@@ -2,5 +2,5 @@ all:
   children:
     server:
       hosts: server.lan
-    fedora-iot:
+    fedora_iot:
       hosts: fedora-iot.lan
