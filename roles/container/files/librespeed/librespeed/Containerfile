@@ -1,1 +1,1 @@
-FROM ghcr.io/linuxserver/librespeed:latest@sha256:8c13bb6313547881e28003eb51b8378e469f0e480fe4ae9bcdfebd82b4d547e7
+FROM ghcr.io/linuxserver/librespeed:latest@sha256:ce7a91de4d6c466f93a8adc3662787d04709a0a387488afa0d3d23462e942d1b
