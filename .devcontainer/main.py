@@ -86,9 +86,10 @@ if args.stage == "all" or args.stage == "onCreateCommand":
     elif platform.machine() == "aarch64":
         podman_architecture = "arm64"
 
-    if check_version("podman --version", os.environ["PODMAN_VERSION"]):
+    PODMAN_VERSION = dependencies_version["podman"]
+    if check_version("podman --version", PODMAN_VERSION):
         subprocess.run(
-            f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{os.environ['PODMAN_VERSION']}/podman-remote-static-linux_{podman_architecture}.tar.gz",
+            f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{PODMAN_VERSION}/podman-remote-static-linux_{podman_architecture}.tar.gz",
             shell=True,
         )
         subprocess.run(

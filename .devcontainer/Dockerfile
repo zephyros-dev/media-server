@@ -38,5 +38,3 @@ RUN \
     --user
 
 ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:/home/${USERNAME}/bin:/home/${USERNAME}/.guix-profile/bin:$PATH
-
-ENV PODMAN_VERSION=v5.2.2
