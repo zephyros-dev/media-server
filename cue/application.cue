@@ -15,6 +15,25 @@ yaml.MarshalStream(_application[_applicationName])
 
 _fact: _ @embed(file="tmp/fact.json")
 
+_profile: {
+	lsio: {
+		metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=911,gid=911"
+		spec: containers: [...{
+			securityContext: {
+				runAsUser:  0
+				runAsGroup: 0
+			}
+		}]
+	}
+	rootless: spec: containers: [...{
+		securityContext: {
+			runAsUser:  _fact.ansible_user_uid
+			runAsGroup: _fact.ansible_user_gid
+		}
+	}]
+	userns_share: metadata: annotations: "io.podman.annotations.userns": "keep-id"
+}
+
 _applicationSet: [applicationName=_]: {
 	#param: {
 		name: string
@@ -55,10 +74,7 @@ _applicationSet: [applicationName=_]: {
 		apiVersion: "v1"
 		kind:       "Pod"
 		metadata: {
-			annotations: {
-				"io.podman.annotations.infra.name": "\(#param.name)-pod"
-			}
-			labels: app: #param.name
+			annotations: "io.podman.annotations.infra.name": "\(#param.name)-pod"
 			name: #param.name
 		}
 		spec: {
@@ -133,15 +149,11 @@ _application: _applicationSet & {
 			name: "audiobookshelf"
 		}
 
-		#pod: {
-			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+		#pod: _profile.rootless & _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
 				image: "audiobookshelf"
-				securityContext: {
-					runAsUser: _fact.ansible_user_uid
-					capabilities: add: ["CAP_NET_BIND_SERVICE"]
-				}
+				securityContext: capabilities: add: ["CAP_NET_BIND_SERVICE"]
 				volumeMounts: [{
 					name:      "audiobooks"
 					mountPath: "/audiobooks"
@@ -164,24 +176,19 @@ _application: _applicationSet & {
 		#param: {
 			name: "bazarr"
 		}
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "bazarr"
-			env: [{
-				name:  "PGID"
-				value: "0"
-			}, {
-				name:  "PUID"
-				value: "0"
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "bazarr"
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:z"
+				}, {
+					name:      "home"
+					mountPath: "/home"
+				}]
 			}]
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/config:z"
-			}, {
-				name:      "home"
-				mountPath: "/home"
-			}]
-		}]
+		}
 	}
 
 	caddy: {
@@ -195,37 +202,36 @@ _application: _applicationSet & {
 				}
 			}
 		}
-		#pod: spec: containers: [{
-			name:  "instance"
-			image: "caddy"
-			securityContext: {
-				runAsUser: _fact.ansible_user_uid
-				capabilities: add: ["CAP_NET_BIND_SERVICE"]
-			}
-			ports: [{
-				containerPort: 80
-				hostPort:      80
-			}, {
-				containerPort: 443
-				hostPort:      443
-			}, {
-				containerPort: 443
-				hostPort:      443
-				protocol:      "UDP"
+		#pod: _profile.rootless & {
+			spec: containers: [{
+				name:  "instance"
+				image: "caddy"
+				securityContext: capabilities: add: ["CAP_NET_BIND_SERVICE"]
+				ports: [{
+					containerPort: 80
+					hostPort:      80
+				}, {
+					containerPort: 443
+					hostPort:      443
+				}, {
+					containerPort: 443
+					hostPort:      443
+					protocol:      "UDP"
+				}]
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:U"
+				}, {
+					name:      "data"
+					mountPath: "/data:U"
+				}, {
+					name:      "Caddyfile"
+					readOnly:  true
+					mountPath: "/etc/caddy/Caddyfile"
+					subPath:   "Caddyfile"
+				}]
 			}]
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/config:U"
-			}, {
-				name:      "data"
-				mountPath: "/data:U"
-			}, {
-				name:      "Caddyfile"
-				readOnly:  true
-				mountPath: "/etc/caddy/Caddyfile"
-				subPath:   "Caddyfile"
-			}]
-		}]
+		}
 	}
 
 	calibre: {
@@ -234,32 +240,27 @@ _application: _applicationSet & {
 			name: "calibre"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "calibre"
-			ports: [{
-				// Used for the calibre wireless device connection
-				containerPort: 9090
-				hostPort:      59090
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "calibre"
+				ports: [{
+					// Used for the calibre wireless device connection
+					containerPort: 9090
+					hostPort:      59090
+				}]
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:z"
+				}, {
+					name:      "books"
+					mountPath: "/books"
+				}, {
+					name:      "device"
+					mountPath: "/dev/dri"
+				}]
 			}]
-			env: [{
-				name:  "PGID"
-				value: "0"
-			}, {
-				name:  "PUID"
-				value: "0"
-			}]
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/config:z"
-			}, {
-				name:      "books"
-				mountPath: "/books"
-			}, {
-				name:      "device"
-				mountPath: "/dev/dri"
-			}]
-		}]
+		}
 	}
 
 	// Already set to run as rootless in image build
@@ -364,13 +365,10 @@ _application: _applicationSet & {
 		}
 
 		// ddns has to be ran separately since caddy is ran inside a podman network, so it does not have the IP address of the host
-		#pod: spec: {
-			containers: [{
+		#pod: _profile.rootless & {
+			spec: containers: [{
 				name:  "instance"
 				image: "ddns"
-				securityContext: {
-					runAsUser: _fact.ansible_user_uid
-				}
 				volumeMounts: [{
 					name:      "config"
 					mountPath: "/config:U"
@@ -393,15 +391,11 @@ _application: _applicationSet & {
 			name: "filebrowser"
 		}
 
-		#pod: {
-			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+		#pod: _profile.rootless & _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
 				image: "filebrowser"
-				securityContext: {
-					runAsUser: _fact.ansible_user_uid
-					capabilities: add: ["CAP_NET_BIND_SERVICE"]
-				}
+				securityContext: capabilities: add: ["CAP_NET_BIND_SERVICE"]
 				volumeMounts: [{
 					name:      "srv"
 					mountPath: "/srv"
@@ -418,13 +412,12 @@ _application: _applicationSet & {
 			name: "flaresolverr"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "flaresolverr"
-			securityContext: {
-				runAsUser: _fact.ansible_user_uid
-			}
-		}]
+		#pod: _profile.rootless & {
+			spec: containers: [{
+				name:  "web"
+				image: "flaresolverr"
+			}]
+		}
 	}
 	// TODO: rootless?
 	immich: {
@@ -617,25 +610,20 @@ _application: _applicationSet & {
 			name: "koreader"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "koreader"
-			env: [{
-				name:  "PGID"
-				value: "0"
-			}, {
-				name:  "PUID"
-				value: "0"
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "koreader"
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:z"
+				}, {
+					name:      "device"
+					mountPath: "/dev/dri"
+				}]
+				securityContext: capabilities: add: ["CAP_NET_RAW"]
 			}]
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/config:z"
-			}, {
-				name:      "device"
-				mountPath: "/dev/dri"
-			}]
-			securityContext: capabilities: add: ["CAP_NET_RAW"]
-		}]
+		}
 	}
 
 	librespeed: {
@@ -654,24 +642,19 @@ _application: _applicationSet & {
 			name: "lidarr"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "lidarr"
-			env: [{
-				name:  "PGID"
-				value: "0"
-			}, {
-				name:  "PUID"
-				value: "0"
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "lidarr"
+				volumeMounts: [{
+					name:      "home"
+					mountPath: "/home"
+				}, {
+					name:      "config"
+					mountPath: "/config:z"
+				}]
 			}]
-			volumeMounts: [{
-				name:      "home"
-				mountPath: "/home"
-			}, {
-				name:      "config"
-				mountPath: "/config:z"
-			}]
-		}]
+		}
 	}
 
 	// Already rootless
@@ -745,8 +728,7 @@ _application: _applicationSet & {
 			name: "navidrome"
 		}
 
-		#pod: {
-			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+		#pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
 				image: "navidrome"
@@ -934,7 +916,8 @@ _application: _applicationSet & {
 			name:  "redis"
 			image: "paperless-redis"
 			securityContext: {
-				runAsUser: _fact.ansible_user_uid
+				runAsUser:  _fact.ansible_user_uid
+				runAsGroup: _fact.ansible_user_gid
 			}
 			volumeMounts: [{
 				name:      "redis"
@@ -1045,8 +1028,7 @@ _application: _applicationSet & {
 			name: "pymedusa"
 		}
 
-		#pod: {
-			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+		#pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
 				image: "pymedusa"
@@ -1067,24 +1049,19 @@ _application: _applicationSet & {
 			name: "radarr"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "radarr"
-			env: [{
-				name:  "PGID"
-				value: "0"
-			}, {
-				name:  "PUID"
-				value: "0"
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "radarr"
+				volumeMounts: [{
+					name:      "home"
+					mountPath: "/home"
+				}, {
+					name:      "config"
+					mountPath: "/config:z"
+				}]
 			}]
-			volumeMounts: [{
-				name:      "home"
-				mountPath: "/home"
-			}, {
-				name:      "config"
-				mountPath: "/config:z"
-			}]
-		}]
+		}
 	}
 
 	// UserNS, TODO: rootless?
@@ -1243,8 +1220,7 @@ _application: _applicationSet & {
 			name: "syncthing"
 		}
 
-		#pod: {
-			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+		#pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
 				image: "syncthing"
@@ -1291,43 +1267,39 @@ _application: _applicationSet & {
 			}
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "transmission"
-			env: [{
-				name:  "PGID"
-				value: "0"
-			}, {
-				name:  "PUID"
-				value: "0"
-			}] + [{
-				name: "USER"
-				valueFrom: secretKeyRef: {
-					name: "transmission"
-					key:  "USER"
-				}}, {
-				name: "PASS"
-				valueFrom: secretKeyRef: {
-					name: "transmission"
-					key:  "PASS"
-				}
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "transmission"
+				env: [{
+					name: "USER"
+					valueFrom: secretKeyRef: {
+						name: "transmission"
+						key:  "USER"
+					}}, {
+					name: "PASS"
+					valueFrom: secretKeyRef: {
+						name: "transmission"
+						key:  "PASS"
+					}
+				}]
+				ports: [{
+					containerPort: 51413
+					hostPort:      51413
+				}, {
+					containerPort: 51413
+					hostPort:      51413
+					protocol:      "UDP"
+				}]
+				volumeMounts: [{
+					name:      "home"
+					mountPath: "/home"
+				}, {
+					name:      "config"
+					mountPath: "/config:z"
+				}]
 			}]
-			ports: [{
-				containerPort: 51413
-				hostPort:      51413
-			}, {
-				containerPort: 51413
-				hostPort:      51413
-				protocol:      "UDP"
-			}]
-			volumeMounts: [{
-				name:      "home"
-				mountPath: "/home"
-			}, {
-				name:      "config"
-				mountPath: "/config:z"
-			}]
-		}]
+		}
 	}
 
 	trilium: {
@@ -1336,18 +1308,21 @@ _application: _applicationSet & {
 			name: "trilium"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "trilium"
-			securityContext: {
-				runAsUser: _fact.ansible_user_uid
-				capabilities: add: ["CAP_SETGID"]
-			}
-			volumeMounts: [{
-				name:      "data"
-				mountPath: "/home/node/trilium-data:U,z"
+		#pod: _profile.rootless & {
+			spec: containers: [{
+				name:  "web"
+				image: "trilium"
+				securityContext: {
+					runAsUser:  _fact.ansible_user_uid
+					runAsGroup: _fact.ansible_user_gid
+					capabilities: add: ["CAP_SETGID"]
+				}
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/home/node/trilium-data:U,z"
+				}]
 			}]
-		}]
+		}
 	}
 
 	wol: {
@@ -1366,31 +1341,30 @@ _application: _applicationSet & {
 			}
 		}
 
-		#pod: spec: {
-			containers: [{
-				name:  "web"
-				image: "wol"
-				securityContext: {
-					runAsUser: _fact.ansible_user_uid
-				}
-				env: [{
-					name:  "WOLWEBVDIR"
-					value: "/"
-				}, {
-					name: "WOLWEBBCASTIP"
-					valueFrom: secretKeyRef: {
-						name: "wol"
-						key:  "WOLWEBBCASTIP"
-					}
+		#pod: _profile.rootless & {
+			spec: {
+				containers: [{
+					name:  "web"
+					image: "wol"
+					env: [{
+						name:  "WOLWEBVDIR"
+						value: "/"
+					}, {
+						name: "WOLWEBBCASTIP"
+						valueFrom: secretKeyRef: {
+							name: "wol"
+							key:  "WOLWEBBCASTIP"
+						}
+					}]
+					volumeMounts: [{
+						name:      "devices.json"
+						readOnly:  true
+						mountPath: "/wolweb/devices.json"
+						subPath:   "devices.json"
+					}]
 				}]
-				volumeMounts: [{
-					name:      "devices.json"
-					readOnly:  true
-					mountPath: "/wolweb/devices.json"
-					subPath:   "devices.json"
-				}]
-			}]
-			hostNetwork: true
+				hostNetwork: true
+			}
 		}
 	}
 }
