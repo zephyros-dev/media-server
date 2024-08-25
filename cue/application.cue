@@ -32,6 +32,7 @@ _profile: {
 		}
 	}]
 	userns_share: metadata: annotations: "io.podman.annotations.userns": "keep-id"
+	rootless_cap: rootless & userns_share
 }
 
 _applicationSet: [applicationName=_]: {
@@ -149,7 +150,7 @@ _application: _applicationSet & {
 			name: "audiobookshelf"
 		}
 
-		#pod: _profile.rootless & _profile.userns_share & {
+		#pod: _profile.rootless_cap & {
 			spec: containers: [{
 				name:  "web"
 				image: "audiobookshelf"
@@ -391,7 +392,7 @@ _application: _applicationSet & {
 			name: "filebrowser"
 		}
 
-		#pod: _profile.rootless & _profile.userns_share & {
+		#pod: _profile.rootless_cap & {
 			spec: containers: [{
 				name:  "web"
 				image: "filebrowser"
@@ -562,27 +563,28 @@ _application: _applicationSet & {
 			name: "jdownloader"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "jdownloader"
-			// Needed for chown the output directory
-			// https://github.com/jlesage/docker-jdownloader-2/blob/0091b8358fccea902af05fa29d05f567f073543b/rootfs/etc/cont-init.d/55-jdownloader2.sh
-			// https://github.com/jlesage/docker-baseimage-gui#taking-ownership-of-a-directory
-			env: [{
-				name:  "USER_ID"
-				value: "0"
-			}, {
-				name:  "GROUP_ID"
-				value: "0"
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "jdownloader"
+				// https://github.com/jlesage/docker-jdownloader-2/blob/0091b8358fccea902af05fa29d05f567f073543b/rootfs/etc/cont-init.d/55-jdownloader2.sh
+				// https://github.com/jlesage/docker-baseimage-gui#taking-ownership-of-a-directory
+				env: [{
+					name:  "USER_ID"
+					value: "911"
+				}, {
+					name:  "GROUP_ID"
+					value: "911"
+				}]
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:z"
+				}, {
+					name:      "output"
+					mountPath: "/output"
+				}]
 			}]
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/config:z"
-			}, {
-				name:      "output"
-				mountPath: "/output"
-			}]
-		}]
+		}
 	}
 
 	kavita: {
@@ -1248,7 +1250,8 @@ _application: _applicationSet & {
 					name:      "koreader-book"
 					mountPath: "/var/syncthing/koreader/book"
 				}]
-			}]}
+			}]
+		}
 	}
 
 	transmission: {
@@ -1312,11 +1315,7 @@ _application: _applicationSet & {
 			spec: containers: [{
 				name:  "web"
 				image: "trilium"
-				securityContext: {
-					runAsUser:  _fact.ansible_user_uid
-					runAsGroup: _fact.ansible_user_gid
-					capabilities: add: ["CAP_SETGID"]
-				}
+				securityContext: capabilities: add: ["CAP_SETGID"]
 				volumeMounts: [{
 					name:      "data"
 					mountPath: "/home/node/trilium-data:U,z"
