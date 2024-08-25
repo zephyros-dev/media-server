@@ -133,27 +133,30 @@ _application: _applicationSet & {
 			name: "audiobookshelf"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "audiobookshelf"
-			securityContext: {
-				runAsUser: _fact.ansible_user_uid
-				capabilities: add: ["CAP_NET_BIND_SERVICE"]
-			}
-			volumeMounts: [{
-				name:      "audiobooks"
-				mountPath: "/audiobooks"
-			}, {
-				name:      "config"
-				mountPath: "/config:z"
-			}, {
-				name:      "metadata"
-				mountPath: "/metadata:z"
-			}, {
-				name:      "podcasts"
-				mountPath: "/podcasts"
+		#pod: {
+			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+			spec: containers: [{
+				name:  "web"
+				image: "audiobookshelf"
+				securityContext: {
+					runAsUser: _fact.ansible_user_uid
+					capabilities: add: ["CAP_NET_BIND_SERVICE"]
+				}
+				volumeMounts: [{
+					name:      "audiobooks"
+					mountPath: "/audiobooks"
+				}, {
+					name:      "config"
+					mountPath: "/config:z"
+				}, {
+					name:      "metadata"
+					mountPath: "/metadata:z"
+				}, {
+					name:      "podcasts"
+					mountPath: "/podcasts"
+				}]
 			}]
-		}]
+		}
 	}
 
 	bazarr: {
@@ -390,21 +393,23 @@ _application: _applicationSet & {
 			name: "filebrowser"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "filebrowser"
-			securityContext: {
-				runAsUser: _fact.ansible_user_uid
-				capabilities: add: ["CAP_NET_BIND_SERVICE"]
-			}
-			volumeMounts: [{
-				name:      "srv"
-				mountPath: "/srv"
-			}, {
-				name:      "database.db"
-				mountPath: "/database.db:z"
-			}]
-		}]
+		#pod: {
+			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+			spec: containers: [{
+				name:  "web"
+				image: "filebrowser"
+				securityContext: {
+					runAsUser: _fact.ansible_user_uid
+					capabilities: add: ["CAP_NET_BIND_SERVICE"]
+				}
+				volumeMounts: [{
+					name:      "srv"
+					mountPath: "/srv"
+				}, {
+					name:      "database.db"
+					mountPath: "/database.db:z"
+				}]
+			}]}
 	}
 
 	flaresolverr: {
@@ -740,33 +745,35 @@ _application: _applicationSet & {
 			name: "navidrome"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "navidrome"
-			securityContext: {
-				runAsUser: _fact.ansible_user_uid
-			}
-			env: [{
-				name:  "ND_BASEURL"
-				value: ""
-			}, {
-				name:  "ND_LOGLEVEL"
-				value: "info"
-			}, {
-				name:  "ND_SCANSCHEDULE"
-				value: "1h"
-			}, {
-				name:  "ND_SESSIONTIMEOUT"
-				value: "24h"
-			}]
-			volumeMounts: [{
-				name:      "data"
-				mountPath: "/data:z"
-			}, {
-				name:      "music"
-				mountPath: "/music:ro"
-			}]
-		}]
+		#pod: {
+			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+			spec: containers: [{
+				name:  "web"
+				image: "navidrome"
+				securityContext: {
+					runAsUser: _fact.ansible_user_uid
+				}
+				env: [{
+					name:  "ND_BASEURL"
+					value: ""
+				}, {
+					name:  "ND_LOGLEVEL"
+					value: "info"
+				}, {
+					name:  "ND_SCANSCHEDULE"
+					value: "1h"
+				}, {
+					name:  "ND_SESSIONTIMEOUT"
+					value: "24h"
+				}]
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/data:z"
+				}, {
+					name:      "music"
+					mountPath: "/music:ro"
+				}]
+			}]}
 	}
 
 	// TODO: rootless?
@@ -878,7 +885,6 @@ _application: _applicationSet & {
 		}]
 	}
 
-	// TODO: rootless?
 	paperless: {
 		_
 		#param: {
@@ -930,6 +936,9 @@ _application: _applicationSet & {
 		}] + [if _fact.container.paperless.postgres_action == "none" for v in [{
 			name:  "redis"
 			image: "paperless-redis"
+			securityContext: {
+				runAsUser: _fact.ansible_user_uid
+			}
 			volumeMounts: [{
 				name:      "redis"
 				mountPath: "/data:U,z"
@@ -1039,20 +1048,22 @@ _application: _applicationSet & {
 			name: "pymedusa"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "pymedusa"
-			securityContext: {
-				runAsUser: _fact.ansible_user_uid
-			}
-			volumeMounts: [{
-				name:      "home"
-				mountPath: "/home"
-			}, {
-				name:      "config"
-				mountPath: "/config:z"
-			}]
-		}]
+		#pod: {
+			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+			spec: containers: [{
+				name:  "web"
+				image: "pymedusa"
+				securityContext: {
+					runAsUser: _fact.ansible_user_uid
+				}
+				volumeMounts: [{
+					name:      "home"
+					mountPath: "/home"
+				}, {
+					name:      "config"
+					mountPath: "/config:z"
+				}]
+			}]}
 	}
 
 	radarr: {
@@ -1238,8 +1249,9 @@ _application: _applicationSet & {
 			name: "syncthing"
 		}
 
-		#pod: spec: {
-			containers: [{
+		#pod: {
+			metadata: annotations: "io.podman.annotations.userns": "keep-id"
+			spec: containers: [{
 				name:  "web"
 				image: "syncthing"
 				// https://docs.syncthing.net/users/firewall.html
@@ -1266,8 +1278,7 @@ _application: _applicationSet & {
 					name:      "koreader-book"
 					mountPath: "/var/syncthing/koreader/book"
 				}]
-			}]
-		}
+			}]}
 	}
 
 	transmission: {
@@ -1325,7 +1336,6 @@ _application: _applicationSet & {
 		}]
 	}
 
-	// Having problem with rootless
 	trilium: {
 		_
 		#param: {

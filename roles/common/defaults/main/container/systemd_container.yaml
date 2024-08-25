@@ -35,8 +35,6 @@ container:
 
 audiobookshelf:
   caddy_proxy_port: 80
-  kube_quadlet_options:
-    UserNS: keep-id
   volumes:
     audiobooks: "{{ global_storage }}/Audiobooks/"
     config: ./config/
@@ -81,8 +79,6 @@ ddns:
     data: pvc
 filebrowser:
   caddy_proxy_port: 80
-  kube_quadlet_options:
-    UserNS: keep-id
   volumes:
     "database.db": "./database.db"
     srv: "{{ global_media }}/"
@@ -138,8 +134,6 @@ miniflux:
     database: ./database/
 navidrome:
   caddy_proxy_port: 4533
-  kube_quadlet_options:
-    UserNS: keep-id
   volumes:
     data: ./data/
     music: "{{ global_media }}/Download/torrent/complete/Music/"
@@ -175,8 +169,6 @@ pymedusa:
   caddy_sso: true
   caddy_proxy_port: 8081
   dashy_icon: favicon-local
-  kube_quadlet_options:
-    UserNS: keep-id
   volumes:
     config: ./web/config/
     home: "{{ global_media }}/"
@@ -214,7 +206,6 @@ syncthing:
   host_network: true
   kube_quadlet_options:
     Network: pasta
-    UserNS: keep-id
   volumes:
     data: ./
     koreader-book: "{{ global_volume_path }}/koreader/{{ koreader.volumes.config | regex_replace('\\./', '') }}book/"
