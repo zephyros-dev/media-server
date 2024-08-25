@@ -750,9 +750,6 @@ _application: _applicationSet & {
 			spec: containers: [{
 				name:  "web"
 				image: "navidrome"
-				securityContext: {
-					runAsUser: _fact.ansible_user_uid
-				}
 				env: [{
 					name:  "ND_BASEURL"
 					value: ""
@@ -1053,9 +1050,6 @@ _application: _applicationSet & {
 			spec: containers: [{
 				name:  "web"
 				image: "pymedusa"
-				securityContext: {
-					runAsUser: _fact.ansible_user_uid
-				}
 				volumeMounts: [{
 					name:      "home"
 					mountPath: "/home"
@@ -1063,7 +1057,8 @@ _application: _applicationSet & {
 					name:      "config"
 					mountPath: "/config:z"
 				}]
-			}]}
+			}]
+		}
 	}
 
 	radarr: {
@@ -1242,7 +1237,6 @@ _application: _applicationSet & {
 		}]
 	}
 
-	// Already rootless
 	syncthing: {
 		_
 		#param: {
