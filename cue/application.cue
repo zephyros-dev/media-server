@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"encoding/yaml"
 	"strings"
+	"path"
 	core "k8s.io/api/core/v1"
 )
 
@@ -35,9 +36,8 @@ _profile: {
 	rootless_cap: rootless & userns_share
 }
 
-_applicationSet: [applicationName=_]: {
+_applicationSet: [applicationName=string]: {
 	#param: {
-		name: string
 		secret: {
 			string?: {
 				type:    "file" | "env"
@@ -45,27 +45,28 @@ _applicationSet: [applicationName=_]: {
 			}
 		}
 		volumes: {
-			for k, v in _fact.container[strings.Replace(#param.name, "-", "_", -1)].volumes {"\(k)": {
+			for k, v in _fact.container[strings.Replace(applicationName, "-", "_", -1)].volumes {"\(k)": {
+				_volume_path: path.Join([_fact.global_volume_path, applicationName, path.Clean(v)])
 				if v == "pvc" {
 					type:  "pvc"
-					value: "\(#param.name)-\(k)"
+					value: "\(applicationName)-\(k)"
 				}
 				if v =~ "\/.+[^\/]$" {
 					type: "file"
-					if v =~ "^\/" {
+					if path.IsAbs(v) {
 						value: v
 					}
 					if v =~ "^\\.\/" {
-						value: "\(_fact.global_volume_path)/\(#param.name)/\(strings.Replace(v, "./", "", -1))"
+						value: _volume_path
 					}
 				}
-				if v =~ "^\/.+\/$" {
+				if path.IsAbs(v) {
 					type:  "absolutePathDir"
-					value: v
+					value: path.Clean(v)
 				}
 				if v =~ "^\\.\/.+\/$" || v == "./" {
 					type:  "relativePathDir"
-					value: "\(_fact.global_volume_path)/\(#param.name)/\(strings.Replace(v, "./", "", -1))"
+					value: _volume_path
 				}
 			}}
 		}
@@ -75,8 +76,8 @@ _applicationSet: [applicationName=_]: {
 		apiVersion: "v1"
 		kind:       "Pod"
 		metadata: {
-			annotations: "io.podman.annotations.infra.name": "\(#param.name)-pod"
-			name: #param.name
+			annotations: "io.podman.annotations.infra.name": "\(applicationName)-pod"
+			name: applicationName
 		}
 		spec: {
 			volumes: [for k, v in #param.volumes {
@@ -99,7 +100,7 @@ _applicationSet: [applicationName=_]: {
 			}] + [for k, v in #param.secret if v.type == "file" {
 				name: k
 				secret: {
-					secretName: #param.name
+					secretName: applicationName
 					items: [{
 						key:  k
 						path: k
@@ -116,7 +117,7 @@ _applicationSet: [applicationName=_]: {
 		apiVersion: "v1"
 		kind:       "Secret"
 		metadata: {
-			name: #param.name
+			name: applicationName
 		}
 		type: "Opaque"
 		stringData: {
@@ -135,7 +136,7 @@ _applicationSet: [applicationName=_]: {
 			apiVersion: "v1"
 			kind:       "PersistentVolumeClaim"
 			metadata: {
-				name: "\(#param.name)-\(k)"
+				name: "\(applicationName)-\(k)"
 			}
 		}
 	}]
@@ -146,10 +147,6 @@ _applicationSet: [applicationName=_]: {
 _application: _applicationSet & {
 	audiobookshelf: {
 		_
-		#param: {
-			name: "audiobookshelf"
-		}
-
 		#pod: _profile.rootless_cap & {
 			spec: containers: [{
 				name:  "web"
@@ -174,9 +171,6 @@ _application: _applicationSet & {
 
 	bazarr: {
 		_
-		#param: {
-			name: "bazarr"
-		}
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -195,7 +189,6 @@ _application: _applicationSet & {
 	caddy: {
 		_
 		#param: {
-			name: "caddy"
 			secret: {
 				Caddyfile: {
 					type:    "file"
@@ -237,10 +230,6 @@ _application: _applicationSet & {
 
 	calibre: {
 		_
-		#param: {
-			name: "calibre"
-		}
-
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -265,7 +254,6 @@ _application: _applicationSet & {
 	dashy: {
 		_
 		#param: {
-			name: "dashy"
 			secret: {
 				"conf.yml": {
 					type: "file"
@@ -344,7 +332,6 @@ _application: _applicationSet & {
 	ddns: {
 		_
 		#param: {
-			name: "ddns"
 			secret: {
 				Caddyfile: {
 					type:    "file"
@@ -385,10 +372,6 @@ _application: _applicationSet & {
 
 	filebrowser: {
 		_
-		#param: {
-			name: "filebrowser"
-		}
-
 		#pod: _profile.rootless_cap & {
 			spec: containers: [{
 				name:  "web"
@@ -406,10 +389,6 @@ _application: _applicationSet & {
 
 	flaresolverr: {
 		_
-		#param: {
-			name: "flaresolverr"
-		}
-
 		#pod: _profile.rootless & {
 			spec: containers: [{
 				name:  "web"
@@ -421,7 +400,6 @@ _application: _applicationSet & {
 	immich: {
 		_
 		#param: {
-			name: "immich"
 			secret: {
 				database_password: {
 					type:    "env"
@@ -549,17 +527,10 @@ _application: _applicationSet & {
 	// Placeholder for getting volume list
 	jellyfin: {
 		_
-		#param: {
-			name: "jellyfin"
-		}
 	}
 
 	jdownloader: {
 		_
-		#param: {
-			name: "jdownloader"
-		}
-
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -586,10 +557,6 @@ _application: _applicationSet & {
 
 	kavita: {
 		_
-		#param: {
-			name: "kavita"
-		}
-
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -607,10 +574,6 @@ _application: _applicationSet & {
 
 	koreader: {
 		_
-		#param: {
-			name: "koreader"
-		}
-
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -625,8 +588,6 @@ _application: _applicationSet & {
 
 	librespeed: {
 		_
-		#param: name: "librespeed"
-
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "librespeed"
@@ -635,10 +596,6 @@ _application: _applicationSet & {
 
 	lidarr: {
 		_
-		#param: {
-			name: "lidarr"
-		}
-
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -658,7 +615,6 @@ _application: _applicationSet & {
 	miniflux: {
 		_
 		#param: {
-			name: "miniflux"
 			secret: {
 				miniflux_postgres_password: {
 					type:    "env"
@@ -721,10 +677,6 @@ _application: _applicationSet & {
 
 	navidrome: {
 		_
-		#param: {
-			name: "navidrome"
-		}
-
 		#pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
@@ -756,7 +708,6 @@ _application: _applicationSet & {
 	nextcloud: {
 		_
 		#param: {
-			name: "nextcloud"
 			secret: {
 				postgres_password: {
 					type:    "env"
@@ -864,7 +815,6 @@ _application: _applicationSet & {
 	paperless: {
 		_
 		#param: {
-			name: "paperless"
 			secret: {
 				paperless_dbpass: {
 					type:    "env"
@@ -1005,10 +955,6 @@ _application: _applicationSet & {
 
 	prowlarr: {
 		_
-		#param: {
-			name: "prowlarr"
-		}
-
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "prowlarr"
@@ -1021,10 +967,6 @@ _application: _applicationSet & {
 
 	pymedusa: {
 		_
-		#param: {
-			name: "pymedusa"
-		}
-
 		#pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
@@ -1042,10 +984,6 @@ _application: _applicationSet & {
 
 	radarr: {
 		_
-		#param: {
-			name: "radarr"
-		}
-
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -1065,7 +1003,6 @@ _application: _applicationSet & {
 	samba: {
 		_
 		#param: {
-			name: "samba"
 			secret: {
 				"ACCOUNT_\(_fact.ansible_user)": {
 					type:    "env"
@@ -1123,7 +1060,6 @@ _application: _applicationSet & {
 	scrutiny: {
 		_
 		#param: {
-			name: "scrutiny"
 			secret: {
 				"scrutiny.yaml": {
 					type: "file"
@@ -1169,7 +1105,6 @@ _application: _applicationSet & {
 	speedtest: {
 		_
 		#param: {
-			name: "speedtest"
 			secret: {
 				speedtest_app_key: {
 					type:    "env"
@@ -1209,10 +1144,6 @@ _application: _applicationSet & {
 
 	syncthing: {
 		_
-		#param: {
-			name: "syncthing"
-		}
-
 		#pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
@@ -1248,7 +1179,6 @@ _application: _applicationSet & {
 	transmission: {
 		_
 		#param: {
-			name: "transmission"
 			secret: {
 				USER: {
 					type:    "env"
@@ -1298,10 +1228,6 @@ _application: _applicationSet & {
 
 	trilium: {
 		_
-		#param: {
-			name: "trilium"
-		}
-
 		#pod: _profile.rootless & {
 			spec: containers: [{
 				name:  "web"
@@ -1318,7 +1244,6 @@ _application: _applicationSet & {
 	wol: {
 		_
 		#param: {
-			name: "wol"
 			secret: {
 				WOLWEBBCASTIP: {
 					type:    "env"

@@ -241,8 +241,8 @@ container_default:
   state: started
   # Template extra entries for quadlet file
   kube_quadlet_options: {}
-  # - "": create volumes with #param.name and volumes name
-  # - ./: Create volume directory with {{ global_volume_path }}/{{ #param.name }}/{{ whatever behind ./ }}
+  # - "": create volumes with application name and volumes name
+  # - ./: Create volume directory with {{ global_volume_path }}/{{ application name }}/{{ whatever behind ./ }}
   # - / with no /: File
   # - / with /: directory
   volumes: {}
