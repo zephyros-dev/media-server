@@ -256,9 +256,6 @@ _application: _applicationSet & {
 				}, {
 					name:      "books"
 					mountPath: "/books"
-				}, {
-					name:      "device"
-					mountPath: "/dev/dri"
 				}]
 			}]
 		}
@@ -621,9 +618,6 @@ _application: _applicationSet & {
 				volumeMounts: [{
 					name:      "config"
 					mountPath: "/config:z"
-				}, {
-					name:      "device"
-					mountPath: "/dev/dri" // TODO: Check file descriptor support
 				}]
 				securityContext: capabilities: add: ["CAP_NET_RAW"]
 			}]}
