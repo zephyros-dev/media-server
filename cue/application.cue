@@ -14,7 +14,29 @@ _applicationName: string @tag(name)
 // Have to use MarshalStream since cue export does not make stream yaml
 yaml.MarshalStream(_application[_applicationName])
 
-_fact: _ @embed(file="tmp/fact.json")
+// Type check for the container variables
+_fact_embed: _ @embed(file="tmp/fact.json")
+#container: {
+	become:           bool
+	caddy_proxy_port: int32
+	caddy_proxy_url:  string
+	caddy_rewrite: [...{
+		src:  string
+		dest: string
+	}]
+	caddy_sso:                    bool
+	dashy_icon:                   string
+	dashy_only:                   bool
+	dashy_statusCheckAcceptCodes: string
+	host_network:                 bool
+	kind:                         "kube" | "container"
+	kube_quadlet_options: [string]: string
+	postgres_action: "none" | "export" | "import" | "clean"
+	preserve_volume: bool
+	state:           "started" | "absent"
+	volumes: [string]: string
+}
+_fact: _fact_embed & {container: [string]: #container}
 
 _profile: {
 	lsio: {
@@ -999,7 +1021,6 @@ _application: _applicationSet & {
 		}
 	}
 
-	// UserNS, TODO: rootless?
 	samba: {
 		_
 		#param: {
