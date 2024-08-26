@@ -614,18 +614,19 @@ _application: _applicationSet & {
 			name: "koreader"
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "koreader"
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/config:z"
-			}, {
-				name:      "device"
-				mountPath: "/dev/dri"
-			}]
-			securityContext: capabilities: add: ["CAP_NET_RAW"]
-		}]
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "koreader"
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:z"
+				}, {
+					name:      "device"
+					mountPath: "/dev/dri" // TODO: Check file descriptor support
+				}]
+				securityContext: capabilities: add: ["CAP_NET_RAW"]
+			}]}
 	}
 
 	librespeed: {
