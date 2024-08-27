@@ -1,1 +1,1 @@
-FROM ghcr.io/zadam/trilium:0.63.7@sha256:a0b5a6a5fd7a64391ae6039bbcd5493151a77a1d5470ef5911923c64d0c232c0
+FROM ghcr.io/triliumnext/notes:0.90.4@sha256:490ec7bec8e39b9020afa01efc5e33a04310362a9e1f780ded7fff83833e0961

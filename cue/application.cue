@@ -1249,17 +1249,14 @@ _application: _applicationSet & {
 
 	trilium: {
 		_
-		#pod: _profile.rootless & {
-			spec: containers: [{
-				name:  "web"
-				image: "trilium"
-				securityContext: capabilities: add: ["CAP_SETGID"]
-				volumeMounts: [{
-					name:      "data"
-					mountPath: "/home/node/trilium-data:U,z"
-				}]
+		#pod: spec: containers: [{
+			name:  "web"
+			image: "trilium"
+			volumeMounts: [{
+				name:      "data"
+				mountPath: "/home/node/trilium-data:z"
 			}]
-		}
+		}]
 	}
 
 	wol: {
