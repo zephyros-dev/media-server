@@ -1,31 +1,35 @@
-- name: Setup application {{ nextcloud_app_loop_var.key }}
-  when: nextcloud_app_loop_var.value.state == 'present'
+- name: Setup nextcloud app {{ nextcloud_app_loop_var.key }}
+  vars:
+    nextcloud_app_var: "{{ nextcloud_app_loop_var.value | combine(nextcloud_app_default) }}"
   block:
-    - name: Install app {{ nextcloud_app_loop_var.key }}
-      changed_when: false
-      register: nextcloud_app_install
-      failed_when: not(nextcloud_app_install.rc == 0 or ("already installed" in nextcloud_app_install.stdout))
-      ansible.builtin.command:
-        cmd: "{{ nextcloud_app_command }} app:install {{ nextcloud_app_loop_var.key }}"
+    - name: Setup application {{ nextcloud_app_loop_var.key }}
+      when: nextcloud_app_var.state == 'present'
+      block:
+        - name: Install app {{ nextcloud_app_loop_var.key }}
+          changed_when: false
+          register: nextcloud_app_install
+          failed_when: not(nextcloud_app_install.rc == 0 or ("already installed" in nextcloud_app_install.stdout))
+          ansible.builtin.command:
+            cmd: "{{ nextcloud_app_command }} app:install {{ nextcloud_app_loop_var.key }}"
 
-    # Force enable app even if it is not available for new nextcloud version
-    - name: Enable app {{ nextcloud_app_loop_var.key }}
-      changed_when: false
-      ansible.builtin.command:
-        cmd: "{{ nextcloud_app_command }} app:enable --force {{ nextcloud_app_loop_var.key }}"
+        # Force enable app even if it is not available for new nextcloud version
+        - name: Enable app {{ nextcloud_app_loop_var.key }}
+          changed_when: false
+          ansible.builtin.command:
+            cmd: "{{ nextcloud_app_command }} app:enable --force {{ nextcloud_app_loop_var.key }}"
 
-    - name: Configure app {{ nextcloud_app_loop_var.key }}
-      changed_when: false
-      ansible.builtin.command:
-        cmd: "{{ nextcloud_app_command }} config:app:set --value {{ item.value }} {{ nextcloud_app_loop_var.key }} {{ item.key }}"
-      loop: "{{ nextcloud_app_loop_var.value.config | dict2items }}"
+        - name: Configure app {{ nextcloud_app_loop_var.key }}
+          changed_when: false
+          ansible.builtin.command:
+            cmd: "{{ nextcloud_app_command }} config:app:set --value {{ item.value }} {{ nextcloud_app_loop_var.key }} {{ item.key }}"
+          loop: "{{ nextcloud_app_var.config | dict2items }}"
 
-- name: Remove application {{ nextcloud_app_loop_var.key }}
-  when: nextcloud_app_loop_var.value.state == 'absent'
-  block:
     - name: Remove application {{ nextcloud_app_loop_var.key }}
-      changed_when: false
-      register: nextcloud_app_remove
-      failed_when: not (nextcloud_app_remove.rc == 0 or ("not installed" in nextcloud_app_remove.stdout))
-      ansible.builtin.command:
-        cmd: "{{ nextcloud_app_command }} app:remove {{ nextcloud_app_loop_var.key }}"
+      when: nextcloud_app_var.state == 'absent'
+      block:
+        - name: Remove application {{ nextcloud_app_loop_var.key }}
+          changed_when: false
+          register: nextcloud_app_remove
+          failed_when: not (nextcloud_app_remove.rc == 0 or ("not installed" in nextcloud_app_remove.stdout))
+          ansible.builtin.command:
+            cmd: "{{ nextcloud_app_command }} app:remove {{ nextcloud_app_loop_var.key }}"

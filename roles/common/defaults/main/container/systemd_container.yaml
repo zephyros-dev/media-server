@@ -58,7 +58,6 @@ calibre:
   volumes:
     config: ./config/
     books: "{{ global_media }}/Storage/Books/"
-    device: /dev/dri/
 calibre_content:
   caddy_proxy_url: http://calibre:8081
   dashy_only: true
@@ -119,7 +118,6 @@ koreader:
   dashy_icon: "/favicon.ico"
   volumes:
     config: ./data/
-    device: /dev/dri/
 librespeed:
   caddy_proxy_port: 80
 lidarr:

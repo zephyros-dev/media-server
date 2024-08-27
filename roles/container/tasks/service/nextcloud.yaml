@@ -34,3 +34,15 @@
   loop_control:
     loop_var: nextcloud_app_loop_var
   loop: "{{ nextcloud_app | dict2items }}"
+  vars:
+    nextcloud_app:
+      bookmarks: {}
+      richdocuments:
+        config:
+          public_wopi_url: https://nextcloud-office.{{ server_domain }}
+          wopi_allowlist: 0.0.0.0/0
+          wopi_url: https://nextcloud-office.{{ server_domain }}
+      tasks: {}
+    nextcloud_app_default:
+      state: present
+      config: {}
