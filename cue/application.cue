@@ -66,6 +66,10 @@ _applicationSet: [applicationName=string]: {
 				content: string
 			}
 		}
+		volumes: [string]: {
+			type:  "pvc" | "file" | "absolutePathDir" | "relativePathDir"
+			value: string
+		}
 		volumes: {
 			for k, v in _fact.container[strings.Replace(applicationName, "-", "_", -1)].volumes {"\(k)": {
 				_volume_path: path.Join([_fact.global_volume_path, applicationName, path.Clean(v)])
@@ -1165,6 +1169,11 @@ _application: _applicationSet & {
 
 	syncthing: {
 		_
+
+		#param: volumes: koreader: {
+			type: "absolutePathDir"
+			value: path.Join([_application.koreader.#param.volumes.config.value, "book"])
+		}
 		#pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
@@ -1190,7 +1199,7 @@ _application: _applicationSet & {
 					name:      "data"
 					mountPath: "/var/syncthing:z"
 				}, {
-					name:      "koreader-book"
+					name:      "koreader"
 					mountPath: "/var/syncthing/koreader/book"
 				}]
 			}]
