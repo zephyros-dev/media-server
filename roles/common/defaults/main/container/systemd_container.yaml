@@ -1,228 +1,194 @@
-container:
-  audiobookshelf: "{{ container_default | combine(audiobookshelf) }}"
-  bazarr: "{{ container_default | combine(bazarr) }}"
-  caddy: "{{ container_default | combine(caddy) }}"
-  calibre_content: "{{ container_default | combine(calibre_content) }}"
-  calibre: "{{ container_default | combine(calibre) }}"
-  cockpit: "{{ container_default | combine(cockpit) }}"
-  dashy: "{{ container_default | combine(dashy) }}"
-  ddns: "{{ container_default | combine(ddns) }}"
-  filebrowser: "{{ container_default | combine(filebrowser) }}"
-  flaresolverr: "{{ container_default | combine(flaresolverr) }}"
-  immich: "{{ container_default | combine(immich) }}"
-  jdownloader: "{{ container_default | combine(jdownloader) }}"
-  jellyfin: "{{ container_default | combine(jellyfin) }}"
-  kavita: "{{ container_default | combine(kavita) }}"
-  koreader: "{{ container_default | combine(koreader) }}"
-  librespeed: "{{ container_default | combine(librespeed) }}"
-  lidarr: "{{ container_default | combine(lidarr) }}"
-  miniflux: "{{ container_default | combine(miniflux) }}"
-  navidrome: "{{ container_default | combine(navidrome) }}"
-  netdata: "{{ container_default | combine(netdata) }}"
-  nextcloud: "{{ container_default | combine(nextcloud) }}"
-  nextcloud_office: "{{ container_default | combine(nextcloud_office) }}"
-  paperless: "{{ container_default | combine(paperless) }}"
-  prowlarr: "{{ container_default | combine(prowlarr) }}"
-  pymedusa: "{{ container_default | combine(pymedusa) }}"
-  radarr: "{{ container_default | combine(radarr) }}"
-  samba: "{{ container_default | combine(samba) }}"
-  scrutiny: "{{ container_default | combine(scrutiny) }}"
-  speedtest: "{{ container_default | combine(speedtest) }}"
-  syncthing: "{{ container_default | combine(syncthing) }}"
-  transmission: "{{ container_default | combine(transmission) }}"
-  trilium: "{{ container_default | combine(trilium) }}"
-  wol: "{{ container_default | combine(wol) }}"
-
-audiobookshelf:
-  caddy_proxy_port: 80
-  volumes:
-    audiobooks: "{{ global_storage }}/Audiobooks/"
-    config: ./config/
-    metadata: ./metadata/
-    podcasts: "{{ global_storage }}/Podcasts/"
-bazarr:
-  caddy_proxy_port: 6767
-  caddy_sso: true
-  volumes:
-    config: ./web/config/
-    home: "{{ global_media }}/"
-caddy:
-  preserve_volume: true
-  volumes:
-    config: pvc
-    data: pvc
-calibre:
-  caddy_proxy_port: 8080
-  caddy_sso: true
-  dashy_statusCheckAcceptCodes: "401"
-  volumes:
-    config: ./config/
-    books: "{{ global_media }}/Storage/Books/"
-calibre_content:
-  caddy_proxy_url: http://calibre:8081
-  dashy_only: true
-  dashy_icon: "/favicon.png"
-  dashy_statusCheckAcceptCodes: "401"
-cockpit:
-  caddy_proxy_url: https://{{ caddyfile_host_address }}:9090
-  dashy_only: true
-dashy:
-  caddy_proxy_port: 8080
-  caddy_sso: true
-ddns:
-  preserve_volume: true
-  kube_quadlet_options:
-    Network: pasta # Use pasta network instead of host since it can preserve the IP address from the host machine
-  volumes:
-    config: pvc
-    data: pvc
-filebrowser:
-  caddy_proxy_port: 80
-  volumes:
-    "database.db": "./database.db"
-    srv: "{{ global_media }}/"
-flaresolverr:
-immich:
-  caddy_proxy_port: 3001
-  volumes:
-    database: ./database/
-    upload: "{{ global_media }}/Storage/Picture/Immich/"
-    ml-cache: pvc
-jdownloader:
-  caddy_proxy_port: 5800
-  volumes:
-    config: ./config/
-    output: "{{ global_download }}/"
-jellyfin:
-  caddy_proxy_port: 8096
-  kind: container
-  # This is a hack so we can migrate the folder fields to volumes
-  # Once podman support mounting nvidia gpu in quadlet kubernetes we can remove this
-  # https://github.com/containers/podman/issues/17833
-  volumes:
-    cache: ./cache/
-    config: ./config/
-    media: "{{ global_media }}/"
-kavita:
-  caddy_proxy_port: 5000
-  caddy_rewrite:
-    - src: /
-      dest: /login
-  volumes:
-    config: ./data/
-    home: "{{ global_media }}/"
-koreader:
-  caddy_proxy_port: 3000
-  caddy_sso: true
-  dashy_statusCheckAcceptCodes: "401"
-  dashy_icon: "/favicon.ico"
-  volumes:
-    config: ./data/
-librespeed:
-  caddy_proxy_port: 80
-lidarr:
-  caddy_proxy_port: 8686
-  caddy_sso: true
-  volumes:
-    home: "{{ global_media }}/"
-    config: ./web/config/
-miniflux:
-  caddy_proxy_port: 8080
-  volumes:
-    database: ./database/
-navidrome:
-  caddy_proxy_port: 4533
-  volumes:
-    data: ./data/
-    music: "{{ global_media }}/Download/torrent/complete/Music/"
-netdata:
-  caddy_proxy_port: 19999
-  host_network: true
-  dashy_only: true
-  dashy_statusCheckAcceptCodes: "401"
-  state: "{{ netdata_state }}"
-nextcloud:
-  caddy_proxy_port: 80
-  volumes:
-    data: "./web/data/"
-    database: "./db/data/"
-    storage: "./web/storage/"
-nextcloud_office:
-  caddy_proxy_url: http://nextcloud:9980
-paperless:
-  caddy_proxy_port: 8000
-  volumes:
-    consume: ./webserver/consume/
-    data: ./webserver/data/
-    database: ./database/data/
-    export: ./webserver/export/
-    media: ./webserver/media/
-    redis: ./redis/data/
-prowlarr:
-  caddy_sso: true
-  caddy_proxy_port: 9696
-  volumes:
-    config: ./web/config/
-pymedusa:
-  caddy_sso: true
-  caddy_proxy_port: 8081
-  dashy_icon: favicon-local
-  volumes:
-    config: ./web/config/
-    home: "{{ global_media }}/"
-radarr:
-  caddy_sso: true
-  caddy_proxy_port: 7878
-  volumes:
-    config: ./web/config/
-    home: "{{ global_media }}/"
-samba:
-  kube_quadlet_options:
-    Network: pasta
-  volumes:
-    disk: "{{ ansible_user_dir }}/disk/"
-    disks: "{{ global_disks_data }}/"
-    home: "{{ ansible_user_dir }}/"
-    storage: "{{ global_storage }}/"
-scrutiny:
-  become: true
-  caddy_sso: true
-  caddy_proxy_port: "{{ scrutiny_port }}"
-  host_network: true
-  volumes:
-    udev: /run/udev/
-    device: /dev/
-speedtest:
-  caddy_proxy_port: 80
-  dashy_icon: favicon-local
-  volumes:
-    config: ./config/
-    db: ./db/data/
-syncthing:
-  caddy_proxy_port: 8384
-  caddy_sso: true
-  host_network: true
-  kube_quadlet_options:
-    Network: pasta
-  volumes:
-    data: ./
-    koreader-book: "{{ global_volume_path }}/koreader/{{ koreader.volumes.config | regex_replace('\\./', '') }}book/"
-transmission:
-  caddy_proxy_port: 9091
-  dashy_statusCheckAcceptCodes: "401"
-  volumes:
-    home: "{{ global_media }}/"
-    config: ./web/config/
-trilium:
-  caddy_proxy_port: 8080
-  volumes:
-    data: ./data/
-wol:
-  caddy_proxy_port: 8089
-  caddy_sso: true
-  dashy_icon: mdi-desktop-classic
-  host_network: true
-
+# https://stackoverflow.com/questions/75614404/combine-each-element-in-a-dictionary-with-a-default-set-of-parameters
+container: "{{ dict(container_base.keys()| product([container_default]))| combine(container_base, recursive=true) }}"
+container_base:
+  audiobookshelf:
+    caddy_proxy_port: 80
+    volumes:
+      audiobooks: "{{ global_storage }}/Audiobooks/"
+      config: ./config/
+      metadata: ./metadata/
+      podcasts: "{{ global_storage }}/Podcasts/"
+  bazarr:
+    caddy_proxy_port: 6767
+    caddy_sso: true
+    volumes:
+      config: ./web/config/
+      home: "{{ global_media }}/"
+  caddy:
+    preserve_volume: true
+    volumes:
+      config: pvc
+      data: pvc
+  calibre_content:
+    caddy_proxy_url: http://calibre:8081
+    dashy_only: true
+    dashy_icon: "/favicon.png"
+    dashy_statusCheckAcceptCodes: "401"
+  calibre:
+    caddy_proxy_port: 8080
+    caddy_sso: true
+    dashy_statusCheckAcceptCodes: "401"
+    volumes:
+      config: ./config/
+      books: "{{ global_media }}/Storage/Books/"
+  cockpit:
+    caddy_proxy_url: https://{{ caddyfile_host_address }}:9090
+    dashy_only: true
+  dashy:
+    caddy_proxy_port: 8080
+    caddy_sso: true
+  ddns:
+    preserve_volume: true
+    kube_quadlet_options:
+      Network: pasta # Use pasta network instead of host since it can preserve the IP address from the host machine
+    volumes:
+      config: pvc
+      data: pvc
+  filebrowser:
+    caddy_proxy_port: 80
+    volumes:
+      "database.db": "./database.db"
+      srv: "{{ global_media }}/"
+  flaresolverr: {}
+  immich:
+    caddy_proxy_port: 3001
+    volumes:
+      database: ./database/
+      upload: "{{ global_media }}/Storage/Picture/Immich/"
+      ml-cache: pvc
+  jdownloader:
+    caddy_proxy_port: 5800
+    volumes:
+      config: ./config/
+      output: "{{ global_download }}/"
+  jellyfin:
+    caddy_proxy_port: 8096
+    kind: container
+    # This is a hack so we can migrate the folder fields to volumes
+    # Once podman support mounting nvidia gpu in quadlet kubernetes we can remove this
+    # https://github.com/containers/podman/issues/17833
+    volumes:
+      cache: ./cache/
+      config: ./config/
+      media: "{{ global_media }}/"
+  kavita:
+    caddy_proxy_port: 5000
+    caddy_rewrite:
+      - src: /
+        dest: /login
+    volumes:
+      config: ./data/
+      home: "{{ global_media }}/"
+  koreader:
+    caddy_proxy_port: 3000
+    caddy_sso: true
+    dashy_statusCheckAcceptCodes: "401"
+    dashy_icon: "/favicon.ico"
+    volumes:
+      config: ./data/
+  librespeed:
+    caddy_proxy_port: 80
+  lidarr:
+    caddy_proxy_port: 8686
+    caddy_sso: true
+    volumes:
+      home: "{{ global_media }}/"
+      config: ./web/config/
+  miniflux:
+    caddy_proxy_port: 8080
+    volumes:
+      database: ./database/
+  navidrome:
+    caddy_proxy_port: 4533
+    volumes:
+      data: ./data/
+      music: "{{ global_media }}/Download/torrent/complete/Music/"
+  netdata:
+    caddy_proxy_port: 19999
+    host_network: true
+    dashy_only: true
+    dashy_statusCheckAcceptCodes: "401"
+    state: "{{ netdata_state }}"
+  nextcloud:
+    caddy_proxy_port: 80
+    volumes:
+      data: "./web/data/"
+      database: "./db/data/"
+      storage: "./web/storage/"
+  nextcloud_office:
+    caddy_proxy_url: http://nextcloud:9980
+  paperless:
+    caddy_proxy_port: 8000
+    volumes:
+      consume: ./webserver/consume/
+      data: ./webserver/data/
+      database: ./database/data/
+      export: ./webserver/export/
+      media: ./webserver/media/
+      redis: ./redis/data/
+  prowlarr:
+    caddy_sso: true
+    caddy_proxy_port: 9696
+    volumes:
+      config: ./web/config/
+  pymedusa:
+    caddy_sso: true
+    caddy_proxy_port: 8081
+    dashy_icon: favicon-local
+    volumes:
+      config: ./web/config/
+      home: "{{ global_media }}/"
+  radarr:
+    caddy_sso: true
+    caddy_proxy_port: 7878
+    volumes:
+      config: ./web/config/
+      home: "{{ global_media }}/"
+  samba:
+    kube_quadlet_options:
+      Network: pasta
+    volumes:
+      disk: "{{ ansible_user_dir }}/disk/"
+      disks: "{{ global_disks_data }}/"
+      home: "{{ ansible_user_dir }}/"
+      storage: "{{ global_storage }}/"
+  scrutiny:
+    become: true
+    caddy_sso: true
+    caddy_proxy_port: "{{ scrutiny_port }}"
+    host_network: true
+    volumes:
+      udev: /run/udev/
+      device: /dev/
+  speedtest:
+    caddy_proxy_port: 80
+    dashy_icon: favicon-local
+    volumes:
+      config: ./config/
+      db: ./db/data/
+  syncthing:
+    caddy_proxy_port: 8384
+    caddy_sso: true
+    host_network: true
+    kube_quadlet_options:
+      Network: pasta
+    volumes:
+      data: ./
+  transmission:
+    caddy_proxy_port: 9091
+    dashy_statusCheckAcceptCodes: "401"
+    volumes:
+      home: "{{ global_media }}/"
+      config: ./web/config/
+  trilium:
+    caddy_proxy_port: 8080
+    volumes:
+      data: ./data/
+  wol:
+    caddy_proxy_port: 8089
+    caddy_sso: true
+    dashy_icon: mdi-desktop-classic
+    host_network: true
 container_default:
   become: false
   caddy_proxy_port: 0

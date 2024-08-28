@@ -1,13 +1,12 @@
 - name: Setup systemd container {{ container_loop_var.key }}
+  vars:
+    container_service_name: "{{ container_loop_var.key | regex_replace('_', '-') }}"
   when:
     - not container_loop_var.value.dashy_only
     - container_loop_var.value.caddy_proxy_url == ""
   tags:
     - "{{ container_loop_var.key }}"
   block:
-    - name: Setup name for service {{ container_loop_var.key }}
-      ansible.builtin.set_fact:
-        container_service_name: "{{ container_loop_var.key | regex_replace('_', '-') }}"
     - name: Setup variable for user scope {{ container_service_name }}
       ansible.builtin.set_fact:
         container_quadlet_path: "{{ ansible_user_dir }}/.config/containers/systemd"

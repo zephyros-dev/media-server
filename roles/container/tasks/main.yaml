@@ -3,7 +3,9 @@
   block:
     - name: Generate facts for container
       delegate_to: localhost
-      tags: always
+      tags:
+        - always
+        - cue_fact
       block:
         - name: Get cue binary path
           changed_when: false
