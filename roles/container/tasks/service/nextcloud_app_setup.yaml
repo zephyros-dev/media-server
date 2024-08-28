@@ -1,6 +1,6 @@
 - name: Setup nextcloud app {{ nextcloud_app_loop_var.key }}
   vars:
-    nextcloud_app_var: "{{ nextcloud_app_loop_var.value | combine(nextcloud_app_default) }}"
+    nextcloud_app_var: "{{ nextcloud_app_default | combine(nextcloud_app_loop_var.value) }}"
   block:
     - name: Setup application {{ nextcloud_app_loop_var.key }}
       when: nextcloud_app_var.state == 'present'
