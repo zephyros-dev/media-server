@@ -80,18 +80,21 @@
       changed_when: false
       ansible.builtin.command:
         cmd: mergerfs --version
-      register: mergerfs_current_version
-    - name: Get mergerfs current version
-      ansible.builtin.set_fact:
-        mergerfs_current_version: "{{ mergerfs_current_version.stdout | regex_search('\\d.+\\d') }}"
-      when: mergerfs_install_state.stat.exists
+      register: mergerfs_version_output
     - name: Install mergerfs
+      vars:
+        mergerfs_current_version: "{{ mergerfs_version_output.stdout | regex_search('\\d.+\\d') }}"
       when: (not mergerfs_install_state.stat.exists) or (mergerfs_current_version != mergerfs_version)
       block:
         - name: Download mergerfs github releases
+          vars:
+            architecture_dict:
+              x86_64: amd64
+              aarch64: arm64
+            mergerfs_arch: "{{ architecture_dict[ansible_architecture] }}"
           ansible.builtin.get_url:
             mode: "0600"
-            url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-static-linux_{{ custom_fact_ansible_alternative_architecture }}.tar.gz
+            url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs-static-linux_{{ mergerfs_arch }}.tar.gz
             dest: /tmp/mergerfs.tar.gz
         - name: Create temporary directory
           ansible.builtin.file:

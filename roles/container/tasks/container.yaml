@@ -38,13 +38,11 @@
                     # Use container_loop_var.key since the key in cue use _ instead of -
                     cmd: CUE_EXPERIMENT=embed {{ cue_path }} eval -e _application.{{ container_loop_var.key }}.#param.volumes --out json
                   register: volume_map
-                - name: Set volume directory lists {{ container_service_name }}
-                  ansible.builtin.set_fact:
-                    container_volume_list: "{{ volume_map.stdout | from_json | json_query(container_volume_list_query) }}"
-                  vars:
-                    container_volume_list_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
                 - name: Check if volume exists {{ container_service_name }}
                   when: "'/dev/' not in item"
+                  vars:
+                    container_volume_list_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
+                    container_volume_list: "{{ volume_map.stdout | from_json | json_query(container_volume_list_query) }}"
                   ansible.builtin.stat:
                     path: "{{ item }}"
                   loop: "{{ container_volume_list }}"

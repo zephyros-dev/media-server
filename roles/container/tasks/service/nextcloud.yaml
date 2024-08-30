@@ -2,10 +2,6 @@
   ansible.builtin.include_tasks:
     file: container_quadlet.yaml
 
-- name: Setup php nextcloud command
-  ansible.builtin.set_fact:
-    nextcloud_app_command: podman exec --user www-data -it nextcloud-web php occ
-
 # https://github.com/nextcloud/docker/issues/1880#issuecomment-1344309058
 - name: Fix permission error nextcloud with postgres 15
   changed_when: false
@@ -15,34 +11,38 @@
     command: psql --user $POSTGRES_USER -c "GRANT ALL ON SCHEMA public TO oc_{{ nextcloud_admin_user }};"
   retries: 10
 
-- name: Upgrade nextcloud
-  changed_when: false
-  ansible.builtin.command:
-    cmd: "{{ nextcloud_app_command }} {{ item }}"
-  loop:
-    - upgrade
-    - maintenance:mode --off
-    - app:update --all
-    - background:cron
-    - db:add-missing-indices
-    - config:system:set maintenance_window_start --type=integer --value=6
-  retries: 10
-
-- name: Setup nextcloud app
-  ansible.builtin.include_tasks:
-    file: nextcloud_app_setup.yaml
-  loop_control:
-    loop_var: nextcloud_app_loop_var
-  loop: "{{ nextcloud_app | dict2items }}"
+- name: Setup php nextcloud
   vars:
-    nextcloud_app:
-      bookmarks: {}
-      richdocuments:
-        config:
-          public_wopi_url: https://nextcloud-office.{{ server_domain }}
-          wopi_allowlist: 0.0.0.0/0
-          wopi_url: https://nextcloud-office.{{ server_domain }}
-      tasks: {}
-    nextcloud_app_default:
-      state: present
-      config: {}
+    nextcloud_app_command: podman exec --user www-data -it nextcloud-web php occ
+  block:
+    - name: Upgrade nextcloud
+      changed_when: false
+      ansible.builtin.command:
+        cmd: "{{ nextcloud_app_command }} {{ item }}"
+      loop:
+        - upgrade
+        - maintenance:mode --off
+        - app:update --all
+        - background:cron
+        - db:add-missing-indices
+        - config:system:set maintenance_window_start --type=integer --value=6
+      retries: 10
+
+    - name: Setup nextcloud app
+      ansible.builtin.include_tasks:
+        file: nextcloud_app_setup.yaml
+      loop_control:
+        loop_var: nextcloud_app_loop_var
+      loop: "{{ nextcloud_app | dict2items }}"
+      vars:
+        nextcloud_app:
+          bookmarks: {}
+          richdocuments:
+            config:
+              public_wopi_url: https://nextcloud-office.{{ server_domain }}
+              wopi_allowlist: 0.0.0.0/0
+              wopi_url: https://nextcloud-office.{{ server_domain }}
+          tasks: {}
+        nextcloud_app_default:
+          state: present
+          config: {}

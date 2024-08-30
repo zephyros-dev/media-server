@@ -11,10 +11,7 @@
           changed_when: false
           ansible.builtin.command:
             cmd: which cue
-          register: cue_path
-        - name: Set cue binary path
-          ansible.builtin.set_fact:
-            cue_path: "{{ cue_path.stdout | trim }}"
+          register: cue_path_cmd
         - name: Create tmp cue folder
           ansible.builtin.file:
             path: cue/tmp
@@ -38,3 +35,5 @@
         loop_var: container_loop_var
       tags: always
       no_log: true
+      vars:
+        cue_path: "{{ cue_path_cmd.stdout | trim }}"
