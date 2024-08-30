@@ -1,5 +1,5 @@
 # https://stackoverflow.com/questions/75614404/combine-each-element-in-a-dictionary-with-a-default-set-of-parameters
-container: "{{ dict(container_base.keys()| product([container_default]))| combine(container_base, recursive=true) }}"
+container: "{{ dict(container_base.keys() | product([container_default])) | combine(container_base, recursive=true) }}"
 container_base:
   audiobookshelf:
     caddy_proxy_port: 80
