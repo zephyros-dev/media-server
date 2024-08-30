@@ -15,10 +15,10 @@
 - name: Setup mergerfs config file
   ansible.builtin.import_role:
     name: common
-    tasks_from: json_edit.yaml
+    tasks_from: structured_edit.yaml
   vars:
-    common_json_file_path: "{{ ansible_user_dir }}/.config/mergerfs_directory/config.json"
-    common_json_edit:
+    file_path: "{{ ansible_user_dir }}/.config/mergerfs_directory/config.json"
+    structured_edit:
       mergerfs_disks_name: "{{ disks.storage.disks_list }}"
       mergerfs_disks_storage_path: "{{ global_disks_storage_path }}"
       mergerfs_storage_path: "{{ global_storage }}"

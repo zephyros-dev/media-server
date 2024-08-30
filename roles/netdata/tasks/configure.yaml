@@ -55,10 +55,11 @@
             - name: Enable nvidia monitoring # noqa: var-naming[no-role-prefix]
               ansible.builtin.import_role:
                 name: common
-                tasks_from: yaml_edit.yaml
+                tasks_from: structured_edit.yaml
               vars:
-                common_yaml_file_path: "/etc/netdata/go.d.conf"
-                common_yaml_edit:
+                file_path: /etc/netdata/go.d.conf
+                force_type: yaml
+                structured_edit:
                   modules:
                     nvidia_smi: true
               notify: Restart Netdata

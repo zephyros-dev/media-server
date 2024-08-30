@@ -1,0 +1,29 @@
+- name: Check if file exists {{ file_path }}
+  ansible.builtin.stat:
+    path: "{{ file_path }}"
+  register: structured_file_stat
+
+- name: Load file {{ file_path }}
+  when: structured_file_stat.stat.exists
+  ansible.builtin.slurp:
+    src: "{{ file_path }}"
+  register: file_slurp
+
+- name: Write to file {{ file_path }}
+  vars:
+    file_decode: "{{ file_slurp.content | b64decode | default({}) }}"
+    file_content: "{{ file_decode is mapping | ternary(file_decode, file_decode | from_yaml_all) }}"
+    file_edit: "{{ file_content | combine(structured_edit, recursive=true, list_merge='append_rp') }}"
+  module_defaults:
+    ansible.builtin.copy:
+      dest: "{{ file_path }}"
+      mode: "0644"
+  block:
+    - name: Write yaml file {{ file_path }} # noqa: risky-file-permissions
+      when: "'.yaml' in file_path | basename or force_type == 'yaml'"
+      ansible.builtin.copy:
+        content: "{{ file_edit | to_nice_yaml(sort_keys=false, indent=2, width=1337) }}"
+    - name: Write json file {{ file_path }} # noqa: risky-file-permissions
+      when: "'.json' in file_path | basename or force_type == 'json'"
+      ansible.builtin.copy:
+        content: "{{ file_edit | to_nice_json }}"
