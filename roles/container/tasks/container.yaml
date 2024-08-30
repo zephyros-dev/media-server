@@ -40,12 +40,11 @@
                   register: volume_map
                 - name: Check if volume exists {{ container_service_name }}
                   when: "'/dev/' not in item"
-                  vars:
-                    container_volume_list_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
-                    container_volume_list: "{{ volume_map.stdout | from_json | json_query(container_volume_list_query) }}"
                   ansible.builtin.stat:
                     path: "{{ item }}"
-                  loop: "{{ container_volume_list }}"
+                  vars:
+                    container_volume_list_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
+                  loop: "{{ volume_map.stdout | from_json | json_query(container_volume_list_query) }}"
                   register: container_volume_state
                 - name: Prepare volume {{ container_service_name }}
                   when: not container_volume_state.skipped
@@ -62,9 +61,9 @@
                     dest: "{{ item }}"
                     force: false
                     mode: "0600"
-                  loop: "{{ volume_map.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
                   vars:
                     container_volume_list_query: "* | [?type=='file'].value"
+                  loop: "{{ volume_map.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
 
                 - name: Disable auth for arr container {{ container_service_name }}
                   when:

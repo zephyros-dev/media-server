@@ -7,7 +7,7 @@
       remote_src: true
   become: true
   block:
-    - name: Configure netdata # noqa: args[module] risky-file-permissions
+    - name: Configure netdata # noqa: risky-file-permissions
       community.general.ini_file:
         path: /etc/netdata/netdata.conf
         section: "{{ item.section }}"
@@ -26,15 +26,15 @@
         - /etc/netdata/python.d
         - /etc/netdata/go.d
 
-    - name: Check if previous configs differ systemd # noqa: args[module] risky-file-permissions
+    - name: Check if previous configs differ systemd # noqa: risky-file-permissions
       ansible.builtin.copy:
-        src: "/usr/lib/netdata/conf.d/go.d.conf"
-        dest: "/etc/netdata/go.d.conf.default"
+        src: /usr/lib/netdata/conf.d/go.d.conf
+        dest: /etc/netdata/go.d.conf.default
       register: netdata_default_config_state
-    - name: Copy default go monitor configuration # noqa: args[module] risky-file-permissions no-handler
+    - name: Copy default go monitor configuration # noqa: risky-file-permissions no-handler
       ansible.builtin.copy:
-        src: "/usr/lib/netdata/conf.d/go.d.conf"
-        dest: "/etc/netdata/go.d.conf"
+        src: /usr/lib/netdata/conf.d/go.d.conf
+        dest: /etc/netdata/go.d.conf
       when: netdata_default_config_state.changed
 
     - name: Setup nvidia monitoring
@@ -47,12 +47,12 @@
         - name: Add nvidia monitoring if nvidia driver is installed
           when: netdata_nvidia_smi_state.stat.exists
           block:
-            - name: Setup nvidia config # noqa: args[module] risky-file-permissions
+            - name: Setup nvidia config # noqa: risky-file-permissions
               ansible.builtin.copy:
-                dest: "/etc/netdata/go.d/nvidia_smi.conf"
-                src: "/usr/lib/netdata/conf.d/go.d/nvidia_smi.conf"
+                dest: /etc/netdata/go.d/nvidia_smi.conf
+                src: /usr/lib/netdata/conf.d/go.d/nvidia_smi.conf
               notify: Restart Netdata
-            - name: Enable nvidia monitoring # noqa: var-naming[no-role-prefix]
+            - name: Enable nvidia monitoring
               ansible.builtin.import_role:
                 name: common
                 tasks_from: structured_edit.yaml
@@ -66,7 +66,7 @@
 
     - name: Setup smartd monitoring
       block:
-        - name: Enable smartd monitoring netdata # noqa: args[module] risky-file-permissions
+        - name: Enable smartd monitoring netdata # noqa: risky-file-permissions
           ansible.builtin.copy:
             src: /usr/lib/netdata/conf.d/go.d/smartctl.conf
             dest: /etc/netdata/go.d/smartctl.conf
