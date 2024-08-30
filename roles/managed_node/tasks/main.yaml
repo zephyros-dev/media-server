@@ -64,7 +64,3 @@
 - name: Miscellaneous settings
   ansible.builtin.import_tasks: system/misc.yaml
   tags: misc
-
-- name: Automatic update packages
-  ansible.builtin.import_tasks: system/auto_update.yaml
-  tags: auto_update

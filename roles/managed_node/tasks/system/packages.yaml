@@ -1,11 +1,22 @@
+- name: Setup global packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - "@virtualization"
+      - dnf-automatic
+      - podman
+      - podman-docker
+      - slirp4netns
+      - snapraid
+      - snapper
+      - fd-find
+      - power-profiles-daemon
+      - restic
+    state: latest
 - name: Setup virtualization
   tags: virt
   become: true
   block:
-    - name: Install the 'virtualization' package group
-      ansible.builtin.dnf:
-        name: "@virtualization"
-        state: latest
     - name: Allow virt to use fuse.mergerfs
       ansible.posix.seboolean:
         name: virt_use_fusefs
@@ -18,14 +29,6 @@
   vars:
     podman_config_dir_path: /etc/containers/containers.conf.d
   block:
-    - name: Install podman
-      ansible.builtin.dnf:
-        name:
-          - podman
-          - podman-docker
-          - slirp4netns
-        state: latest
-
     - name: Setup privileged ports for rootless podman
       ansible.posix.sysctl:
         name: net.ipv4.ip_unprivileged_port_start
@@ -127,34 +130,15 @@
   tags: snapraid
   become: true
   block:
-    - name: Install snapraid and dependencies
-      ansible.builtin.dnf:
-        name:
-          - snapraid
-          - snapper
-        state: latest
     - name: Install snapraid-btrfs
       ansible.builtin.copy:
         src: submodules/snapraid-btrfs/snapraid-btrfs
         dest: /usr/local/bin/snapraid-btrfs
         mode: "0755"
 
-- name: Install fd
-  become: true
-  ansible.builtin.dnf:
-    name:
-      - fd-find
-    state: latest
-  tags:
-    - fd
-
 - name: Setup low power mode
   become: true
   block:
-    - name: Install power-profiles-daemon
-      ansible.builtin.dnf:
-        name: power-profiles-daemon
-        state: latest
     - name: Enable power-profiles-daemon
       ansible.builtin.systemd:
         name: power-profiles-daemon
@@ -166,9 +150,12 @@
       ansible.builtin.command:
         cmd: powerprofilesctl set power-saver
 
-- name: Install restic
+- name: Setup auto update dnf
   become: true
-  ansible.builtin.dnf:
-    name: restic
-    state: latest
-  tags: restic
+  block:
+    - name: Enable automatic update timer # noqa: args[module]
+      ansible.builtin.systemd:
+        name: dnf-automatic-install.timer
+        daemon_reload: true
+        enabled: true
+        state: started

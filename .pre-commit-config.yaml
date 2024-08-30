@@ -23,15 +23,3 @@ repos:
     rev: 38.52.1
     hooks:
       - id: renovate-config-validator
-  - repo: https://github.com/antonbabenko/pre-commit-terraform
-    hooks:
-      - id: terraform_fmt
-    rev: v1.93.0
-  - repo: local
-    hooks:
-      - id: cue-fmt
-        name: cue fmt
-        entry: cue
-        files: \.cue$
-        args: [fmt]
-        language: golang
