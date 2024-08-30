@@ -1,1 +1,1 @@
-FROM docker.io/filebrowser/filebrowser:latest@sha256:e68df99eecbb2ec6ee15ac57a49848986c26500f455182a0261b53b71f76d008
+FROM docker.io/filebrowser/filebrowser:latest@sha256:b9b0dcac8b20c01ed4777889c8ae6ff74443ed604e11e4b862d9f3068eeb9114
