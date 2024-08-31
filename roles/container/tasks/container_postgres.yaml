@@ -30,8 +30,6 @@
                 mode: "0700"
                 state: directory
             - name: Backup volume {{ container_loop_var.key }}
-              become: true
-              become_method: containers.podman.podman_unshare
               ansible.builtin.copy:
                 dest: "{{ postgres_backup_path }}/{{ ansible_date_time.iso8601_basic_short }}"
                 directory_mode: recursive
@@ -57,8 +55,6 @@
           when: container_loop_var.value.postgres_action == "import"
           block:
             - name: Clean current postgres volume {{ container_loop_var.key }}
-              become: true
-              become_method: containers.podman.podman_unshare
               ansible.builtin.file:
                 path: "{{ postgres_data_path }}"
                 state: absent
@@ -83,8 +79,6 @@
           when: container_loop_var.value.postgres_action == "clean"
           block:
             - name: Clean backup db {{ container_loop_var.key }}
-              become: true
-              become_method: containers.podman.podman_unshare
               ansible.builtin.file:
                 path: "{{ postgres_backup_path }}"
                 state: absent

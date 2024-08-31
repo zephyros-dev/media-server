@@ -39,7 +39,7 @@ container_base:
     caddy_sso: true
   ddns:
     preserve_volume: true
-    kube_quadlet_options:
+    quadlet_kube_options:
       Network: pasta # Use pasta network instead of host since it can preserve the IP address from the host machine
     volumes:
       config: pvc
@@ -112,13 +112,16 @@ container_base:
   nextcloud:
     caddy_proxy_port: 80
     volumes:
-      data: "./web/data/"
-      database: "./db/data/"
-      storage: "./web/storage/"
+      data: ./web/data/
+      database: ./db/data/
+      storage: ./web/storage/
+      redis: ./redis/data/
   nextcloud_office:
     caddy_proxy_url: http://nextcloud:9980
   paperless:
     caddy_proxy_port: 8000
+    quadlet_build_options:
+      PodmanArgs: --build-arg=INSTALL_LANGUAGE={{ paperless_ocr_languages }}
     volumes:
       consume: ./webserver/consume/
       data: ./webserver/data/
@@ -145,7 +148,7 @@ container_base:
       config: ./web/config/
       home: "{{ global_media }}/"
   samba:
-    kube_quadlet_options:
+    quadlet_kube_options:
       Network: pasta
     volumes:
       disk: "{{ ansible_user_dir }}/disk/"
@@ -170,7 +173,7 @@ container_base:
     caddy_proxy_port: 8384
     caddy_sso: true
     host_network: true
-    kube_quadlet_options:
+    quadlet_kube_options:
       Network: pasta
     volumes:
       data: ./
@@ -204,7 +207,8 @@ container_default:
   preserve_volume: false
   state: started
   # Template extra entries for quadlet file
-  kube_quadlet_options: {}
+  quadlet_kube_options: {}
+  quadlet_build_options: {}
   # - "": create volumes with application name and volumes name
   # - ./: Create volume directory with {{ global_volume_path }}/{{ application name }}/{{ whatever behind ./ }}
   # - / with no /: File

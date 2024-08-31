@@ -48,8 +48,6 @@
                   register: container_volume_state
                 - name: Prepare volume {{ container_service_name }}
                   when: not container_volume_state.skipped
-                  become_method: containers.podman.podman_unshare
-                  become: true
                   ansible.builtin.file:
                     path: "{{ item }}"
                     mode: "0755"
@@ -71,8 +69,6 @@
                     - container_service_name != "bazarr"
                   block:
                     - name: Disable authentication for {{ container_service_name }}
-                      become_method: containers.podman.podman_unshare
-                      become: true
                       community.general.xml:
                         path: "{{ global_volume_path }}/{{ container_service_name }}/{{ container[container_service_name].volumes.config | regex_replace('\\./', '') }}/config.xml"
                         xpath: "{{ item.key }}"

@@ -46,6 +46,7 @@
       loop:
         - restic-backup
         - restic-prune
+        - restic-unlock # This service can be used manually to unlock the repo
     - name: Setup restic timer
       ansible.builtin.include_role:
         name: systemd_timer

@@ -2,6 +2,7 @@ ansible-lint==24.7.0
 ansible==10.3.0
 dagger-io==0.12.6
 jmespath==1.0.1
+mitogen==0.3.9
 pre-commit==3.8.0
 python-dotenv==1.0.1
 transmission-rpc==7.0.11

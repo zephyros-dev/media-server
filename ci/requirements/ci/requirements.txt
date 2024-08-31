@@ -1,3 +1,4 @@
 ansible==10.3.0
 jmespath==1.0.1
+mitogen==0.3.9
 requests==2.32.3

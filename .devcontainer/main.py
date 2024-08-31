@@ -70,6 +70,19 @@ def dependency_setup():
     # Cue setup
     subprocess.run("cue get go k8s.io/api/core/...", shell=True, cwd="cue")
 
+    # Install mitogen
+    (Path(home_path) / ".ansible/plugins").mkdir(parents=True, exist_ok=True)
+    mitogen_path = re.search(
+        r"Location: (.+)\n",
+        subprocess.run(
+            "pip show mitogen", shell=True, capture_output=True, text=True
+        ).stdout,
+    ).group(1)
+    if not (home_path / ".ansible/plugins/strategy").is_symlink():
+        Path(home_path / ".ansible/plugins/strategy").symlink_to(
+            Path(mitogen_path) / "ansible_mitogen/plugins/strategy"
+        )
+
 
 environment = Environment(
     loader=FileSystemLoader(".devcontainer/templates"), keep_trailing_newline=True
@@ -81,15 +94,15 @@ if args.stage == "all" or args.stage == "onCreateCommand":
     # Install latest version of podman
     podman_path = f"{home_path}/bin/podman"
 
-    if platform.machine() == "x86_64":
-        podman_architecture = "amd64"
-    elif platform.machine() == "aarch64":
-        podman_architecture = "arm64"
+    podman_architecture = {
+        "x86_64": "amd64",
+        "aarch64": "arm64",
+    }
 
     PODMAN_VERSION = dependencies_version["podman"]
     if check_version("podman --version", PODMAN_VERSION):
         subprocess.run(
-            f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{PODMAN_VERSION}/podman-remote-static-linux_{podman_architecture}.tar.gz",
+            f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{PODMAN_VERSION}/podman-remote-static-linux_{podman_architecture[platform.machine()]}.tar.gz",
             shell=True,
         )
         subprocess.run(

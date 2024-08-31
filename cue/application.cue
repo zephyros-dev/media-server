@@ -30,7 +30,8 @@ _fact_embed: _ @embed(file="tmp/fact.json")
 	dashy_statusCheckAcceptCodes: string
 	host_network:                 bool
 	kind:                         "kube" | "container"
-	kube_quadlet_options: [string]: string
+	quadlet_kube_options: [string]:  string
+	quadlet_build_options: [string]: string
 	postgres_action: "none" | "export" | "import" | "clean"
 	preserve_volume: bool
 	state:           "started" | "absent"
@@ -55,7 +56,7 @@ _profile: {
 		}
 	}]
 	userns_share: metadata: annotations: "io.podman.annotations.userns": "keep-id"
-	rootless_cap: rootless & userns_share
+	rootless_userns: rootless & userns_share
 }
 
 _applicationSet: [applicationName=string]: {
@@ -173,7 +174,7 @@ _applicationSet: [applicationName=string]: {
 _application: _applicationSet & {
 	audiobookshelf: {
 		_
-		#pod: _profile.rootless_cap & {
+		#pod: _profile.rootless_userns & {
 			spec: containers: [{
 				name:  "web"
 				image: "audiobookshelf"
@@ -398,7 +399,7 @@ _application: _applicationSet & {
 
 	filebrowser: {
 		_
-		#pod: _profile.rootless_cap & {
+		#pod: _profile.rootless_userns & {
 			spec: containers: [{
 				name:  "web"
 				image: "filebrowser"
@@ -422,7 +423,7 @@ _application: _applicationSet & {
 			}]
 		}
 	}
-	// TODO: rootless?
+
 	immich: {
 		_
 		#param: {
@@ -438,116 +439,118 @@ _application: _applicationSet & {
 			}
 		}
 
-		#pod: spec: containers: [{
-			name:  "postgres"
-			image: "immich-postgres"
-			env: [{
-				name:  "POSTGRES_DB"
-				value: "immich"
+		#pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "postgres"
+				image: "immich-postgres"
+				env: [{
+					name:  "POSTGRES_DB"
+					value: "immich"
+				}, {
+					name:  "POSTGRES_USER"
+					value: "immich"
+				}, {
+					name: "POSTGRES_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "immich"
+						key:  "database_password"
+					}
+				}]
+				volumeMounts: [{
+					name:      "database"
+					mountPath: "/var/lib/postgresql/data:U,z"
+				}]
+			}] + [if _fact.container.immich.postgres_action == "none" for v in [{
+				name:  "redis"
+				image: "immich-redis"
 			}, {
-				name:  "POSTGRES_USER"
-				value: "immich"
+				name:  "server"
+				image: "immich-server"
+				args: ["start.sh", "immich"]
+				env: [{
+					name:  "DB_DATABASE_NAME"
+					value: "immich"
+				}, {
+					name:  "DB_HOSTNAME"
+					value: "localhost"
+				}, {
+					name:  "DB_USERNAME"
+					value: "immich"
+				}, {
+					name:  "NODE_ENV"
+					value: "production"
+				}, {
+					name:  "REDIS_HOSTNAME"
+					value: "localhost"
+				}, {
+					name: "JWT_SECRET"
+					valueFrom: secretKeyRef: {
+						name: "immich"
+						key:  "jwt_secret"
+					}
+				}, {
+					name: "DB_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "immich"
+						key:  "database_password"
+					}
+				}]
+				volumeMounts: [{
+					name:      "upload"
+					mountPath: "/usr/src/app/upload"
+				}]
 			}, {
-				name: "POSTGRES_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "immich"
-					key:  "database_password"
-				}
-			}]
-			volumeMounts: [{
-				name:      "database"
-				mountPath: "/var/lib/postgresql/data:z"
-			}]
-		}] + [if _fact.container.immich.postgres_action == "none" for v in [{
-			name:  "redis"
-			image: "immich-redis"
-		}, {
-			name:  "server"
-			image: "immich-server"
-			args: ["start.sh", "immich"]
-			env: [{
-				name:  "DB_DATABASE_NAME"
-				value: "immich"
+				name:  "microservices"
+				image: "immich-server"
+				args: ["start.sh", "microservices"]
+				env: [{
+					name:  "DB_DATABASE_NAME"
+					value: "immich"
+				}, {
+					name:  "DB_HOSTNAME"
+					value: "localhost"
+				}, {
+					name:  "DB_USERNAME"
+					value: "immich"
+				}, {
+					name:  "NODE_ENV"
+					value: "production"
+				}, {
+					name:  "REDIS_HOSTNAME"
+					value: "localhost"
+				}, {
+					name: "JWT_SECRET"
+					valueFrom: secretKeyRef: {
+						name: "immich"
+						key:  "jwt_secret"
+					}
+				}, {
+					name: "DB_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "immich"
+						key:  "database_password"
+					}
+				}]
+				volumeMounts: [{
+					name:      "upload"
+					mountPath: "/usr/src/app/upload"
+				}]
 			}, {
-				name:  "DB_HOSTNAME"
-				value: "localhost"
-			}, {
-				name:  "DB_USERNAME"
-				value: "immich"
-			}, {
-				name:  "NODE_ENV"
-				value: "production"
-			}, {
-				name:  "REDIS_HOSTNAME"
-				value: "localhost"
-			}, {
-				name: "JWT_SECRET"
-				valueFrom: secretKeyRef: {
-					name: "immich"
-					key:  "jwt_secret"
-				}
-			}, {
-				name: "DB_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "immich"
-					key:  "database_password"
-				}
-			}]
-			volumeMounts: [{
-				name:      "upload"
-				mountPath: "/usr/src/app/upload"
-			}]
-		}, {
-			name:  "microservices"
-			image: "immich-server"
-			args: ["start.sh", "microservices"]
-			env: [{
-				name:  "DB_DATABASE_NAME"
-				value: "immich"
-			}, {
-				name:  "DB_HOSTNAME"
-				value: "localhost"
-			}, {
-				name:  "DB_USERNAME"
-				value: "immich"
-			}, {
-				name:  "NODE_ENV"
-				value: "production"
-			}, {
-				name:  "REDIS_HOSTNAME"
-				value: "localhost"
-			}, {
-				name: "JWT_SECRET"
-				valueFrom: secretKeyRef: {
-					name: "immich"
-					key:  "jwt_secret"
-				}
-			}, {
-				name: "DB_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "immich"
-					key:  "database_password"
-				}
-			}]
-			volumeMounts: [{
-				name:      "upload"
-				mountPath: "/usr/src/app/upload"
-			}]
-		}, {
-			name:  "machine-learning"
-			image: "immich-machine-learning"
-			env: [{
-				name:  "NODE_ENV"
-				value: "production"
-			}]
-			volumeMounts: [{
-				name:      "upload"
-				mountPath: "/usr/src/app/upload"
-			}, {
-				name:      "ml-cache"
-				mountPath: "/cache:U"
-			}]
-		}] {v}]
+				name:  "machine-learning"
+				image: "immich-machine-learning"
+				env: [{
+					name:  "NODE_ENV"
+					value: "production"
+				}]
+				volumeMounts: [{
+					name:      "upload"
+					mountPath: "/usr/src/app/upload"
+				}, {
+					name:      "ml-cache"
+					mountPath: "/cache:U"
+				}]
+			}] {v}]
+		}
 	}
 
 	// Placeholder for getting volume list
@@ -637,7 +640,6 @@ _application: _applicationSet & {
 		}
 	}
 
-	// Already rootless
 	miniflux: {
 		_
 		#param: {
@@ -656,49 +658,51 @@ _application: _applicationSet & {
 				}
 			}
 		}
-		#pod: spec: containers: [{
-			name:  "postgres"
-			image: "miniflux-postgres"
-			env: [{
-				name:  "POSTGRES_USER"
-				value: "miniflux"
-			}] + [{
-				name: "POSTGRES_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "miniflux"
-					key:  "miniflux_postgres_password"
-				}
-			}]
-			volumeMounts: [{
-				name:      "database"
-				mountPath: "/var/lib/postgresql/data:z"
-			}]
-		}] + [if _fact.container.miniflux.postgres_action == "none" for v in [{
-			name:  "web"
-			image: "miniflux"
-			env: [{
-				name:  "RUN_MIGRATIONS"
-				value: "1"
-			}, {
-				name:  "CREATE_ADMIN"
-				value: "1"
-			}, {
-				name:  "ADMIN_USERNAME"
-				value: "admin"
-			}] + [{
-				name: "ADMIN_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "miniflux"
-					key:  "miniflux_admin_password"
-				}
-			}, {
-				name: "DATABASE_URL"
-				valueFrom: secretKeyRef: {
-					name: "miniflux"
-					key:  "miniflux_database_url"
-				}
-			}]
-		}] {v}]
+		#pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "postgres"
+				image: "miniflux-postgres"
+				env: [{
+					name:  "POSTGRES_USER"
+					value: "miniflux"
+				}] + [{
+					name: "POSTGRES_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "miniflux"
+						key:  "miniflux_postgres_password"
+					}
+				}]
+				volumeMounts: [{
+					name:      "database"
+					mountPath: "/var/lib/postgresql/data:U,z"
+				}]
+			}] + [if _fact.container.miniflux.postgres_action == "none" for v in [{
+				name:  "web"
+				image: "miniflux"
+				env: [{
+					name:  "RUN_MIGRATIONS"
+					value: "1"
+				}, {
+					name:  "CREATE_ADMIN"
+					value: "1"
+				}, {
+					name:  "ADMIN_USERNAME"
+					value: "admin"
+				}] + [{
+					name: "ADMIN_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "miniflux"
+						key:  "miniflux_admin_password"
+					}
+				}, {
+					name: "DATABASE_URL"
+					valueFrom: secretKeyRef: {
+						name: "miniflux"
+						key:  "miniflux_database_url"
+					}
+				}]
+			}] {v}]
+		}
 	}
 
 	navidrome: {
@@ -730,7 +734,6 @@ _application: _applicationSet & {
 			}]}
 	}
 
-	// TODO: rootless?
 	nextcloud: {
 		_
 		#param: {
@@ -746,96 +749,115 @@ _application: _applicationSet & {
 			}
 		}
 
-		#pod: spec: containers: [{
-			name:  "postgres"
-			image: "nextcloud-postgres"
-			env: [{
-				name:  "POSTGRES_DB"
-				value: "nextcloud"
-			}, {
-				name:  "POSTGRES_USER"
-				value: "postgres"
-			}] + [{
-				name: "POSTGRES_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "nextcloud"
-					key:  "postgres_password"
+		#pod: {
+			metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=33,gid=33"
+			spec: containers: [{
+				name:  "postgres"
+				image: "nextcloud-postgres"
+				securityContext: {
+					runAsUser:  33
+					runAsGroup: 33
 				}
-			}]
-			volumeMounts: [{
-				name:      "database"
-				mountPath: "/var/lib/postgresql/data:z"
-			}]
-		}] + [if _fact.container.nextcloud.postgres_action == "none" for v in [{
-			name:  "web"
-			image: "nextcloud"
-			env: [{
-				name:  "NEXTCLOUD_TRUSTED_DOMAINS"
-				value: "nextcloud.\(_fact.server_domain)"
-			}, {
-				name:  "OVERWRITEPROTOCOL"
-				value: "https"
-			}, {
-				name:  "POSTGRES_DB"
-				value: "nextcloud"
-			}, {
-				name:  "POSTGRES_HOST"
-				value: "localhost:5432"
-			}, {
-				name:  "POSTGRES_USER"
-				value: "postgres"
-			}, {
-				name:  "REDIS_HOST"
-				value: "localhost"
-			}] + [{
-				name: "POSTGRES_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "nextcloud"
-					key:  "postgres_password"
+				env: [{
+					name:  "POSTGRES_DB"
+					value: "nextcloud"
+				}, {
+					name:  "POSTGRES_USER"
+					value: "postgres"
+				}] + [{
+					name: "POSTGRES_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "nextcloud"
+						key:  "postgres_password"
+					}
+				}]
+				volumeMounts: [{
+					name:      "database"
+					mountPath: "/var/lib/postgresql/data:U,z"
+				}]
+			}] + [if _fact.container.nextcloud.postgres_action == "none" for v in [{
+				name:  "web"
+				image: "nextcloud"
+				securityContext: {
+					runAsUser:  0
+					runAsGroup: 0
 				}
+				env: [{
+					name:  "NEXTCLOUD_TRUSTED_DOMAINS"
+					value: "nextcloud.\(_fact.server_domain)"
+				}, {
+					name:  "OVERWRITEPROTOCOL"
+					value: "https"
+				}, {
+					name:  "POSTGRES_DB"
+					value: "nextcloud"
+				}, {
+					name:  "POSTGRES_HOST"
+					value: "localhost:5432"
+				}, {
+					name:  "POSTGRES_USER"
+					value: "postgres"
+				}, {
+					name:  "REDIS_HOST"
+					value: "localhost"
+				}] + [{
+					name: "POSTGRES_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "nextcloud"
+						key:  "postgres_password"
+					}
+				}, {
+					name: "REDIS_HOST_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "nextcloud"
+						key:  "redis_password"
+					}
+				}]
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/var/www/html:z"
+				}, {
+					name:      "storage"
+					mountPath: "/var/www/html/data:z"
+				}]
 			}, {
-				name: "REDIS_HOST_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "nextcloud"
-					key:  "redis_password"
+				name:  "redis"
+				image: "nextcloud-redis"
+				args: ["redis-server", "--requirepass", _fact.nextcloud_redis_password]
+				securityContext: {
+					runAsUser:  33
+					runAsGroup: 33
 				}
-			}]
-			volumeMounts: [{
-				name:      "data"
-				mountPath: "/var/www/html:z"
+				volumeMounts: [{
+					name:      "redis"
+					mountPath: "/data:U,z"
+				}]
 			}, {
-				name:      "storage"
-				mountPath: "/var/www/html/data:z"
+				name:  "office"
+				image: "nextcloud-office"
+				env: [{
+					name:  "server_name"
+					value: "nextcloud-office.\(_fact.server_domain)"
+				}, {
+					name:  "aliasgroup1"
+					value: "nextcloud.\(_fact.server_domain)"
+				}, {
+					// https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html#reverse-proxy-settings-in-apache2-config-ssl-termination
+					name:  "extra_params"
+					value: "--o:ssl.enable=false --o:ssl.termination=true"
+				}]
+				securityContext: {
+					capabilities: add: ["MKNOD"]
+				}
+			}] {v}] + [if _fact.debug {
+				name:  "adminer"
+				image: "docker.io/adminer"
+				ports: [{
+					containerPort: 8080
+					hostPort:      38080
+				}]
 			}]
-		}, {
-			name:  "redis"
-			image: "nextcloud-redis"
-			args: ["redis-server", "--requirepass", _fact.nextcloud_redis_password]
-		}, {
-			name:  "office"
-			image: "nextcloud-office"
-			env: [{
-				name:  "server_name"
-				value: "nextcloud-office.\(_fact.server_domain)"
-			}, {
-				name:  "aliasgroup1"
-				value: "nextcloud.\(_fact.server_domain)"
-			}, {
-				// https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html#reverse-proxy-settings-in-apache2-config-ssl-termination
-				name:  "extra_params"
-				value: "--o:ssl.enable=false --o:ssl.termination=true"
-			}]
-			securityContext: {
-				capabilities: add: ["MKNOD"]
-			}
-		}] {v}] + [if _fact.debug {
-			name:  "adminer"
-			image: "docker.io/adminer"
-			ports: [{
-				containerPort: 8080
-				hostPort:      38080
-			}]
-		}]
+		}
 	}
 
 	paperless: {
@@ -850,10 +872,6 @@ _application: _applicationSet & {
 					type:    "env"
 					content: _fact.paperless_ocr_language
 				}
-				paperless_ocr_languages: {
-					type:    "env"
-					content: _fact.paperless_ocr_languages
-				}
 				paperless_secret_key: {
 					type:    "env"
 					content: _fact.paperless_secret_key
@@ -865,130 +883,128 @@ _application: _applicationSet & {
 			}
 		}
 
-		#pod: spec: containers: [{
-			name:  "postgres"
-			image: "paperless-postgres"
-			env: [{
-				name:  "POSTGRES_DB"
-				value: "paperless"
-			}, {
-				name:  "POSTGRES_USER"
-				value: "paperless"
-			}, {
-				name: "POSTGRES_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "paperless"
-					key:  "paperless_dbpass"
+		#pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "postgres"
+				image: "paperless-postgres"
+				env: [{
+					name:  "POSTGRES_DB"
+					value: "paperless"
+				}, {
+					name:  "POSTGRES_USER"
+					value: "paperless"
+				}, {
+					name: "POSTGRES_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "paperless"
+						key:  "paperless_dbpass"
+					}
+				}]
+				volumeMounts: [{
+					name:      "database"
+					mountPath: "/var/lib/postgresql/data:U,z"
+				}]
+			}] + [if _fact.container.paperless.postgres_action == "none" for v in [{
+				name:  "redis"
+				image: "paperless-redis"
+				securityContext: {
+					runAsUser:  _fact.ansible_user_uid
+					runAsGroup: _fact.ansible_user_gid
 				}
-			}]
-			volumeMounts: [{
-				name:      "database"
-				mountPath: "/var/lib/postgresql/data:z"
-			}]
-		}] + [if _fact.container.paperless.postgres_action == "none" for v in [{
-			name:  "redis"
-			image: "paperless-redis"
-			securityContext: {
-				runAsUser:  _fact.ansible_user_uid
-				runAsGroup: _fact.ansible_user_gid
-			}
-			volumeMounts: [{
-				name:      "redis"
-				mountPath: "/data:U,z"
-			}]
-		}, {
-			name:  "gotenberg"
-			image: "gotenberg"
-			args: [
-				"gotenberg",
-				"--chromium-disable-javascript=true",
-				"--chromium-allow-list=file:///tmp/.*",
-			]
-		}, {
-			name:  "tika"
-			image: "tika"
-		}, {
-			// https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=682407
-			// Huge picture will cause gs to crash
-			// TODO: We need to be able to adjust the -r value of gs, but currently I'm not sure how to do it on ocrmypdf
-			name:  "webserver"
-			image: "paperless-ngx"
-			env: [{
-				name:  "PAPERLESS_DBHOST"
-				value: "localhost"
+				volumeMounts: [{
+					name:      "redis"
+					mountPath: "/data:U,z"
+				}]
 			}, {
-				name:  "PAPERLESS_OCR_SKIP_ARCHIVE_FILE"
-				value: "always"
+				name:  "gotenberg"
+				image: "gotenberg"
+				args: [
+					"gotenberg",
+					"--chromium-disable-javascript=true",
+					"--chromium-allow-list=file:///tmp/.*",
+				]
 			}, {
-				name:  "PAPERLESS_REDIS"
-				value: "redis://localhost:6379"
+				name:  "tika"
+				image: "tika"
 			}, {
-				name:  "PAPERLESS_TIKA_ENABLED"
-				value: "1"
-			}, {
-				name:  "PAPERLESS_TIKA_ENDPOINT"
-				value: "http://localhost:9998"
-			}, {
-				name:  "PAPERLESS_TIKA_GOTENBERG_ENDPOINT"
-				value: "http://localhost:3000"
-			}] + [{
-				name: "PAPERLESS_DBPASS"
-				valueFrom: secretKeyRef: {
-					name: "paperless"
-					key:  "paperless_dbpass"
-				}
-			}, {
-				name: "PAPERLESS_OCR_LANGUAGE"
-				valueFrom: secretKeyRef: {
-					name: "paperless"
-					key:  "paperless_ocr_language"
-				}
-			}, {
-				name: "PAPERLESS_OCR_LANGUAGES"
-				valueFrom: secretKeyRef: {
-					name: "paperless"
-					key:  "paperless_ocr_languages"
-				}
-			}, {
-				name: "PAPERLESS_SECRET_KEY"
-				valueFrom: secretKeyRef: {
-					name: "paperless"
-					key:  "paperless_secret_key"
-				}
-			}, {
-				name: "PAPERLESS_URL"
-				valueFrom: secretKeyRef: {
-					name: "paperless"
-					key:  "paperless_url"
-				}
-			}]
-			// Do not chown paperless volume as it is chowned by the container process
-			volumeMounts: [{
-				name:      "consume"
-				mountPath: "/usr/src/paperless/consume:z"
-			}, {
-				name:      "data"
-				mountPath: "/usr/src/paperless/data:z"
-			}, {
-				name:      "export"
-				mountPath: "/usr/src/paperless/export:z"
-			}, {
-				name:      "media"
-				mountPath: "/usr/src/paperless/media:z"
-			}]
-		}] {v}]
+				// https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=682407
+				// Huge picture will cause gs to crash
+				// TODO: We need to be able to adjust the -r value of gs, but currently I'm not sure how to do it on ocrmypdf
+				name:  "webserver"
+				image: "paperless-ngx"
+				env: [{
+					name:  "PAPERLESS_DBHOST"
+					value: "localhost"
+				}, {
+					name:  "PAPERLESS_OCR_SKIP_ARCHIVE_FILE"
+					value: "always"
+				}, {
+					name:  "PAPERLESS_REDIS"
+					value: "redis://localhost:6379"
+				}, {
+					name:  "PAPERLESS_TIKA_ENABLED"
+					value: "1"
+				}, {
+					name:  "PAPERLESS_TIKA_ENDPOINT"
+					value: "http://localhost:9998"
+				}, {
+					name:  "PAPERLESS_TIKA_GOTENBERG_ENDPOINT"
+					value: "http://localhost:3000"
+				}] + [{
+					name: "PAPERLESS_DBPASS"
+					valueFrom: secretKeyRef: {
+						name: "paperless"
+						key:  "paperless_dbpass"
+					}
+				}, {
+					name: "PAPERLESS_OCR_LANGUAGE"
+					valueFrom: secretKeyRef: {
+						name: "paperless"
+						key:  "paperless_ocr_language"
+					}
+				}, {
+					name: "PAPERLESS_SECRET_KEY"
+					valueFrom: secretKeyRef: {
+						name: "paperless"
+						key:  "paperless_secret_key"
+					}
+				}, {
+					name: "PAPERLESS_URL"
+					valueFrom: secretKeyRef: {
+						name: "paperless"
+						key:  "paperless_url"
+					}
+				}]
+				// Do not chown paperless volume as it is chowned by the container process
+				volumeMounts: [{
+					name:      "consume"
+					mountPath: "/usr/src/paperless/consume:U,z"
+				}, {
+					name:      "data"
+					mountPath: "/usr/src/paperless/data:U,z"
+				}, {
+					name:      "export"
+					mountPath: "/usr/src/paperless/export:U,z"
+				}, {
+					name:      "media"
+					mountPath: "/usr/src/paperless/media:U,z"
+				}]
+			}] {v}]
+		}
 	}
 
 	prowlarr: {
 		_
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "prowlarr"
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/config:z"
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "prowlarr"
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:z"
+				}]
 			}]
-		}]
+		}
 	}
 
 	pymedusa: {

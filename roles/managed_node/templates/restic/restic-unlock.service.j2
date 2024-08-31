@@ -1,0 +1,6 @@
+[Unit]
+Description=Restic backup service
+[Service]
+Type=oneshot
+ExecStart=restic unlock
+EnvironmentFile={{ restic_env_path }}
