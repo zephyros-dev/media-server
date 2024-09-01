@@ -47,6 +47,7 @@ def dependency_setup():
     elif platform.machine() == "aarch64":
         aqua_architecture = "arm64"
     aqua_bin_path = home_path / ".local/share/aquaproj-aqua/bin/aqua"
+    aqua_bin_path.parent.mkdir(parents=True, exist_ok=True)
     if check_version("aqua --version", AQUA_VERSION):
         subprocess.run(
             f"curl -Lo {home_path / 'aqua.tar.gz'} https://github.com/aquaproj/aqua/releases/download/{AQUA_VERSION}/aqua_linux_{aqua_architecture}.tar.gz",

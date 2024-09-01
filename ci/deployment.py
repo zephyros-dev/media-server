@@ -74,31 +74,23 @@ async def ci():
 
         ci = (
             ci.with_env_variable(
-                "PATH", f"{
-                    user_dir}/.local/share/aquaproj-aqua/bin:{container_path}"
+                "PATH",
+                f"{
+                    user_dir}/.local/share/aquaproj-aqua/bin:{container_path}",
             )
             .with_mounted_cache(
-                f"{user_dir}/.local/share/aquaproj-aqua/pkgs",
-                client.cache_volume("aqua-pkgs"),
+                f"{user_dir}/.local/share/aquaproj-aqua",
+                client.cache_volume("aqua-cache"),
             )
             .with_mounted_cache(
-                f"{user_dir}/.local/share/aquaproj-aqua/registries",
-                client.cache_volume("aqua-registries"),
-            )
-            .with_mounted_cache(
-                f"{user_dir}/.local/share/aquaproj-aqua/bin",
-                client.cache_volume("aqua-bin"),
-            )
-            .with_exec([".devcontainer/main.py", "--stage=dependency"])
-        )
-
-        ci = (
-            ci.with_mounted_cache(
                 f"{user_dir}/.ansible", client.cache_volume("ansible_cache")
             )
-            .with_exec(["ansible-galaxy", "install", "-r", "requirements.yaml"])
-            .with_env_variable("ANSIBLE_HOST_KEY_CHECKING", "False")
+            .with_exec(["python", ".devcontainer/main.py", "--stage=dependency"])
         )
+
+        ci = ci.with_exec(
+            ["ansible-galaxy", "install", "-r", "requirements.yaml"]
+        ).with_env_variable("ANSIBLE_HOST_KEY_CHECKING", "False")
 
         ansible_config = {
             "ANSIBLE_CALLBACKS_ENABLED": "timer",
