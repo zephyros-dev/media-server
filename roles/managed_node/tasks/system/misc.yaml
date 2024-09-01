@@ -6,6 +6,7 @@
       ansible.posix.selinux:
         policy: targeted
         state: enforcing
+
     # Reference: https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
     - name: Increase buffer size for HTTP/3 perfomance in caddy
       ansible.posix.sysctl:
@@ -26,7 +27,6 @@
           value: 524288
 
     - name: Add user to libvirt group
-      become: true
       ansible.builtin.user:
         name: "{{ ansible_user }}"
         groups:

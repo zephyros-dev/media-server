@@ -18,7 +18,7 @@
   ansible.builtin.import_tasks: system/restic.yaml
   tags: restic
 
-- name: Setup systemd # noqa: var-naming[no-role-prefix]
+- name: Setup systemd
   tags: systemd
   ansible.builtin.include_tasks:
     file: systemd.yaml
@@ -27,10 +27,10 @@
   loop_control:
     loop_var: systemd_loop_var
   vars:
-    managed_node_systemd_name: "{{ systemd_loop_var.name }}"
-    managed_node_systemd_become: "{{ systemd_loop_var.become | default(false) }}"
-    managed_node_systemd_state: "{{ systemd_loop_var.state | default('started') }}"
-    managed_node_systemd_schedule: "{{ systemd_loop_var.schedule | default('') }}"
+    systemd_name: "{{ systemd_loop_var.name }}"
+    systemd_become: "{{ systemd_loop_var.become | default(false) }}"
+    systemd_state: "{{ systemd_loop_var.state | default('started') }}"
+    systemd_schedule: "{{ systemd_loop_var.schedule | default('') }}"
   loop:
     - name: shutdown
       schedule: "00:00:00"

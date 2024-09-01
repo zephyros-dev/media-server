@@ -14,7 +14,7 @@
             - name: Install netdata
               when: not netdata_installed.stat.exists
               block:
-                - name: Download the installation script # noqa: ignore-errors
+                - name: Download the installation script
                   ansible.builtin.get_url:
                     url: https://get.netdata.cloud/kickstart.sh
                     dest: /tmp/kickstart.sh
@@ -25,13 +25,13 @@
                     cmd: /tmp/kickstart.sh
 
         - name: Configure netdata
+          become: true
           module_defaults:
             ansible.builtin.copy:
               group: netdata
               mode: "0600"
               owner: netdata
               remote_src: true
-          become: true
           block:
             - name: Configure netdata # noqa: risky-file-permissions
               community.general.ini_file:
@@ -49,7 +49,6 @@
                 mode: "0755"
                 state: directory
               loop:
-                - /etc/netdata/python.d
                 - /etc/netdata/go.d
 
             - name: Check if previous configs differ systemd # noqa: risky-file-permissions
@@ -111,4 +110,3 @@
           ansible.builtin.file:
             path: /etc/netdata
             state: absent
-      # TODO: Run uninstaller script if exists

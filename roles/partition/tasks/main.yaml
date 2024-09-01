@@ -1,4 +1,4 @@
-- name: Create partition for drives # noqa: var-naming[no-role-prefix]
+- name: Create partition for drives
   ansible.builtin.include_tasks:
     file: partition.yaml
     apply:
