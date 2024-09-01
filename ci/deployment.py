@@ -78,6 +78,9 @@ async def ci():
                 f"{
                     user_dir}/.local/share/aquaproj-aqua/bin:{container_path}",
             )
+            .with_env_variable(
+                "AQUA_GLOBAL_CONFIG", f"{user_dir}/.config/aquaproj-aqua/aqua.yaml"
+            )
             .with_mounted_cache(
                 f"{user_dir}/.local/share/aquaproj-aqua",
                 client.cache_volume("aqua-cache"),
