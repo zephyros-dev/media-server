@@ -58,8 +58,7 @@
   tags: nvidia
 
 - name: Install netdata
-  ansible.builtin.import_role:
-    name: netdata
+  ansible.builtin.import_tasks: system/netdata.yaml
 
 - name: Miscellaneous settings
   ansible.builtin.import_tasks: system/misc.yaml
