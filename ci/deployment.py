@@ -85,7 +85,7 @@ async def ci():
             .with_mounted_cache(
                 f"{user_dir}/.ansible", client.cache_volume("ansible_cache")
             )
-            .with_exec(["python", ".devcontainer/main.py", "--stage=dependency"])
+            .with_exec(["python", ".devcontainer/main.py", "--profile=ci"])
         )
 
         ci = ci.with_exec(

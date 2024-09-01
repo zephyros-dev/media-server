@@ -91,6 +91,7 @@
           block:
             - name: Check if custom setup flow exists {{ container_service_name }}
               delegate_to: localhost
+              become: false
               ansible.builtin.stat:
                 path: roles/container/tasks/service/{{ container_service_name }}.yaml
               register: custom_setup_flow

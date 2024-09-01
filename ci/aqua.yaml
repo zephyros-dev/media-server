@@ -1,0 +1,7 @@
+registries:
+  - type: standard
+    ref: main
+packages:
+  - name: cue-lang/cue@v0.10.0
+  - name: getsops/sops@v3.9.0
+  - name: golang/go@go1.22.6

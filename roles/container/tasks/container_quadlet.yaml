@@ -39,6 +39,7 @@
         # So we have to list the files and copy them one by one
         - name: Get list of Containerfiles to copy {{ container_loop_var.key }}
           delegate_to: localhost
+          become: false
           ansible.builtin.find:
             paths: roles/container/files/{{ container_loop_var.key }}
             file_type: file
@@ -69,8 +70,8 @@
       when: container_loop_var.value.kind == "kube"
       block:
         - name: Prepare kube deployment {{ container_loop_var.key }}
-          become: false
           delegate_to: localhost
+          become: false
           block:
             - name: Render kube deployment {{ container_loop_var.key }}
               changed_when: false
