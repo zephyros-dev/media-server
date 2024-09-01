@@ -126,6 +126,14 @@ ansible-playbook partition --check
 
 # Troubleshooting
 
+## CI debugging
+
+- To debug the CI, run the following command
+
+```
+dagger run -i python ci/deployment.py
+```
+
 ## Kavita
 
 ### Kavita failed to save progress

@@ -62,6 +62,11 @@
       "groupName": "cue-lang-k8s-api",
       "matchPaths": ["cue/go.*"],
       "matchUpdateTypes": ["major", "minor"]
+    },
+    {
+      "automerge": false,
+      "groupName": "dagger",
+      "matchPackagePatterns": ["dagger"]
     }
   ],
   "pinDigests": true,

@@ -59,6 +59,7 @@
 
 - name: Install netdata
   ansible.builtin.import_tasks: system/netdata.yaml
+  tags: netdata
 
 - name: Miscellaneous settings
   ansible.builtin.import_tasks: system/misc.yaml

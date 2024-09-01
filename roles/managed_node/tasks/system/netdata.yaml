@@ -1,112 +1,109 @@
-- name: Setup netdata
-  tags: netdata
+- name: Install Netdata
+  when: netdata_state == "started"
   block:
-    - name: Install Netdata
-      when: netdata_state == "started"
+    - name: Setup netdata
+      become: true
       block:
-        - name: Setup netdata
-          become: true
+        - name: Check if Netdata is installed
+          ansible.builtin.stat:
+            path: /usr/sbin/netdata
+          register: netdata_installed
+        - name: Install netdata
+          when: not netdata_installed.stat.exists
           block:
-            - name: Check if Netdata is installed
+            - name: Download the installation script
+              ansible.builtin.get_url:
+                url: https://get.netdata.cloud/kickstart.sh
+                dest: /tmp/kickstart.sh
+                mode: +x
+            - name: Install Netdata
+              changed_when: false
+              ansible.builtin.shell:
+                cmd: /tmp/kickstart.sh
+
+    - name: Configure netdata
+      become: true
+      module_defaults:
+        ansible.builtin.copy:
+          group: netdata
+          mode: "0600"
+          owner: netdata
+          remote_src: true
+      block:
+        - name: Configure netdata # noqa: risky-file-permissions
+          community.general.ini_file:
+            path: /etc/netdata/netdata.conf
+            section: "{{ item.section }}"
+            option: "{{ item.option }}"
+            value: "{{ item.value }}"
+            state: "{{ item.state }}"
+          loop: "{{ netdata_config }}"
+          notify: Restart Netdata
+
+        - name: Setup netdata folder
+          ansible.builtin.file:
+            path: "{{ item }}"
+            mode: "0755"
+            state: directory
+          loop:
+            - /etc/netdata/go.d
+
+        - name: Check if previous configs differ systemd # noqa: risky-file-permissions
+          ansible.builtin.copy:
+            src: /usr/lib/netdata/conf.d/go.d.conf
+            dest: /etc/netdata/go.d.conf.default
+          register: netdata_default_config_state
+        - name: Copy default go monitor configuration # noqa: risky-file-permissions no-handler
+          ansible.builtin.copy:
+            src: /usr/lib/netdata/conf.d/go.d.conf
+            dest: /etc/netdata/go.d.conf
+          when: netdata_default_config_state.changed
+
+        - name: Setup nvidia monitoring
+          tags: nvidia
+          block:
+            - name: Check if nvidia-smi is installed
               ansible.builtin.stat:
-                path: /usr/sbin/netdata
-              register: netdata_installed
-            - name: Install netdata
-              when: not netdata_installed.stat.exists
+                path: /usr/bin/nvidia-smi
+              register: netdata_nvidia_smi_state
+            - name: Add nvidia monitoring if nvidia driver is installed
+              when: netdata_nvidia_smi_state.stat.exists
               block:
-                - name: Download the installation script
-                  ansible.builtin.get_url:
-                    url: https://get.netdata.cloud/kickstart.sh
-                    dest: /tmp/kickstart.sh
-                    mode: +x
-                - name: Install Netdata
-                  changed_when: false
-                  ansible.builtin.shell:
-                    cmd: /tmp/kickstart.sh
-
-        - name: Configure netdata
-          become: true
-          module_defaults:
-            ansible.builtin.copy:
-              group: netdata
-              mode: "0600"
-              owner: netdata
-              remote_src: true
-          block:
-            - name: Configure netdata # noqa: risky-file-permissions
-              community.general.ini_file:
-                path: /etc/netdata/netdata.conf
-                section: "{{ item.section }}"
-                option: "{{ item.option }}"
-                value: "{{ item.value }}"
-                state: "{{ item.state }}"
-              loop: "{{ netdata_config }}"
-              notify: Restart Netdata
-
-            - name: Setup netdata folder
-              ansible.builtin.file:
-                path: "{{ item }}"
-                mode: "0755"
-                state: directory
-              loop:
-                - /etc/netdata/go.d
-
-            - name: Check if previous configs differ systemd # noqa: risky-file-permissions
-              ansible.builtin.copy:
-                src: /usr/lib/netdata/conf.d/go.d.conf
-                dest: /etc/netdata/go.d.conf.default
-              register: netdata_default_config_state
-            - name: Copy default go monitor configuration # noqa: risky-file-permissions no-handler
-              ansible.builtin.copy:
-                src: /usr/lib/netdata/conf.d/go.d.conf
-                dest: /etc/netdata/go.d.conf
-              when: netdata_default_config_state.changed
-
-            - name: Setup nvidia monitoring
-              tags: nvidia
-              block:
-                - name: Check if nvidia-smi is installed
-                  ansible.builtin.stat:
-                    path: /usr/bin/nvidia-smi
-                  register: netdata_nvidia_smi_state
-                - name: Add nvidia monitoring if nvidia driver is installed
-                  when: netdata_nvidia_smi_state.stat.exists
-                  block:
-                    - name: Setup nvidia config # noqa: risky-file-permissions
-                      ansible.builtin.copy:
-                        dest: /etc/netdata/go.d/nvidia_smi.conf
-                        src: /usr/lib/netdata/conf.d/go.d/nvidia_smi.conf
-                      notify: Restart Netdata
-                    - name: Enable nvidia monitoring
-                      ansible.builtin.import_role:
-                        name: common
-                        tasks_from: structured_edit.yaml
-                      vars:
-                        file_path: /etc/netdata/go.d.conf
-                        force_type: yaml
-                        structured_edit:
-                          modules:
-                            nvidia_smi: true
-                      notify: Restart Netdata
-
-            - name: Setup smartd monitoring
-              block:
-                - name: Enable smartd monitoring netdata # noqa: risky-file-permissions
+                - name: Setup nvidia config # noqa: risky-file-permissions
                   ansible.builtin.copy:
-                    src: /usr/lib/netdata/conf.d/go.d/smartctl.conf
-                    dest: /etc/netdata/go.d/smartctl.conf
+                    dest: /etc/netdata/go.d/nvidia_smi.conf
+                    src: /usr/lib/netdata/conf.d/go.d/nvidia_smi.conf
+                  notify: Restart Netdata
+                - name: Enable nvidia monitoring
+                  ansible.builtin.import_role:
+                    name: common
+                    tasks_from: structured_edit.yaml
+                  vars:
+                    file_path: /etc/netdata/go.d.conf
+                    force_type: yaml
+                    structured_edit:
+                      modules:
+                        nvidia_smi: true
                   notify: Restart Netdata
 
-    - name: Uninstall netdata
-      when: netdata_state == "absent"
-      block:
-        - name: Uninstall Netdata
-          changed_when: false
-          ansible.builtin.shell:
-            cmd: /tmp/kickstart.sh --uninstall
+        - name: Setup smartd monitoring
+          block:
+            - name: Enable smartd monitoring netdata # noqa: risky-file-permissions
+              ansible.builtin.copy:
+                src: /usr/lib/netdata/conf.d/go.d/smartctl.conf
+                dest: /etc/netdata/go.d/smartctl.conf
+              notify: Restart Netdata
 
-        - name: Remove netdata config
-          become: true
-          ansible.builtin.file:
-            path: /etc/netdata
-            state: absent
+- name: Uninstall netdata
+  when: netdata_state == "absent"
+  block:
+    - name: Uninstall Netdata
+      changed_when: false
+      ansible.builtin.shell:
+        cmd: /tmp/kickstart.sh --uninstall
+
+    - name: Remove netdata config
+      become: true
+      ansible.builtin.file:
+        path: /etc/netdata
+        state: absent
