@@ -1,5 +1,5 @@
-- name: Create service {{ container_loop_var.key }}
-  when: container_loop_var.value.state == "started"
+- name: Create service {{ container_service_name }}
+  when: container_item.value.state == "started"
   module_defaults:
     ansible.builtin.copy:
       mode: "0600"
@@ -7,175 +7,179 @@
       lstrip_blocks: true
       mode: "0600"
     ansible.builtin.systemd:
-      name: "{{ container_loop_var.key }}"
+      name: "{{ container_service_name }}"
       daemon_reload: true
       state: started
       scope: "{{ container_systemd_scope }}"
   block:
-    - name: Prepare image files {{ container_loop_var.key }}
+    - name: Prepare image files {{ container_service_name }}
       block:
-        - name: Create deployment folder {{ container_loop_var.key }}
+        - name: Create deployment folder {{ container_service_name }}
           ansible.builtin.file:
-            path: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+            path: "{{ container_quadlet_path }}/{{ container_service_name }}"
             state: directory
             mode: "0755"
         # Synchronize create new ssh connection every time so it's very slow on the CI server
         # https://stackoverflow.com/a/62776037
         # Synchronize does not work with root however, so we have to use the copy module
-        # - name: Copy image build files {{ container_loop_var.key }} # noqa: risky-file-permissions
+        # - name: Copy image build files {{ container_service_name }} # noqa: risky-file-permissions
         #   ansible.posix.synchronize:
         #     use_ssh_args: true
         #     rsync_opts: ["-4"] # Use this since the VPN on the CI server is IPv4 only
-        #     src: "{{ container_loop_var.key }}/"
-        #     dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
+        #     src: "{{ container_service_name }}/"
+        #     dest: "{{ container_quadlet_path }}/{{ container_service_name }}/"
         #   register: image_containerfile_state
         # The ansible.builtin.copy has bugs that does not detect file changes when only 1 file is copied
         # https://github.com/ansible/ansible/issues/38938
-        # - name: Copy Containerfiles {{ container_loop_var.key }} # noqa: risky-file-permissions
+        # - name: Copy Containerfiles {{ container_service_name }} # noqa: risky-file-permissions
         #   ansible.builtin.copy:
-        #     src: "{{ container_loop_var.key }}/"
-        #     dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/"
+        #     src: "{{ container_service_name }}/"
+        #     dest: "{{ container_quadlet_path }}/{{ container_service_name }}/"
         #   register: image_containerfile_state
         # So we have to list the files and copy them one by one
-        - name: Get list of Containerfiles to copy {{ container_loop_var.key }}
+        - name: Get list of Containerfiles to copy {{ container_service_name }}
           delegate_to: localhost
           become: false
           ansible.builtin.find:
-            paths: roles/container/files/{{ container_loop_var.key }}
+            paths: roles/container/files/{{ container_service_name }}
             file_type: file
             recurse: true
           register: image_containerfile_list
-        - name: Copy Containerfiles {{ container_loop_var.key }} # noqa: risky-file-permissions
+        - name: Copy Containerfiles {{ container_service_name }} # noqa: risky-file-permissions
           ansible.builtin.copy:
             src: "{{ item.path }}"
-            dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/{{ item.path | dirname | basename }}/{{ item.path | basename }}"
+            dest: "{{ container_quadlet_path }}/{{ container_service_name }}/{{ item.path | dirname | basename }}/{{ item.path | basename }}"
           loop: "{{ image_containerfile_list.files }}"
           register: image_containerfile_state
         # For container: Copy the container file and build it on remote so that the image tag
         # can be updated via renovate
-        - name: Get list of image to build {{ container_loop_var.key }}
+        - name: Get list of image to build {{ container_service_name }}
           ansible.builtin.find:
-            paths: "{{ container_quadlet_path }}/{{ container_loop_var.key }}"
+            paths: "{{ container_quadlet_path }}/{{ container_service_name }}"
             file_type: directory
           register: image_list
         # We use build image service since its build can be cached, unlike using podman kube build flag
-        - name: Create build images services {{ container_loop_var.key }} # noqa: risky-file-permissions
+        - name: Create build images services {{ container_service_name }} # noqa: risky-file-permissions
           ansible.builtin.template:
             src: quadlet/image.build.j2
             dest: "{{ container_quadlet_path }}/{{ item.path | basename }}.build"
           loop: "{{ image_list.files }}"
           register: image_build_service_state
 
-    - name: Create kube service {{ container_loop_var.key }}
-      when: container_loop_var.value.kind == "kube"
+    - name: Setup quadlet files {{ container_service_name }}
+      vars:
+        image_changed: "{{ image_build_service_state.changed or image_containerfile_state.changed }}"
       block:
-        - name: Prepare kube deployment {{ container_loop_var.key }}
-          delegate_to: localhost
-          become: false
+        - name: Create kube service {{ container_service_name }}
+          when: container_item.value.kind == "kube"
           block:
-            - name: Render kube deployment {{ container_loop_var.key }}
-              changed_when: false
-              ansible.builtin.shell:
-                chdir: cue
-                cmd: CUE_EXPERIMENT=embed cue export --inject name={{ container_loop_var.key }} --out text
-              register: cue_dump
-        - name: Setup kube deployment {{ container_loop_var.key }}
-          block:
-            - name: Create kube deployment {{ container_loop_var.key }} # noqa: risky-file-permissions
-              ansible.builtin.copy:
-                content: "{{ cue_dump.stdout }}"
-                dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}/deployment.yaml"
-              register: kube_file_yaml
-            - name: Create kube quadlet file {{ container_loop_var.key }} # noqa: risky-file-permissions
-              ansible.builtin.template:
-                src: quadlet/service.kube.j2
-                dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.kube"
-              register: kube_file_quadlet
-            - name: Start systemd service {{ container_loop_var.key }}
+            - name: Prepare kube deployment {{ container_service_name }}
+              delegate_to: localhost
+              become: false
               block:
-                - name: Start systemd service {{ container_loop_var.key }}
+                - name: Render kube deployment {{ container_service_name }}
                   changed_when: false
-                  when: not (kube_file_yaml.changed or kube_file_quadlet.changed)
-                  ansible.builtin.systemd:
-                  async: 45
-                  poll: 0
-                - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module]
-                  changed_when: false
-                  when: kube_file_yaml.changed or kube_file_quadlet.changed or image_build_service_state.changed or image_containerfile_state.changed
-                  ansible.builtin.systemd:
-                    state: restarted
-                  async: 45
-                  poll: 0
+                  ansible.builtin.shell:
+                    chdir: cue
+                    cmd: CUE_EXPERIMENT=embed cue export --inject name={{ container_service_name }} --out text
+                  register: cue_dump
+            - name: Setup kube deployment {{ container_service_name }}
+              block:
+                - name: Create kube deployment {{ container_service_name }} # noqa: risky-file-permissions
+                  ansible.builtin.copy:
+                    content: "{{ cue_dump.stdout }}"
+                    dest: "{{ container_quadlet_path }}/{{ container_service_name }}/deployment.yaml"
+                  register: kube_file_yaml
+                - name: Create kube quadlet file {{ container_service_name }} # noqa: risky-file-permissions
+                  ansible.builtin.template:
+                    src: quadlet/service.kube.j2
+                    dest: "{{ container_quadlet_path }}/{{ container_service_name }}.kube"
+                  register: kube_file_quadlet
+                - name: Start systemd service {{ container_service_name }}
+                  block:
+                    - name: Start systemd service {{ container_service_name }}
+                      changed_when: false
+                      when: not (kube_file_yaml.changed or kube_file_quadlet.changed)
+                      ansible.builtin.systemd:
+                      async: 45
+                      poll: 0
+                    - name: Restart systemd service if changed {{ container_service_name }} # noqa: args[module]
+                      changed_when: false
+                      when: kube_file_yaml.changed or kube_file_quadlet.changed or image_changed
+                      ansible.builtin.systemd:
+                        state: restarted
+                      async: 45
+                      poll: 0
 
-    - name: Create container service {{ container_loop_var.key }}
-      when: container_loop_var.value.kind == "container"
-      block:
-        - name: Register volumes variables {{ container_loop_var.key }}
-          when: container_loop_var.value.volumes != {}
-          ansible.builtin.set_fact:
-            "{{ container_loop_var.key }}_volume_{{ item.key }}": "{{ item.value.value }}"
-          loop: "{{ volume_map.stdout | from_json | dict2items }}"
-        - name: Create container quadlet file {{ container_loop_var.key }} # noqa: risky-file-permissions
-          ansible.builtin.template:
-            src: "quadlet/{{ container_loop_var.key }}.container.j2"
-            dest: "{{ container_quadlet_path }}/{{ container_loop_var.key }}.container"
-          register: container_file_state
-        - name: Start systemd service {{ container_loop_var.key }}
-          changed_when: false
-          when: not container_file_state.changed
-          ansible.builtin.systemd:
-          async: 45
-          poll: 0
-        - name: Restart systemd service if changed {{ container_loop_var.key }} # noqa: args[module] no-handler
-          changed_when: false
-          when: container_file_state.changed
-          ansible.builtin.systemd:
-            state: restarted
-          async: 45
-          poll: 0
+        - name: Create container service {{ container_service_name }}
+          when: container_item.value.kind == "container"
+          block:
+            - name: Register volumes variables {{ container_service_name }}
+              when: container_item.value.volumes != {}
+              ansible.builtin.set_fact:
+                "{{ container_service_name }}_volume_{{ item.key }}": "{{ item.value.value }}"
+              loop: "{{ volume_map.stdout | from_json | dict2items }}"
+            - name: Create container quadlet file {{ container_service_name }} # noqa: risky-file-permissions
+              ansible.builtin.template:
+                src: "quadlet/{{ container_service_name }}.container.j2"
+                dest: "{{ container_quadlet_path }}/{{ container_service_name }}.container"
+              register: container_file_state
+            - name: Start systemd service {{ container_service_name }}
+              changed_when: false
+              when: not container_file_state.changed
+              ansible.builtin.systemd:
+              async: 45
+              poll: 0
+            - name: Restart systemd service if changed {{ container_service_name }} # noqa: args[module] no-handler
+              changed_when: false
+              when: container_file_state.changed or image_changed
+              ansible.builtin.systemd:
+                state: restarted
+              async: 45
+              poll: 0
 
-- name: Remove service {{ container_loop_var.key }}
-  when: container_loop_var.value.state == "absent"
+- name: Remove service {{ container_service_name }}
+  when: container_item.value.state == "absent"
   module_defaults:
     ansible.builtin.systemd:
-      name: "{{ container_loop_var.key }}"
+      name: "{{ container_service_name }}"
       daemon_reload: true
       scope: "{{ container_systemd_scope }}"
       state: stopped
   block:
-    - name: Check if container or kube service exists {{ container_loop_var.key }}
+    - name: Check if container or kube service exists {{ container_service_name }}
       ansible.builtin.find:
         paths: "{{ container_quadlet_path }}/"
         patterns:
-          - "{{ container_loop_var.key }}.kube"
-          - "{{ container_loop_var.key }}.container"
+          - "{{ container_service_name }}.kube"
+          - "{{ container_service_name }}.container"
       register: service_file_exists
 
-    - name: Stop container service {{ container_loop_var.key }}
+    - name: Stop container service {{ container_service_name }}
       when: service_file_exists.files | length > 0
       ansible.builtin.systemd:
 
-    - name: Find list of build service {{ container_loop_var.key }}
+    - name: Find list of build service {{ container_service_name }}
       ansible.builtin.find:
         paths: "{{ container_quadlet_path }}/"
         file_type: any
-        patterns: "{{ container_loop_var.key }}*.build"
+        patterns: "{{ container_service_name }}*.build"
       register: build_service_list
 
-    - name: Stop build service {{ container_loop_var.key }}
+    - name: Stop build service {{ container_service_name }}
       when: build_service_list.files | length > 0
       ansible.builtin.systemd:
         name: "{{ item.path | basename }}"
         state: stopped
       loop: "{{ build_service_list.files }}"
 
-    - name: Find container systemd files {{ container_loop_var.key }}
+    - name: Find container systemd files {{ container_service_name }}
       ansible.builtin.find:
         paths: "{{ container_quadlet_path }}/"
         file_type: any
-        patterns: "{{ container_loop_var.key }}*"
+        patterns: "{{ container_service_name }}*"
       register: files_removal_list
-    - name: Remove files {{ container_loop_var.key }}
+    - name: Remove files {{ container_service_name }}
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent

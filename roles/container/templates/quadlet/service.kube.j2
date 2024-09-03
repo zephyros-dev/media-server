@@ -1,7 +1,7 @@
 [Kube]
-Yaml=./{{ container_loop_var.key }}/deployment.yaml
+Yaml=./{{ container_service_name }}/deployment.yaml
 SetWorkingDirectory=yaml
-{% for key,value in container_loop_var.value.quadlet_kube_options | dictsort %}
+{% for key,value in container_item.value.quadlet_kube_options | dictsort %}
 {{ key }}={{ value }}
 {% endfor %}
 [Service]

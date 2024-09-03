@@ -1,6 +1,6 @@
 [Install]
 {# Start by default on boot #}
-{% if container_loop_var.value.become %}
+{% if container_item.value.become %}
 WantedBy=multi-user.target
 {% else %}
 WantedBy=default.target

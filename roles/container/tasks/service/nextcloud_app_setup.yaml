@@ -23,6 +23,8 @@
           ansible.builtin.command:
             cmd: "{{ nextcloud_app_command }} config:app:set --value {{ item.value }} {{ nextcloud_app_loop_var.key }} {{ item.key }}"
           loop: "{{ nextcloud_app_var.config | dict2items }}"
+          async: 45
+          poll: 0
 
     - name: Remove application {{ nextcloud_app_loop_var.key }}
       when: nextcloud_app_var.state == 'absent'

@@ -1,4 +1,4 @@
-- name: Create container {{ container_loop_var.key }}
+- name: Create container {{ container_service_name }}
   ansible.builtin.include_tasks:
     file: container_quadlet.yaml
 

@@ -1,32 +1,32 @@
-- name: Setup systemd container {{ container_loop_var.key }}
+- name: Setup systemd container {{ container_item.key }}
   vars:
-    container_service_name: "{{ container_loop_var.key | regex_replace('_', '-') }}"
+    container_service_name: "{{ container_item.key | regex_replace('_', '-') }}"
   when:
-    - not container_loop_var.value.dashy_only
-    - container_loop_var.value.caddy_proxy_url == ""
+    - not container_item.value.dashy_only
+    - container_item.value.caddy_proxy_url == ""
   tags:
-    - "{{ container_loop_var.key }}"
+    - "{{ container_item.key }}"
   block:
     - name: Setup variable for user scope {{ container_service_name }}
       ansible.builtin.set_fact:
         container_quadlet_path: "{{ ansible_user_dir }}/.config/containers/systemd"
         container_systemd_scope: user
-      when: not container_loop_var.value.become
+      when: not container_item.value.become
 
     - name: Setup variable for system scope {{ container_service_name }}
       ansible.builtin.set_fact:
         container_quadlet_path: /etc/containers/systemd
         container_systemd_scope: system
-      when: container_loop_var.value.become
+      when: container_item.value.become
 
     - name: Setup systemd container {{ container_service_name }}
-      become: "{{ container_loop_var.value.become }}"
+      become: "{{ container_item.value.become }}"
       block:
         - name: Setup podman container {{ container_service_name }}
-          when: container_loop_var.value.state == "started"
+          when: container_item.value.state == "started"
           block:
             - name: Setup volumes {{ container_service_name }}
-              when: container_loop_var.value.volumes != {}
+              when: container_item.value.volumes != {}
               block:
                 - name: Get volume list {{ container_service_name }}
                   changed_when: false
@@ -35,16 +35,16 @@
                   ansible.builtin.shell:
                     chdir: cue
                     # Need {{ cue_path }} this since cue is not installed globaly, and we may need to run this with sudo
-                    # Use container_loop_var.key since the key in cue use _ instead of -
-                    cmd: CUE_EXPERIMENT=embed {{ cue_path }} eval -e _application.{{ container_loop_var.key }}.#param.volumes --out json
+                    # Use container_item.key since the key in cue use _ instead of -
+                    cmd: CUE_EXPERIMENT=embed {{ cue_path }} eval -e _application.{{ container_item.key }}.#param.volumes --out json
                   register: volume_map
                 - name: Check if volume exists {{ container_service_name }}
                   when: "'/dev/' not in item"
                   ansible.builtin.stat:
                     path: "{{ item }}"
                   vars:
-                    container_volume_list_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
-                  loop: "{{ volume_map.stdout | from_json | json_query(container_volume_list_query) }}"
+                    volume_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
+                  loop: "{{ volume_map.stdout | from_json | json_query(volume_query) }}"
                   register: container_volume_state
                 - name: Prepare volume {{ container_service_name }}
                   when: not container_volume_state.skipped
@@ -60,8 +60,8 @@
                     force: false
                     mode: "0600"
                   vars:
-                    container_volume_list_query: "* | [?type=='file'].value"
-                  loop: "{{ volume_map.stdout | from_json | community.general.json_query(container_volume_list_query) }}"
+                    volume_query: "* | [?type=='file'].value"
+                  loop: "{{ volume_map.stdout | from_json | json_query(volume_query) }}"
 
                 - name: Disable auth for arr container {{ container_service_name }}
                   when:
@@ -70,7 +70,7 @@
                   block:
                     - name: Disable authentication for {{ container_service_name }}
                       community.general.xml:
-                        path: "{{ global_volume_path }}/{{ container_service_name }}/{{ container[container_service_name].volumes.config | regex_replace('\\./', '') }}/config.xml"
+                        path: "{{ volume_map.stdout | from_json | json_query('config.value') }}/config.xml"
                         xpath: "{{ item.key }}"
                         value: "{{ item.value }}"
                       loop:
@@ -94,19 +94,19 @@
               become: false
               ansible.builtin.stat:
                 path: roles/container/tasks/service/{{ container_service_name }}.yaml
-              register: custom_setup_flow
+              register: custom_flow
             - name: Create container with custom flow {{ container_service_name }}
               when:
-                - custom_setup_flow.stat.exists
-                - container_loop_var.value.state == "started"
-                - container_loop_var.value.postgres_action == "none"
+                - custom_flow.stat.exists
+                - container_item.value.state == "started"
+                - container_item.value.postgres_action == "none"
               ansible.builtin.include_tasks:
                 file: service/{{ container_service_name }}.yaml
             - name: Setup container {{ container_service_name }}
-              when: not custom_setup_flow.stat.exists or container_loop_var.value.state == "absent" or container_loop_var.value.postgres_action != "none"
+              when: not custom_flow.stat.exists or container_item.value.state == "absent" or container_item.value.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_quadlet.yaml
             - name: Setup postgres {{ container_service_name }}
-              when: container_loop_var.value.postgres_action != "none"
+              when: container_item.value.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_postgres.yaml

@@ -29,10 +29,10 @@
       args:
         apply:
           tags:
-            - "{{ container_loop_var.key }}"
+            - "{{ container_item.key }}"
       loop: "{{ container | dict2items }}"
       loop_control:
-        loop_var: container_loop_var
+        loop_var: container_item
       tags: always
       no_log: true
       vars:

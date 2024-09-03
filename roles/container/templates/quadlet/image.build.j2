@@ -1,11 +1,11 @@
 [Build]
 ImageTag={{ item.path | basename }}
-SetWorkingDirectory=./{{ container_loop_var.key }}/{{ item.path | basename }}
-{% for key,value in container_loop_var.value.quadlet_build_options | dictsort %}
+SetWorkingDirectory=./{{ container_service_name }}/{{ item.path | basename }}
+{% for key,value in container_item.value.quadlet_build_options | dictsort %}
 {{ key }}={{ value }}
 {% endfor %}
 [Unit]
 {# This restart the image build when the kube service is restarted, which apply the new image if exists #}
-BindsTo={{ container_loop_var.key }}.service
+BindsTo={{ container_service_name }}.service
 [Install]
-WantedBy={{ container_loop_var.key }}.service
+WantedBy={{ container_service_name }}.service
