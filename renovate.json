@@ -102,5 +102,7 @@
       "matchStrings": ["mergerfs_version: \"(?<currentValue>.*?)\"\n"]
     }
   ],
-  "repositories": ["zephyros-dev/media-server"]
+  "repositories": ["zephyros-dev/media-server"],
+  "schedule": ["after 2pm, before 1am"],
+  "updateNotScheduled": false
 }
