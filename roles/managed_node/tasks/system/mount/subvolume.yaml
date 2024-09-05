@@ -6,7 +6,7 @@
 - name: Mount root subvolume for {{ subvolume_loop_var + ' of ' + storage_loop_var }}
   ansible.posix.mount:
     path: /mnt/disks/storage/root/{{ storage_loop_var }}
-    src: /dev/disk/by-id/{{ storage_loop_var }}-part1
+    src: /dev/disk/by-{{ disks_id_type }}/{{ storage_loop_var }}-part1
     fstype: btrfs
     state: mounted
 
@@ -25,7 +25,7 @@
 - name: Mount subvolume for {{ subvolume_loop_var + ' of ' + storage_loop_var }}
   ansible.posix.mount:
     path: /mnt/disks/storage/{{ subvolume_loop_var }}/{{ storage_loop_var }}
-    src: /dev/disk/by-id/{{ storage_loop_var }}-part1
+    src: /dev/disk/by-{{ disks_id_type }}/{{ storage_loop_var }}-part1
     fstype: btrfs
     opts: subvol=/{{ subvolume_loop_var }},compress=zstd:1
     state: mounted

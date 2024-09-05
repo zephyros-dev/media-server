@@ -2,6 +2,11 @@
   tags: snapraid
   become: true
   block:
+    - name: Install snapraid-btrfs
+      ansible.builtin.copy:
+        src: submodules/snapraid-btrfs/snapraid-btrfs
+        dest: /usr/local/bin/snapraid-btrfs
+        mode: "0755"
     - name: Configure snapraid
       ansible.builtin.template:
         src: snapraid/snapraid.conf.j2

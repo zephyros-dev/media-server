@@ -1,5 +1,6 @@
 - name: Setup global packages
   become: true
+  when: ansible_hostname == "server"
   ansible.builtin.dnf:
     name:
       - "@virtualization"
@@ -27,6 +28,16 @@
         name: virt_use_fusefs
         state: true
         persistent: true
+
+- name: Setup global packages
+  become: true
+  when: ansible_hostname == "fedora-iot"
+  community.general.rpm_ostree_pkg:
+    name:
+      - pip
+      - power-profiles-daemon
+      - restic
+      - snapper
 
 - name: Setup podman
   tags: podman
@@ -78,6 +89,7 @@
 - name: Install mergerfs
   become: true
   tags: mergerfs
+  when: ansible_hostname == "server"
   block:
     - name: Check if mergerfs is installed
       ansible.builtin.stat:
@@ -131,16 +143,6 @@
             - /tmp/mergerfs.tar.gz
             - /tmp/mergerfs
 
-- name: Install snapraid
-  tags: snapraid
-  become: true
-  block:
-    - name: Install snapraid-btrfs
-      ansible.builtin.copy:
-        src: submodules/snapraid-btrfs/snapraid-btrfs
-        dest: /usr/local/bin/snapraid-btrfs
-        mode: "0755"
-
 - name: Setup low power mode
   become: true
   block:
@@ -159,8 +161,16 @@
   become: true
   block:
     - name: Enable automatic update timer # noqa: args[module]
+      when: ansible_hostname == "server"
       ansible.builtin.systemd:
         name: dnf-automatic-install.timer
+        daemon_reload: true
+        enabled: true
+        state: started
+    - name: Enable automatic update service
+      when: ansible_hostname == "fedora-iot"
+      ansible.builtin.systemd:
+        name: rpm-ostreed-automatic.timer
         daemon_reload: true
         enabled: true
         state: started

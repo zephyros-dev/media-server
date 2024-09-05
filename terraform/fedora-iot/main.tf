@@ -1,12 +1,13 @@
-resource "libvirt_volume" "parity" {
-  name   = "fedora-parity"
-  size   = 10000000000
-  format = "raw"
-
-}
 resource "libvirt_volume" "data" {
   count  = 2
   name   = "fedora-data-${count.index}"
+  size   = 10000000000
+  format = "raw"
+}
+
+resource "libvirt_volume" "parity" {
+  count  = 1
+  name   = "fedora-parity-${count.index}"
   size   = 10000000000
   format = "raw"
 }
@@ -52,7 +53,13 @@ resource "libvirt_domain" "this" {
     content {
       volume_id = disk.value.id
     }
+  }
 
+  dynamic "disk" {
+    for_each = libvirt_volume.parity
+    content {
+      volume_id = disk.value.id
+    }
   }
 
   graphics {

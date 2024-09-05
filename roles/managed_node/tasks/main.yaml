@@ -2,8 +2,10 @@
   ansible.builtin.import_tasks: system/network.yaml
   tags: network
 
-- name: Harden ssh
-  ansible.builtin.import_tasks: system/ssh.yaml
+- name: Security hardening
+  ansible.builtin.import_tasks: system/hardening.yaml
+  become: true
+  tags: hardening
   when: ansible_user != "root"
 
 - name: Install packages
@@ -17,6 +19,10 @@
 - name: Setup restic
   ansible.builtin.import_tasks: system/restic.yaml
   tags: restic
+
+- name: Setup storage mounts
+  ansible.builtin.import_tasks: system/mount.yaml
+  tags: mount
 
 - name: Setup systemd
   tags: systemd
@@ -41,10 +47,6 @@
       schedule: "20:00:00"
     - name: mergerfs-directory
       schedule: "*:00:00"
-
-- name: Setup storage mounts
-  ansible.builtin.import_tasks: system/mount.yaml
-  tags: mount
 
 - name: Setup mergerfs_directory service
   ansible.builtin.import_tasks: user/mergerfs_directory.yaml

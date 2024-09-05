@@ -1,18 +1,14 @@
-- name: Create a new primary partition for disks {{ "parition" + partition_loop_var.value.fs_type + "disk" + partition_loop_var.key }}
+- name: Create a new primary partition for disks {{ "parition" + partition_item.value.fs_type + "disk" + partition_item.key }}
   community.general.parted:
-    device: /dev/disk/by-id/{{ disks_list_loop_var }}
+    device: /dev/disk/by-{{ disks_id_type }}/{{ item }}
     number: 1
-    fs_type: "{{ partition_loop_var.value.fs_type }}"
+    fs_type: "{{ partition_item.value.fs_type }}"
     label: gpt
     state: present
-  loop: "{{ partition_loop_var.value.disks_list }}"
-  loop_control:
-    loop_var: disks_list_loop_var
+  loop: "{{ partition_item.value.disks_list }}"
 
-- name: Make filesystem for disks {{ partition_loop_var.key }} # noqa: args[module]
+- name: Make filesystem for disks {{ partition_item.key }}
   community.general.filesystem:
-    fstype: "{{ partition_loop_var.value.fs_type }}"
-    dev: /dev/disk/by-id/{{ disks_list_loop_var }}-part1
-  loop: "{{ partition_loop_var.value.disks_list }}"
-  loop_control:
-    loop_var: disks_list_loop_var
+    fstype: "{{ partition_item.value.fs_type }}"
+    dev: /dev/disk/by-{{ disks_id_type }}/{{ item }}-part1
+  loop: "{{ partition_item.value.disks_list }}"
