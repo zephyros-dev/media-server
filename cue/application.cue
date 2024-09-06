@@ -1154,33 +1154,35 @@ _application: _applicationSet & {
 			}
 		}
 
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "speedtest"
-			env: [{
-				name:  "DB_CONNECTION"
-				value: "sqlite"
-			}, {
-				name:  "DISPLAY_TIMEZONE"
-				value: _fact.ansible_date_time.tz
-			}, {
-				name:  "SPEEDTEST_SCHEDULE"
-				value: "0 * * * *"
-			}, {
-				name:  "PRUNE_RESULTS_OLDER_THAN"
-				value: "365"
-			}, {
-				name: "APP_KEY"
-				valueFrom: secretKeyRef: {
-					name: "speedtest"
-					key:  "speedtest_app_key"
-				}
+		#pod: _profile.lsio & {
+			spec: containers: [{
+				name:  "web"
+				image: "speedtest"
+				env: [{
+					name:  "DB_CONNECTION"
+					value: "sqlite"
+				}, {
+					name:  "DISPLAY_TIMEZONE"
+					value: _fact.ansible_date_time.tz
+				}, {
+					name:  "SPEEDTEST_SCHEDULE"
+					value: "0 * * * *"
+				}, {
+					name:  "PRUNE_RESULTS_OLDER_THAN"
+					value: "365"
+				}, {
+					name: "APP_KEY"
+					valueFrom: secretKeyRef: {
+						name: "speedtest"
+						key:  "speedtest_app_key"
+					}
+				}]
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:z"
+				}]
 			}]
-			volumeMounts: [{
-				name:      "config"
-				mountPath: "/config:z"
-			}]
-		}]
+		}
 	}
 
 	syncthing: {
@@ -1274,14 +1276,21 @@ _application: _applicationSet & {
 
 	trilium: {
 		_
-		#pod: spec: containers: [{
-			name:  "web"
-			image: "trilium"
-			volumeMounts: [{
-				name:      "data"
-				mountPath: "/home/node/trilium-data:z"
+		#pod: {
+			metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=1000,gid=1000"
+			spec: containers: [{
+				name:  "web"
+				image: "trilium"
+				securityContext: {
+					runAsUser:  0
+					runAsGroup: 0
+				}
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/home/node/trilium-data:z"
+				}]
 			}]
-		}]
+		}
 	}
 
 	wol: {
