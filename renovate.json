@@ -103,6 +103,6 @@
     }
   ],
   "repositories": ["zephyros-dev/media-server"],
-  "schedule": ["after 2pm, before 1am"],
+  "schedule": ["after 1am, before 2pm"],
   "updateNotScheduled": false
 }
