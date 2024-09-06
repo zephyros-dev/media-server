@@ -21,3 +21,17 @@
         master: bridge0
         hairpin: false
         state: present
+
+    - name: Setup firewall traffic for services
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true
+      loop:
+        - http
+        - http3
+        - https
+        - samba
+        - syncthing
+        - transmission-client
