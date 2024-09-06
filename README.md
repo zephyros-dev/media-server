@@ -195,6 +195,8 @@ find . -type f -links 1 ! -name "*.srt" -print
 podman system reset
 ```
 
+- Renovate can be visisted at: https://developer.mend.io
+
 # FAQ
 
 1. Why HP Z230?
