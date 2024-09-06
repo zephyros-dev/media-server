@@ -4,14 +4,17 @@
     name:
       - "@virtualization"
       - dnf-automatic
+      - fd-find
+      - fish
+      - git
+      - pip
       - podman
       - podman-docker
-      - slirp4netns
-      - snapraid
-      - snapper
-      - fd-find
       - power-profiles-daemon
       - restic
+      - slirp4netns
+      - snapper
+      - snapraid
     state: latest
 - name: Setup virtualization
   tags: virt

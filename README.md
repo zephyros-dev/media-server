@@ -186,6 +186,15 @@ find . -type f -links 1 ! -name "*.srt" -print
 
 <!-- TODO: Write a scheduled monitoring for this -->
 
+## Reinstallation note
+
+- If the server is reinstalled, some steps need to be taken:
+  - Podman: Reset podman for rootless user
+
+```
+podman system reset
+```
+
 # FAQ
 
 1. Why HP Z230?

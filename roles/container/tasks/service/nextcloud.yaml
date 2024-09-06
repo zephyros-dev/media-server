@@ -9,7 +9,7 @@
     name: nextcloud-postgres
     detach: true
     command: psql --user $POSTGRES_USER -c "GRANT ALL ON SCHEMA public TO oc_{{ nextcloud_admin_user }};"
-  retries: 10
+  retries: 60
 
 - name: Setup php nextcloud
   vars:

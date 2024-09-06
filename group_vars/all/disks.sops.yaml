@@ -2,8 +2,8 @@ disks:
     storage:
         fs_type: ENC[AES256_GCM,data:xhqXtUs=,iv:wub09KB+/ahsxEY626FMJrY4FVdrvh3J8J8i58gst08=,tag:539FcVsw8eay77OsZN85Dw==,type:str]
         disks_list:
-            - ENC[AES256_GCM,data:x5NV4wRABalE+kX0c8krmXxm+VaIRfsocr4r1evOb5s=,iv:mgeIawgEVlofZYUa4QgwG0pg2Ewq6qo3JDYnW3xip/w=,tag:5/YBxAGCsjKjMKoF4Sw4hg==,type:str]
             - ENC[AES256_GCM,data:SNY9r4i3aYTxYf9G09uCjNK37IhOH47KXUwByttWqbw=,iv:ItfpXdHsoA19PC/Z24qxhkUWq5Xjoc92nx+Iwh9tx4o=,tag:1lJNP/KpiDLu82uV3UV6LQ==,type:str]
+            - ENC[AES256_GCM,data:x5NV4wRABalE+kX0c8krmXxm+VaIRfsocr4r1evOb5s=,iv:mgeIawgEVlofZYUa4QgwG0pg2Ewq6qo3JDYnW3xip/w=,tag:5/YBxAGCsjKjMKoF4Sw4hg==,type:str]
     parity:
         fs_type: ENC[AES256_GCM,data:M1QaPg==,iv:pBWqycL7ABVVMXL8kK06tfAsUHjosqpNYDwD5ZU61Ds=,tag:jZ2B47ybiMqnFRsXhUVdiA==,type:str]
         disks_list:
@@ -23,8 +23,8 @@ sops:
             cEwzOXM3a25ZYy82UFlBMEFjWjA2NGsKTJEEgh/A5m4Rf9xvFZpOLrRNBtd6zLE4
             ajohpwNwAiMe9ikYh1w5WOy+HU3PB5XP11saZ786h8lJ9fNXSoh6Aw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2022-12-05T04:58:21Z"
-    mac: ENC[AES256_GCM,data:DEbftEdsA36EDCvBpR3hxbJIUmi4JMzPcrEKLVgMs3wtmnu9EEhBOAvttjq8Ru31PQZWdPHeOtIyEVDgL4D1CO6mU7bnEtwFaFtlAkVGNIlrCY5ESz4kmojKKEFxbVfG9VDws8wN4YfIte7ShWaSs3Ep8Oe1WDnpGpKVxzKmZsg=,iv:MTaba6ICxGZ5PYF3yZWr4ogt5+ZlQtALn0IvD8bXAaA=,tag:dXh6Fvn0u1hUzdWfp9v7XQ==,type:str]
+    lastmodified: "2024-09-06T02:57:07Z"
+    mac: ENC[AES256_GCM,data:Rj4hbGmOu7UFDl8e5p0HSaBFHMbLK7n1NnaZ+IPqLEVxOMduYKeLUwlHh5GqRbtjNMj+5c4mijiqWSYlGzFD39g5ev6UX5TUM7iGEyRVlZjEd1Z7obSowjjRNf2qwHfubw11NhtAPxKsfcCukWC//u1EqrpDg7u8Sr6CAsaVMtw=,iv:EV6YjjgVmOuHCPBTIi0MDkQPzwm5/aV0zL5L8FSy8Ec=,tag:0WAsaC3HHIV6NpRM/mSrRQ==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
-    version: 3.7.3
+    version: 3.9.0

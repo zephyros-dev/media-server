@@ -1,5 +1,5 @@
 @extern(embed)
-package application
+package main
 
 import (
 	"encoding/json"

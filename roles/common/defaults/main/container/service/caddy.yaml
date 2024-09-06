@@ -1,2 +1,2 @@
 caddyfile_host_address: host.containers.internal
-caddyfile_content: "{{ lookup('ansible.builtin.template', 'caddy/Caddyfile.j2') }}"
+caddyfile_content: "{{ lookup('ansible.builtin.template', 'roles/container/templates/caddy/Caddyfile.j2') }}"

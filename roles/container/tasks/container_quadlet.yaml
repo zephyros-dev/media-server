@@ -45,6 +45,12 @@
             file_type: file
             recurse: true
           register: image_containerfile_list
+        - name: Create Containerfile directory {{ container_service_name }}
+          ansible.builtin.file:
+            path: "{{ container_quadlet_path }}/{{ container_service_name }}/{{ item.path | dirname | basename }}"
+            state: directory
+            mode: "0755"
+          loop: "{{ image_containerfile_list.files }}"
         - name: Copy Containerfiles {{ container_service_name }} # noqa: risky-file-permissions
           ansible.builtin.copy:
             src: "{{ item.path }}"
@@ -81,7 +87,7 @@
                   changed_when: false
                   ansible.builtin.shell:
                     chdir: cue
-                    cmd: CUE_EXPERIMENT=embed cue export --inject name={{ container_service_name }} --out text
+                    cmd: CUE_EXPERIMENT=embed cue export application.cue --inject name={{ container_service_name }} --out text
                   register: cue_dump
             - name: Setup kube deployment {{ container_service_name }}
               block:

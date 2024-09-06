@@ -1,49 +1,44 @@
 - name: Setup snapraid
   tags: snapraid
+  become: true
   block:
     - name: Configure snapraid
       ansible.builtin.template:
         src: snapraid/snapraid.conf.j2
         dest: /etc/snapraid.conf
         mode: "0600"
+    - name: Get snapper configuration
+      changed_when: false
+      delegate_to: localhost
+      become: false
+      ansible.builtin.shell:
+        chdir: cue
+        cmd: CUE_EXPERIMENT=embed cue export snapper.cue --out json
+      register: cue_snapper
+    - name: Create snapper configuration list
+      community.general.ini_file:
+        path: /etc/sysconfig/snapper
+        section: null
+        option: SNAPPER_CONFIGS
+        value: '"{{ cue_snapper.stdout | from_json | json_query("snapper_configs[*].name") | join(" ") }}"'
+        mode: "0644"
+        no_extra_spaces: true
+    # https://github.com/openSUSE/snapper/issues/408#issuecomment-554719988
+    - name: Create snapper place-holder config files if not exists
+      ansible.builtin.file:
+        path: "/etc/snapper/configs/{{ item }}"
+        mode: "0644"
+        force: false
+        state: file
+      loop: "{{ cue_snapper.stdout | from_json | json_query('snapper_configs[*].name') }}"
     - name: Configure snapper
       ansible.builtin.include_role:
         name: aisbergg.snapper
         apply:
           become: true
       vars:
-        snapper_configs:
-          - path: "{{ global_disks_storage_path }}/{{ snapper_loop_var }}"
-            name: "{{ snapper_loop_var }}"
-            vars:
-              ALLOW_USERS: "{{ ansible_env.USER }}"
-              ALLOW_GROUPS: "{{ ansible_env.USER }}"
-              SYNC_ACL: true
-              TIMELINE_CREATE: false
-              TIMELINE_CLEANUP: false
-      loop: "{{ disks.storage.disks_list }}"
-      loop_control:
-        loop_var: snapper_loop_var
-    - name: Setup snapper for /home auto snapshots
-      ansible.builtin.include_role:
-        name: aisbergg.snapper
-        apply:
-          become: true
-      vars:
-        snapper_configs:
-          - path: /home
-            name: home
-            vars:
-              ALLOW_USERS: "{{ ansible_env.USER }}"
-              ALLOW_GROUPS: "{{ ansible_env.USER }}"
-              SYNC_ACL: true
-              TIMELINE_LIMIT_HOURLY: "6"
-              TIMELINE_LIMIT_DAILY: "7"
-              TIMELINE_LIMIT_WEEKLY: "0"
-              TIMELINE_LIMIT_MONTHLY: "0"
-              TIMELINE_LIMIT_YEARLY: "0"
+        snapper_configs: "{{ cue_snapper.stdout | from_json | json_query('snapper_configs') }}"
     - name: Setup snapraid-btrfs-runner
-      become: true
       tags: snapraid_runner
       vars:
         snapraid_runner_path: /opt/snapraid-btrfs-runner/
@@ -93,8 +88,8 @@
               value: /etc/snapraid.conf
         - name: Template snapraid runner systemd
           ansible.builtin.template:
-            src: "snapraid/snapraid-runner.{{ item }}.j2"
-            dest: "/etc/systemd/system/snapraid-runner.{{ item }}"
+            src: snapraid/snapraid-runner.{{ item }}.j2
+            dest: /etc/systemd/system/snapraid-runner.{{ item }}
             mode: "0600"
           loop:
             - service

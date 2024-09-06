@@ -1,0 +1,21 @@
+- name: Generate facts for container
+  delegate_to: localhost
+  tags:
+    - always
+  block:
+    - name: Get cue binary path
+      changed_when: false
+      ansible.builtin.command:
+        cmd: which cue
+      register: cue_path_cmd
+    - name: Create tmp cue folder
+      ansible.builtin.file:
+        path: cue/tmp
+        state: directory
+        mode: "0755"
+    - name: Export facts to file
+      changed_when: false
+      ansible.builtin.copy:
+        content: "{{ lookup('vars', 'vars') | to_nice_json }}"
+        mode: "0644"
+        dest: cue/tmp/fact.json
