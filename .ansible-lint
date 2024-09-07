@@ -4,6 +4,7 @@ exclude_paths:
   - ci
   - secret
   - submodules
+  - group_vars
 skip_list:
   - command-instead-of-shell
   - meta-no-info
