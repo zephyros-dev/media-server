@@ -460,6 +460,10 @@ _application: _applicationSet & {
 			}] + [if _fact.container.immich.postgres_action == "none" for v in [{
 				name:  "redis"
 				image: "immich-redis"
+				volumeMounts: [{
+					name:      "redis"
+					mountPath: "/data:U"
+				}]
 			}, {
 				name:  "server"
 				image: "immich-server"
@@ -821,13 +825,9 @@ _application: _applicationSet & {
 				name:  "redis"
 				image: "nextcloud-redis"
 				args: ["redis-server", "--requirepass", _fact.nextcloud_redis_password]
-				securityContext: {
-					runAsUser:  33
-					runAsGroup: 33
-				}
 				volumeMounts: [{
 					name:      "redis"
-					mountPath: "/data:U,z"
+					mountPath: "/data:U"
 				}]
 			}, {
 				name:  "office"
@@ -904,13 +904,9 @@ _application: _applicationSet & {
 			}] + [if _fact.container.paperless.postgres_action == "none" for v in [{
 				name:  "redis"
 				image: "paperless-redis"
-				securityContext: {
-					runAsUser:  _fact.ansible_user_uid
-					runAsGroup: _fact.ansible_user_gid
-				}
 				volumeMounts: [{
 					name:      "redis"
-					mountPath: "/data:U,z"
+					mountPath: "/data:U"
 				}]
 			}, {
 				name:  "gotenberg"
