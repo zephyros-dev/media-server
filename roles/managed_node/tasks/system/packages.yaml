@@ -3,6 +3,8 @@
   ansible.builtin.dnf:
     name:
       - "@virtualization"
+      - cockpit-machines
+      - cockpit-podman
       - dnf-automatic
       - fd-find
       - fish

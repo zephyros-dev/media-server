@@ -6,7 +6,7 @@
       ansible.builtin.template:
         src: snapraid/snapraid.conf.j2
         dest: /etc/snapraid.conf
-        mode: "0600"
+        mode: "0644"
     - name: Get snapper configuration
       changed_when: false
       delegate_to: localhost
