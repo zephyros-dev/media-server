@@ -91,6 +91,9 @@
             - section: snapraid
               option: config
               value: /etc/snapraid.conf
+            - section: logging
+              option: file
+              value: null
         - name: Template snapraid runner systemd
           ansible.builtin.template:
             src: snapraid/snapraid-runner.{{ item }}.j2
