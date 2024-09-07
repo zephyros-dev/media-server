@@ -4,5 +4,5 @@
     apply:
       become: true
   loop: "{{ disks | dict2items }}"
-  vars:
-    partition_loop_var: "{{ item }}"
+  loop_control:
+    loop_var: partition_item

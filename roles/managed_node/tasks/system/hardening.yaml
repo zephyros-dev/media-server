@@ -6,3 +6,12 @@
     sftp_enabled: true
     ssh_allow_tcp_forwarding: "yes"
     ssh_allow_agent_forwarding: true # Could be exploited by someone with root access, so only use this for dev machines
+
+# This causes all users systemctl to fail, will need to investigate further
+# - name: Harden os
+#   tags: os
+#   ansible.builtin.import_role:
+#     name: devsec.hardening.os_hardening
+#   vars:
+#     os_chmod_rootuser_home_folder: false
+#     os_user_pw_ageing: false
