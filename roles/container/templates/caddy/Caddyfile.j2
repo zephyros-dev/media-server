@@ -54,45 +54,43 @@ auth.{{ server_domain }} {
 {% for key,value in container | dictsort %}
   {% if value.state == 'started' %}
     {% if value.caddy_proxy_port > 0 or value.caddy_proxy_url != "" %}
-{% set name = key | replace("_", "-") %}
+      {% set name = key | replace("_", "-") %}
 {{ name }}.{{ server_domain }} {
-    import global-config
-        {% if value.caddy_sso %}
-    import proxy-auth
-        {% endif %}
-        {% if value.caddy_rewrite %}
-          {% for rule in value.caddy_rewrite %}
-    rewrite {{ rule.src }} {{ rule.dest }}
-          {% endfor %}
-        {% endif %}
-        {% if value.host_network %}
-        {# Use ~ instead of + to auto convert int port to string #}
-          {% set reverse_proxy = caddyfile_host_address ~ ":" ~ value.caddy_proxy_port %}
-        {% elif value.caddy_proxy_url != "" %}
-          {% set reverse_proxy = value.caddy_proxy_url %}
-        {% else %}
-          {% set reverse_proxy = name ~ ":" ~ value.caddy_proxy_port %}
-        {% endif %}
-    reverse_proxy {{ reverse_proxy }} {
-        import security-header
+  import global-config
+      {% if value.caddy_sso %}
+  import proxy-auth
+      {% endif %}
+      {% if value.caddy_rewrite %}
+        {% for rule in value.caddy_rewrite %}
+  rewrite {{ rule.src }} {{ rule.dest }}
+        {% endfor %}
+      {% endif %}
+      {% if value.host_network %}
+      {# Use ~ instead of + to auto convert int port to string #}
+        {% set reverse_proxy = caddyfile_host_address ~ ":" ~ value.caddy_proxy_port %}
+      {% elif value.caddy_proxy_url != "" %}
+        {% set reverse_proxy = value.caddy_proxy_url %}
+      {% else %}
+        {% set reverse_proxy = name ~ ":" ~ value.caddy_proxy_port %}
+      {% endif %}
+  reverse_proxy {{ reverse_proxy }} {
+    import security-header
+    {% if name == 'cockpit' %}
+    transport http {
+        tls_insecure_skip_verify
     }
-        {% if name == 'nextcloud' %}
-    redir /.well-known/carddav /remote.php/carddav 301
-    redir /.well-known/caldav /remote.php/caldav 301
-        {% endif %}
+    {% endif %}
+  }
+      {% if name == 'nextcloud' %}
+  redir /.well-known/carddav /remote.php/carddav 301
+  redir /.well-known/caldav /remote.php/caldav 301
+      {% endif %}
+      {% if name == 'cockpit' %}
+  tls me@outlook.com {
+    dns dynv6 {{ ddns_dynv6_token }}
+  }
+      {% endif %}
 }
     {% endif %}
   {% endif %}
 {% endfor %}
-server.{{ dynv6_zone }} {
-  import global-config
-  reverse_proxy https://{{ caddyfile_host_address }}:9090 {
-    import security-header
-    transport http {
-      tls_insecure_skip_verify
-    }
-  }
-  tls me@outlook.com {
-    dns dynv6 {{ ddns_dynv6_token }}
-  }
-}

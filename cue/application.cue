@@ -298,9 +298,6 @@ _application: _applicationSet & {
 								if (v.dashy_only || v.caddy_proxy_port > 0) && k != "dashy" {
 									_url_key:    strings.Replace(k, "_", "-", -1)
 									_url_public: string | *"https://\(_url_key).\(_fact.server_domain)"
-									if k == "cockpit" {
-										_url_public: "https://server.\(_fact.dynv6_zone)"
-									}
 									if v.state == "started" {
 										title: strings.ToTitle(_url_key)
 										if v.dashy_icon == "" {
