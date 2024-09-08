@@ -9,11 +9,6 @@ import (
 	core "k8s.io/api/core/v1"
 )
 
-_applicationName: string @tag(name)
-
-// Have to use MarshalStream since cue export does not make stream yaml
-yaml.MarshalStream(_application[_applicationName])
-
 // Type check for the container variables
 _fact_embed: _ @embed(file="tmp/fact.json")
 #container: {
@@ -59,7 +54,7 @@ _profile: {
 	rootless_userns: rootless & userns_share
 }
 
-_applicationSet: [applicationName=string]: {
+application: [applicationName=string]: {
 	#param: {
 		secret: {
 			string?: {
@@ -168,10 +163,11 @@ _applicationSet: [applicationName=string]: {
 		}
 	}]
 
-	[#pod, #secret] + #volume
+	// Have to use MarshalStream since cue export does not make stream yaml
+	yaml.MarshalStream([#pod, #secret] + #volume)
 }
 
-_application: _applicationSet & {
+application: {
 	audiobookshelf: {
 		_
 		#pod: _profile.rootless_userns & {
@@ -1183,7 +1179,7 @@ _application: _applicationSet & {
 
 		#param: volumes: koreader: {
 			type: "absolutePathDir"
-			value: path.Join([_application.koreader.#param.volumes.config.value, "book"])
+			value: path.Join([application.koreader.#param.volumes.config.value, "book"])
 		}
 		#pod: _profile.userns_share & {
 			spec: containers: [{

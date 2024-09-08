@@ -87,7 +87,7 @@
                   changed_when: false
                   ansible.builtin.shell:
                     chdir: cue
-                    cmd: CUE_EXPERIMENT=embed cue export application.cue --inject name={{ container_service_name }} --out text
+                    cmd: CUE_EXPERIMENT=embed cue export application.cue --expression application.{{ container_service_name }} --out text
                   register: cue_dump
             - name: Setup kube deployment {{ container_service_name }}
               block:

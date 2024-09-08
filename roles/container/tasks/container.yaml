@@ -36,7 +36,7 @@
                     chdir: cue
                     # Need {{ cue_path }} this since cue is not installed globaly, and we may need to run this with sudo
                     # Use container_item.key since the key in cue use _ instead of -
-                    cmd: CUE_EXPERIMENT=embed {{ cue_path }} eval -e _application.{{ container_item.key }}.#param.volumes --out json
+                    cmd: CUE_EXPERIMENT=embed {{ cue_path }} eval -e application.{{ container_item.key }}.#param.volumes --out json
                   register: volume_map
                 - name: Check if volume exists {{ container_service_name }}
                   when: "'/dev/' not in item"
