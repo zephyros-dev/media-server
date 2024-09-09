@@ -55,7 +55,7 @@ _profile: {
 }
 
 application: [applicationName=string]: {
-	#param: {
+	param: {
 		secret: {
 			string?: {
 				type:    "file" | "env"
@@ -102,7 +102,7 @@ application: [applicationName=string]: {
 			name: applicationName
 		}
 		spec: {
-			volumes: [for k, v in #param.volumes {
+			volumes: [for k, v in param.volumes {
 				name: k
 				if v.type == "pvc" {
 					persistentVolumeClaim: claimName: v.value
@@ -119,7 +119,7 @@ application: [applicationName=string]: {
 						type: "Directory"
 					}
 				}
-			}] + [for k, v in #param.secret if v.type == "file" {
+			}] + [for k, v in param.secret if v.type == "file" {
 				name: k
 				secret: {
 					secretName: applicationName
@@ -143,17 +143,17 @@ application: [applicationName=string]: {
 		}
 		type: "Opaque"
 		stringData: {
-			for k, v in #param.secret if v.type == "file" {
+			for k, v in param.secret if v.type == "file" {
 				"\(k)": v.content
 			}
 		} & {
-			for k, v in #param.secret if v.type == "env" {
+			for k, v in param.secret if v.type == "env" {
 				"\(k)": v.content
 			}
 		}
 	}
 
-	#volume: [for k, v in #param.volumes if v.type == "pvc" {
+	#volume: [for k, v in param.volumes if v.type == "pvc" {
 		core.#PersistentVolumeClaim & {
 			apiVersion: "v1"
 			kind:       "PersistentVolumeClaim"
@@ -164,7 +164,7 @@ application: [applicationName=string]: {
 	}]
 
 	// Have to use MarshalStream since cue export does not make stream yaml
-	yaml.MarshalStream([#pod, #secret] + #volume)
+	manifest: yaml.MarshalStream([#pod, #secret] + #volume)
 }
 
 application: {
@@ -211,7 +211,7 @@ application: {
 
 	caddy: {
 		_
-		#param: {
+		param: {
 			secret: {
 				Caddyfile: {
 					type:    "file"
@@ -276,7 +276,7 @@ application: {
 	// Already set to run as rootless in image build
 	dashy: {
 		_
-		#param: {
+		param: {
 			secret: {
 				"conf.yml": {
 					type: "file"
@@ -351,7 +351,7 @@ application: {
 
 	ddns: {
 		_
-		#param: {
+		param: {
 			secret: {
 				Caddyfile: {
 					type:    "file"
@@ -419,7 +419,7 @@ application: {
 
 	immich: {
 		_
-		#param: {
+		param: {
 			secret: {
 				database_password: {
 					type:    "env"
@@ -639,7 +639,7 @@ application: {
 
 	miniflux: {
 		_
-		#param: {
+		param: {
 			secret: {
 				miniflux_postgres_password: {
 					type:    "env"
@@ -733,7 +733,7 @@ application: {
 
 	nextcloud: {
 		_
-		#param: {
+		param: {
 			secret: {
 				postgres_password: {
 					type:    "env"
@@ -855,7 +855,7 @@ application: {
 
 	paperless: {
 		_
-		#param: {
+		param: {
 			secret: {
 				paperless_dbpass: {
 					type:    "env"
@@ -1032,7 +1032,7 @@ application: {
 
 	samba: {
 		_
-		#param: {
+		param: {
 			secret: {
 				"ACCOUNT_\(_fact.ansible_user)": {
 					type:    "env"
@@ -1061,7 +1061,7 @@ application: {
 				}, {
 					name:  "WSDD2_DISABLE"
 					value: "1"
-				}] + [for k, v in #param.volumes {
+				}] + [for k, v in param.volumes {
 					name:  "SAMBA_VOLUME_CONFIG_\(k)"
 					value: "[\(k)]; path=/shares/\(k); valid users = \(_fact.ansible_user); guest ok = no; read only = no; browseable = yes;"
 				}] + [{
@@ -1089,7 +1089,7 @@ application: {
 
 	scrutiny: {
 		_
-		#param: {
+		param: {
 			secret: {
 				"scrutiny.yaml": {
 					type: "file"
@@ -1134,7 +1134,7 @@ application: {
 
 	speedtest: {
 		_
-		#param: {
+		param: {
 			secret: {
 				speedtest_app_key: {
 					type:    "env"
@@ -1177,9 +1177,9 @@ application: {
 	syncthing: {
 		_
 
-		#param: volumes: koreader: {
+		param: volumes: koreader: {
 			type: "absolutePathDir"
-			value: path.Join([application.koreader.#param.volumes.config.value, "book"])
+			value: path.Join([application.koreader.param.volumes.config.value, "book"])
 		}
 		#pod: _profile.userns_share & {
 			spec: containers: [{
@@ -1215,7 +1215,7 @@ application: {
 
 	transmission: {
 		_
-		#param: {
+		param: {
 			secret: {
 				USER: {
 					type:    "env"
@@ -1284,7 +1284,7 @@ application: {
 
 	wol: {
 		_
-		#param: {
+		param: {
 			secret: {
 				WOLWEBBCASTIP: {
 					type:    "env"

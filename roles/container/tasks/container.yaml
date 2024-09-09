@@ -28,23 +28,21 @@
             - name: Setup volumes {{ container_service_name }}
               when: container_item.value.volumes != {}
               block:
-                - name: Get volume list {{ container_service_name }}
-                  changed_when: false
-                  delegate_to: localhost
-                  become: false
-                  ansible.builtin.shell:
-                    chdir: cue
-                    # Need {{ cue_path }} this since cue is not installed globaly, and we may need to run this with sudo
-                    # Use container_item.key since the key in cue use _ instead of -
-                    cmd: CUE_EXPERIMENT=embed {{ cue_path }} eval -e application.{{ container_item.key }}.#param.volumes --out json
-                  register: volume_map
+                - name: Get volume list for {{ container_service_name }}
+                  # We have to use set_fact since vars make the tasks unable to be skipped
+                  ansible.builtin.set_fact:
+                    volume_list: "{{ container_manifest.stdout | from_json | json_query(volume_list_query) }}"
+                    volume_map: "{{ container_manifest.stdout | from_json | json_query(volume_map_query) }}"
+                  vars:
+                    volume_map_query: application.{{ container_item.key }}.param.volumes
+                    volume_list_query: "{{ volume_map_query }}.*"
                 - name: Check if volume exists {{ container_service_name }}
                   when: "'/dev/' not in item"
                   ansible.builtin.stat:
                     path: "{{ item }}"
                   vars:
-                    volume_query: "* | [?type=='relativePathDir' || type=='absolutePathDir'].value"
-                  loop: "{{ volume_map.stdout | from_json | json_query(volume_query) }}"
+                    volume_query: "[?type == `relativePathDir` || type == `absolutePathDir`].value"
+                  loop: "{{ volume_list | json_query(volume_query) }}"
                   register: container_volume_state
                 - name: Prepare volume {{ container_service_name }}
                   when: not container_volume_state.skipped
@@ -60,32 +58,31 @@
                     force: false
                     mode: "0600"
                   vars:
-                    volume_query: "* | [?type=='file'].value"
-                  loop: "{{ volume_map.stdout | from_json | json_query(volume_query) }}"
+                    volume_query: "[?type==`file`].value"
+                  loop: "{{ volume_list | json_query(volume_query) }}"
 
-                - name: Disable auth for arr container {{ container_service_name }}
-                  when:
-                    - "'arr' in container_service_name"
-                    - container_service_name != "bazarr"
-                  block:
-                    - name: Disable authentication for {{ container_service_name }}
-                      community.general.xml:
-                        path: "{{ volume_map.stdout | from_json | json_query('config.value') }}/config.xml"
-                        xpath: "{{ item.key }}"
-                        value: "{{ item.value }}"
-                      loop:
-                        - key: /Config/AuthenticationMethod
-                          value: Basic
-                        - key: /Config/AuthenticationRequired
-                          value: DisabledForLocalAddresses
-                      register: arr_config
-
-                    - name: Restart {{ container_service_name }} # noqa: no-handler
-                      when: arr_config.changed
-                      ansible.builtin.systemd:
-                        name: "{{ container_service_name }}"
-                        scope: user
-                        state: restarted
+            - name: Disable auth for arr container {{ container_service_name }}
+              when:
+                - "'arr' in container_service_name"
+                - container_service_name != "bazarr"
+              block:
+                - name: Disable authentication for {{ container_service_name }}
+                  community.general.xml:
+                    path: "{{ volume_map | json_query('config.value') }}/config.xml"
+                    xpath: "{{ item.key }}"
+                    value: "{{ item.value }}"
+                  loop:
+                    - key: /Config/AuthenticationMethod
+                      value: Basic
+                    - key: /Config/AuthenticationRequired
+                      value: DisabledForLocalAddresses
+                  register: arr_config
+                - name: Restart {{ container_service_name }} # noqa: no-handler
+                  when: arr_config.changed
+                  ansible.builtin.systemd:
+                    name: "{{ container_service_name }}"
+                    scope: user
+                    state: restarted
 
         - name: Setup container with quadlet {{ container_service_name }}
           block:

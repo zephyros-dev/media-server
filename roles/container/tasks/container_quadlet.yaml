@@ -79,21 +79,13 @@
         - name: Create kube service {{ container_service_name }}
           when: container_item.value.kind == "kube"
           block:
-            - name: Prepare kube deployment {{ container_service_name }}
-              delegate_to: localhost
-              become: false
-              block:
-                - name: Render kube deployment {{ container_service_name }}
-                  changed_when: false
-                  ansible.builtin.shell:
-                    chdir: cue
-                    cmd: CUE_EXPERIMENT=embed cue export application.cue --expression application.{{ container_service_name }} --out text
-                  register: cue_dump
             - name: Setup kube deployment {{ container_service_name }}
               block:
                 - name: Create kube deployment {{ container_service_name }} # noqa: risky-file-permissions
+                  vars:
+                    manifest_query: application.{{ container_service_name }}.manifest
                   ansible.builtin.copy:
-                    content: "{{ cue_dump.stdout }}"
+                    content: "{{ container_manifest.stdout | from_json | json_query(manifest_query) }}"
                     dest: "{{ container_quadlet_path }}/{{ container_service_name }}/deployment.yaml"
                   register: kube_file_yaml
                 - name: Create kube quadlet file {{ container_service_name }} # noqa: risky-file-permissions
@@ -124,7 +116,7 @@
               when: container_item.value.volumes != {}
               ansible.builtin.set_fact:
                 "{{ container_service_name }}_volume_{{ item.key }}": "{{ item.value.value }}"
-              loop: "{{ volume_map.stdout | from_json | dict2items }}"
+              loop: "{{ volume_map | dict2items }}"
             - name: Create container quadlet file {{ container_service_name }} # noqa: risky-file-permissions
               ansible.builtin.template:
                 src: "quadlet/{{ container_service_name }}.container.j2"

@@ -1,13 +1,7 @@
 - name: Generate facts for container
   delegate_to: localhost
-  tags:
-    - always
+  tags: always
   block:
-    - name: Get cue binary path
-      changed_when: false
-      ansible.builtin.command:
-        cmd: which cue
-      register: cue_path_cmd
     - name: Create tmp cue folder
       ansible.builtin.file:
         path: cue/tmp
