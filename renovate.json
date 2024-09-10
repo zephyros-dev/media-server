@@ -70,12 +70,6 @@
     }
   ],
   "pinDigests": true,
-  "pip-compile": {
-    "fileMatch": ["(^|/)requirements\\.in$"]
-  },
-  "pip_requirements": {
-    "fileMatch": ["(^|/)requirements\\.in$"]
-  },
   "platform": "github",
   "platformAutomerge": true,
   "pre-commit": {
