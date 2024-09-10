@@ -4,20 +4,21 @@
   module_defaults:
     ansible.builtin.command:
       chdir: cue
+    ansible.builtin.copy:
+      mode: "0644"
+      dest: cue/tmp/fact.json
   block:
     - name: Create tmp cue folder
       ansible.builtin.file:
         path: cue/tmp
         state: directory
         mode: "0755"
-    - name: Export facts to file
+    - name: Export facts to file # noqa: args[module], risky-file-permissions
       changed_when: false
       vars:
         caddyfile_content: ""
       ansible.builtin.copy:
         content: "{{ lookup('vars', 'vars') | to_nice_json }}"
-        mode: "0644"
-        dest: cue/tmp/fact.json
     - name: Get container cue facts
       changed_when: false
       ansible.builtin.command:
@@ -28,12 +29,10 @@
         container: "{{ application_facts.stdout | from_json | json_query('application') }}"
       ansible.builtin.set_fact:
         caddyfile_content: "{{ lookup('ansible.builtin.template', 'roles/container/templates/caddy/Caddyfile.j2') }}"
-    - name: Export facts to file
+    - name: Export facts to file # noqa: args[module], risky-file-permissions
       changed_when: false
       ansible.builtin.copy:
         content: "{{ lookup('vars', 'vars') | to_nice_json }}"
-        mode: "0644"
-        dest: cue/tmp/fact.json
     - name: Get container fact with caddyfile content
       changed_when: false
       ansible.builtin.command:

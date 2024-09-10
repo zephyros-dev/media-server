@@ -81,6 +81,7 @@ async def ci():
             .with_env_variable(
                 "AQUA_GLOBAL_CONFIG", f"{user_dir}/.config/aquaproj-aqua/aqua.yaml"
             )
+            .with_env_variable("CUE_EXPERIMENT", "embed")
             .with_mounted_cache(
                 f"{user_dir}/.local/share/aquaproj-aqua",
                 client.cache_volume("aqua-cache"),
