@@ -17,7 +17,7 @@
         path: /etc/sysconfig/snapper
         section: null
         option: SNAPPER_CONFIGS
-        value: '"{{ cue_facts.stdout | from_json | json_query("snapper_configs[*].name") | join(" ") }}"'
+        value: '"{{ snapper_configs | json_query("[*].name") | join(" ") }}"'
         mode: "0644"
         no_extra_spaces: true
     # https://github.com/openSUSE/snapper/issues/408#issuecomment-554719988
@@ -27,14 +27,12 @@
         mode: "0644"
         force: false
         state: file
-      loop: "{{ cue_facts.stdout | from_json | json_query('snapper_configs[*].name') }}"
+      loop: "{{ snapper_configs | json_query('[*].name') }}"
     - name: Configure snapper
       ansible.builtin.include_role:
         name: aisbergg.snapper
         apply:
           become: true
-      vars:
-        snapper_configs: "{{ cue_facts.stdout | from_json | json_query('snapper_configs') }}"
     - name: Setup snapraid-btrfs-runner
       tags: snapraid_runner
       vars:

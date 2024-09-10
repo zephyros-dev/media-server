@@ -1,9 +1,9 @@
 #jinja2:lstrip_blocks: True
 [Kube]
-Yaml=./{{ container_service_name }}/deployment.yaml
+Yaml=./{{ application_name }}/deployment.yaml
 SetWorkingDirectory=yaml
-{% if container_item.value.param.quadlet_kube_options is defined %}
-{% for key,value in container_item.value.param.quadlet_kube_options | dictsort %}
+{% if application_item.value.param.quadlet_kube_options is defined %}
+{% for key,value in application_item.value.param.quadlet_kube_options | dictsort %}
 {{ key }}={{ value }}
 {% endfor %}
 {% endif %}

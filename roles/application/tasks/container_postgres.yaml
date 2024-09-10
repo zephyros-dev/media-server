@@ -1,84 +1,84 @@
-- name: Setup postgres container {{ container_service_name }}
+- name: Setup postgres container {{ application_name }}
   module_defaults:
     ansible.builtin.systemd:
-      name: "{{ container_service_name }}"
+      name: "{{ application_name }}"
       scope: "{{ container_systemd_scope }}"
   block:
-    - name: Get list of containers in the pod {{ container_service_name }}
+    - name: Get list of containers in the pod {{ application_name }}
       containers.podman.podman_container_info:
-        name: "{{ container_service_name }}-postgres"
+        name: "{{ application_name }}-postgres"
       register: podman_container_info
       retries: 10 # Waiting for container to start
       until: podman_container_info.containers | length > 0
-    - name: Setup postgres action for pod {{ container_service_name }}
+    - name: Setup postgres action for pod {{ application_name }}
       vars:
         postgres_data_path: "{{ podman_container_info | json_query('containers[0].Mounts[?Destination==`/var/lib/postgresql/data`].Source') | first }}"
         postgres_user: "{{ podman_container_info | json_query('containers[0].Config.Env[?contains(@, `POSTGRES_USER`) == `true`]') | first | regex_replace('^POSTGRES_USER=', '') }}"
         postgres_backup_path: "{{ postgres_data_path | dirname }}/postgres_backup"
       block:
-        - name: Stop container {{ container_service_name }}
-          when: container_item.value.postgres_action != "clean"
+        - name: Stop container {{ application_name }}
+          when: application_item.value.postgres_action != "clean"
           ansible.builtin.systemd: # noqa: args[module]
             state: stopped
 
-        - name: Export the postgres db {{ container_service_name }}
-          when: container_item.value.postgres_action == "export"
+        - name: Export the postgres db {{ application_name }}
+          when: application_item.value.postgres_action == "export"
           block:
-            - name: Make backup db folder {{ container_service_name }}
+            - name: Make backup db folder {{ application_name }}
               ansible.builtin.file:
                 path: "{{ postgres_backup_path }}"
                 mode: "0700"
                 state: directory
-            - name: Backup volume {{ container_service_name }}
+            - name: Backup volume {{ application_name }}
               ansible.builtin.copy:
                 dest: "{{ postgres_backup_path }}/{{ ansible_date_time.iso8601_basic_short }}"
                 directory_mode: recursive
                 mode: "0700"
                 remote_src: true
                 src: "{{ postgres_data_path }}"
-            - name: Start postgres {{ container_service_name }} # noqa: args[module]
+            - name: Start postgres {{ application_name }} # noqa: args[module]
               ansible.builtin.systemd:
                 state: started
-            - name: Create dump postgres {{ container_service_name }}
+            - name: Create dump postgres {{ application_name }}
               changed_when: false
               ansible.builtin.shell:
                 chdir: "{{ postgres_backup_path }}"
-                cmd: podman exec {{ container_service_name }}-postgres pg_dumpall -U {{ postgres_user }} > dump.sql
+                cmd: podman exec {{ application_name }}-postgres pg_dumpall -U {{ postgres_user }} > dump.sql
               register: postgres_dump
               until: postgres_dump.failed == false
               retries: 10
-            - name: Stop postgres container {{ container_service_name }} # noqa: args[module]
+            - name: Stop postgres container {{ application_name }} # noqa: args[module]
               ansible.builtin.systemd:
                 state: stopped
 
-        - name: Import the postgres db {{ container_service_name }}
-          when: container_item.value.postgres_action == "import"
+        - name: Import the postgres db {{ application_name }}
+          when: application_item.value.postgres_action == "import"
           block:
-            - name: Clean current postgres volume {{ container_service_name }}
+            - name: Clean current postgres volume {{ application_name }}
               ansible.builtin.file:
                 path: "{{ postgres_data_path }}"
                 state: absent
-            - name: Create empty postgres folder {{ container_service_name }}
+            - name: Create empty postgres folder {{ application_name }}
               ansible.builtin.file:
                 path: "{{ postgres_data_path }}"
                 mode: "0700"
                 state: directory
-            - name: Start postgres container {{ container_service_name }} # noqa: args[module]
+            - name: Start postgres container {{ application_name }} # noqa: args[module]
               ansible.builtin.systemd:
                 state: started
-            - name: Import postgres container {{ container_service_name }}
+            - name: Import postgres container {{ application_name }}
               ansible.builtin.shell:
                 chdir: "{{ postgres_backup_path }}"
-                cmd: podman exec -i {{ container_service_name }}-postgres psql -U {{ postgres_user }} < dump.sql
+                cmd: podman exec -i {{ application_name }}-postgres psql -U {{ postgres_user }} < dump.sql
               register: import_output
               until: import_output.rc == 0
               retries: 10
               changed_when: false
 
-        - name: Clean postgres backup {{ container_service_name }}
-          when: container_item.value.postgres_action == "clean"
+        - name: Clean postgres backup {{ application_name }}
+          when: application_item.value.postgres_action == "clean"
           block:
-            - name: Clean backup db {{ container_service_name }}
+            - name: Clean backup db {{ application_name }}
               ansible.builtin.file:
                 path: "{{ postgres_backup_path }}"
                 state: absent

@@ -1,0 +1,14 @@
+#jinja2:lstrip_blocks: True
+[Build]
+ImageTag={{ item.path | basename }}
+SetWorkingDirectory=./{{ application_name }}/{{ item.path | basename }}
+{% if application_item.value.param.quadlet_build_options is defined %}
+{% for key,value in application_item.value.param.quadlet_build_options | dictsort %}
+{{ key }}={{ value }}
+{% endfor %}
+{% endif %}
+[Unit]
+{# This restart the image build when the kube service is restarted, which apply the new image if exists #}
+BindsTo={{ application_name }}.service
+[Install]
+WantedBy={{ application_name }}.service

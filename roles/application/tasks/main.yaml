@@ -1,5 +1,5 @@
 - name: Setup container
-  tags: container
+  tags: application
   block:
     - name: Run podman container with systemd
       ansible.builtin.include_tasks:
@@ -7,9 +7,9 @@
       args:
         apply:
           tags:
-            - "{{ container_item.key }}"
-      loop: "{{ container | dict2items }}"
+            - "{{ application_item.key }}"
+      loop: "{{ application | dict2items }}"
       loop_control:
-        loop_var: container_item
+        loop_var: application_item
       tags: always
       no_log: true

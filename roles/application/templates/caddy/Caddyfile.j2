@@ -51,7 +51,7 @@ auth.{{ server_domain }} {
   # header_down Cross-Origin-Opener-Policy "same-origin"
   # header_down Cross-Origin-Resource-Policy "cross-origin"
 }
-{% for key,value in container | dictsort %}
+{% for key,value in application | dictsort %}
   {% if value.param.state == 'started' %}
     {% if value.param.caddy_proxy_port is defined or value.param.caddy_proxy_url is defined %}
       {% set name = key | replace("_", "-") %}

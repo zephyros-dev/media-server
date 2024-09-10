@@ -9,7 +9,9 @@ import (
 	core "k8s.io/api/core/v1"
 )
 
-_fact: _ @embed(file="tmp/fact.json")
+_fact_embed: _ @embed(file="tmp/fact.json")
+// Type check for fact
+_fact: _fact_embed & {}
 
 _profile: {
 	lsio: {

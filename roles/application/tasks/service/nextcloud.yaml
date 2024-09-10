@@ -1,4 +1,4 @@
-- name: Create container {{ container_service_name }}
+- name: Create container {{ application_name }}
   ansible.builtin.include_tasks:
     file: container_quadlet.yaml
 

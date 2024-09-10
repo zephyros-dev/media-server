@@ -26,18 +26,20 @@
       register: cue_facts
     - name: Get caddyfile content
       vars:
-        container: "{{ cue_facts.stdout | from_json | json_query('application') }}"
+        application: "{{ cue_facts.stdout | from_json | json_query('application') }}"
       ansible.builtin.set_fact:
-        caddyfile_content: "{{ lookup('ansible.builtin.template', 'roles/container/templates/caddy/Caddyfile.j2') }}"
+        caddyfile_content: "{{ lookup('ansible.builtin.template', 'roles/application/templates/caddy/Caddyfile.j2') }}"
     - name: Export facts to file # noqa: args[module], risky-file-permissions
       changed_when: false
       ansible.builtin.copy:
         content: "{{ lookup('vars', 'vars') | to_nice_json }}"
-    - name: Get container fact with caddyfile content
+    - name: Re-get container cue facts with caddyfile content
       changed_when: false
       ansible.builtin.command:
         cmd: cue export fact.cue --out json
       register: cue_facts
-    - name: Set container facts
+    - name: Set cue facts
       ansible.builtin.set_fact:
-        container: "{{ cue_facts.stdout | from_json | json_query('application') }}"
+        "{{ item.key }}": "{{ item.value }}"
+      loop: "{{ cue_facts.stdout | from_json | dict2items }}"
+      no_log: true

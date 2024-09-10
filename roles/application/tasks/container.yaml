@@ -1,42 +1,42 @@
-- name: Setup systemd container {{ container_item.key }}
+- name: Setup systemd container {{ application_item.key }}
   vars:
-    container_service_name: "{{ container_item.key | regex_replace('_', '-') }}"
+    application_name: "{{ application_item.key | regex_replace('_', '-') }}"
   when:
-    - not container_item.value.param.dashy_only
-    - not container_item.value.param.caddy_proxy_url is defined
+    - not application_item.value.param.dashy_only
+    - not application_item.value.param.caddy_proxy_url is defined
   tags:
-    - "{{ container_item.key }}"
+    - "{{ application_item.key }}"
   block:
-    - name: Setup variable for user scope {{ container_service_name }}
+    - name: Setup variable for user scope {{ application_name }}
       ansible.builtin.set_fact:
         container_quadlet_path: "{{ ansible_user_dir }}/.config/containers/systemd"
         container_systemd_scope: user
-      when: not container_item.value.param.become
+      when: not application_item.value.param.become
 
-    - name: Setup variable for system scope {{ container_service_name }}
+    - name: Setup variable for system scope {{ application_name }}
       ansible.builtin.set_fact:
         container_quadlet_path: /etc/containers/systemd
         container_systemd_scope: system
-      when: container_item.value.param.become
+      when: application_item.value.param.become
 
-    - name: Setup systemd container {{ container_service_name }}
-      become: "{{ container_item.value.param.become }}"
+    - name: Setup systemd container {{ application_name }}
+      become: "{{ application_item.value.param.become }}"
       block:
-        - name: Setup podman container {{ container_service_name }}
-          when: container_item.value.param.state == "started"
+        - name: Setup podman container {{ application_name }}
+          when: application_item.value.param.state == "started"
           block:
-            - name: Setup volumes {{ container_service_name }}
-              when: container_item.value.param.volumes is defined
+            - name: Setup volumes {{ application_name }}
+              when: application_item.value.param.volumes is defined
               block:
-                - name: Get volume list for {{ container_service_name }}
+                - name: Get volume list for {{ application_name }}
                   # We have to use set_fact since vars make the tasks unable to be skipped
                   ansible.builtin.set_fact:
-                    volume_list: "{{ container | json_query(volume_list_query) }}"
-                    volume_map: "{{ container | json_query(volume_map_query) }}"
+                    volume_map: "{{ application | json_query(volume_map_query) }}"
+                    volume_list: "{{ application | json_query(volume_list_query) }}"
                   vars:
-                    volume_map_query: "{{ container_item.key }}.transform.volumes"
+                    volume_map_query: "{{ application_item.key }}.transform.volumes"
                     volume_list_query: "{{ volume_map_query }}.*"
-                - name: Check if volume exists {{ container_service_name }}
+                - name: Check if volume exists {{ application_name }}
                   when: "'/dev/' not in item"
                   ansible.builtin.stat:
                     path: "{{ item }}"
@@ -44,14 +44,14 @@
                     volume_query: "[?type == `relativePathDir` || type == `absolutePathDir`].value"
                   loop: "{{ volume_list | json_query(volume_query) }}"
                   register: container_volume_state
-                - name: Prepare volume {{ container_service_name }}
+                - name: Prepare volume {{ application_name }}
                   when: not container_volume_state.skipped
                   ansible.builtin.file:
                     path: "{{ item }}"
                     mode: "0755"
                     state: directory
                   loop: "{{ container_volume_state.results | default([]) | json_query('[?stat.exists == `false`].item') }}"
-                - name: Prepare files {{ container_service_name }}
+                - name: Prepare files {{ application_name }}
                   ansible.builtin.copy:
                     content: ""
                     dest: "{{ item }}"
@@ -61,12 +61,12 @@
                     volume_query: "[?type==`file`].value"
                   loop: "{{ volume_list | json_query(volume_query) }}"
 
-            - name: Disable auth for arr container {{ container_service_name }}
+            - name: Disable auth for arr container {{ application_name }}
               when:
-                - "'arr' in container_service_name"
-                - container_service_name != "bazarr"
+                - "'arr' in application_name"
+                - application_name != "bazarr"
               block:
-                - name: Disable authentication for {{ container_service_name }}
+                - name: Disable authentication for {{ application_name }}
                   community.general.xml:
                     path: "{{ volume_map | json_query('config.value') }}/config.xml"
                     xpath: "{{ item.key }}"
@@ -77,33 +77,33 @@
                     - key: /Config/AuthenticationRequired
                       value: DisabledForLocalAddresses
                   register: arr_config
-                - name: Restart {{ container_service_name }} # noqa: no-handler
+                - name: Restart {{ application_name }} # noqa: no-handler
                   when: arr_config.changed
                   ansible.builtin.systemd:
-                    name: "{{ container_service_name }}"
+                    name: "{{ application_name }}"
                     scope: user
                     state: restarted
 
-        - name: Setup container with quadlet {{ container_service_name }}
+        - name: Setup container with quadlet {{ application_name }}
           block:
-            - name: Check if custom setup flow exists {{ container_service_name }}
+            - name: Check if custom setup flow exists {{ application_name }}
               delegate_to: localhost
               become: false
               ansible.builtin.stat:
-                path: roles/container/tasks/service/{{ container_service_name }}.yaml
+                path: roles/application/tasks/service/{{ application_name }}.yaml
               register: custom_flow
-            - name: Create container with custom flow {{ container_service_name }}
+            - name: Create container with custom flow {{ application_name }}
               when:
                 - custom_flow.stat.exists
-                - container_item.value.param.state == "started"
-                - container_item.value.param.postgres_action == "none"
+                - application_item.value.param.state == "started"
+                - application_item.value.param.postgres_action == "none"
               ansible.builtin.include_tasks:
-                file: service/{{ container_service_name }}.yaml
-            - name: Setup container {{ container_service_name }}
-              when: not custom_flow.stat.exists or container_item.value.param.state == "absent" or container_item.value.param.postgres_action != "none"
+                file: service/{{ application_name }}.yaml
+            - name: Setup container {{ application_name }}
+              when: not custom_flow.stat.exists or application_item.value.param.state == "absent" or application_item.value.param.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_quadlet.yaml
-            - name: Setup postgres {{ container_service_name }}
-              when: container_item.value.param.postgres_action != "none"
+            - name: Setup postgres {{ application_name }}
+              when: application_item.value.param.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_postgres.yaml
