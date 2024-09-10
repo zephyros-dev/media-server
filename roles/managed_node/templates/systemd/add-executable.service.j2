@@ -2,7 +2,7 @@
 Description=Add executable permission for exe file in storage
 
 [Service]
-WorkingDirectory={{ executable_location }}
+WorkingDirectory={{ global_media }}
 ExecStart=find ./ -name "*.exe" -exec chmod u+x {} \;
 RemainAfterExit=true
 Type=oneshot

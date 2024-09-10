@@ -2,7 +2,7 @@
   vars:
     application_name: "{{ application_item.key | regex_replace('_', '-') }}"
   when:
-    - not application_item.value.param.dashy_only
+    - application_item.value.param.dashy_show
     - not application_item.value.param.caddy_proxy_url is defined
   tags:
     - "{{ application_item.key }}"

@@ -11,7 +11,25 @@ import (
 
 _fact_embed: _ @embed(file="tmp/fact.json")
 // Type check for fact
-_fact: _fact_embed & {}
+_fact: _fact_embed & {
+	disks: {
+		storage?: {
+			fs_type: string | *"btrfs"
+			disks_list: [...string]
+		}
+		parity?: {
+			fs_type: string | *"ext4"
+			disks_list: [...string]
+		}
+	}
+
+	//  Root volume folder
+	global_volume_path: string
+	// Media folder, shared among Jellyfin, Pymedusa, Radarr, bazarr for hardlink
+	global_media: string
+	// Global folder for manual download file
+	global_download: string
+}
 
 _profile: {
 	lsio: {
@@ -44,7 +62,7 @@ application: [applicationName=string]: {
 		}]
 		caddy_sso:                     *false | bool
 		dashy_icon?:                   string
-		dashy_only:                    *false | bool
+		dashy_show:                    *true | bool // Show service endpoint in dashy
 		dashy_statusCheckAcceptCodes?: int32 | >99 | <600
 		host_network:                  *false | bool
 		kind:                          *"kube" | "container"
@@ -292,7 +310,6 @@ application: {
 		_
 		param: {
 			caddy_proxy_url:              "http://calibre:8081"
-			dashy_only:                   true
 			dashy_icon:                   "/favicon.png"
 			dashy_statusCheckAcceptCodes: 401
 		}
@@ -333,7 +350,6 @@ application: {
 		_
 		param: {
 			caddy_proxy_url: "https://\(_fact.caddyfile_host_address):9090"
-			dashy_only:      true
 		}
 	}
 
@@ -343,6 +359,7 @@ application: {
 		param: {
 			caddy_proxy_port: 8080
 			caddy_sso:        true
+			dashy_show:       false
 			secret: {
 				"conf.yml": {
 					type: "file"
@@ -357,7 +374,7 @@ application: {
 							name: "All"
 							items: [
 								for k, v in application
-								if (v.param.dashy_only || v.param.caddy_proxy_port != _|_) && k != "dashy" {
+								if v.param.dashy_show {
 									_url_key:    strings.Replace(k, "_", "-", -1)
 									_url_public: string | *"https://\(_url_key).\(_fact.server_domain)"
 									if v.param.state == "started" {
@@ -375,7 +392,7 @@ application: {
 										}
 										if v.param.caddy_sso {
 											statusCheckAllowInsecure: true
-											if v.param.caddy_proxy_url == _|_ {
+											if v.param.caddy_proxy_port != _|_ {
 												if v.param.host_network {
 													statusCheckUrl: "http://\(_fact.caddyfile_host_address):\(v.param.caddy_proxy_port)"
 												}
@@ -881,7 +898,7 @@ application: {
 		param: {
 			caddy_proxy_port:             19999
 			host_network:                 true
-			dashy_only:                   true
+			dashy_show:                   true
 			dashy_statusCheckAcceptCodes: 401
 			state:                        _fact.netdata_state
 		}
@@ -1020,6 +1037,7 @@ application: {
 		_
 		param: {
 			caddy_proxy_url: "http://nextcloud:9980"
+			dashy_show:      false
 		}
 	}
 
@@ -1289,7 +1307,7 @@ application: {
 		param: {
 			become:           true
 			caddy_sso:        true
-			caddy_proxy_port: _fact.scrutiny_port
+			caddy_proxy_port: scrutiny_port
 			host_network:     true
 			volumes: {
 				udev:   "/run/udev/"
@@ -1315,7 +1333,7 @@ application: {
 				image: "scrutiny"
 				ports: [{
 					containerPort: 8080
-					hostPort:      _fact.scrutiny_port
+					hostPort:      scrutiny_port
 				}]
 				volumeMounts: [{
 					name:      "udev"
@@ -1559,6 +1577,23 @@ application: {
 		}
 	}
 }
+
+restic_backup_path: _fact.global_volume_path
+restic_env: {
+	B2_ACCOUNT_ID:     _fact.restic_b2_account_id
+	B2_ACCOUNT_KEY:    _fact.restic_b2_account_key
+	BACKUP_PATHS:      restic_backup_path
+	RESTIC_PASSWORD:   _fact.restic_password
+	RESTIC_REPOSITORY: "\(_fact.restic_repository)\(restic_backup_path)"
+	EXCLUDE_FILE:      "/etc/restic/exclude"
+	RETENTION_MONTHS:  1
+	RETENTION_WEEKS:   1
+	RETENTION_DAYS:    1
+	RESTIC_CACHE_DIR:  "/etc/restic/cache"
+}
+restic_env_path: "/etc/restic/restic.env"
+
+scrutiny_port: 18080
 
 snapper_configs: [
 	for disk in _fact.disks.storage.disks_list {

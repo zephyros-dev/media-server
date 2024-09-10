@@ -1,9 +1,0 @@
-disks:
-  storage:
-    fs_type: btrfs
-    disks_list:
-      - disk-id
-  parity:
-    fs_type: ext4
-    disks_list:
-      - disk-id
