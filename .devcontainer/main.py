@@ -76,7 +76,7 @@ def dependency_setup():
 
     if not (home_path / ".config/aquaproj-aqua/config.yaml").is_symlink():
         Path(home_path / ".config/aquaproj-aqua/config.yaml").symlink_to(
-            Path(os.getcwd() / profile_map[args.profile]["aqua_dep_path"])
+            Path(os.getcwd()) / profile_map[args.profile]["aqua_dep_path"]
         )
 
     subprocess.run("aqua install --all", shell=True)
