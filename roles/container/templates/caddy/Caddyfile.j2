@@ -52,26 +52,26 @@ auth.{{ server_domain }} {
   # header_down Cross-Origin-Resource-Policy "cross-origin"
 }
 {% for key,value in container | dictsort %}
-  {% if value.state == 'started' %}
-    {% if value.caddy_proxy_port > 0 or value.caddy_proxy_url != "" %}
+  {% if value.param.state == 'started' %}
+    {% if value.param.caddy_proxy_port is defined or value.param.caddy_proxy_url is defined %}
       {% set name = key | replace("_", "-") %}
 {{ name }}.{{ server_domain }} {
   import global-config
-      {% if value.caddy_sso %}
+      {% if value.param.caddy_sso %}
   import proxy-auth
       {% endif %}
-      {% if value.caddy_rewrite %}
-        {% for rule in value.caddy_rewrite %}
+      {% if value.param.caddy_rewrite is defined %}
+        {% for rule in value.param.caddy_rewrite %}
   rewrite {{ rule.src }} {{ rule.dest }}
         {% endfor %}
       {% endif %}
-      {% if value.host_network %}
+      {% if value.param.host_network %}
       {# Use ~ instead of + to auto convert int port to string #}
-        {% set reverse_proxy = caddyfile_host_address ~ ":" ~ value.caddy_proxy_port %}
-      {% elif value.caddy_proxy_url != "" %}
-        {% set reverse_proxy = value.caddy_proxy_url %}
+        {% set reverse_proxy = caddyfile_host_address ~ ":" ~ value.param.caddy_proxy_port %}
+      {% elif value.param.caddy_proxy_url is defined %}
+        {% set reverse_proxy = value.param.caddy_proxy_url %}
       {% else %}
-        {% set reverse_proxy = name ~ ":" ~ value.caddy_proxy_port %}
+        {% set reverse_proxy = name ~ ":" ~ value.param.caddy_proxy_port %}
       {% endif %}
   reverse_proxy {{ reverse_proxy }} {
     import security-header

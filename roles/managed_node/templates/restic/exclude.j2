@@ -1,1 +1,1 @@
-{{ global_volume_path }}/nextcloud/{{ container.nextcloud.volumes.storage | regex_replace('\\./', '') }}
+{{ container.nextcloud.transform.volumes.storage.value }}

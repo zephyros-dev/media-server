@@ -9,30 +9,7 @@ import (
 	core "k8s.io/api/core/v1"
 )
 
-// Type check for the container variables
-_fact_embed: _ @embed(file="tmp/fact.json")
-#container: {
-	become:           bool
-	caddy_proxy_port: int32
-	caddy_proxy_url:  string
-	caddy_rewrite: [...{
-		src:  string
-		dest: string
-	}]
-	caddy_sso:                    bool
-	dashy_icon:                   string
-	dashy_only:                   bool
-	dashy_statusCheckAcceptCodes: string
-	host_network:                 bool
-	kind:                         "kube" | "container"
-	quadlet_kube_options: [string]:  string
-	quadlet_build_options: [string]: string
-	postgres_action: "none" | "export" | "import" | "clean"
-	preserve_volume: bool
-	state:           "started" | "absent"
-	volumes: [string]: string
-}
-_fact: _fact_embed & {container: [string]: #container}
+_fact: _ @embed(file="tmp/fact.json")
 
 _profile: {
 	lsio: {
@@ -56,18 +33,47 @@ _profile: {
 
 application: [applicationName=string]: {
 	param: {
-		secret: {
-			string?: {
+		become:            *false | bool
+		caddy_proxy_port?: int32
+		caddy_proxy_url?:  string
+		caddy_rewrite?: [...{
+			src:  string
+			dest: string
+		}]
+		caddy_sso:                     *false | bool
+		dashy_icon?:                   string
+		dashy_only:                    *false | bool
+		dashy_statusCheckAcceptCodes?: int32 | >99 | <600
+		host_network:                  *false | bool
+		kind:                          *"kube" | "container"
+		quadlet_kube_options?: {
+			[string]: string
+		}
+		quadlet_build_options?: {
+			[string]: string
+		}
+		postgres_action: *"none" | "export" | "import" | "clean"
+		preserve_volume: *true | bool
+		state:           *"started" | "absent"
+		volumes?: {
+			[string]: string
+		}
+		secret?: {
+			[string]: {
 				type:    "file" | "env"
 				content: string
 			}
 		}
+	}
+
+	transform: {
 		volumes: [string]: {
 			type:  "pvc" | "file" | "absolutePathDir" | "relativePathDir"
 			value: string
 		}
 		volumes: {
-			for k, v in _fact.container[strings.Replace(applicationName, "-", "_", -1)].volumes {"\(k)": {
+			if param.volumes != _|_
+			for k, v in param.volumes {"\(k)": {
 				_volume_path: path.Join([_fact.global_volume_path, applicationName, path.Clean(v)])
 				if v == "pvc" {
 					type:  "pvc"
@@ -94,7 +100,7 @@ application: [applicationName=string]: {
 		}
 	}
 
-	#pod: core.#Pod & {
+	#pod: *null | core.#Pod & {
 		apiVersion: "v1"
 		kind:       "Pod"
 		metadata: {
@@ -102,7 +108,7 @@ application: [applicationName=string]: {
 			name: applicationName
 		}
 		spec: {
-			volumes: [for k, v in param.volumes {
+			volumes: [for k, v in transform.volumes {
 				name: k
 				if v.type == "pvc" {
 					persistentVolumeClaim: claimName: v.value
@@ -119,57 +125,73 @@ application: [applicationName=string]: {
 						type: "Directory"
 					}
 				}
-			}] + [for k, v in param.secret if v.type == "file" {
-				name: k
-				secret: {
-					secretName: applicationName
-					items: [{
-						key:  k
-						path: k
-					}]
-				}
-			}]
+			}] + [
+				if param.secret != _|_
+				for k, v in param.secret if v.type == "file" {
+					name: k
+					secret: {
+						secretName: applicationName
+						items: [{
+							key:  k
+							path: k
+						}]
+					}
+				}]
 		}
 	}
 
 	// Waiting for the function to check existence and concrete value
 	// https://github.com/cue-lang/cue/issues/943
 
-	#secret: core.#Secret & {
-		apiVersion: "v1"
-		kind:       "Secret"
-		metadata: {
-			name: applicationName
-		}
-		type: "Opaque"
-		stringData: {
-			for k, v in param.secret if v.type == "file" {
-				"\(k)": v.content
+	#secret: [
+		if param.secret != _|_ {
+			core.#Secret & {
+				apiVersion: "v1"
+				kind:       "Secret"
+				metadata: {
+					name: applicationName
+				}
+				type: "Opaque"
+				stringData: {
+					for k, v in param.secret if v.type == "file" {
+						"\(k)": v.content
+					}
+				} & {
+					for k, v in param.secret if v.type == "env" {
+						"\(k)": v.content
+					}
+				}
 			}
-		} & {
-			for k, v in param.secret if v.type == "env" {
-				"\(k)": v.content
-			}
-		}
-	}
+		},
+	]
 
-	#volume: [for k, v in param.volumes if v.type == "pvc" {
-		core.#PersistentVolumeClaim & {
-			apiVersion: "v1"
-			kind:       "PersistentVolumeClaim"
-			metadata: {
-				name: "\(applicationName)-\(k)"
+	#volume: [
+		for k, v in transform.volumes if v.type == "pvc" {
+			core.#PersistentVolumeClaim & {
+				apiVersion: "v1"
+				kind:       "PersistentVolumeClaim"
+				metadata: {
+					name: "\(applicationName)-\(k)"
+				}
 			}
-		}
-	}]
+		}]
 
 	// Have to use MarshalStream since cue export does not make stream yaml
-	manifest: yaml.MarshalStream([#pod, #secret] + #volume)
+	manifest: yaml.MarshalStream([#pod] + #secret + #volume)
 }
 
 application: {
 	audiobookshelf: {
 		_
+		param: {
+			caddy_proxy_port: 80
+			volumes: {
+				audiobooks: "\(_fact.global_storage)/Audiobooks/"
+				config:     "./config/"
+				metadata:   "./metadata/"
+				podcasts:   "\(_fact.global_storage)/Podcasts/"
+			}
+		}
 		#pod: _profile.rootless_userns & {
 			spec: containers: [{
 				name:  "web"
@@ -194,6 +216,14 @@ application: {
 
 	bazarr: {
 		_
+		param: {
+			caddy_proxy_port: 6767
+			caddy_sso:        true
+			volumes: {
+				config: "./web/config/"
+				home:   "\(_fact.global_media)/"
+			}
+		}
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -212,6 +242,11 @@ application: {
 	caddy: {
 		_
 		param: {
+			preserve_volume: true
+			volumes: {
+				config: "pvc"
+				data:   "pvc"
+			}
 			secret: {
 				Caddyfile: {
 					type:    "file"
@@ -251,8 +286,27 @@ application: {
 		}
 	}
 
+	calibre_content: {
+		_
+		param: {
+			caddy_proxy_url:              "http://calibre:8081"
+			dashy_only:                   true
+			dashy_icon:                   "/favicon.png"
+			dashy_statusCheckAcceptCodes: 401
+		}
+	}
+
 	calibre: {
 		_
+		param: {
+			caddy_proxy_port:             8080
+			caddy_sso:                    true
+			dashy_statusCheckAcceptCodes: 401
+			volumes: {
+				books:  "\(_fact.global_media)/Storage/Books/"
+				config: "./config/"
+			}
+		}
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -273,10 +327,20 @@ application: {
 		}
 	}
 
+	cockpit: {
+		_
+		param: {
+			caddy_proxy_url: "https://\(_fact.caddyfile_host_address):9090"
+			dashy_only:      true
+		}
+	}
+
 	// Already set to run as rootless in image build
 	dashy: {
 		_
 		param: {
+			caddy_proxy_port: 8080
+			caddy_sso:        true
 			secret: {
 				"conf.yml": {
 					type: "file"
@@ -290,42 +354,42 @@ application: {
 						sections: [{
 							name: "All"
 							items: [
-								for k, v in _fact.container
-								if (v.dashy_only || v.caddy_proxy_port > 0) && k != "dashy" {
+								for k, v in application
+								if (v.param.dashy_only || v.param.caddy_proxy_port != _|_) && k != "dashy" {
 									_url_key:    strings.Replace(k, "_", "-", -1)
 									_url_public: string | *"https://\(_url_key).\(_fact.server_domain)"
-									if v.state == "started" {
+									if v.param.state == "started" {
 										title: strings.ToTitle(_url_key)
-										if v.dashy_icon == "" {
+										if v.param.dashy_icon == _|_ {
 											icon: "hl-\(_url_key)"
 										}
-										if v.dashy_icon != "" {
-											if strings.HasPrefix(v.dashy_icon, "/") {
-												icon: "https://\(_url_key).\(_fact.server_domain)\(v.dashy_icon)"
+										if v.param.dashy_icon != _|_ {
+											if strings.HasPrefix(v.param.dashy_icon, "/") {
+												icon: "https://\(_url_key).\(_fact.server_domain)\(v.param.dashy_icon)"
 											}
-											if !strings.HasPrefix(v.dashy_icon, "/") {
-												icon: v.dashy_icon
+											if !strings.HasPrefix(v.param.dashy_icon, "/") {
+												icon: v.param.dashy_icon
 											}
 										}
-										if v.caddy_sso {
+										if v.param.caddy_sso {
 											statusCheckAllowInsecure: true
-											if v.caddy_proxy_url == "" {
-												if v.host_network {
-													statusCheckUrl: "http://\(_fact.caddyfile_host_address):\(v.caddy_proxy_port)"
+											if v.param.caddy_proxy_url == _|_ {
+												if v.param.host_network {
+													statusCheckUrl: "http://\(_fact.caddyfile_host_address):\(v.param.caddy_proxy_port)"
 												}
-												if !v.host_network {
-													statusCheckUrl: "http://\(_url_key):\(v.caddy_proxy_port)"
+												if !v.param.host_network {
+													statusCheckUrl: "http://\(_url_key):\(v.param.caddy_proxy_port)"
 												}
 											}
-											if v.caddy_proxy_url != "" {
-												statusCheckUrl: v.caddy_proxy_url
+											if v.param.caddy_proxy_url != _|_ {
+												statusCheckUrl: v.param.caddy_proxy_url
 											}
 										}
-										if !v.caddy_sso {
+										if !v.param.caddy_sso {
 											statusCheckUrl: _url_public
 										}
-										if v.dashy_statusCheckAcceptCodes != "" {
-											statusCheckAcceptCodes: v.dashy_statusCheckAcceptCodes
+										if v.param.dashy_statusCheckAcceptCodes != _|_ {
+											statusCheckAcceptCodes: v.param.dashy_statusCheckAcceptCodes
 										}
 										url: _url_public
 									}
@@ -352,6 +416,12 @@ application: {
 	ddns: {
 		_
 		param: {
+			preserve_volume: true
+			quadlet_kube_options: Network: "pasta" // Use pasta network instead of host since it can preserve the IP address from the host machine
+			volumes: {
+				config: "pvc"
+				data:   "pvc"
+			}
 			secret: {
 				Caddyfile: {
 					type:    "file"
@@ -392,6 +462,13 @@ application: {
 
 	filebrowser: {
 		_
+		param: {
+			caddy_proxy_port: 80
+			volumes: {
+				"database.db": "./database.db"
+				srv:           "\(_fact.global_media)/"
+			}
+		}
 		#pod: _profile.rootless_userns & {
 			spec: containers: [{
 				name:  "web"
@@ -420,6 +497,13 @@ application: {
 	immich: {
 		_
 		param: {
+			caddy_proxy_port: 3001
+			volumes: {
+				database:   "./database/"
+				"ml-cache": "pvc"
+				redis:      "pvc"
+				upload:     "\(_fact.global_media)/Storage/Picture/Immich/"
+			}
 			secret: {
 				database_password: {
 					type:    "env"
@@ -453,7 +537,7 @@ application: {
 					name:      "database"
 					mountPath: "/var/lib/postgresql/data:U,z"
 				}]
-			}] + [if _fact.container.immich.postgres_action == "none" for v in [{
+			}] + [if param.postgres_action == "none" for v in [{
 				name:  "redis"
 				image: "immich-redis"
 				volumeMounts: [{
@@ -553,10 +637,29 @@ application: {
 	// Placeholder for getting volume list
 	jellyfin: {
 		_
+		param: {
+			caddy_proxy_port: 8096
+			// This is a hack so we can migrate the folder fields to volumes
+			// Once podman support mounting nvidia gpu in quadlet kubernetes we can remove this
+			// https://github.com/containers/podman/issues/17833
+			kind: "container"
+			volumes: {
+				cache:  "./cache/"
+				config: "./config/"
+				media:  "\(_fact.global_media)/"
+			}
+		}
 	}
 
 	jdownloader: {
 		_
+		param: {
+			caddy_proxy_port: 5800
+			volumes: {
+				config: "./config/"
+				output: "\(_fact.global_download)/"
+			}
+		}
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -583,6 +686,17 @@ application: {
 
 	kavita: {
 		_
+		param: {
+			caddy_proxy_port: 5000
+			caddy_rewrite: [{
+				src:  "/"
+				dest: "/login"
+			}]
+			volumes: {
+				config: "./data/"
+				home:   "\(_fact.global_media)/"
+			}
+		}
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -600,6 +714,15 @@ application: {
 
 	koreader: {
 		_
+		param: {
+			caddy_proxy_port:             3000
+			caddy_sso:                    true
+			dashy_statusCheckAcceptCodes: 401
+			dashy_icon:                   "/favicon.ico"
+			volumes: {
+				config: "./data/"
+			}
+		}
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -614,6 +737,7 @@ application: {
 
 	librespeed: {
 		_
+		param: caddy_proxy_port: 80
 		#pod: spec: containers: [{
 			name:  "web"
 			image: "librespeed"
@@ -622,6 +746,14 @@ application: {
 
 	lidarr: {
 		_
+		param: {
+			caddy_proxy_port: 8686
+			caddy_sso:        true
+			volumes: {
+				config: "./web/config/"
+				home:   "\(_fact.global_media)/"
+			}
+		}
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -640,6 +772,10 @@ application: {
 	miniflux: {
 		_
 		param: {
+			caddy_proxy_port: 8080
+			volumes: {
+				database: "./database/"
+			}
 			secret: {
 				miniflux_postgres_password: {
 					type:    "env"
@@ -673,7 +809,7 @@ application: {
 					name:      "database"
 					mountPath: "/var/lib/postgresql/data:U,z"
 				}]
-			}] + [if _fact.container.miniflux.postgres_action == "none" for v in [{
+			}] + [if param.postgres_action == "none" for v in [{
 				name:  "web"
 				image: "miniflux"
 				env: [{
@@ -704,6 +840,13 @@ application: {
 
 	navidrome: {
 		_
+		param: {
+			caddy_proxy_port: 4533
+			volumes: {
+				data:  "./data/"
+				music: "\(_fact.global_media)/Download/torrent/complete/Music/"
+			}
+		}
 		#pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
@@ -731,9 +874,27 @@ application: {
 			}]}
 	}
 
+	netdata: {
+		_
+		param: {
+			caddy_proxy_port:             19999
+			host_network:                 true
+			dashy_only:                   true
+			dashy_statusCheckAcceptCodes: 401
+			state:                        _fact.netdata_state
+		}
+	}
+
 	nextcloud: {
 		_
 		param: {
+			caddy_proxy_port: 80
+			volumes: {
+				data:     "./web/data/"
+				database: "./db/data/"
+				redis:    "pvc"
+				storage:  "./web/storage/"
+			}
 			secret: {
 				postgres_password: {
 					type:    "env"
@@ -772,7 +933,7 @@ application: {
 					name:      "database"
 					mountPath: "/var/lib/postgresql/data:U,z"
 				}]
-			}] + [if _fact.container.nextcloud.postgres_action == "none" for v in [{
+			}] + [if param.postgres_action == "none" for v in [{
 				name:  "web"
 				image: "nextcloud"
 				securityContext: {
@@ -853,9 +1014,26 @@ application: {
 		}
 	}
 
+	nextcloud_office: {
+		_
+		param: {
+			caddy_proxy_url: "http://nextcloud:9980"
+		}
+	}
+
 	paperless: {
 		_
 		param: {
+			caddy_proxy_port: 8000
+			quadlet_build_options: PodmanArgs: "--build-arg=INSTALL_LANGUAGE=\(_fact.paperless_ocr_languages)"
+			volumes: {
+				consume:  "./webserver/consume/"
+				data:     "./webserver/data/"
+				database: "./database/data/"
+				export:   "./webserver/export/"
+				media:    "./webserver/media/"
+				redis:    "pvc"
+			}
 			secret: {
 				paperless_dbpass: {
 					type:    "env"
@@ -897,7 +1075,7 @@ application: {
 					name:      "database"
 					mountPath: "/var/lib/postgresql/data:U,z"
 				}]
-			}] + [if _fact.container.paperless.postgres_action == "none" for v in [{
+			}] + [if param.postgres_action == "none" for v in [{
 				name:  "redis"
 				image: "paperless-redis"
 				volumeMounts: [{
@@ -984,6 +1162,11 @@ application: {
 
 	prowlarr: {
 		_
+		param: {
+			caddy_sso:        true
+			caddy_proxy_port: 9696
+			volumes: config: "./web/config/"
+		}
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -998,6 +1181,15 @@ application: {
 
 	pymedusa: {
 		_
+		param: {
+			caddy_sso:        true
+			caddy_proxy_port: 8081
+			dashy_icon:       "favicon-local"
+			volumes: {
+				config: "./web/config/"
+				home:   "\(_fact.global_media)/"
+			}
+		}
 		#pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
@@ -1015,6 +1207,14 @@ application: {
 
 	radarr: {
 		_
+		param: {
+			caddy_sso:        true
+			caddy_proxy_port: 7878
+			volumes: {
+				config: "./web/config/"
+				home:   "\(_fact.global_media)/"
+			}
+		}
 		#pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
@@ -1033,6 +1233,10 @@ application: {
 	samba: {
 		_
 		param: {
+			quadlet_kube_options: Network: "pasta"
+			volumes: {
+				storage: "\(_fact.global_storage)/"
+			}
 			secret: {
 				"ACCOUNT_\(_fact.ansible_user)": {
 					type:    "env"
@@ -1071,15 +1275,6 @@ application: {
 						key:  "ACCOUNT_\(_fact.ansible_user)"
 					}}]
 				volumeMounts: [{
-					name:      "home"
-					mountPath: "/shares/home"
-				}, {
-					name:      "disk"
-					mountPath: "/shares/disk"
-				}, {
-					name:      "disks"
-					mountPath: "/shares/disks"
-				}, {
 					name:      "storage"
 					mountPath: "/shares/storage"
 				}]
@@ -1090,6 +1285,14 @@ application: {
 	scrutiny: {
 		_
 		param: {
+			become:           true
+			caddy_sso:        true
+			caddy_proxy_port: _fact.scrutiny_port
+			host_network:     true
+			volumes: {
+				udev:   "/run/udev/"
+				device: "/dev/"
+			}
 			secret: {
 				"scrutiny.yaml": {
 					type: "file"
@@ -1135,6 +1338,12 @@ application: {
 	speedtest: {
 		_
 		param: {
+			caddy_proxy_port: 80
+			dashy_icon:       "favicon-local"
+			volumes: {
+				config: "./config/"
+				db:     "./db/data/"
+			}
 			secret: {
 				speedtest_app_key: {
 					type:    "env"
@@ -1176,10 +1385,18 @@ application: {
 
 	syncthing: {
 		_
-
-		param: volumes: koreader: {
+		param: {
+			caddy_proxy_port: 8384
+			caddy_sso:        true
+			host_network:     true
+			quadlet_kube_options: Network: "pasta"
+			volumes: {
+				data: "./"
+			}
+		}
+		transform: volumes: koreader: {
 			type: "absolutePathDir"
-			value: path.Join([application.koreader.param.volumes.config.value, "book"])
+			value: path.Join([application.koreader.transform.volumes.config.value, "book"])
 		}
 		#pod: _profile.userns_share & {
 			spec: containers: [{
@@ -1216,6 +1433,12 @@ application: {
 	transmission: {
 		_
 		param: {
+			caddy_proxy_port:             9091
+			dashy_statusCheckAcceptCodes: 401
+			volumes: {
+				home:   "\(_fact.global_media)/"
+				config: "./web/config/"
+			}
 			secret: {
 				USER: {
 					type:    "env"
@@ -1265,6 +1488,12 @@ application: {
 
 	trilium: {
 		_
+		param: {
+			caddy_proxy_port: 8080
+			volumes: {
+				data: "./data/"
+			}
+		}
 		#pod: {
 			metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=1000,gid=1000"
 			spec: containers: [{
@@ -1285,6 +1514,10 @@ application: {
 	wol: {
 		_
 		param: {
+			caddy_proxy_port: 8089
+			caddy_sso:        true
+			dashy_icon:       "mdi-desktop-classic"
+			host_network:     true
 			secret: {
 				WOLWEBBCASTIP: {
 					type:    "env"

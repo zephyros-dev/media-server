@@ -1,17 +1,6 @@
 - name: Setup container
   tags: container
   block:
-    - name: Export all container manifest
-      delegate_to: localhost
-      changed_when: false
-      environment:
-        CUE_EXPERIMENT: embed
-      ansible.builtin.command:
-        chdir: cue
-        cmd: cue export application.cue --out json
-      register: container_manifest
-      tags: always
-
     - name: Run podman container with systemd
       ansible.builtin.include_tasks:
         file: container.yaml

@@ -1,9 +1,12 @@
+#jinja2:lstrip_blocks: True
 [Build]
 ImageTag={{ item.path | basename }}
 SetWorkingDirectory=./{{ container_service_name }}/{{ item.path | basename }}
-{% for key,value in container_item.value.quadlet_build_options | dictsort %}
+{% if container_item.value.param.quadlet_build_options is defined %}
+{% for key,value in container_item.value.param.quadlet_build_options | dictsort %}
 {{ key }}={{ value }}
 {% endfor %}
+{% endif %}
 [Unit]
 {# This restart the image build when the kube service is restarted, which apply the new image if exists #}
 BindsTo={{ container_service_name }}.service

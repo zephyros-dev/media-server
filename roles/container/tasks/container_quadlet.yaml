@@ -1,5 +1,5 @@
 - name: Create service {{ container_service_name }}
-  when: container_item.value.state == "started"
+  when: container_item.value.param.state == "started"
   module_defaults:
     ansible.builtin.copy:
       mode: "0600"
@@ -77,7 +77,7 @@
         image_changed: "{{ image_build_service_state.changed or image_containerfile_state.changed }}"
       block:
         - name: Create kube service {{ container_service_name }}
-          when: container_item.value.kind == "kube"
+          when: container_item.value.param.kind == "kube"
           block:
             - name: Setup kube deployment {{ container_service_name }}
               block:
@@ -85,7 +85,7 @@
                   vars:
                     manifest_query: application.{{ container_service_name }}.manifest
                   ansible.builtin.copy:
-                    content: "{{ container_manifest.stdout | from_json | json_query(manifest_query) }}"
+                    content: "{{ application_facts.stdout | from_json | json_query(manifest_query) }}"
                     dest: "{{ container_quadlet_path }}/{{ container_service_name }}/deployment.yaml"
                   register: kube_file_yaml
                 - name: Create kube quadlet file {{ container_service_name }} # noqa: risky-file-permissions
@@ -110,10 +110,10 @@
                       poll: 0
 
         - name: Create container service {{ container_service_name }}
-          when: container_item.value.kind == "container"
+          when: container_item.value.param.kind == "container"
           block:
             - name: Register volumes variables {{ container_service_name }}
-              when: container_item.value.volumes != {}
+              when: container_item.value.param.volumes is defined
               ansible.builtin.set_fact:
                 "{{ container_service_name }}_volume_{{ item.key }}": "{{ item.value.value }}"
               loop: "{{ volume_map | dict2items }}"
@@ -137,7 +137,7 @@
               poll: 0
 
 - name: Remove service {{ container_service_name }}
-  when: container_item.value.state == "absent"
+  when: container_item.value.param.state == "absent"
   module_defaults:
     ansible.builtin.systemd:
       name: "{{ container_service_name }}"

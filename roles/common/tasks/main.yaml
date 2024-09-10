@@ -1,6 +1,9 @@
 - name: Generate facts for container
   delegate_to: localhost
   tags: always
+  module_defaults:
+    ansible.builtin.command:
+      chdir: cue
   block:
     - name: Create tmp cue folder
       ansible.builtin.file:
@@ -9,7 +12,33 @@
         mode: "0755"
     - name: Export facts to file
       changed_when: false
+      vars:
+        caddyfile_content: ""
       ansible.builtin.copy:
         content: "{{ lookup('vars', 'vars') | to_nice_json }}"
         mode: "0644"
         dest: cue/tmp/fact.json
+    - name: Get container cue facts
+      changed_when: false
+      ansible.builtin.command:
+        cmd: cue export application.cue --out json
+      register: application_facts
+    - name: Get caddyfile content
+      vars:
+        container: "{{ application_facts.stdout | from_json | json_query('application') }}"
+      ansible.builtin.set_fact:
+        caddyfile_content: "{{ lookup('ansible.builtin.template', 'roles/container/templates/caddy/Caddyfile.j2') }}"
+    - name: Export facts to file
+      changed_when: false
+      ansible.builtin.copy:
+        content: "{{ lookup('vars', 'vars') | to_nice_json }}"
+        mode: "0644"
+        dest: cue/tmp/fact.json
+    - name: Get container fact with caddyfile content
+      changed_when: false
+      ansible.builtin.command:
+        cmd: cue export application.cue --out json
+      register: application_facts
+    - name: Set container facts
+      ansible.builtin.set_fact:
+        container: "{{ application_facts.stdout | from_json | json_query('application') }}"

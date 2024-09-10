@@ -1,9 +1,12 @@
+#jinja2:lstrip_blocks: True
 [Kube]
 Yaml=./{{ container_service_name }}/deployment.yaml
 SetWorkingDirectory=yaml
-{% for key,value in container_item.value.quadlet_kube_options | dictsort %}
+{% if container_item.value.param.quadlet_kube_options is defined %}
+{% for key,value in container_item.value.param.quadlet_kube_options | dictsort %}
 {{ key }}={{ value }}
 {% endfor %}
+{% endif %}
 [Service]
 {# Extend Timeout to allow time to pull the image #}
 TimeoutStartSec=1800

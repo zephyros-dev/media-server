@@ -2,8 +2,8 @@
   vars:
     container_service_name: "{{ container_item.key | regex_replace('_', '-') }}"
   when:
-    - not container_item.value.dashy_only
-    - container_item.value.caddy_proxy_url == ""
+    - not container_item.value.param.dashy_only
+    - not container_item.value.param.caddy_proxy_url is defined
   tags:
     - "{{ container_item.key }}"
   block:
@@ -11,30 +11,30 @@
       ansible.builtin.set_fact:
         container_quadlet_path: "{{ ansible_user_dir }}/.config/containers/systemd"
         container_systemd_scope: user
-      when: not container_item.value.become
+      when: not container_item.value.param.become
 
     - name: Setup variable for system scope {{ container_service_name }}
       ansible.builtin.set_fact:
         container_quadlet_path: /etc/containers/systemd
         container_systemd_scope: system
-      when: container_item.value.become
+      when: container_item.value.param.become
 
     - name: Setup systemd container {{ container_service_name }}
-      become: "{{ container_item.value.become }}"
+      become: "{{ container_item.value.param.become }}"
       block:
         - name: Setup podman container {{ container_service_name }}
-          when: container_item.value.state == "started"
+          when: container_item.value.param.state == "started"
           block:
             - name: Setup volumes {{ container_service_name }}
-              when: container_item.value.volumes != {}
+              when: container_item.value.param.volumes is defined
               block:
                 - name: Get volume list for {{ container_service_name }}
                   # We have to use set_fact since vars make the tasks unable to be skipped
                   ansible.builtin.set_fact:
-                    volume_list: "{{ container_manifest.stdout | from_json | json_query(volume_list_query) }}"
-                    volume_map: "{{ container_manifest.stdout | from_json | json_query(volume_map_query) }}"
+                    volume_list: "{{ application_facts.stdout | from_json | json_query(volume_list_query) }}"
+                    volume_map: "{{ application_facts.stdout | from_json | json_query(volume_map_query) }}"
                   vars:
-                    volume_map_query: application.{{ container_item.key }}.param.volumes
+                    volume_map_query: application.{{ container_item.key }}.transform.volumes
                     volume_list_query: "{{ volume_map_query }}.*"
                 - name: Check if volume exists {{ container_service_name }}
                   when: "'/dev/' not in item"
@@ -95,15 +95,15 @@
             - name: Create container with custom flow {{ container_service_name }}
               when:
                 - custom_flow.stat.exists
-                - container_item.value.state == "started"
-                - container_item.value.postgres_action == "none"
+                - container_item.value.param.state == "started"
+                - container_item.value.param.postgres_action == "none"
               ansible.builtin.include_tasks:
                 file: service/{{ container_service_name }}.yaml
             - name: Setup container {{ container_service_name }}
-              when: not custom_flow.stat.exists or container_item.value.state == "absent" or container_item.value.postgres_action != "none"
+              when: not custom_flow.stat.exists or container_item.value.param.state == "absent" or container_item.value.param.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_quadlet.yaml
             - name: Setup postgres {{ container_service_name }}
-              when: container_item.value.postgres_action != "none"
+              when: container_item.value.param.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_postgres.yaml
