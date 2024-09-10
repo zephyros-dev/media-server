@@ -22,11 +22,11 @@
     - name: Get container cue facts
       changed_when: false
       ansible.builtin.command:
-        cmd: cue export application.cue --out json
-      register: application_facts
+        cmd: cue export fact.cue --out json
+      register: cue_facts
     - name: Get caddyfile content
       vars:
-        container: "{{ application_facts.stdout | from_json | json_query('application') }}"
+        container: "{{ cue_facts.stdout | from_json | json_query('application') }}"
       ansible.builtin.set_fact:
         caddyfile_content: "{{ lookup('ansible.builtin.template', 'roles/container/templates/caddy/Caddyfile.j2') }}"
     - name: Export facts to file # noqa: args[module], risky-file-permissions
@@ -36,8 +36,8 @@
     - name: Get container fact with caddyfile content
       changed_when: false
       ansible.builtin.command:
-        cmd: cue export application.cue --out json
-      register: application_facts
+        cmd: cue export fact.cue --out json
+      register: cue_facts
     - name: Set container facts
       ansible.builtin.set_fact:
-        container: "{{ application_facts.stdout | from_json | json_query('application') }}"
+        container: "{{ cue_facts.stdout | from_json | json_query('application') }}"

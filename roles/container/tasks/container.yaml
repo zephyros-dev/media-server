@@ -31,10 +31,10 @@
                 - name: Get volume list for {{ container_service_name }}
                   # We have to use set_fact since vars make the tasks unable to be skipped
                   ansible.builtin.set_fact:
-                    volume_list: "{{ application_facts.stdout | from_json | json_query(volume_list_query) }}"
-                    volume_map: "{{ application_facts.stdout | from_json | json_query(volume_map_query) }}"
+                    volume_list: "{{ container | json_query(volume_list_query) }}"
+                    volume_map: "{{ container | json_query(volume_map_query) }}"
                   vars:
-                    volume_map_query: application.{{ container_item.key }}.transform.volumes
+                    volume_map_query: "{{ container_item.key }}.transform.volumes"
                     volume_list_query: "{{ volume_map_query }}.*"
                 - name: Check if volume exists {{ container_service_name }}
                   when: "'/dev/' not in item"

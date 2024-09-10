@@ -83,9 +83,9 @@
               block:
                 - name: Create kube deployment {{ container_service_name }} # noqa: risky-file-permissions
                   vars:
-                    manifest_query: application.{{ container_service_name }}.manifest
+                    manifest_query: "{{ container_service_name }}.manifest"
                   ansible.builtin.copy:
-                    content: "{{ application_facts.stdout | from_json | json_query(manifest_query) }}"
+                    content: "{{ container | json_query(manifest_query) }}"
                     dest: "{{ container_quadlet_path }}/{{ container_service_name }}/deployment.yaml"
                   register: kube_file_yaml
                 - name: Create kube quadlet file {{ container_service_name }} # noqa: risky-file-permissions

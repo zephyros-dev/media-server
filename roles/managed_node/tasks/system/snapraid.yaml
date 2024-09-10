@@ -12,25 +12,12 @@
         src: snapraid/snapraid.conf.j2
         dest: /etc/snapraid.conf
         mode: "0644"
-    - name: Get snapper configuration
-      changed_when: false
-      delegate_to: localhost
-      become: false
-      environment:
-        CUE_EXPERIMENT: embed
-      ansible.builtin.command:
-        chdir: cue
-        cmd: cue export snapper.cue --out json
-      register: cue_snapper
-    - name: Set cue_snapper result
-      ansible.builtin.set_fact:
-        cue_snapper: "{{ cue_snapper.stdout | from_json }}"
     - name: Create snapper configuration list
       community.general.ini_file:
         path: /etc/sysconfig/snapper
         section: null
         option: SNAPPER_CONFIGS
-        value: '"{{ cue_snapper | json_query("snapper_configs[*].name") | join(" ") }}"'
+        value: '"{{ cue_facts.stdout | from_json | json_query("snapper_configs[*].name") | join(" ") }}"'
         mode: "0644"
         no_extra_spaces: true
     # https://github.com/openSUSE/snapper/issues/408#issuecomment-554719988
@@ -40,14 +27,14 @@
         mode: "0644"
         force: false
         state: file
-      loop: "{{ cue_snapper | json_query('snapper_configs[*].name') }}"
+      loop: "{{ cue_facts.stdout | from_json | json_query('snapper_configs[*].name') }}"
     - name: Configure snapper
       ansible.builtin.include_role:
         name: aisbergg.snapper
         apply:
           become: true
       vars:
-        snapper_configs: "{{ cue_snapper | json_query('snapper_configs') }}"
+        snapper_configs: "{{ cue_facts.stdout | from_json | json_query('snapper_configs') }}"
     - name: Setup snapraid-btrfs-runner
       tags: snapraid_runner
       vars:
