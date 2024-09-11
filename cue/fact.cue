@@ -14,11 +14,11 @@ _fact_embed: _ @embed(file="tmp/fact.json")
 _fact: _fact_embed & {
 	disks: {
 		storage?: {
-			fs_type: string | *"btrfs"
+			fs_type: *"btrfs" | string
 			disks_list: [...string]
 		}
 		parity?: {
-			fs_type: string | *"ext4"
+			fs_type: *"ext4" | string
 			disks_list: [...string]
 		}
 	}
@@ -120,7 +120,7 @@ application: [applicationName=string]: {
 		}
 	}
 
-	#pod: *null | core.#Pod & {
+	pod: *null | core.#Pod & {// The default value has to be null here since combining it with values that have the same type will cause the value to only exists with the later one
 		apiVersion: "v1"
 		kind:       "Pod"
 		metadata: {
@@ -197,7 +197,7 @@ application: [applicationName=string]: {
 		}]
 
 	// Have to use MarshalStream since cue export does not make stream yaml
-	manifest: yaml.MarshalStream([#pod] + #secret + #volume)
+	manifest: yaml.MarshalStream([pod] + #secret + #volume)
 }
 
 application: {
@@ -212,7 +212,7 @@ application: {
 				podcasts:   "\(_fact.global_storage)/Podcasts/"
 			}
 		}
-		#pod: _profile.rootless_userns & {
+		pod: _profile.rootless_userns & {
 			spec: containers: [{
 				name:  "web"
 				image: "audiobookshelf"
@@ -244,7 +244,7 @@ application: {
 				home:   "\(_fact.global_media)/"
 			}
 		}
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "bazarr"
@@ -262,6 +262,7 @@ application: {
 	caddy: {
 		_
 		param: {
+			dashy_show:      false
 			preserve_volume: true
 			volumes: {
 				config: "pvc"
@@ -274,7 +275,7 @@ application: {
 				}
 			}
 		}
-		#pod: _profile.rootless & {
+		pod: _profile.rootless & {
 			spec: containers: [{
 				name:  "instance"
 				image: "caddy"
@@ -326,7 +327,7 @@ application: {
 				config: "./config/"
 			}
 		}
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "calibre"
@@ -420,7 +421,7 @@ application: {
 			}
 		}
 
-		#pod: spec: containers: [{
+		pod: spec: containers: [{
 			name:  "web"
 			image: "dashy"
 			volumeMounts: [{
@@ -437,6 +438,7 @@ application: {
 		param: {
 			preserve_volume: true
 			quadlet_kube_options: Network: "pasta" // Use pasta network instead of host since it can preserve the IP address from the host machine
+			dashy_show: false
 			volumes: {
 				config: "pvc"
 				data:   "pvc"
@@ -459,7 +461,7 @@ application: {
 		}
 
 		// ddns has to be ran separately since caddy is ran inside a podman network, so it does not have the IP address of the host
-		#pod: _profile.rootless & {
+		pod: _profile.rootless & {
 			spec: containers: [{
 				name:  "instance"
 				image: "ddns"
@@ -488,7 +490,7 @@ application: {
 				srv:           "\(_fact.global_media)/"
 			}
 		}
-		#pod: _profile.rootless_userns & {
+		pod: _profile.rootless_userns & {
 			spec: containers: [{
 				name:  "web"
 				image: "filebrowser"
@@ -505,7 +507,8 @@ application: {
 
 	flaresolverr: {
 		_
-		#pod: _profile.rootless & {
+		param: dashy_show: false
+		pod: _profile.rootless & {
 			spec: containers: [{
 				name:  "web"
 				image: "flaresolverr"
@@ -535,7 +538,7 @@ application: {
 			}
 		}
 
-		#pod: _profile.rootless_userns & {
+		pod: _profile.rootless_userns & {
 			spec: containers: [{
 				name:  "postgres"
 				image: "immich-postgres"
@@ -679,7 +682,7 @@ application: {
 				output: "\(_fact.global_download)/"
 			}
 		}
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "jdownloader"
@@ -716,7 +719,7 @@ application: {
 				home:   "\(_fact.global_media)/"
 			}
 		}
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "kavita"
@@ -742,7 +745,7 @@ application: {
 				config: "./data/"
 			}
 		}
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "koreader"
@@ -757,7 +760,7 @@ application: {
 	librespeed: {
 		_
 		param: caddy_proxy_port: 80
-		#pod: spec: containers: [{
+		pod: spec: containers: [{
 			name:  "web"
 			image: "librespeed"
 		}]
@@ -773,7 +776,7 @@ application: {
 				home:   "\(_fact.global_media)/"
 			}
 		}
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "lidarr"
@@ -810,7 +813,7 @@ application: {
 				}
 			}
 		}
-		#pod: _profile.rootless_userns & {
+		pod: _profile.rootless_userns & {
 			spec: containers: [{
 				name:  "postgres"
 				image: "miniflux-postgres"
@@ -866,7 +869,7 @@ application: {
 				music: "\(_fact.global_media)/Download/torrent/complete/Music/"
 			}
 		}
-		#pod: _profile.userns_share & {
+		pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
 				image: "navidrome"
@@ -926,7 +929,7 @@ application: {
 			}
 		}
 
-		#pod: {
+		pod: {
 			metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=33,gid=33"
 			spec: containers: [{
 				name:  "postgres"
@@ -1074,7 +1077,7 @@ application: {
 			}
 		}
 
-		#pod: _profile.rootless_userns & {
+		pod: _profile.rootless_userns & {
 			spec: containers: [{
 				name:  "postgres"
 				image: "paperless-postgres"
@@ -1187,7 +1190,7 @@ application: {
 			caddy_proxy_port: 9696
 			volumes: config: "./web/config/"
 		}
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "prowlarr"
@@ -1210,7 +1213,7 @@ application: {
 				home:   "\(_fact.global_media)/"
 			}
 		}
-		#pod: _profile.userns_share & {
+		pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
 				image: "pymedusa"
@@ -1235,7 +1238,7 @@ application: {
 				home:   "\(_fact.global_media)/"
 			}
 		}
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "radarr"
@@ -1253,6 +1256,7 @@ application: {
 	samba: {
 		_
 		param: {
+			dashy_show: false
 			quadlet_kube_options: Network: "pasta"
 			volumes: {
 				storage: "\(_fact.global_storage)/"
@@ -1265,7 +1269,7 @@ application: {
 			}
 		}
 
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "instance"
 				image: "samba"
@@ -1327,7 +1331,7 @@ application: {
 			}
 		}
 
-		#pod: spec: {
+		pod: spec: {
 			containers: [{
 				name:  "web"
 				image: "scrutiny"
@@ -1372,7 +1376,7 @@ application: {
 			}
 		}
 
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "speedtest"
@@ -1418,7 +1422,7 @@ application: {
 			type: "absolutePathDir"
 			value: path.Join([application.koreader.transform.volumes.config.value, "book"])
 		}
-		#pod: _profile.userns_share & {
+		pod: _profile.userns_share & {
 			spec: containers: [{
 				name:  "web"
 				image: "syncthing"
@@ -1471,7 +1475,7 @@ application: {
 			}
 		}
 
-		#pod: _profile.lsio & {
+		pod: _profile.lsio & {
 			spec: containers: [{
 				name:  "web"
 				image: "transmission"
@@ -1514,7 +1518,7 @@ application: {
 				data: "./data/"
 			}
 		}
-		#pod: {
+		pod: {
 			metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=1000,gid=1000"
 			spec: containers: [{
 				name:  "web"
@@ -1550,7 +1554,7 @@ application: {
 			}
 		}
 
-		#pod: _profile.rootless & {
+		pod: _profile.rootless & {
 			spec: {
 				containers: [{
 					name:  "web"

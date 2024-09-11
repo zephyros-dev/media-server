@@ -33,5 +33,5 @@ netdata_state: started
 netdata_config:
   - section: web
     option: bind to
-    value: localhost:19999
+    value: server.lan:19999
     state: present

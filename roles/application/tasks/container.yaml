@@ -1,11 +1,10 @@
 - name: Setup systemd container {{ application_item.key }}
   vars:
     application_name: "{{ application_item.key | regex_replace('_', '-') }}"
-  when:
-    - application_item.value.param.dashy_show
-    - not application_item.value.param.caddy_proxy_url is defined
-  tags:
-    - "{{ application_item.key }}"
+    volume_list: []
+    volume_map: {}
+  when: application_item.value.pod != None
+  tags: "{{ application_item.key }}"
   block:
     - name: Setup variable for user scope {{ application_name }}
       ansible.builtin.set_fact:

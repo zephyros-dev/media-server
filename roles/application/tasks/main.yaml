@@ -6,8 +6,7 @@
         file: container.yaml
       args:
         apply:
-          tags:
-            - "{{ application_item.key }}"
+          tags: "{{ application_item.key }}"
       loop: "{{ application | dict2items }}"
       loop_control:
         loop_var: application_item
