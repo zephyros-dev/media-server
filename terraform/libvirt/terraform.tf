@@ -24,4 +24,6 @@ provider "libvirt" {
   # User need to be in the libvirt group
   # https://github.com/teemtee/tmt/issues/329
   uri = "qemu+ssh://${local.secret.user}@${local.secret.host_machine}/system"
+  # We use system instead of session because we want to use host network
+  # https://blog.wikichoon.com/2016/01/qemusystem-vs-qemusession.html
 }

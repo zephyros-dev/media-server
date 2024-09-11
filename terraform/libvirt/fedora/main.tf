@@ -1,3 +1,5 @@
+
+#region fedora-iot
 resource "libvirt_volume" "data" {
   count  = 2
   name   = "fedora-data-${count.index}"
@@ -33,15 +35,11 @@ resource "libvirt_domain" "this" {
 
   network_interface {
     bridge = "bridge0"
-    mac    = local.secret.mac_address
+    mac    = var.secret.mac_address
   }
 
   disk {
-    file = local.secret.iot_image_path
-  }
-
-  disk {
-    file = local.secret.server_image_path
+    file = var.secret.iot_image_path
   }
 
   disk {
@@ -73,3 +71,4 @@ resource "libvirt_domain" "this" {
     ]
   }
 }
+#endregion
