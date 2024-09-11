@@ -38,6 +38,14 @@ jobs:
           wg-quick up wg0 &> /dev/null
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+      - name: Test connection to server
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_on: error
+          command: ping -4 -c 5 server.lan
+          on_retry_command: wg-quick down wg0 && wg-quick up wg0 &> /dev/null
       - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5
         with:
           python-version: "3.12"
