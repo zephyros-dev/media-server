@@ -903,7 +903,6 @@ application: {
 			host_network:                 true
 			dashy_show:                   true
 			dashy_statusCheckAcceptCodes: 401
-			state:                        _fact.netdata_state
 		}
 	}
 

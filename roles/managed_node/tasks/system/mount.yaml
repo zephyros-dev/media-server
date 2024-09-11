@@ -15,6 +15,11 @@
         fstype: fuse.mergerfs
         opts: "{{ mergerfs_options | join(',') }}"
         state: mounted
+      vars:
+        mergerfs_options:
+          - cache.files=off
+          - category.create=mfs
+          - fsname=mergerfs
 
     - name: Mount parity disks
       ansible.posix.mount:

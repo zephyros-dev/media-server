@@ -1,5 +1,5 @@
 - name: Install Netdata
-  when: netdata_state == "started"
+  when: application.netdata.param.state == "started"
   block:
     - name: Setup netdata
       become: true
@@ -37,8 +37,12 @@
             option: "{{ item.option }}"
             value: "{{ item.value }}"
             state: "{{ item.state }}"
-          loop: "{{ netdata_config }}"
           notify: Restart Netdata
+          loop:
+            - section: web
+              option: bind to
+              value: server.lan:19999
+              state: present
 
         - name: Setup netdata folder
           ansible.builtin.file:
@@ -95,7 +99,7 @@
               notify: Restart Netdata
 
 - name: Uninstall netdata
-  when: netdata_state == "absent"
+  when: application.netdata.param.state == "absent"
   block:
     - name: Uninstall Netdata
       changed_when: false
