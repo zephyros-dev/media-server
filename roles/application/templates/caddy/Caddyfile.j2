@@ -53,7 +53,7 @@ auth.{{ server_domain }} {
 }
 {% for key,value in application | dictsort %}
   {% if value.param.state == 'started' %}
-    {% if value.param.caddy_proxy_port is defined or value.param.caddy_proxy_url is defined %}
+    {% if value.param.caddy_proxy is defined %}
       {% set name = key | replace("_", "-") %}
 {{ name }}.{{ server_domain }} {
   import global-config
@@ -65,22 +65,7 @@ auth.{{ server_domain }} {
   rewrite {{ rule.src }} {{ rule.dest }}
         {% endfor %}
       {% endif %}
-      {# Use ~ instead of + to auto convert int port to string #}
-      {% if value.param.caddy_proxy_url is defined %}
-        {% set reverse_proxy = value.param.caddy_proxy_url %}
-      {% elif value.param.caddy_proxy_port is defined %}
-        {% set _host_port_url = caddyfile_host_address ~ ":" ~ value.param.caddy_proxy_port %}
-        {% if value.pod == None or value.pod.spec.hostNetwork or value.param.become %}
-          {% set reverse_proxy = _host_port_url %}
-        {% elif value.param.quadlet_kube_options.Network is defined %}
-          {% if value.param.quadlet_kube_options.Network == 'pasta' %}
-            {% set reverse_proxy = caddyfile_host_address ~ ":" ~ value.param.caddy_proxy_port %}
-          {% endif %}
-        {% else %}
-          {% set reverse_proxy = name ~ ":" ~ value.param.caddy_proxy_port %}
-        {% endif %}
-      {% endif %}
-  reverse_proxy {{ reverse_proxy }} {
+  reverse_proxy {{ value.transform.caddy_proxy_url }} {
     import security-header
     {% if name == 'cockpit' %}
     transport http {

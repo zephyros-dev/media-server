@@ -4,8 +4,8 @@ package main
 import (
 	"encoding/json"
 	"encoding/yaml"
-	"strings"
 	"path"
+	"strings"
 	core "k8s.io/api/core/v1"
 )
 
@@ -53,9 +53,8 @@ _profile: {
 
 application: [applicationName=string]: {
 	param: {
-		become:            *false | bool
-		caddy_proxy_port?: int32
-		caddy_proxy_url?:  string
+		become:       *false | bool
+		caddy_proxy?: uint16 | string
 		caddy_rewrite?: [...{
 			src:  string
 			dest: string
@@ -63,7 +62,7 @@ application: [applicationName=string]: {
 		caddy_sso:                     *false | bool
 		dashy_icon?:                   string
 		dashy_show:                    *true | bool // Show service endpoint in dashy
-		dashy_statusCheckAcceptCodes?: int32 | >99 | <600
+		dashy_statusCheckAcceptCodes?: uint16 & >99 & <600
 		kind:                          *"kube" | "container"
 		quadlet_kube_options?: {
 			[string]: string
@@ -116,6 +115,31 @@ application: [applicationName=string]: {
 					value: _volume_path
 				}
 			}}
+		}
+		#caddy_proxy: {
+			in:        uint16
+			_host_url: "http://\(_fact.caddyfile_host_address):\(in)"
+			if pod == null || param.become {
+				out: _host_url
+			}
+			if pod != null {
+				if pod.spec.hostNetwork {
+					out: "http://\(_fact.caddyfile_host_address):\(in)"
+				}
+				if !param.become && !pod.spec.hostNetwork && param.quadlet_kube_options.Network == _|_ {
+					out: "http://\(applicationName):\(in)"
+				}
+			}
+			if param.quadlet_kube_options.Network != _|_
+			if param.quadlet_kube_options.Network == "pasta" {
+				out: _host_url
+			}
+		} | {
+			in:  string
+			out: in
+		}
+		if param.caddy_proxy != _|_ {
+			caddy_proxy_url: (#caddy_proxy & {in: param.caddy_proxy}).out
 		}
 	}
 
@@ -204,7 +228,7 @@ application: {
 	audiobookshelf: {
 		_
 		param: {
-			caddy_proxy_port: 80
+			caddy_proxy: 80
 			volumes: {
 				audiobooks: "\(_fact.global_storage)/Audiobooks/"
 				config:     "./config/"
@@ -237,8 +261,8 @@ application: {
 	bazarr: {
 		_
 		param: {
-			caddy_proxy_port: 6767
-			caddy_sso:        true
+			caddy_proxy: 6767
+			caddy_sso:   true
 			volumes: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
@@ -310,7 +334,7 @@ application: {
 	calibre_content: {
 		_
 		param: {
-			caddy_proxy_url:              "http://calibre:8081"
+			caddy_proxy:                  "http://calibre:8081"
 			dashy_icon:                   "/favicon.png"
 			dashy_statusCheckAcceptCodes: 401
 		}
@@ -319,7 +343,7 @@ application: {
 	calibre: {
 		_
 		param: {
-			caddy_proxy_port:             8080
+			caddy_proxy:                  8080
 			caddy_sso:                    true
 			dashy_statusCheckAcceptCodes: 401
 			volumes: {
@@ -350,7 +374,7 @@ application: {
 	cockpit: {
 		_
 		param: {
-			caddy_proxy_url: "https://\(_fact.caddyfile_host_address):9090"
+			caddy_proxy: "https://\(_fact.caddyfile_host_address):9090"
 		}
 	}
 
@@ -358,9 +382,9 @@ application: {
 	dashy: {
 		_
 		param: {
-			caddy_proxy_port: 8080
-			caddy_sso:        true
-			dashy_show:       false
+			caddy_proxy: 8080
+			caddy_sso:   true
+			dashy_show:  false
 			secret: {
 				"conf.yml": {
 					type: "file"
@@ -391,28 +415,14 @@ application: {
 												icon: v.param.dashy_icon
 											}
 										}
-										if v.param.caddy_sso {
-											statusCheckAllowInsecure: true
-											if v.param.caddy_proxy_port != _|_ {
-												_host_port_url: "http://\(_fact.caddyfile_host_address):\(v.param.caddy_proxy_port)"
-												if v.pod == null || v.pod.spec.hostNetwork || v.param.become {
-													statusCheckUrl: _host_port_url
-												}
-												if v.param.quadlet_kube_options.Network != _|_ {
-													if v.param.quadlet_kube_options.Network == "pasta" {
-														statusCheckUrl: _host_port_url
-													}
-												}
-												if !v.param.become && !v.pod.spec.hostNetwork && v.param.quadlet_kube_options.Network == _|_ {
-													statusCheckUrl: "http://\(_url_key):\(v.param.caddy_proxy_port)"
-												}
+										if v.param.caddy_proxy != _|_ {
+											if v.param.caddy_sso {
+												statusCheckAllowInsecure: true
+												statusCheckUrl:           v.transform.caddy_proxy_url
 											}
-											if v.param.caddy_proxy_url != _|_ {
-												statusCheckUrl: v.param.caddy_proxy_url
+											if !v.param.caddy_sso {
+												statusCheckUrl: _url_public
 											}
-										}
-										if !v.param.caddy_sso {
-											statusCheckUrl: _url_public
 										}
 										if v.param.dashy_statusCheckAcceptCodes != _|_ {
 											statusCheckAcceptCodes: v.param.dashy_statusCheckAcceptCodes
@@ -494,7 +504,7 @@ application: {
 	filebrowser: {
 		_
 		param: {
-			caddy_proxy_port: 80
+			caddy_proxy: 80
 			volumes: {
 				"database.db": "./database.db"
 				srv:           "\(_fact.global_media)/"
@@ -529,7 +539,7 @@ application: {
 	immich: {
 		_
 		param: {
-			caddy_proxy_port: 3001
+			caddy_proxy: 3001
 			volumes: {
 				database:   "./database/"
 				"ml-cache": "pvc"
@@ -670,7 +680,7 @@ application: {
 	jellyfin: {
 		_
 		param: {
-			caddy_proxy_url: "jellyfin:8096"
+			caddy_proxy: "jellyfin:8096"
 			// This is a hack so we can migrate the folder fields to volumes
 			// Once podman support mounting nvidia gpu in quadlet kubernetes we can remove this
 			// https://github.com/containers/podman/issues/17833
@@ -686,7 +696,7 @@ application: {
 	jdownloader: {
 		_
 		param: {
-			caddy_proxy_port: 5800
+			caddy_proxy: 5800
 			volumes: {
 				config: "./config/"
 				output: "\(_fact.global_download)/"
@@ -719,7 +729,7 @@ application: {
 	kavita: {
 		_
 		param: {
-			caddy_proxy_port: 5000
+			caddy_proxy: 5000
 			caddy_rewrite: [{
 				src:  "/"
 				dest: "/login"
@@ -747,7 +757,7 @@ application: {
 	koreader: {
 		_
 		param: {
-			caddy_proxy_port:             3000
+			caddy_proxy:                  3000
 			caddy_sso:                    true
 			dashy_statusCheckAcceptCodes: 401
 			dashy_icon:                   "/favicon.ico"
@@ -769,7 +779,7 @@ application: {
 
 	librespeed: {
 		_
-		param: caddy_proxy_port: 80
+		param: caddy_proxy: 80
 		pod: spec: containers: [{
 			name:  "web"
 			image: "librespeed"
@@ -779,8 +789,8 @@ application: {
 	lidarr: {
 		_
 		param: {
-			caddy_proxy_port: 8686
-			caddy_sso:        true
+			caddy_proxy: 8686
+			caddy_sso:   true
 			volumes: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
@@ -804,7 +814,7 @@ application: {
 	miniflux: {
 		_
 		param: {
-			caddy_proxy_port: 8080
+			caddy_proxy: 8080
 			volumes: {
 				database: "./database/"
 			}
@@ -873,7 +883,7 @@ application: {
 	navidrome: {
 		_
 		param: {
-			caddy_proxy_port: 4533
+			caddy_proxy: 4533
 			volumes: {
 				data:  "./data/"
 				music: "\(_fact.global_media)/Download/torrent/complete/Music/"
@@ -909,7 +919,7 @@ application: {
 	netdata: {
 		_
 		param: {
-			caddy_proxy_port:             19999
+			caddy_proxy:                  19999
 			dashy_show:                   true
 			dashy_statusCheckAcceptCodes: 401
 		}
@@ -918,7 +928,7 @@ application: {
 	nextcloud: {
 		_
 		param: {
-			caddy_proxy_port: 80
+			caddy_proxy: 80
 			volumes: {
 				data:     "./web/data/"
 				database: "./db/data/"
@@ -1044,15 +1054,15 @@ application: {
 	nextcloud_office: {
 		_
 		param: {
-			caddy_proxy_url: "http://nextcloud:9980"
-			dashy_show:      false
+			caddy_proxy: "http://nextcloud:9980"
+			dashy_show:  false
 		}
 	}
 
 	paperless: {
 		_
 		param: {
-			caddy_proxy_port: 8000
+			caddy_proxy: 8000
 			quadlet_build_options: PodmanArgs: "--build-arg=INSTALL_LANGUAGE=\(_fact.paperless_ocr_languages)"
 			volumes: {
 				consume:  "./webserver/consume/"
@@ -1191,8 +1201,8 @@ application: {
 	prowlarr: {
 		_
 		param: {
-			caddy_sso:        true
-			caddy_proxy_port: 9696
+			caddy_sso:   true
+			caddy_proxy: 9696
 			volumes: config: "./web/config/"
 		}
 		pod: _profile.lsio & {
@@ -1210,9 +1220,9 @@ application: {
 	pymedusa: {
 		_
 		param: {
-			caddy_sso:        true
-			caddy_proxy_port: 8081
-			dashy_icon:       "favicon-local"
+			caddy_sso:   true
+			caddy_proxy: 8081
+			dashy_icon:  "favicon-local"
 			volumes: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
@@ -1236,8 +1246,8 @@ application: {
 	radarr: {
 		_
 		param: {
-			caddy_sso:        true
-			caddy_proxy_port: 7878
+			caddy_sso:   true
+			caddy_proxy: 7878
 			volumes: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
@@ -1314,9 +1324,9 @@ application: {
 	scrutiny: {
 		_
 		param: {
-			become:           true
-			caddy_sso:        true
-			caddy_proxy_port: scrutiny_port
+			become:      true
+			caddy_sso:   true
+			caddy_proxy: scrutiny_port
 			volumes: {
 				udev:   "/run/udev/"
 				device: "/dev/"
@@ -1366,8 +1376,8 @@ application: {
 	speedtest: {
 		_
 		param: {
-			caddy_proxy_port: 80
-			dashy_icon:       "favicon-local"
+			caddy_proxy: 80
+			dashy_icon:  "favicon-local"
 			volumes: {
 				config: "./config/"
 				db:     "./db/data/"
@@ -1414,8 +1424,8 @@ application: {
 	syncthing: {
 		_
 		param: {
-			caddy_proxy_port: 8384
-			caddy_sso:        true
+			caddy_proxy: 8384
+			caddy_sso:   true
 			quadlet_kube_options: Network: "pasta"
 			volumes: {
 				data: "./"
@@ -1460,7 +1470,7 @@ application: {
 	transmission: {
 		_
 		param: {
-			caddy_proxy_port:             9091
+			caddy_proxy:                  9091
 			dashy_statusCheckAcceptCodes: 401
 			volumes: {
 				home:   "\(_fact.global_media)/"
@@ -1516,7 +1526,7 @@ application: {
 	trilium: {
 		_
 		param: {
-			caddy_proxy_port: 8080
+			caddy_proxy: 8080
 			volumes: {
 				data: "./data/"
 			}
@@ -1541,9 +1551,9 @@ application: {
 	wol: {
 		_
 		param: {
-			caddy_proxy_port: 8089
-			caddy_sso:        true
-			dashy_icon:       "mdi-desktop-classic"
+			caddy_proxy: 8089
+			caddy_sso:   true
+			dashy_icon:  "mdi-desktop-classic"
 			secret: {
 				WOLWEBBCASTIP: {
 					type:    "env"
