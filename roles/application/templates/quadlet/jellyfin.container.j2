@@ -1,6 +1,7 @@
 [Container]
 ContainerName=jellyfin
 Image=jellyfin
+UserNS=keep-id
 AddDevice=nvidia.com/gpu=all
 Volume={{ jellyfin_volume_cache }}:/cache:z
 Volume={{ jellyfin_volume_config }}:/config:z
