@@ -39,7 +39,7 @@ go_arch = go_arch_map[platform.machine()]
 
 profile_map = {
     "ci": {"aqua_dep_path": "ci/aqua.yaml"},
-    "devcontainer": {"aqua_dep_path": "aqua.yaml"},
+    "devcontainer": {"aqua_dep_path": ".devcontainer/aqua.yaml"},
 }
 
 
@@ -74,8 +74,8 @@ def dependency_setup():
 
     (Path(home_path) / ".config/aquaproj-aqua").mkdir(parents=True, exist_ok=True)
 
-    if not (home_path / ".config/aquaproj-aqua/config.yaml").is_symlink():
-        Path(home_path / ".config/aquaproj-aqua/config.yaml").symlink_to(
+    if not (home_path / ".config/aquaproj-aqua/aqua.yaml").is_symlink():
+        Path(home_path / ".config/aquaproj-aqua/aqua.yaml").symlink_to(
             Path(os.getcwd()) / profile_map[args.profile]["aqua_dep_path"]
         )
 
