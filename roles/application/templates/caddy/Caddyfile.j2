@@ -65,13 +65,20 @@ auth.{{ server_domain }} {
   rewrite {{ rule.src }} {{ rule.dest }}
         {% endfor %}
       {% endif %}
-      {% if value.param.host_network %}
       {# Use ~ instead of + to auto convert int port to string #}
-        {% set reverse_proxy = caddyfile_host_address ~ ":" ~ value.param.caddy_proxy_port %}
-      {% elif value.param.caddy_proxy_url is defined %}
+      {% if value.param.caddy_proxy_url is defined %}
         {% set reverse_proxy = value.param.caddy_proxy_url %}
-      {% else %}
-        {% set reverse_proxy = name ~ ":" ~ value.param.caddy_proxy_port %}
+      {% elif value.param.caddy_proxy_port is defined %}
+        {% set _host_port_url = caddyfile_host_address ~ ":" ~ value.param.caddy_proxy_port %}
+        {% if value.pod == None or value.pod.spec.hostNetwork or value.param.become %}
+          {% set reverse_proxy = _host_port_url %}
+        {% elif value.param.quadlet_kube_options.Network is defined %}
+          {% if value.param.quadlet_kube_options.Network == 'pasta' %}
+            {% set reverse_proxy = caddyfile_host_address ~ ":" ~ value.param.caddy_proxy_port %}
+          {% endif %}
+        {% else %}
+          {% set reverse_proxy = name ~ ":" ~ value.param.caddy_proxy_port %}
+        {% endif %}
       {% endif %}
   reverse_proxy {{ reverse_proxy }} {
     import security-header
@@ -86,8 +93,11 @@ auth.{{ server_domain }} {
   redir /.well-known/caldav /remote.php/caldav 301
       {% endif %}
       {% if name == 'cockpit' %}
-  tls me@outlook.com {
-    dns dynv6 {{ ddns_dynv6_token }}
+  tls {
+    dns porkbun {
+      api_key {{ porkbun_api_key }}
+      api_secret_key {{ porkbun_api_secret_key }}
+    }
   }
       {% endif %}
 }

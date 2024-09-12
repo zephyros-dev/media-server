@@ -9,9 +9,7 @@ global_storage_mergerfs_mkdir_paths:
     - ENC[AES256_GCM,data:Tv1cNfkHYPORYzLcsfn4A8DrHRzphgXlcbA2yGPxxx0=,iv:/RttRGdaobQXtKODGPMRrUp97IkV0NsUlwjZB8D7SVo=,tag:/wraXvnAR/7FXk4E1T2KUA==,type:str]
     - ENC[AES256_GCM,data:5hb/dJHiQ+CmTfTUCEp/IwVaRlrB70wuzv2iZeREuA==,iv:ZBrI43EgZe336VPAU3/rlNfuV0vu2BkB2xJ00VFFlNU=,tag:ylYVp1Ffpz/YQ77ms3txyg==,type:str]
 global_volume_path: ENC[AES256_GCM,data:lTBtzW2SRiwfXEJB6CtIyMLklS+XWVI9oCl1oN4=,iv:nvvCKV6p+jKW9wNVpLtczsSttkLVNjgj+tKSnvT386c=,tag:qibcuQTw5qw4O02QNK5f2Q==,type:str]
-dynv6_zone: ENC[AES256_GCM,data:+vurnpF4If0g5xLVEwFAPQ==,iv:SecgDx092quh03B4Bc+aB1OIRNLBN754Xs8yR3nHxv0=,tag:147+vFeLwdkxCJbeN0D3Tw==,type:str]
-server_subdomain: ENC[AES256_GCM,data:BdXwm90U,iv:SEyqSQeqk+3wSruev+wrbTM2DyIKT1ETP5OViok3oPc=,tag:UdIS2lC11/79FnOUavACbg==,type:str]
-server_domain: ENC[AES256_GCM,data:0OwKTVwSv1QjTacJOwlT0jscYjCwUEE7dXh13aBOWGj35VVDpK6y,iv:N8T+kul4DtE0YuXzynO2u0oBsex0ap5gnJl7d4qHoEk=,tag:hGjDdhjAVkqppfWHJYoIxw==,type:str]
+server_domain: ENC[AES256_GCM,data:QorASe+4Jw==,iv:jLQku12o4dAJTXnRgwLhgxYQSpJujCaAoVXu2gQrE7k=,tag:z3JMUZnD7ShYlSkrRWLO3A==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -27,8 +25,8 @@ sops:
             VThOQW9MMTAxSEVoajV2THNKVzIzTzQKmrdW59KzTRqlhPhXCiKg6AfCRJc+wQFN
             X+y/8aa4S4ChOK+scFnzsA5q0A8aNWx1pR5l/mWnthhgdLdVEqJ82Q==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-12-03T09:39:06Z"
-    mac: ENC[AES256_GCM,data:pz0qCV12lcBFPL16xekNJatoB+MeePEvPrdGzTTadBP5cebk/fecPTfjjXQ7DojVVjJRRA/41mkTeYtPP/52NJkFD/ihFW2Zys1s4uQH2uk9rHdJ9i0xSK3wKgwMSJBROMIOWrBxHdOW7ufj7hKZMJjpenBsONsx85jOBK6xbX8=,iv:Epk3KSJohqKHvdrqfFMKfQS/4ly4YJLbOslV7Bh372o=,tag:lzoYGjQt2M5nFI03LYyxhQ==,type:str]
+    lastmodified: "2024-09-12T04:35:45Z"
+    mac: ENC[AES256_GCM,data:VRqd+APkkK1Ew0R6R+5ihPEmBMBn/p0q92EzYPdAt2YWPjc2BzQR/M8JIyct9VaCGCtfBJDLHasAmPsRuYtHy4g9hi73Dim+mFrKlVxuaxvobAMCDk4pWdxsmMnBR50BwTHzKU2uV/xrHH+V0L+MgjhK0n5KzLDRK03pd8mZkxc=,iv:ra0TS/L5l5sVxTLPqyuTCq8EXECHnDFaoVX87eVipD4=,tag:vqf2jbKV9m/0QszQYMD1Hw==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
-    version: 3.8.1
+    version: 3.9.0

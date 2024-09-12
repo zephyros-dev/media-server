@@ -2,7 +2,7 @@ FROM docker.io/caddy:2.8.4-builder-alpine@sha256:f9f6c6cf8eb75cbd5b6278da1f2abc7
 
 RUN --mount=type=cache,target=/go/pkg,sharing=locked \
     xcaddy build \
-    --with github.com/caddy-dns/dynv6 \
+    --with github.com/caddy-dns/porkbun \
     --with github.com/mholt/caddy-dynamicdns
 
 FROM docker.io/caddy:2.8.4-alpine@sha256:33937b9d51461ea87794350c1c09ce53f327802508929d78f3b5642533f2f7db

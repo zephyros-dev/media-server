@@ -3,7 +3,7 @@
     application_name: "{{ application_item.key | regex_replace('_', '-') }}"
     volume_list: []
     volume_map: {}
-  when: application_item.value.pod != None
+  when: application_item.value.pod != None or application_item.value.param.kind == "container"
   tags: "{{ application_item.key }}"
   block:
     - name: Setup variable for user scope {{ application_name }}

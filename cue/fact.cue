@@ -64,7 +64,6 @@ application: [applicationName=string]: {
 		dashy_icon?:                   string
 		dashy_show:                    *true | bool // Show service endpoint in dashy
 		dashy_statusCheckAcceptCodes?: int32 | >99 | <600
-		host_network:                  *false | bool
 		kind:                          *"kube" | "container"
 		quadlet_kube_options?: {
 			[string]: string
@@ -128,6 +127,7 @@ application: [applicationName=string]: {
 			name: applicationName
 		}
 		spec: {
+			hostNetwork: *false | bool
 			volumes: [for k, v in transform.volumes {
 				name: k
 				if v.type == "pvc" {
@@ -394,10 +394,16 @@ application: {
 										if v.param.caddy_sso {
 											statusCheckAllowInsecure: true
 											if v.param.caddy_proxy_port != _|_ {
-												if v.param.host_network {
-													statusCheckUrl: "http://\(_fact.caddyfile_host_address):\(v.param.caddy_proxy_port)"
+												_host_port_url: "http://\(_fact.caddyfile_host_address):\(v.param.caddy_proxy_port)"
+												if v.pod == null || v.pod.spec.hostNetwork || v.param.become {
+													statusCheckUrl: _host_port_url
 												}
-												if !v.param.host_network {
+												if v.param.quadlet_kube_options.Network != _|_ {
+													if v.param.quadlet_kube_options.Network == "pasta" {
+														statusCheckUrl: _host_port_url
+													}
+												}
+												if !v.param.become && !v.pod.spec.hostNetwork && v.param.quadlet_kube_options.Network == _|_ {
 													statusCheckUrl: "http://\(_url_key):\(v.param.caddy_proxy_port)"
 												}
 											}
@@ -449,9 +455,12 @@ application: {
 					content: """
 					{
 						dynamic_dns {
-							provider dynv6 \(_fact.ddns_dynv6_token)
+							provider porkbun {
+								api_key \(_fact.porkbun_api_key)
+								api_secret_key \(_fact.porkbun_api_secret_key)
+							}
 							domains {
-								\(_fact.dynv6_zone) *.\(_fact.server_subdomain)
+								\(_fact.server_domain) *
 							}
 							ttl 15m
 						}
@@ -661,7 +670,7 @@ application: {
 	jellyfin: {
 		_
 		param: {
-			caddy_proxy_port: 8096
+			caddy_proxy_url: "jellyfin:8096"
 			// This is a hack so we can migrate the folder fields to volumes
 			// Once podman support mounting nvidia gpu in quadlet kubernetes we can remove this
 			// https://github.com/containers/podman/issues/17833
@@ -901,7 +910,6 @@ application: {
 		_
 		param: {
 			caddy_proxy_port:             19999
-			host_network:                 true
 			dashy_show:                   true
 			dashy_statusCheckAcceptCodes: 401
 		}
@@ -963,9 +971,6 @@ application: {
 					runAsGroup: 0
 				}
 				env: [{
-					name:  "NEXTCLOUD_TRUSTED_DOMAINS"
-					value: "nextcloud.\(_fact.server_domain)"
-				}, {
 					name:  "OVERWRITEPROTOCOL"
 					value: "https"
 				}, {
@@ -1312,7 +1317,6 @@ application: {
 			become:           true
 			caddy_sso:        true
 			caddy_proxy_port: scrutiny_port
-			host_network:     true
 			volumes: {
 				udev:   "/run/udev/"
 				device: "/dev/"
@@ -1412,7 +1416,6 @@ application: {
 		param: {
 			caddy_proxy_port: 8384
 			caddy_sso:        true
-			host_network:     true
 			quadlet_kube_options: Network: "pasta"
 			volumes: {
 				data: "./"
@@ -1541,7 +1544,6 @@ application: {
 			caddy_proxy_port: 8089
 			caddy_sso:        true
 			dashy_icon:       "mdi-desktop-classic"
-			host_network:     true
 			secret: {
 				WOLWEBBCASTIP: {
 					type:    "env"
@@ -1556,6 +1558,7 @@ application: {
 
 		pod: _profile.rootless & {
 			spec: {
+				hostNetwork: true
 				containers: [{
 					name:  "web"
 					image: "wol"
@@ -1576,7 +1579,6 @@ application: {
 						subPath:   "devices.json"
 					}]
 				}]
-				hostNetwork: true
 			}
 		}
 	}
