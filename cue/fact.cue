@@ -453,6 +453,7 @@ application: {
 							domains {
 								\(_fact.dynv6_zone) *.\(_fact.server_subdomain)
 							}
+							ttl 15m
 						}
 					}
 					"""
