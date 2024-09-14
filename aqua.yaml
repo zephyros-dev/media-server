@@ -1,0 +1,5 @@
+registries:
+  - type: standard
+    ref: main
+packages:
+  - name: getsops/sops@v3.9.0
