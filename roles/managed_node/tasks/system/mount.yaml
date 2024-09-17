@@ -23,8 +23,8 @@
 
     - name: Mount parity disks
       ansible.posix.mount:
-        path: "/mnt/disks/parity/{{ item }}"
-        src: "/dev/disk/by-id/{{ item }}-part1"
+        path: /mnt/disks/parity/{{ item }}
+        src: /dev/disk/by-{{ disks_id_type }}/{{ item }}-part1
         fstype: ext4
         state: mounted
       loop: "{{ disks.parity.disks_list }}"

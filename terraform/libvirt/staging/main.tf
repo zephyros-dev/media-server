@@ -1,28 +1,28 @@
 
-#region fedora-iot
+#region staging-iot
 resource "libvirt_volume" "data" {
   count  = 2
-  name   = "fedora-data-${count.index}"
+  name   = "staging-data-${count.index}"
   size   = 10000000000
   format = "raw"
 }
 
 resource "libvirt_volume" "parity" {
   count  = 1
-  name   = "fedora-parity-${count.index}"
+  name   = "staging-parity-${count.index}"
   size   = 10000000000
   format = "raw"
 }
 
 resource "libvirt_volume" "root" {
-  name   = "fedora-root"
-  size   = 30000000000
+  name   = "staging-root"
+  size   = 50000000000
   format = "raw"
 }
 
 # Define KVM domain to create
 resource "libvirt_domain" "this" {
-  name   = "fedora-iot"
+  name   = "staging"
   memory = "4096"
   vcpu   = 2
 

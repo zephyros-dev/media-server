@@ -1,12 +1,15 @@
 - name: Harden ssh
   tags: ssh
+  when: ansible_pkg_mgr != "atomic_container"
   ansible.builtin.import_role:
     name: devsec.hardening.ssh_hardening
   vars:
     sftp_enabled: true
     ssh_allow_tcp_forwarding: "yes"
     ssh_allow_agent_forwarding: true # Could be exploited by someone with root access, so only use this for dev machines
-
+    ssh_pkgs: []
+  # Stuck at https://github.com/dev-sec/ansible-collection-hardening/blob/d386d0fe1b74cf9bd3d6671a96f770f3d8a31b2d/roles/ssh_hardening/tasks/selinux.yml#L2
+  # Should we make a PR?
 # This causes all users systemctl to fail, will need to investigate further
 # - name: Harden os
 #   tags: os

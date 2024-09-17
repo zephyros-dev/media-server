@@ -12,27 +12,45 @@
         src: snapraid/snapraid.conf.j2
         dest: /etc/snapraid.conf
         mode: "0644"
-    - name: Create snapper configuration list
-      community.general.ini_file:
-        path: /etc/sysconfig/snapper
-        section: null
-        option: SNAPPER_CONFIGS
-        value: '"{{ snapper_configs | json_query("[*].name") | join(" ") }}"'
-        mode: "0644"
-        no_extra_spaces: true
-    # https://github.com/openSUSE/snapper/issues/408#issuecomment-554719988
-    - name: Create snapper place-holder config files if not exists
-      ansible.builtin.file:
-        path: "/etc/snapper/configs/{{ item }}"
-        mode: "0644"
-        force: false
-        state: file
-      loop: "{{ snapper_configs | json_query('[*].name') }}"
+    - name: Check if previous snapshot exists
+      ansible.builtin.stat:
+        path: "{{ item }}/.snapshots"
+      register: snapper_snapshot_state
+      loop: "{{ snapper_configs | json_query('[*].path') }}"
+    - name: Restore configuration for snapshot that exists
+      vars:
+        _snapshot_exists_item: "{{ snapper_snapshot_state.results | json_query('[?stat.exists].item') | to_json }}"
+        _query: "[?contains(`{{ _snapshot_exists_item }}`, path)].name"
+        snapper_existing_snapshot: "{{ snapper_configs | json_query(_query) }}"
+      block:
+        - name: Create snapper configuration list
+          community.general.ini_file:
+            path: /etc/sysconfig/snapper
+            section: null
+            option: SNAPPER_CONFIGS
+            value: '"{{ snapper_existing_snapshot | join(" ") }}"'
+            mode: "0644"
+            no_extra_spaces: true
+        - name: Create snapper config folder
+          ansible.builtin.file:
+            path: /etc/snapper/configs
+            mode: "0755"
+            state: directory
+        # https://github.com/openSUSE/snapper/issues/408#issuecomment-554719988
+        - name: Create snapper place-holder config files if not exists
+          ansible.builtin.copy:
+            dest: /etc/snapper/configs/{{ item }}
+            mode: "0644"
+            force: false
+            content: ""
+          loop: "{{ snapper_existing_snapshot }}"
     - name: Configure snapper
       ansible.builtin.include_role:
         name: aisbergg.snapper
         apply:
           become: true
+      vars:
+        __snapper_dependencies: []
     - name: Setup snapraid-btrfs-runner
       tags: snapraid_runner
       vars:

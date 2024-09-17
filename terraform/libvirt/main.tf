@@ -8,8 +8,8 @@ resource "libvirt_pool" "default" {
 }
 #endregion
 
-module "fedora-iot" {
-  source = "./fedora"
+module "staging" {
+  source = "./staging"
   secret = local.secret
 }
 

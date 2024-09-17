@@ -1,17 +1,18 @@
 - name: Check if file exists {{ file_path }}
-  ansible.builtin.stat:
-    path: "{{ file_path }}"
-  register: structured_file_stat
+  ansible.builtin.copy:
+    dest: "{{ file_path }}"
+    mode: "0644"
+    content: ""
+    force: false
 
 - name: Load file {{ file_path }}
-  when: structured_file_stat.stat.exists
   ansible.builtin.slurp:
     src: "{{ file_path }}"
   register: file_slurp
 
 - name: Write to file {{ file_path }}
   vars:
-    file_decode: "{{ file_slurp.content | b64decode | default({}) }}"
+    file_decode: "{{ file_slurp.content | b64decode }}"
     file_content: "{{ file_decode is mapping | ternary(file_decode, file_decode | from_yaml_all) }}"
     file_edit: "{{ file_content | combine(structured_edit, recursive=true, list_merge='append_rp') }}"
   module_defaults:
