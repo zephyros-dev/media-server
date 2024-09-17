@@ -20,7 +20,7 @@
     - name: Restore configuration for snapshot that exists
       vars:
         _snapshot_exists_item: "{{ snapper_snapshot_state.results | json_query('[?stat.exists].item') | to_json }}"
-        _query: "[?contains(`{{ _snapshot_exists_item }}`, path)].name"
+        _query: "[?contains(`{{ _snapshot_exists_item }}`, path)].{name: name, path: path}"
         snapper_existing_snapshot: "{{ snapper_configs | json_query(_query) }}"
       block:
         - name: Create snapper configuration list
@@ -28,7 +28,7 @@
             path: /etc/sysconfig/snapper
             section: null
             option: SNAPPER_CONFIGS
-            value: '"{{ snapper_existing_snapshot | join(" ") }}"'
+            value: '"{{ snapper_existing_snapshot | json_query("[].name") | join(" ") }}"'
             mode: "0644"
             no_extra_spaces: true
         - name: Create snapper config folder
@@ -37,12 +37,14 @@
             mode: "0755"
             state: directory
         # https://github.com/openSUSE/snapper/issues/408#issuecomment-554719988
+        # Need to make a valid snapper config here for the config check command in the role to work
         - name: Create snapper place-holder config files if not exists
           ansible.builtin.copy:
-            dest: /etc/snapper/configs/{{ item }}
+            dest: /etc/snapper/configs/{{ item.name }}
             mode: "0644"
             force: false
-            content: ""
+            content: |
+              SUBVOLUME="{{ item.path }}"
           loop: "{{ snapper_existing_snapshot }}"
     - name: Configure snapper
       ansible.builtin.include_role:

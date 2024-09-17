@@ -13,27 +13,27 @@
       loop: "{{ restic_env | dict2items }}"
       no_log: true
     # Comment this out for now since it takes too long to run
-    # - name: Check if restic repo exists
-    #   block:
-    #     - name: Check if restic repo exists
-    #       changed_when: false
-    #       ansible.builtin.command:
-    #         cmd: restic cat config
-    #       environment: "{{ restic_env }}"
-    #       register: restic_repo_status
-    #   rescue:
-    #     - name: Init restic repo
-    #       ansible.builtin.command:
-    #         cmd: restic init
-    #       environment: "{{ restic_env }}"
-    #       when: '"bucket not found" in restic_repo_status.stderr'
-    #       changed_when: false
-    #     - name: Unlock restic repo
-    #       ansible.builtin.command:
-    #         cmd: restic unlock
-    #       environment: "{{ restic_env }}"
-    #       when: '"unable to create lock in backend" in restic_repo_status.stderr'
-    #       changed_when: false
+    - name: Check if restic repo exists
+      block:
+        - name: Check if restic repo exists
+          changed_when: false
+          ansible.builtin.command:
+            cmd: restic cat config
+          environment: "{{ restic_env }}"
+          register: restic_repo_status
+      rescue:
+        - name: Init restic repo
+          ansible.builtin.command:
+            cmd: restic init
+          environment: "{{ restic_env }}"
+          when: '"bucket not found" in restic_repo_status.stderr'
+          changed_when: false
+        - name: Unlock restic repo
+          ansible.builtin.command:
+            cmd: restic unlock
+          environment: "{{ restic_env }}"
+          when: '"unable to create lock in backend" in restic_repo_status.stderr'
+          changed_when: false
     - name: Setup restic exclude file
       ansible.builtin.template:
         src: restic/exclude.j2

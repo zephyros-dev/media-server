@@ -53,6 +53,7 @@
   register: rpm_ostree_pkg
 
 - name: Reboot to apply rpm-ostree packages # noqa: no-handler
+  become: true
   when: rpm_ostree_pkg.changed
   ansible.builtin.reboot:
     reboot_timeout: 600

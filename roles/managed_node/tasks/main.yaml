@@ -67,12 +67,12 @@
   ansible.builtin.import_tasks: system/snapraid.yaml
 
 - name: Setup nvidia driver
-  when: ansible_pkg_mgr == "atomic_container"
+  when: ansible_pkg_mgr != "atomic_container"
   ansible.builtin.import_tasks: system/nvidia.yaml
   tags: nvidia
 
 - name: Install netdata
-  when: ansible_pkg_mgr == "atomic_container"
+  when: ansible_pkg_mgr != "atomic_container"
   ansible.builtin.import_tasks: system/netdata.yaml
   tags: netdata
 
