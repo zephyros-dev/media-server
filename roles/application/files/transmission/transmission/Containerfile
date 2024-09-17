@@ -1,1 +1,1 @@
-FROM ghcr.io/linuxserver/transmission:latest@sha256:60f620b6597d1a3c06f3faf0ae1af7385b0f8f793b4d425cd4867423dd0800c7
+FROM ghcr.io/linuxserver/transmission:latest@sha256:c8a655ff89bdeb988e622d4adf5d7dc307a4918dbaef3b47b2dc47824ded5080
