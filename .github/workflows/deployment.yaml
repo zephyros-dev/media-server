@@ -52,6 +52,7 @@ jobs:
           max_attempts: 3
           retry_on: error
           command: ./ci/run.sh
+          on_retry_command: ./ci/retry.sh
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: Setup tmate session
