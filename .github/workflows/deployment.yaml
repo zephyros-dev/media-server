@@ -35,6 +35,7 @@ jobs:
         run: |
           sudo apt update && sudo apt install wireguard
           sops -d secret/deployment/wg0.sops.ini | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          wg-quick up wg0 &> /dev/null
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5
