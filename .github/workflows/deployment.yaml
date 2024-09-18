@@ -58,9 +58,16 @@ jobs:
         run: |
           eval `ssh-agent`
           sops -d secret/deployment/ssh_key.sops | ssh-add - &> /dev/null
-          python ci/deployment.py
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+      - name: Run dagger pipeline
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_on: error
+          command: python ci/deployment.py
+          on_retry_command: ./ci/reset.sh
       - name: Setup tmate session
         if: env.DEBUG_MODE == 'true' && failure()
         uses: mxschmitt/action-tmate@v3
