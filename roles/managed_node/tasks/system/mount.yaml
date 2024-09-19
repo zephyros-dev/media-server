@@ -28,3 +28,11 @@
         fstype: ext4
         state: mounted
       loop: "{{ disks.parity.disks_list }}"
+
+    - name: Change ownership global storage
+      ansible.builtin.file:
+        path: "{{ global_storage }}"
+        mode: "0755"
+        owner: "{{ ansible_user_uid }}"
+        group: "{{ ansible_user_gid }}"
+        state: directory

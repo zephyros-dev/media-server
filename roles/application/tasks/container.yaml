@@ -22,7 +22,7 @@
       become: "{{ application_item.value.param.become }}"
       block:
         - name: Setup podman container {{ application_name }}
-          when: application_item.value.param.state == "started"
+          when: application_item.value.transform.state == "started"
           block:
             - name: Setup volumes {{ application_name }}
               when: application_item.value.param.volumes is defined
@@ -51,37 +51,23 @@
                     state: directory
                   loop: "{{ container_volume_state.results | default([]) | json_query('[?stat.exists == `false`].item') }}"
                 - name: Prepare files {{ application_name }}
-                  ansible.builtin.copy:
-                    content: ""
-                    dest: "{{ item }}"
-                    force: false
-                    mode: "0600"
                   vars:
                     volume_query: "[?type==`file`].value"
-                  loop: "{{ volume_list | json_query(volume_query) }}"
-
-            - name: Disable auth for arr container {{ application_name }}
-              when:
-                - "'arr' in application_name"
-                - application_name != "bazarr"
-              block:
-                - name: Disable authentication for {{ application_name }}
-                  community.general.xml:
-                    path: "{{ volume_map | json_query('config.value') }}/config.xml"
-                    xpath: "{{ item.key }}"
-                    value: "{{ item.value }}"
-                  loop:
-                    - key: /Config/AuthenticationMethod
-                      value: Basic
-                    - key: /Config/AuthenticationRequired
-                      value: DisabledForLocalAddresses
-                  register: arr_config
-                - name: Restart {{ application_name }} # noqa: no-handler
-                  when: arr_config.changed
-                  ansible.builtin.systemd:
-                    name: "{{ application_name }}"
-                    scope: user
-                    state: restarted
+                    file_list: "{{ volume_list | json_query(volume_query) }}"
+                  block:
+                    - name: Prepare directory {{ application_name }}
+                      ansible.builtin.file:
+                        path: "{{ item | dirname }}"
+                        mode: "0755"
+                        state: directory
+                      loop: "{{ file_list }}"
+                    - name: Prepare empty file {{ application_name }}
+                      ansible.builtin.copy:
+                        content: ""
+                        dest: "{{ item }}"
+                        force: false
+                        mode: "0600"
+                      loop: "{{ file_list }}"
 
         - name: Setup container with quadlet {{ application_name }}
           block:
@@ -94,15 +80,40 @@
             - name: Create container with custom flow {{ application_name }}
               when:
                 - custom_flow.stat.exists
-                - application_item.value.param.state == "started"
+                - application_item.value.transform.state == "started"
                 - application_item.value.param.postgres_action == "none"
               ansible.builtin.include_tasks:
                 file: service/{{ application_name }}.yaml
             - name: Setup container {{ application_name }}
-              when: not custom_flow.stat.exists or application_item.value.param.state == "absent" or application_item.value.param.postgres_action != "none"
+              when: not custom_flow.stat.exists or application_item.value.transform.state == "absent" or application_item.value.param.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_quadlet.yaml
             - name: Setup postgres {{ application_name }}
               when: application_item.value.param.postgres_action != "none"
               ansible.builtin.include_tasks:
                 file: container_postgres.yaml
+
+            - name: Disable auth for arr container {{ application_name }}
+              when:
+                - "'arr' in application_name"
+                - application_name != "bazarr"
+                - application_item.value.transform.state == "started"
+              block:
+                - name: Disable authentication for {{ application_name }}
+                  community.general.xml:
+                    path: "{{ volume_map | json_query('config.value') }}/config.xml"
+                    xpath: "{{ item.key }}"
+                    value: "{{ item.value }}"
+                  loop:
+                    - key: /Config/AuthenticationMethod
+                      value: Basic
+                    - key: /Config/AuthenticationRequired
+                      value: DisabledForLocalAddresses
+                  register: arr_config
+                  retries: 60
+                - name: Restart {{ application_name }} # noqa: no-handler
+                  when: arr_config.changed
+                  ansible.builtin.systemd:
+                    name: "{{ application_name }}"
+                    scope: user
+                    state: restarted

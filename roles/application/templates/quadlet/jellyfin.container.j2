@@ -1,8 +1,11 @@
+#jinja2:lstrip_blocks: True
 [Container]
 ContainerName=jellyfin
 Image=jellyfin
 UserNS=keep-id
+{% if ansible_hostname != 'staging' %}
 AddDevice=nvidia.com/gpu=all
+{% endif %}
 Volume={{ jellyfin_volume_cache }}:/cache:z
 Volume={{ jellyfin_volume_config }}:/config:z
 Volume={{ global_media }}:/home

@@ -1,5 +1,5 @@
 - name: Create service {{ application_name }}
-  when: application_item.value.param.state == "started"
+  when: application_item.value.transform.state == "started"
   module_defaults:
     ansible.builtin.copy:
       mode: "0600"
@@ -137,7 +137,7 @@
               poll: 0
 
 - name: Remove service {{ application_name }}
-  when: application_item.value.param.state == "absent"
+  when: application_item.value.transform.state == "absent"
   module_defaults:
     ansible.builtin.systemd:
       name: "{{ application_name }}"

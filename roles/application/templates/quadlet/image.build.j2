@@ -7,8 +7,6 @@ SetWorkingDirectory=./{{ application_name }}/{{ item.path | basename }}
 {{ key }}={{ value }}
 {% endfor %}
 {% endif %}
-[Unit]
-{# This restart the image build when the kube service is restarted, which apply the new image if exists #}
-BindsTo={{ application_name }}.service
 [Install]
-WantedBy={{ application_name }}.service
+{# This restart the image build when the kube service is restarted, which apply the new image if exists #}
+RequiredBy={{ application_name }}.service

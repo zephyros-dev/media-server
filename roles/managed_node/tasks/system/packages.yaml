@@ -46,6 +46,8 @@
   when: ansible_pkg_mgr == "atomic_container"
   community.general.rpm_ostree_pkg:
     name:
+      - fd-find
+      - fish
       - pip
       - power-profiles-daemon
       - restic
@@ -104,6 +106,14 @@
         src: templates/podman/containers.conf.j2
         dest: "{{ podman_config_dir_path }}/containers.conf"
         mode: "0644"
+    # https://github.com/containers/podman/issues/23515
+    # This may be removed once podman is on version 5.2.2
+    - name: Fix podman invalid volume
+      when: ansible_hostname == "staging"
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/share/containers/storage/volumes"
+        mode: "0755"
+        state: directory
 
 - name: Install mergerfs
   become: true

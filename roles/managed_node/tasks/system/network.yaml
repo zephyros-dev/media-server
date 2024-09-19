@@ -35,3 +35,14 @@
         - samba
         - syncthing
         - transmission-client
+
+    - name: Setup local domain for staging server
+      when: ansible_hostname == "staging"
+      sdorra.porkbun.porkbun_record:
+        api_key: "{{ porkbun_api_key }}"
+        secret_api_key: "{{ porkbun_api_secret_key }}"
+        domain: "{{ root_domain }}"
+        name: "*.staging"
+        record_type: A
+        content: "{{ ansible_default_ipv4.address }}"
+        state: present

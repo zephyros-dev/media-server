@@ -23,7 +23,7 @@ resource "libvirt_volume" "root" {
 # Define KVM domain to create
 resource "libvirt_domain" "this" {
   name   = "staging"
-  memory = "4096"
+  memory = "8192"
   vcpu   = 2
 
   autostart = true

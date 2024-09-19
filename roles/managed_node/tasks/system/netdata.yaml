@@ -1,5 +1,5 @@
 - name: Install Netdata
-  when: application.netdata.param.state == "started"
+  when: application.netdata.transform.state == "started"
   block:
     - name: Setup netdata
       become: true
@@ -99,7 +99,7 @@
               notify: Restart Netdata
 
 - name: Uninstall netdata
-  when: application.netdata.param.state == "absent"
+  when: application.netdata.transform.state == "absent"
   block:
     - name: Uninstall Netdata
       changed_when: false

@@ -59,6 +59,7 @@ application: [applicationName=string]: {
 			src:  string
 			dest: string
 		}]
+		staging:                       *true | bool
 		caddy_sso:                     *false | bool
 		dashy_icon?:                   string
 		dashy_show:                    *true | bool // Show service endpoint in dashy
@@ -140,6 +141,18 @@ application: [applicationName=string]: {
 		}
 		if param.caddy_proxy != _|_ {
 			caddy_proxy_url: (#caddy_proxy & {in: param.caddy_proxy}).out
+		}
+
+		if _fact.ansible_hostname != "staging" {
+			state: param.state
+		}
+		if _fact.ansible_hostname == "staging" {
+			if param.staging {
+				state: param.state
+			}
+			if !param.staging {
+				state: "absent"
+			}
 		}
 	}
 
@@ -452,9 +465,10 @@ application: {
 	ddns: {
 		_
 		param: {
+			staging:         false
+			dashy_show:      false
 			preserve_volume: true
 			quadlet_kube_options: Network: "pasta" // Use pasta network instead of host since it can preserve the IP address from the host machine
-			dashy_show: false
 			volumes: {
 				config: "pvc"
 				data:   "pvc"

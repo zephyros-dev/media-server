@@ -7,6 +7,8 @@ collections:
     version: 1.15.4
   - name: devsec.hardening
     version: 10.0.0
+  - name: sdorra.porkbun
+    version: 1.0.0
 roles:
   - name: aisbergg.snapper
     version: v2.1.0

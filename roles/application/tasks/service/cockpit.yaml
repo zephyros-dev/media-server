@@ -1,0 +1,10 @@
+- name: Setup cockpit domain for server
+  when: ansible_hostname == "server"
+  sdorra.porkbun.porkbun_record:
+    api_key: "{{ porkbun_api_key }}"
+    secret_api_key: "{{ porkbun_api_secret_key }}"
+    domain: "{{ root_domain }}"
+    name: cockpit
+    record_type: A
+    content: "{{ ansible_default_ipv4.address }}"
+    state: present

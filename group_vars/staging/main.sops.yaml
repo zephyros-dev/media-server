@@ -15,6 +15,8 @@ disks:
         fs_type: ENC[AES256_GCM,data:XydFgQ==,iv:sz6o1jB+8Su+OCTVztNGpzuYvogVlp0DsklNkK4R6gQ=,tag:ognVLunMDepVrkH3ODQZWg==,type:str]
         disks_list:
             - ENC[AES256_GCM,data:TmP1+wzq6l8tHq+Fo6FSKg==,iv:QGS+iAiQA6Bd4EHsc46Cn2SMkxDILa2kG6gSnIOXUz8=,tag:odmirQamXwGdITPxFL8/tg==,type:str]
+#ENC[AES256_GCM,data:fRZxshM7pQ==,iv:O9G7tJwiLUv7UIOe8uNmEx5m85hOrEa6WPkq8sYgZKo=,tag:WmDX+BCsqpxP86FziyBGuA==,type:comment]
+server_domain: ENC[AES256_GCM,data:+kShVXokU8J4ltJ96Pwv8JcWC+AxG/y7GQ==,iv:k6apfsrlk5CUlBd6QYF4s47yeyedtij5i81ujIsqr+k=,tag:71r6kAHI8njKtoDBJkoQRQ==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -30,8 +32,8 @@ sops:
             QUlBVzVtbGo0VWtudUFLaklRcFNJSVUKVTVhLM2Z1gHkh6G9n9LS+KtutVppfKn9
             maZkcdkfBG72wTG84kiT53M1qa9buhCZ70sL+ro2QTIiSnOiHuKDtg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-09-16T15:42:35Z"
-    mac: ENC[AES256_GCM,data:ky5gykbyq1ZWj9O27fyQZDzeDS6g0CgD6LMsFid7SJsztDWHTb2VOfXcL5GMpvBfjvIdA2L/p3lyPUc2fSwzR68FNHuwIE59qTH0+HXsOs6BT2PcnyTqb7LWFkaa42bHxsNs8sX5E1K6D1+OEIJ67OIytOlA4/uNRhfWByihPIw=,iv:ZpPbPz5kMbLLyNDWVlM7bVqKuYwnKBWdggvv7qJH7Bk=,tag:QhO6xmMNwFUkZo3XGDIDcA==,type:str]
+    lastmodified: "2024-09-19T07:47:31Z"
+    mac: ENC[AES256_GCM,data:mgVsPikpowyah49ZmB8fFtGIqYTrqpQdJqrr9jGtsqVOuV5c0U8wEDTsV4fNIPw0p93vzr9M1dT1DSER+x9INf3gvBh9yWcDoj4LfmrbXoeJjlheYaJtxx6Jel1lBKbxVWxik1I5kgTyjr8MTcN+j+1dYfwmkplqEbE6QnON9Wg=,iv:9gXeC/T/2zQW8AKjfnTiqKOt+sHnUzBh9ayvsv+uhyQ=,tag:GIsTdlN0AO3SfMAZUrpFFQ==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.9.0

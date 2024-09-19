@@ -27,7 +27,7 @@
         - db:add-missing-indices
         - config:system:set maintenance_window_start --type=integer --value=6
         - config:system:set trusted_domains 0 --value='nextcloud.{{ server_domain }}'
-      retries: 10
+      retries: 60
 
     - name: Setup nextcloud app
       ansible.builtin.include_tasks:

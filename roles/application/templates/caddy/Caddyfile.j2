@@ -1,4 +1,12 @@
 #jinja2:lstrip_blocks: True
+{% if ansible_hostname == 'staging' %}
+{
+	acme_dns porkbun {
+    api_key {{ porkbun_api_key }}
+    api_secret_key {{ porkbun_api_secret_key }}
+	}
+}
+{% endif %}
 # CORS snippet
 # https://caddyserver.com/docs/caddyfile/directives/import#examples
 (cors) {
@@ -52,7 +60,7 @@ auth.{{ server_domain }} {
   # header_down Cross-Origin-Resource-Policy "cross-origin"
 }
 {% for key,value in application | dictsort %}
-  {% if value.param.state == 'started' %}
+  {% if value.transform.state == 'started' %}
     {% if value.param.caddy_proxy is defined %}
       {% set name = key | replace("_", "-") %}
 {{ name }}.{{ server_domain }} {
