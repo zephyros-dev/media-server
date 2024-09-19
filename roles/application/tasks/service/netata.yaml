@@ -1,0 +1,6 @@
+- name: Create netdata data directory
+  become: true
+  ansible.builtin.file:
+    path: /etc/netdata
+    mode: "0755"
+    state: directory

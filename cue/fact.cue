@@ -101,19 +101,21 @@ application: [applicationName=string]: {
 				if v =~ "\/.+[^\/]$" {
 					type: "file"
 					if path.IsAbs(v) {
-						value: v
+						value: path.Clean(v)
 					}
-					if v =~ "^\\.\/" {
+					if !path.IsAbs(v) {
 						value: _volume_path
 					}
 				}
-				if path.IsAbs(v) {
-					type:  "absolutePathDir"
-					value: path.Clean(v)
-				}
-				if v =~ "^\\.\/.+\/$" || v == "./" {
-					type:  "relativePathDir"
-					value: _volume_path
+				if v =~ ".+\/$" {
+					if path.IsAbs(v) {
+						type:  "absolutePathDir"
+						value: path.Clean(v)
+					}
+					if !path.IsAbs(v) {
+						type:  "relativePathDir"
+						value: _volume_path
+					}
 				}
 			}}
 		}
@@ -933,9 +935,89 @@ application: {
 	netdata: {
 		_
 		param: {
-			caddy_proxy:                  19999
-			dashy_show:                   true
-			dashy_statusCheckAcceptCodes: 401
+			become:      true
+			caddy_proxy: 19999
+			volumes: {
+				config:    "/etc/netdata/"
+				lib:       "pvc"
+				cache:     "pvc"
+				root:      "/root/"
+				passwd:    "/etc/passwd"
+				group:     "/etc/group"
+				localtime: "/etc/localtime"
+				proc:      "/proc/"
+				sys:       "/sys/"
+				osrelease: "/etc/os-release"
+				varlog:    "/var/log/"
+				systemd:   "/run/dbus/"
+				dev_dri:   "/dev/dri/"
+			}
+		}
+		pod: spec: {
+			hostNetwork: true
+			hostPID:     true
+			containers: [{
+				name:  "web"
+				image: "netdata"
+				securityContext: capabilities: add: [
+					"SYS_PTRACE",
+					"SYS_ADMIN",
+				]
+				volumeMounts: [
+					{
+						name:      "config"
+						mountPath: "/etc/netdata:z"
+					},
+					{
+						name:      "lib"
+						mountPath: "/var/lib/netdata"
+					},
+					{
+						name:      "cache"
+						mountPath: "/var/cache/netdata"
+					},
+					{
+						name:      "root"
+						mountPath: "/host/root:ro"
+					},
+					{
+						name:      "passwd"
+						mountPath: "/etc/passwd:ro"
+					},
+					{
+						name:      "group"
+						mountPath: "/etc/group:ro"
+					},
+					{
+						name:      "localtime"
+						mountPath: "/etc/localtime:ro"
+					},
+					{
+						name:      "proc"
+						mountPath: "/host/proc:ro"
+					},
+					{
+						name:      "sys"
+						mountPath: "/host/sys:ro"
+					},
+					{
+						name:      "osrelease"
+						mountPath: "/host/etc/os-release:ro"
+					},
+					{
+						name:      "varlog"
+						mountPath: "/host/var/log:ro"
+					},
+					{
+						name:      "systemd"
+						mountPath: "/run/dbus:ro"
+					},
+					{
+						name:      "dev_dri"
+						mountPath: "/dev/dri:ro"
+					},
+				]
+			}]
 		}
 	}
 

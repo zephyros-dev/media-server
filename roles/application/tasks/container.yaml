@@ -36,7 +36,7 @@
                     volume_map_query: "{{ application_item.key }}.transform.volumes"
                     volume_list_query: "{{ volume_map_query }}.*"
                 - name: Check if volume exists {{ application_name }}
-                  when: "'/dev/' not in item"
+                  when: "'/dev/' not in item or application_name == 'netdata'"
                   ansible.builtin.stat:
                     path: "{{ item }}"
                   vars:
