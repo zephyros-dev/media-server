@@ -1,0 +1,14 @@
+- name: Setup staging
+  hosts: staging
+  vars:
+    debug: false
+  tasks:
+    - name: Setup partition
+      ansible.builtin.import_role:
+        name: partition
+    - name: Setup server
+      ansible.builtin.import_role:
+        name: managed_node
+    - name: Setup applicaiton
+      ansible.builtin.import_role:
+        name: application

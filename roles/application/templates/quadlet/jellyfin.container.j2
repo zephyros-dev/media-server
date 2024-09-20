@@ -6,8 +6,8 @@ UserNS=keep-id
 {% if ansible_hostname != 'staging' %}
 AddDevice=nvidia.com/gpu=all
 {% endif %}
-Volume={{ jellyfin_volume_cache }}:/cache:z
-Volume={{ jellyfin_volume_config }}:/config:z
+Volume={{ volumes.cache.value }}:/cache:z
+Volume={{ volumes.config.value }}:/config:z
 Volume={{ global_media }}:/home
 Network=podman-default-kube-network
 {% include 'common.j2' %}

@@ -30,11 +30,9 @@
                 - name: Get volume list for {{ application_name }}
                   # We have to use set_fact since vars make the tasks unable to be skipped
                   ansible.builtin.set_fact:
-                    volume_map: "{{ application | json_query(volume_map_query) }}"
                     volume_list: "{{ application | json_query(volume_list_query) }}"
                   vars:
-                    volume_map_query: "{{ application_item.key }}.transform.volumes"
-                    volume_list_query: "{{ volume_map_query }}.*"
+                    volume_list_query: "{{ application_item.key }}.transform.volumes.*"
                 - name: Check if volume exists {{ application_name }}
                   when: "'/dev/' not in item or application_name == 'netdata'"
                   ansible.builtin.stat:
@@ -49,7 +47,7 @@
                     path: "{{ item }}"
                     mode: "0755"
                     state: directory
-                  loop: "{{ container_volume_state.results | default([]) | json_query('[?stat.exists == `false`].item') }}"
+                  loop: "{{ container_volume_state.results | json_query('[?stat.exists == `false`].item') }}"
                 - name: Prepare files {{ application_name }}
                   vars:
                     volume_query: "[?type==`file`].value"
@@ -101,7 +99,7 @@
               block:
                 - name: Disable authentication for {{ application_name }}
                   community.general.xml:
-                    path: "{{ volume_map | json_query('config.value') }}/config.xml"
+                    path: "{{ application_item.value.transform.volumes.config.value }}/config.xml"
                     xpath: "{{ item.key }}"
                     value: "{{ item.value }}"
                   loop:

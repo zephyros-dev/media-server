@@ -112,12 +112,9 @@
         - name: Create container service {{ application_name }}
           when: application_item.value.param.kind == "container"
           block:
-            - name: Register volumes variables {{ application_name }}
-              when: application_item.value.param.volumes is defined
-              ansible.builtin.set_fact:
-                "{{ application_name }}_volume_{{ item.key }}": "{{ item.value.value }}"
-              loop: "{{ volume_map | dict2items }}"
             - name: Create container quadlet file {{ application_name }} # noqa: risky-file-permissions
+              vars:
+                volumes: "{{ application_item.value.transform.volumes }}"
               ansible.builtin.template:
                 src: "quadlet/{{ application_name }}.container.j2"
                 dest: "{{ container_quadlet_path }}/{{ application_name }}.container"
