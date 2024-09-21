@@ -937,6 +937,7 @@ application: {
 		param: {
 			become:      true
 			caddy_proxy: 19999
+			kind:        "container"
 			volumes: {
 				config:    "/etc/netdata/"
 				lib:       "pvc"
@@ -952,72 +953,6 @@ application: {
 				systemd:   "/run/dbus/"
 				dev_dri:   "/dev/dri/"
 			}
-		}
-		pod: spec: {
-			hostNetwork: true
-			hostPID:     true
-			containers: [{
-				name:  "web"
-				image: "netdata"
-				securityContext: capabilities: add: [
-					"SYS_PTRACE",
-					"SYS_ADMIN",
-				]
-				volumeMounts: [
-					{
-						name:      "config"
-						mountPath: "/etc/netdata:z"
-					},
-					{
-						name:      "lib"
-						mountPath: "/var/lib/netdata"
-					},
-					{
-						name:      "cache"
-						mountPath: "/var/cache/netdata"
-					},
-					{
-						name:      "root"
-						mountPath: "/host/root:ro"
-					},
-					{
-						name:      "passwd"
-						mountPath: "/etc/passwd:ro"
-					},
-					{
-						name:      "group"
-						mountPath: "/etc/group:ro"
-					},
-					{
-						name:      "localtime"
-						mountPath: "/etc/localtime:ro"
-					},
-					{
-						name:      "proc"
-						mountPath: "/host/proc:ro"
-					},
-					{
-						name:      "sys"
-						mountPath: "/host/sys:ro"
-					},
-					{
-						name:      "osrelease"
-						mountPath: "/host/etc/os-release:ro"
-					},
-					{
-						name:      "varlog"
-						mountPath: "/host/var/log:ro"
-					},
-					{
-						name:      "systemd"
-						mountPath: "/run/dbus:ro"
-					},
-					{
-						name:      "dev_dri"
-						mountPath: "/dev/dri:ro"
-					},
-				]
-			}]
 		}
 	}
 

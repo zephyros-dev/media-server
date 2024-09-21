@@ -164,7 +164,7 @@
     - name: Stop build service {{ application_name }}
       when: build_service_list.files | length > 0
       ansible.builtin.systemd:
-        name: "{{ item.path | basename }}"
+        name: "{{ item.path | basename | replace('.', '-') }}"
         state: stopped
       loop: "{{ build_service_list.files }}"
 

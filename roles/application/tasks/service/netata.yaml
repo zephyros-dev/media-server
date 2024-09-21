@@ -4,3 +4,7 @@
     path: /etc/netdata
     mode: "0755"
     state: directory
+
+- name: Create container {{ application_name }}
+  ansible.builtin.include_tasks:
+    file: container_quadlet.yaml
