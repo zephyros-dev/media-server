@@ -66,6 +66,10 @@
     {
       "groupName": "dagger",
       "matchPackagePatterns": ["dagger"]
+    },
+    {
+      "groupName": "ansible-lint",
+      "matchPackagePatterns": ["ansible-lint"]
     }
   ],
   "pinDigests": true,
