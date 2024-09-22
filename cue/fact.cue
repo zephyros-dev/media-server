@@ -341,7 +341,8 @@ application: {
 					readOnly:  true
 					mountPath: "/etc/caddy/Caddyfile"
 					subPath:   "Caddyfile"
-				}]
+				},
+				]
 			}]
 		}
 	}

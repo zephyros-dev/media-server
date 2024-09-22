@@ -41,6 +41,14 @@
         state: true
         persistent: true
 
+# The os-prober takes a long time since we have large disks
+- name: Remove os-prober
+  become: true
+  when: ansible_pkg_mgr == "atomic_container"
+  ansible.builtin.file:
+    path: /etc/grub.d/30_os-prober
+    state: absent
+
 - name: Setup global packages
   become: true
   when: ansible_pkg_mgr == "atomic_container"
