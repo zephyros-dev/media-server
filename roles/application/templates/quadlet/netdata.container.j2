@@ -2,7 +2,7 @@
 [Container]
 ContainerName=netdata
 Image=netdata
-{% if ansible_hostname != 'staging' %}
+{% if nvidia_installed %}
 AddDevice=nvidia.com/gpu=all
 {% endif %}
 AddCapability=SYS_PTRACE

@@ -2,10 +2,8 @@
 [Container]
 ContainerName=jellyfin
 Image=jellyfin
-{% if ansible_hostname != 'staging' %}
+{% if nvidia_installed %}
 AddDevice=nvidia.com/gpu=all
-# https://github.com/ublue-os/ucore?tab=readme-ov-file#images
-# SecurityLabelType=nvidia_container_t
 SecurityLabelDisable=true
 {% endif %}
 UserNS=keep-id

@@ -1,4 +1,4 @@
-- name: Generate facts for container
+- name: Generate facts
   delegate_to: localhost
   tags: always
   module_defaults:
@@ -43,3 +43,16 @@
         "{{ item.key }}": "{{ item.value }}"
       loop: "{{ cue_facts.stdout | from_json | dict2items }}"
       no_log: true
+
+- name: Gather host facts
+  tags: always
+  block:
+    - name: Check if nvidia is installed
+      changed_when: false
+      ansible.builtin.command:
+        cmd: nvidia-smi
+      register: nvidia_smi
+    - name: Set nvidia installed fact
+      ansible.builtin.set_fact:
+        nvidia_installed: "{{ nvidia_smi.rc == 0 }}"
+    # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/cdi-support.html
