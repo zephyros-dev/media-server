@@ -1,8 +1,5 @@
 #!/bin/bash
-sudo dnf install \
-    git \
-    podman \
-    podman-docker \
-    slirp4netns
-systemctl --user start podman.socket
-systemctl --user enable podman.socket
+# We have to make the symlink for docker to podman since moby engine is installed in ucore
+# https://github.com/ublue-os/ucore?tab=readme-ov-file#dockermoby-and-podman
+rm ~/.local/bin/docker
+ln -s /usr/bin/podman ~/.local/bin/docker

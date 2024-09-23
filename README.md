@@ -96,6 +96,12 @@ ansible-playbook partition --check
 
 - In the BIOS, enable wol via Advanced -> Device Options -> S5 Wake on LAN
 
+## OS
+
+### Ucore (rpm-ostree variants)
+
+https://github.com/ublue-os/ucore
+
 ## Services
 
 ### Koreader connection to opds Calibre content server
