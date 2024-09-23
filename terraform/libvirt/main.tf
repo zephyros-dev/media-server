@@ -9,6 +9,9 @@ resource "libvirt_pool" "default" {
 #endregion
 
 module "staging" {
+  depends_on = [
+    libvirt_pool.default
+  ]
   source = "./staging"
   secret = local.secret
 }
