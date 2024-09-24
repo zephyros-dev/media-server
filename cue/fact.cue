@@ -401,6 +401,10 @@ application: {
 			caddy_proxy: 8080
 			caddy_sso:   true
 			dashy_show:  false
+			volumes: {
+				home_cache:   "pvc"
+				node_modules: "pvc"
+			}
 			secret: {
 				"conf.yml": {
 					type: "file"
@@ -441,7 +445,7 @@ application: {
 											}
 										}
 										if v.param.dashy_statusCheckAcceptCodes != _|_ {
-											statusCheckAcceptCodes: v.param.dashy_statusCheckAcceptCodes
+											statusCheckAcceptCodes: "\(v.param.dashy_statusCheckAcceptCodes)"
 										}
 										url: _url_public
 									}
@@ -461,6 +465,12 @@ application: {
 				readOnly:  true
 				mountPath: "/app/user-data/conf.yml"
 				subPath:   "conf.yml"
+			}, {
+				name:      "node_modules"
+				mountPath: "/app/node_modules"
+			}, {
+				name:      "home_cache"
+				mountPath: "/home/node"
 			}]
 		}]
 	}
