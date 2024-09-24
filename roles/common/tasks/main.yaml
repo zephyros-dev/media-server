@@ -49,10 +49,10 @@
   block:
     - name: Check if nvidia is installed
       changed_when: false
-      ansible.builtin.command:
-        cmd: nvidia-smi
+      ansible.builtin.stat:
+        path: /usr/bin/nvidia-smi
       register: nvidia_smi
     - name: Set nvidia installed fact
       ansible.builtin.set_fact:
-        nvidia_installed: "{{ nvidia_smi.rc == 0 }}"
+        nvidia_installed: "{{ nvidia_smi.stat.exists }}"
     # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/cdi-support.html
