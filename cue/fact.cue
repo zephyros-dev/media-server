@@ -499,6 +499,7 @@ application: {
 							domains {
 								\(_fact.server_domain) *
 							}
+							check_interval 15m
 							ttl 15m
 						}
 					}
