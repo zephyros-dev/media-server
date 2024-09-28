@@ -1,4 +1,4 @@
-- name: Create a new primary partition for disks {{ "parition" + partition_item.value.fs_type + "disk" + partition_item.key }}
+- name: Create a new primary partition for disks {{ "parition " + partition_item.value.fs_type + " disk " + partition_item.key }}
   community.general.parted:
     device: /dev/disk/by-id/{{ item }}
     number: 1
