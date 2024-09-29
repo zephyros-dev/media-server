@@ -301,6 +301,7 @@ application: {
 	caddy: {
 		_
 		param: {
+			state:           "started"
 			dashy_show:      false
 			preserve_volume: true
 			volumes: {
@@ -478,6 +479,7 @@ application: {
 	ddns: {
 		_
 		param: {
+			state:           "started"
 			staging:         false
 			dashy_show:      false
 			preserve_volume: true
@@ -1165,7 +1167,7 @@ application: {
 				}]
 			}, {
 				name:  "gotenberg"
-				image: "gotenberg"
+				image: "paperless-gotenberg"
 				args: [
 					"gotenberg",
 					"--chromium-disable-javascript=true",
@@ -1173,7 +1175,7 @@ application: {
 				]
 			}, {
 				name:  "tika"
-				image: "tika"
+				image: "paperless-tika"
 			}, {
 				// https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=682407
 				// Huge picture will cause gs to crash
