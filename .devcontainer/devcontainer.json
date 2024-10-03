@@ -94,7 +94,7 @@
     "GUIX_PROFILE": "/home/vscode/.config/guix/current"
   },
   "remoteUser": "vscode",
-  "runArgs": ["--userns=keep-id", "--privileged"],
+  "runArgs": ["--userns=keep-id", "--privileged", "--network=host"],
   "workspaceFolder": "${localWorkspaceFolder}",
   "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind"
 }
