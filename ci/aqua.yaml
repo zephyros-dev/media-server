@@ -3,5 +3,5 @@ registries:
     ref: main
 packages:
   - name: cue-lang/cue@v0.10.0
-  - name: getsops/sops@v3.9.0
+  - name: getsops/sops@v3.9.1
   - name: golang/go@go1.23.2
