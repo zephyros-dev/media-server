@@ -7,3 +7,8 @@ WantedBy=default.target
 {% endif %}
 [Unit]
 After=network-online.target
+{% if application_item.value.param.unit is defined %}
+{% for key, value in application_item.value.param.quadlet_unit_options | dictsort %}
+{{ key }}={{ value }}
+{% endfor %}
+{% endif %}

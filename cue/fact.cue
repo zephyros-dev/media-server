@@ -71,6 +71,9 @@ application: [applicationName=string]: {
 		quadlet_build_options?: {
 			[string]: string
 		}
+		quadlet_unit_options?: {
+			[string]: string
+		}
 		postgres_action: *"none" | "export" | "import" | "clean"
 		preserve_volume: *true | bool
 		state:           *"started" | "absent"
@@ -484,6 +487,9 @@ application: {
 			dashy_show:      false
 			preserve_volume: true
 			quadlet_kube_options: Network: "pasta" // Use pasta network instead of host since it can preserve the IP address from the host machine
+			quadlet_unit_options: {
+				Before: "caddy.service"
+			}
 			volumes: {
 				config: "pvc"
 				data:   "pvc"
