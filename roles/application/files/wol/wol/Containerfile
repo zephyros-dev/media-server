@@ -1,1 +1,1 @@
-FROM ghcr.io/sameerdhoot/wolweb:latest@sha256:8c72fad7c02d10ef535a7032e6924f2b99b2d61e0a1b1a60f2667317ad9bd74a
+FROM ghcr.io/sameerdhoot/wolweb:latest@sha256:0496bdce1946c4991a935c27e5988c7b41b7dc244846c8be145768154489ba24
