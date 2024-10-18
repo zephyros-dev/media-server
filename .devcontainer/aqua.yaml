@@ -6,6 +6,6 @@ packages:
   - name: cue-lang/cue@v0.10.0
   - name: getsops/sops@v3.9.1
   - name: golang/go@go1.23.2
-  - name: hashicorp/terraform@v1.9.7
+  - name: hashicorp/terraform@v1.9.8
   - name: sharkdp/fd@v10.2.0
   - name: dagger/dagger@v0.13.5
