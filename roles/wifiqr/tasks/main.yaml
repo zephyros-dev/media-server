@@ -14,10 +14,14 @@
         mode: "0755"
       loop:
         - wifiqr/qr
+    - name: Install wifiqr
+      changed_when: false
+      ansible.builtin.command:
+        cmd: go install github.com/reugn/wifiqr/cmd/wifiqr@latest
     - name: Create wifiqr
       ansible.builtin.command:
         chdir: wifiqr
-        cmd: wifiqr --ssid "{{ item.key }}" --key "{{ item.value.password }}" --output qr/{{ item.key }}.png --size {{ wifiqr_qr_size }}
+        cmd: /home/vscode/go/bin/wifiqr --ssid "{{ item.key }}" --key "{{ item.value.password }}" --output qr/{{ item.key }}.png --size {{ wifiqr_qr_size }}
       changed_when: false
       loop: "{{ wifiqr_wifi | dict2items }}"
     - name: Template wifiqr documents
@@ -26,3 +30,4 @@
         dest: wifiqr/{{ item.key }}.html
         mode: "0644"
       loop: "{{ wifiqr_wifi | dict2items }}"
+      no_log: true
