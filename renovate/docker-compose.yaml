@@ -7,7 +7,8 @@ services:
       RENOVATE_CONFIG_FILE: /opt/renovate/config.json
       RENOVATE_DRY_RUN: ${RENOVATE_DRY_RUN:-full}
       RENOVATE_REPOSITORIES: ${RENOVATE_REPOSITORIES:-["zephyros-dev/media-server"]}
-      RENOVATE_TOKEN: ${RENOVATE_TOKEN}
+      RENOVATE_TOKEN: ${RENOVATE_TOKEN} # https://docs.renovatebot.com/modules/platform/github/#running-using-a-fine-grained-token
+    privileged: true
     volumes:
       - ./config.json:/opt/renovate/config.json:ro
       # The .git-credentials file format can be found here:

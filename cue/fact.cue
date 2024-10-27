@@ -1540,37 +1540,40 @@ application: {
 		}
 
 		pod: _profile.lsio & {
-			spec: containers: [{
-				name:  "web"
-				image: "transmission"
-				env: [{
-					name: "USER"
-					valueFrom: secretKeyRef: {
-						name: "transmission"
-						key:  "USER"
-					}}, {
-					name: "PASS"
-					valueFrom: secretKeyRef: {
-						name: "transmission"
-						key:  "PASS"
-					}
+			spec: {
+				hostNetwork: true // Rootless port mapping cause UDP tracker failure, need investigation
+				containers: [{
+					name:  "web"
+					image: "transmission"
+					env: [{
+						name: "USER"
+						valueFrom: secretKeyRef: {
+							name: "transmission"
+							key:  "USER"
+						}}, {
+						name: "PASS"
+						valueFrom: secretKeyRef: {
+							name: "transmission"
+							key:  "PASS"
+						}
+					}]
+					// ports: [{
+					// 	containerPort: 51413
+					// 	hostPort:      51413
+					// }, {
+					// 	containerPort: 51413
+					// 	hostPort:      51413
+					// 	protocol:      "UDP"
+					// }]
+					volumeMounts: [{
+						name:      "home"
+						mountPath: "/home"
+					}, {
+						name:      "config"
+						mountPath: "/config:z"
+					}]
 				}]
-				ports: [{
-					containerPort: 51413
-					hostPort:      51413
-				}, {
-					containerPort: 51413
-					hostPort:      51413
-					protocol:      "UDP"
-				}]
-				volumeMounts: [{
-					name:      "home"
-					mountPath: "/home"
-				}, {
-					name:      "config"
-					mountPath: "/config:z"
-				}]
-			}]
+			}
 		}
 	}
 
