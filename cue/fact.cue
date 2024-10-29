@@ -1541,7 +1541,8 @@ application: {
 
 		pod: _profile.lsio & {
 			spec: {
-				hostNetwork: true // Rootless port mapping cause UDP tracker failure, need investigation
+				// hostNetwork: true // Rootless port mapping cause UDP tracker failure, need investigation
+				// We're using the transmission hostname internal network hostname for the clients so we went back to using port expose
 				containers: [{
 					name:  "web"
 					image: "transmission"
@@ -1557,14 +1558,14 @@ application: {
 							key:  "PASS"
 						}
 					}]
-					// ports: [{
-					// 	containerPort: 51413
-					// 	hostPort:      51413
-					// }, {
-					// 	containerPort: 51413
-					// 	hostPort:      51413
-					// 	protocol:      "UDP"
-					// }]
+					ports: [{
+						containerPort: 51413
+						hostPort:      51413
+					}, {
+						containerPort: 51413
+						hostPort:      51413
+						protocol:      "UDP"
+					}]
 					volumeMounts: [{
 						name:      "home"
 						mountPath: "/home"
