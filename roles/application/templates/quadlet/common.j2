@@ -13,4 +13,5 @@ WantedBy=default.target
 {% endif %}
 [Service]
 {# New podman version will have a user network online target, for now the container will break on machine startup, so setup restart always for it as workaround #}
-Restart=always
+{# Taken from https://systemd.io/NETWORK_ONLINE/ #}
+ExecStartPre=sh -c 'until ping -c 1 example.com; do sleep 1; done'

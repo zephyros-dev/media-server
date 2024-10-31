@@ -304,7 +304,6 @@ application: {
 	caddy: {
 		_
 		param: {
-			state:           "started"
 			dashy_show:      false
 			preserve_volume: true
 			volumes: {
@@ -482,7 +481,6 @@ application: {
 	ddns: {
 		_
 		param: {
-			state:           "started"
 			staging:         false
 			dashy_show:      false
 			preserve_volume: true
