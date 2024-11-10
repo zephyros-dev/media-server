@@ -8,4 +8,4 @@ packages:
   - name: golang/go@go1.23.3
   - name: hashicorp/terraform@v1.9.8
   - name: sharkdp/fd@v10.2.0
-  - name: dagger/dagger@v0.13.7
+  - name: dagger/dagger@v0.14.0
