@@ -8,7 +8,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     docker-compose \
     fish \
     gettext-base \
-    # guix \
     openssl \
     sshpass \
     whois
@@ -37,4 +36,4 @@ RUN \
     --requirement requirements.txt \
     --user
 
-ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:/home/${USERNAME}/bin:/home/${USERNAME}/.guix-profile/bin:$PATH
+ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/node_modules/.bin:/home/${USERNAME}/bin:$PATH

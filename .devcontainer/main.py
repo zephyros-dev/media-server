@@ -133,14 +133,6 @@ if args.profile == "devcontainer":
         if not cue_home_path.is_symlink():
             cue_home_path.symlink_to(cue_path)
 
-        # Guix
-        template = environment.get_template("channels.scm.j2")
-        Path(home_path / ".config/guix/channels.scm").write_text(template.render())
-        # Emacs
-        (Path(home_path) / ".config/emacs").mkdir(parents=True, exist_ok=True)
-        template = environment.get_template("init.el.j2")
-        (Path(home_path) / ".config/emacs/init.el").write_text(template.render())
-
     if args.stage == "all" or args.stage == "postAttachCommand":
         subprocess.run(
             "git config --global init.templateDir ~/.git-template", shell=True
@@ -172,12 +164,6 @@ if args.profile == "devcontainer":
         )
 
         subprocess.run("pre-commit install", shell=True)
-
-        guix_env = """
-    GUIX_PROFILE="$HOME/.config/.guix/current"
-    . "$GUIX_PROFILE/etc/profile"
-            """
-        Path(home_path / ".zshenv").write_text(guix_env)
 
 if args.profile == "ci":
     dependency_setup()
