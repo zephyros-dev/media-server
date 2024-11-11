@@ -135,10 +135,10 @@ application: [applicationName=string]: {
 				if !param.become && !pod.spec.hostNetwork && param.quadlet_kube_options.Network == _|_ {
 					out: "http://\(applicationName):\(in)"
 				}
-			}
-			if param.quadlet_kube_options.Network != _|_
-			if param.quadlet_kube_options.Network == "pasta" {
-				out: _host_url
+				if param.quadlet_kube_options.Network != _|_
+				if param.quadlet_kube_options.Network == "pasta" {
+					out: _host_url
+				}
 			}
 		} | {
 			in:  string
@@ -1521,6 +1521,7 @@ application: {
 		param: {
 			caddy_proxy:                  9091
 			dashy_statusCheckAcceptCodes: 401
+			quadlet_kube_options: Network: "pasta" // https://github.com/containers/podman/issues/23739#issuecomment-2310186061
 			volumes: {
 				home:   "\(_fact.global_media)/"
 				config: "./web/config/"
@@ -1539,8 +1540,6 @@ application: {
 
 		pod: _profile.lsio & {
 			spec: {
-				// hostNetwork: true // Rootless port mapping cause UDP tracker failure, need investigation
-				// We're using the transmission hostname internal network hostname for the clients so we went back to using port expose
 				containers: [{
 					name:  "web"
 					image: "transmission"
@@ -1556,14 +1555,19 @@ application: {
 							key:  "PASS"
 						}
 					}]
-					ports: [{
-						containerPort: 51413
-						hostPort:      51413
-					}, {
-						containerPort: 51413
-						hostPort:      51413
-						protocol:      "UDP"
-					}]
+					ports: [
+						{
+							containerPort: 9091
+							hostPort:      9091
+						},
+						{
+							containerPort: 51413
+							hostPort:      51413
+						}, {
+							containerPort: 51413
+							hostPort:      51413
+							protocol:      "UDP"
+						}]
 					volumeMounts: [{
 						name:      "home"
 						mountPath: "/home"
