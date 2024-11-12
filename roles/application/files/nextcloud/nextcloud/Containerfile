@@ -1,1 +1,1 @@
-FROM docker.io/nextcloud:30.0.2@sha256:9fd332ef6a4ea95b0333b79e2246d8a766acebed828cf431ebe82143bc2e22a3
+FROM docker.io/nextcloud:30.0.2@sha256:a59fdbe97325295ace5ed5bb5d5a2de1b5a6ae91107f318480fe44974274e8ed
