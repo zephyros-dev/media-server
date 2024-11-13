@@ -1,10 +1,10 @@
-FROM docker.io/caddy:2.8.4-builder-alpine@sha256:ce7d58e2ff641a4268d101c86db79a60d0bcdb6636a25c905c8da9a8a64b77db AS builder
+FROM docker.io/caddy:2.8.4-builder-alpine@sha256:553c1bbbea1bc75829c9483c0b3caf2d67d263db9258ad70fb48bb4f78baf6c1 AS builder
 
 RUN --mount=type=cache,target=/go/pkg,sharing=locked \
     xcaddy build \
     --with github.com/caddy-dns/porkbun \
     --with github.com/mholt/caddy-dynamicdns
 
-FROM docker.io/caddy:2.8.4-alpine@sha256:268fae1d45736f0588d2212e0bb832645294c937740f263bd3075250b4fb27e5
+FROM docker.io/caddy:2.8.4-alpine@sha256:54e9c7289f80701f1df5bc8236b25b740f598f51f1bbdba250f2335aadd6bccd
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
