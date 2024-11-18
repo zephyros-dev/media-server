@@ -27,7 +27,7 @@
       "automerge": false,
       "excludePackagePatterns": ["actions"],
       "matchPackagePatterns": ["python", "go"],
-      "matchUpdateTypes": ["minor"]
+      "matchUpdateTypes": ["major", "minor"]
     },
     {
       "excludePackagePatterns": ["actions"],
@@ -40,8 +40,10 @@
       "schedule": ["every weekend"]
     },
     {
+      "automerge": false,
       "groupName": "immich",
-      "matchPackagePatterns": ["ghcr.io/immich-app"]
+      "matchPackagePatterns": ["ghcr.io/immich-app"],
+      "matchUpdateTypes": ["major", "minor"]
     },
     {
       "groupName": "caddy",
