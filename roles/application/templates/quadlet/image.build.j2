@@ -10,5 +10,7 @@ SetWorkingDirectory=./{{ application_name }}/{{ item.path | basename }}
 {# This restart the image build when the kube service is restarted, which apply the new image if exists #}
 {# Needs both BindsTo and Before: https://fedoramagazine.org/systemd-unit-dependencies-and-order/ #}
 [Unit]
-BindsTo={{ application_name }}.service
 Before={{ application_name }}.service
+StopPropagatedFrom={{ application_name }}.service
+[Install]
+RequiredBy={{ application_name }}.service
