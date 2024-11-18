@@ -573,7 +573,7 @@ application: {
 	immich: {
 		_
 		param: {
-			caddy_proxy: 3001
+			caddy_proxy: 2283
 			volumes: {
 				database:   "./database/"
 				"ml-cache": "pvc"
@@ -623,43 +623,6 @@ application: {
 			}, {
 				name:  "server"
 				image: "immich-server"
-				args: ["start.sh", "immich"]
-				env: [{
-					name:  "DB_DATABASE_NAME"
-					value: "immich"
-				}, {
-					name:  "DB_HOSTNAME"
-					value: "localhost"
-				}, {
-					name:  "DB_USERNAME"
-					value: "immich"
-				}, {
-					name:  "NODE_ENV"
-					value: "production"
-				}, {
-					name:  "REDIS_HOSTNAME"
-					value: "localhost"
-				}, {
-					name: "JWT_SECRET"
-					valueFrom: secretKeyRef: {
-						name: "immich"
-						key:  "jwt_secret"
-					}
-				}, {
-					name: "DB_PASSWORD"
-					valueFrom: secretKeyRef: {
-						name: "immich"
-						key:  "database_password"
-					}
-				}]
-				volumeMounts: [{
-					name:      "upload"
-					mountPath: "/usr/src/app/upload"
-				}]
-			}, {
-				name:  "microservices"
-				image: "immich-server"
-				args: ["start.sh", "microservices"]
 				env: [{
 					name:  "DB_DATABASE_NAME"
 					value: "immich"
