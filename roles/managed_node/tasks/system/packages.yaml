@@ -6,7 +6,7 @@
   when: not snapper_repo_state.stat.exists
   become: true
   ansible.builtin.get_url:
-    url: https://download.opensuse.org/repositories/filesystems:snapper/Fedora_{{ ansible_distribution_major_version }}/filesystems:snapper.repo
+    url: https://download.opensuse.org/repositories/filesystems:snapper/Fedora_40/filesystems:snapper.repo
     dest: /etc/yum.repos.d/snapper.repo
     mode: "0600"
 
@@ -21,12 +21,13 @@
         persistent: true
 
 # The os-prober takes a long time since we have large disks
-- name: Remove os-prober
+- name: Disable os-prober
   become: true
   when: ansible_pkg_mgr == "atomic_container"
   ansible.builtin.file:
     path: /etc/grub.d/30_os-prober
-    state: absent
+    mode: "0644"
+    state: file
 
 - name: Setup global packages
   become: true
