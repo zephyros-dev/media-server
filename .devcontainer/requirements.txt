@@ -1,5 +1,5 @@
 ansible-lint==24.10.0
-ansible==10.6.0
+ansible==11.0.0
 dagger-io==0.14.0
 jmespath==1.0.1
 mitogen==0.3.18
