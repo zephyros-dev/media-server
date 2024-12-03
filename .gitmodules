@@ -6,7 +6,3 @@
 	path = submodules/snapraid-btrfs-runner
 	url = https://github.com/fmoledina/snapraid-btrfs-runner
 	branch = master
-[submodule "submodules/zapret"]
-	path = submodules/zapret
-	url = https://github.com/bol-van/zapret
-	branch = master
