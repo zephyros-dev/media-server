@@ -4,4 +4,4 @@ registries:
 packages:
   - name: cue-lang/cue@v0.10.1
   - name: getsops/sops@v3.9.2
-  - name: golang/go@go1.23.3
+  - name: golang/go@go1.23.4
