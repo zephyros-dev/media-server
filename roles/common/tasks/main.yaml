@@ -22,7 +22,7 @@
     - name: Get container cue facts
       changed_when: false
       ansible.builtin.command:
-        cmd: cue export fact.cue --out json
+        cmd: cue export --out json
       register: cue_facts
     - name: Get caddyfile content
       vars:
@@ -36,7 +36,7 @@
     - name: Re-get container cue facts with caddyfile content
       changed_when: false
       ansible.builtin.command:
-        cmd: cue export fact.cue --out json
+        cmd: cue export --out json
       register: cue_facts
     - name: Set cue facts
       ansible.builtin.set_fact:

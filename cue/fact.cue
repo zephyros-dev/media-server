@@ -4,6 +4,7 @@ package main
 import (
 	"encoding/json"
 	"encoding/yaml"
+	"list"
 	"path"
 	"strings"
 	core "k8s.io/api/core/v1"
@@ -170,7 +171,7 @@ application: [applicationName=string]: {
 		}
 		spec: {
 			hostNetwork: *false | bool
-			volumes: [for k, v in transform.volumes {
+			volumes: list.Concat([[for k, v in transform.volumes {
 				name: k
 				if v.type == "pvc" {
 					persistentVolumeClaim: claimName: v.value
@@ -187,7 +188,7 @@ application: [applicationName=string]: {
 						type: "Directory"
 					}
 				}
-			}] + [
+			}], [
 				if param.secret != _|_
 				for k, v in param.secret if v.type == "file" {
 					name: k
@@ -198,7 +199,7 @@ application: [applicationName=string]: {
 							path: k
 						}]
 					}
-				}]
+				}]])
 		}
 	}
 
@@ -239,7 +240,7 @@ application: [applicationName=string]: {
 		}]
 
 	// Have to use MarshalStream since cue export does not make stream yaml
-	manifest: yaml.MarshalStream([pod] + #secret + #volume)
+	manifest: yaml.MarshalStream(list.Concat([[pod], #secret, #volume]))
 }
 
 application: {
@@ -593,7 +594,7 @@ application: {
 		}
 
 		pod: _profile.rootless_userns & {
-			spec: containers: [{
+			spec: containers: list.Concat([[{
 				name:  "postgres"
 				image: "immich-postgres"
 				env: [{
@@ -613,7 +614,7 @@ application: {
 					name:      "database"
 					mountPath: "/var/lib/postgresql/data:U,z"
 				}]
-			}] + [if param.postgres_action == "none" for v in [{
+			}], [if param.postgres_action == "none" for v in [{
 				name:  "redis"
 				image: "immich-redis"
 				volumeMounts: [{
@@ -669,7 +670,7 @@ application: {
 					name:      "ml-cache"
 					mountPath: "/cache:U"
 				}]
-			}] {v}]
+			}] {v}]])
 		}
 	}
 
@@ -831,27 +832,27 @@ application: {
 			}
 		}
 		pod: _profile.rootless_userns & {
-			spec: containers: [{
+			spec: containers: list.Concat([[{
 				name:  "postgres"
 				image: "miniflux-postgres"
-				env: [{
+				env: list.Concat([[{
 					name:  "POSTGRES_USER"
 					value: "miniflux"
-				}] + [{
+				}], [{
 					name: "POSTGRES_PASSWORD"
 					valueFrom: secretKeyRef: {
 						name: "miniflux"
 						key:  "miniflux_postgres_password"
 					}
-				}]
+				}]])
 				volumeMounts: [{
 					name:      "database"
 					mountPath: "/var/lib/postgresql/data:U,z"
 				}]
-			}] + [if param.postgres_action == "none" for v in [{
+			}], [if param.postgres_action == "none" for v in [{
 				name:  "web"
 				image: "miniflux"
-				env: [{
+				env: list.Concat([[{
 					name:  "RUN_MIGRATIONS"
 					value: "1"
 				}, {
@@ -860,7 +861,7 @@ application: {
 				}, {
 					name:  "ADMIN_USERNAME"
 					value: "admin"
-				}] + [{
+				}], [{
 					name: "ADMIN_PASSWORD"
 					valueFrom: secretKeyRef: {
 						name: "miniflux"
@@ -872,8 +873,8 @@ application: {
 						name: "miniflux"
 						key:  "miniflux_database_url"
 					}
-				}]
-			}] {v}]
+				}]])
+			}] {v}]])
 		}
 	}
 
@@ -961,38 +962,38 @@ application: {
 
 		pod: {
 			metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=33,gid=33"
-			spec: containers: [{
+			spec: containers: list.Concat([[{
 				name:  "postgres"
 				image: "nextcloud-postgres"
 				securityContext: {
 					runAsUser:  33
 					runAsGroup: 33
 				}
-				env: [{
+				env: list.Concat([[{
 					name:  "POSTGRES_DB"
 					value: "nextcloud"
 				}, {
 					name:  "POSTGRES_USER"
 					value: "postgres"
-				}] + [{
+				}], [{
 					name: "POSTGRES_PASSWORD"
 					valueFrom: secretKeyRef: {
 						name: "nextcloud"
 						key:  "postgres_password"
 					}
-				}]
+				}]])
 				volumeMounts: [{
 					name:      "database"
 					mountPath: "/var/lib/postgresql/data:U,z"
 				}]
-			}] + [if param.postgres_action == "none" for v in [{
+			}], [if param.postgres_action == "none" for v in [{
 				name:  "web"
 				image: "nextcloud"
 				securityContext: {
 					runAsUser:  0
 					runAsGroup: 0
 				}
-				env: [{
+				env: list.Concat([[{
 					name:  "OVERWRITEPROTOCOL"
 					value: "https"
 				}, {
@@ -1007,7 +1008,7 @@ application: {
 				}, {
 					name:  "REDIS_HOST"
 					value: "localhost"
-				}] + [{
+				}], [{
 					name: "POSTGRES_PASSWORD"
 					valueFrom: secretKeyRef: {
 						name: "nextcloud"
@@ -1019,7 +1020,7 @@ application: {
 						name: "nextcloud"
 						key:  "redis_password"
 					}
-				}]
+				}]])
 				volumeMounts: [{
 					name:      "data"
 					mountPath: "/var/www/html:z"
@@ -1052,14 +1053,14 @@ application: {
 				securityContext: {
 					capabilities: add: ["MKNOD"]
 				}
-			}] {v}] + [if _fact.debug {
+			}] {v}], [if _fact.debug {
 				name:  "adminer"
 				image: "docker.io/adminer"
 				ports: [{
 					containerPort: 8080
 					hostPort:      38080
 				}]
-			}]
+			}]])
 		}
 	}
 
@@ -1105,7 +1106,7 @@ application: {
 		}
 
 		pod: _profile.rootless_userns & {
-			spec: containers: [{
+			spec: containers: list.Concat([[{
 				name:  "postgres"
 				image: "paperless-postgres"
 				env: [{
@@ -1125,7 +1126,7 @@ application: {
 					name:      "database"
 					mountPath: "/var/lib/postgresql/data:U,z"
 				}]
-			}] + [if param.postgres_action == "none" for v in [{
+			}], [if param.postgres_action == "none" for v in [{
 				name:  "redis"
 				image: "paperless-redis"
 				volumeMounts: [{
@@ -1149,7 +1150,7 @@ application: {
 				// TODO: We need to be able to adjust the -r value of gs, but currently I'm not sure how to do it on ocrmypdf
 				name:  "webserver"
 				image: "paperless-ngx"
-				env: [{
+				env: list.Concat([[{
 					name:  "PAPERLESS_DBHOST"
 					value: "localhost"
 				}, {
@@ -1167,7 +1168,7 @@ application: {
 				}, {
 					name:  "PAPERLESS_TIKA_GOTENBERG_ENDPOINT"
 					value: "http://localhost:3000"
-				}] + [{
+				}], [{
 					name: "PAPERLESS_DBPASS"
 					valueFrom: secretKeyRef: {
 						name: "paperless"
@@ -1191,7 +1192,7 @@ application: {
 						name: "paperless"
 						key:  "paperless_url"
 					}
-				}]
+				}]])
 				// Do not chown paperless volume as it is chowned by the container process
 				volumeMounts: [{
 					name:      "consume"
@@ -1206,7 +1207,7 @@ application: {
 					name:      "media"
 					mountPath: "/usr/src/paperless/media:U,z"
 				}]
-			}] {v}]
+			}] {v}]])
 		}
 	}
 
@@ -1304,7 +1305,7 @@ application: {
 					containerPort: 445
 					hostPort:      445
 				}]
-				env: [{
+				env: list.Concat([[{
 					name:  "AVAHI_DISABLE"
 					value: "1"
 				}, {
@@ -1316,15 +1317,15 @@ application: {
 				}, {
 					name:  "WSDD2_DISABLE"
 					value: "1"
-				}] + [for k, v in param.volumes {
+				}], [for k, v in param.volumes {
 					name:  "SAMBA_VOLUME_CONFIG_\(k)"
 					value: "[\(k)]; path=/shares/\(k); valid users = \(_fact.ansible_user); guest ok = no; read only = no; browseable = yes;"
-				}] + [{
+				}], [{
 					name: "ACCOUNT_\(_fact.ansible_user)"
 					valueFrom: secretKeyRef: {
 						name: "samba"
 						key:  "ACCOUNT_\(_fact.ansible_user)"
-					}}]
+					}}]])
 				volumeMounts: [{
 					name:      "storage"
 					mountPath: "/shares/storage"
@@ -1631,7 +1632,7 @@ restic_env_path: "/etc/restic/restic.env"
 
 scrutiny_port: 18080
 
-snapper_configs: [
+snapper_configs: list.Concat([[
 	for disk in _fact.disks.storage.disks_list {
 		path: "\(_fact.global_disks_storage_path)/\(disk)"
 		name: disk
@@ -1643,7 +1644,7 @@ snapper_configs: [
 			TIMELINE_CLEANUP: false
 		}
 	},
-] + [{
+], [{
 	path: "/home"
 	name: "home"
 	vars: {
@@ -1656,4 +1657,4 @@ snapper_configs: [
 		TIMELINE_LIMIT_MONTHLY: "0"
 		TIMELINE_LIMIT_YEARLY:  "0"
 	}
-}]
+}]])
