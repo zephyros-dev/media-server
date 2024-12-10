@@ -1,2 +1,2 @@
 # https://github.com/paperless-ngx/paperless-ngx/blob/dev/docker/compose/docker-compose.postgres.yml
-FROM docker.io/postgres:16-alpine@sha256:56e87f5517713be839c1ce724ec275cb46579fb05edbb0887f26f60faebe7f0d
+FROM docker.io/postgres:16-alpine@sha256:161619c29df5fa5f5ba0d107dd416ddccb9a8e091e53fa2ddbec23cb7b1736f0
