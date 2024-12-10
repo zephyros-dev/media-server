@@ -67,6 +67,7 @@
   "pinDigests": true,
   "platform": "github",
   "platformAutomerge": true,
+  "postUpdateOptions": ["gomodTidy"],
   "pre-commit": {
     "enabled": true
   },
