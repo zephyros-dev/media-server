@@ -17,12 +17,12 @@
         postgres_backup_path: "{{ postgres_data_path | dirname }}/postgres_backup"
       block:
         - name: Stop container {{ application_name }}
-          when: application_item.value.postgres_action != "clean"
+          when: application_item.value.param.postgres_action != "clean"
           ansible.builtin.systemd: # noqa: args[module]
             state: stopped
 
         - name: Export the postgres db {{ application_name }}
-          when: application_item.value.postgres_action == "export"
+          when: application_item.value.param.postgres_action == "export"
           block:
             - name: Make backup db folder {{ application_name }}
               ansible.builtin.file:
@@ -52,7 +52,7 @@
                 state: stopped
 
         - name: Import the postgres db {{ application_name }}
-          when: application_item.value.postgres_action == "import"
+          when: application_item.value.param.postgres_action == "import"
           block:
             - name: Clean current postgres volume {{ application_name }}
               ansible.builtin.file:
@@ -76,7 +76,7 @@
               changed_when: false
 
         - name: Clean postgres backup {{ application_name }}
-          when: application_item.value.postgres_action == "clean"
+          when: application_item.value.param.postgres_action == "clean"
           block:
             - name: Clean backup db {{ application_name }}
               ansible.builtin.file:

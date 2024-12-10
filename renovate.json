@@ -50,12 +50,6 @@
       "matchPackagePatterns": ["caddy"]
     },
     {
-      "additionalBranchPrefix": "{{parentDir}}/",
-      "commitMessageAction": "({{parentDir}})",
-      "matchPackagePatterns": ["postgres"],
-      "matchUpdateTypes": ["major"]
-    },
-    {
       "automerge": false,
       "groupName": "cue-lang-k8s-api",
       "matchPaths": ["cue/go.*"],
