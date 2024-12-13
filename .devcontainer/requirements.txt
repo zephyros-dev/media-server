@@ -1,6 +1,6 @@
 ansible-lint==24.12.1
 ansible==11.1.0
-dagger-io==0.14.0
+dagger-io==0.15.0
 jmespath==1.0.1
 mitogen==0.3.19
 pre-commit==4.0.1
