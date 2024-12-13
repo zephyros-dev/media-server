@@ -1,1 +1,1 @@
-FROM docker.io/pymedusa/medusa:master@sha256:67b4850cfc2d0ec815cb3ff9379d73bc7860a8743c8c189d463071df37ec2167
+FROM docker.io/pymedusa/medusa:master@sha256:c3b1eb0e7f143e7f52824e98cf4e7fbef03d8b144b86f6d38f7ee50a0f8b1954
