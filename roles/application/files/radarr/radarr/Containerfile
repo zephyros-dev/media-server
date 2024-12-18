@@ -1,1 +1,1 @@
-FROM ghcr.io/linuxserver/radarr:latest@sha256:399d00b11182a2622af0d42f115d29aed02a0fe58f6ebe98e1e654712d2e4acd
+FROM ghcr.io/linuxserver/radarr:latest@sha256:ee4c2213b769bc9a891b5dd5aa1786804634fb681dd261b3bed6b65d98592c55
