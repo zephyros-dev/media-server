@@ -1241,7 +1241,7 @@ application: {
 				home:   "\(_fact.global_media)/"
 			}
 		}
-		pod: _profile.userns_share & {
+		pod: {
 			spec: containers: [{
 				name:  "web"
 				image: "pymedusa"

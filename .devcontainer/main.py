@@ -92,10 +92,14 @@ def dependency_setup():
             "pip show mitogen", shell=True, capture_output=True, text=True
         ).stdout,
     ).group(1)
-    if not (home_path / ".ansible/plugins/strategy").is_symlink():
-        Path(home_path / ".ansible/plugins/strategy").symlink_to(
-            Path(mitogen_path) / "ansible_mitogen/plugins/strategy"
-        )
+
+    # https://stackoverflow.com/questions/8299386/modifying-a-symlink-in-python/55742015#55742015
+    Path(home_path / ".ansible/plugins/strategy_tmp").symlink_to(
+        Path(mitogen_path) / "ansible_mitogen/plugins/strategy"
+    )
+    Path(home_path / ".ansible/plugins/strategy_tmp").rename(
+        home_path / ".ansible/plugins/strategy"
+    )
 
 
 environment = Environment(
