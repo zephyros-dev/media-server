@@ -1,4 +1,4 @@
-FROM ghcr.io/paperless-ngx/paperless-ngx:2.14.3@sha256:81a73a8d7c4bc014811d452febec81c06e22c55307a9718a0f595bdd043105fc
+FROM ghcr.io/paperless-ngx/paperless-ngx:2.14.4@sha256:e806e507bce660602ce3e477d8a895c4f303b8564b51530e94ffe9fc7e946f51
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 # The entrypoint script cannot be sourced so we have to write our own tesseract language installation
 # https://github.com/paperless-ngx/paperless-ngx/blob/main/docker/docker-entrypoint.sh
