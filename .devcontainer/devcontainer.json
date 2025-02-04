@@ -83,7 +83,6 @@
   "remoteEnv": {
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
     "CONTAINER_HOST": "unix:///run/user/1000/podman/podman.sock",
-    "CUE_EXPERIMENT": "embed", // Remove once out of alpha
     "DEBUG_MODE": "true",
     "DOCKER_HOST": "unix:///run/user/1000/podman/podman.sock",
     "EDITOR": "code --wait"
