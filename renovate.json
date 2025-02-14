@@ -26,7 +26,12 @@
     {
       "automerge": false,
       "excludePackagePatterns": ["actions"],
-      "matchPackagePatterns": ["python", "go", "cue"],
+      "matchPackagePatterns": ["python", "cue"],
+      "matchUpdateTypes": ["major", "minor"]
+    },
+    {
+      "automerge": false,
+      "matchPackageNames": ["go", "golang/go"],
       "matchUpdateTypes": ["major", "minor"]
     },
     {
