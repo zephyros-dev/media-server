@@ -56,12 +56,6 @@
       "matchPackagePatterns": ["caddy"]
     },
     {
-      "automerge": false,
-      "groupName": "cue-lang-k8s-api",
-      "matchPaths": ["cue/go.*"],
-      "matchUpdateTypes": ["major", "minor"]
-    },
-    {
       "groupName": "dagger",
       "matchPackagePatterns": ["dagger"]
     },
