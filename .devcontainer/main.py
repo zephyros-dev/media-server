@@ -57,7 +57,7 @@ def check_version(command, desired_version):
         return False
 
 
-def dependency_setup():
+def shared_setup():
     AQUA_VERSION = dependencies_version["aqua"]
     aqua_bin_path = home_path / ".local/share/aquaproj-aqua/bin/aqua"
     aqua_bin_path.parent.mkdir(parents=True, exist_ok=True)
@@ -89,7 +89,7 @@ def dependency_setup():
     mitogen_path = re.search(
         r"Location: (.+)\n",
         subprocess.run(
-            "pip show mitogen", shell=True, capture_output=True, text=True
+            "uv pip show mitogen", shell=True, capture_output=True, text=True
         ).stdout,
     ).group(1)
 
@@ -100,6 +100,7 @@ def dependency_setup():
     Path(home_path / ".ansible/plugins/strategy_tmp").rename(
         home_path / ".ansible/plugins/strategy"
     )
+    subprocess.run("uv run ansible-galaxy install -r requirements.yaml", shell=True)
 
 
 environment = Environment(
@@ -108,7 +109,7 @@ environment = Environment(
 
 if args.profile == "devcontainer":
     if args.stage == "all" or args.stage == "onCreateCommand":
-        dependency_setup()
+        shared_setup()
 
         # Install latest version of podman
         podman_path = f"{home_path}/bin/podman"
@@ -142,9 +143,9 @@ if args.profile == "devcontainer":
             "git config --global init.templateDir ~/.git-template", shell=True
         )
         subprocess.run(
-            "pre-commit init-templatedir -t pre-commit ~/.git-template", shell=True
+            "uv run pre-commit init-templatedir -t pre-commit ~/.git-template",
+            shell=True,
         )
-        subprocess.run("ansible-galaxy install -r requirements.yaml", shell=True)
         gitignore_list = [
             "ansible",
             "dotenv",
@@ -167,7 +168,7 @@ if args.profile == "devcontainer":
             'plugin_cache_dir = "/home/vscode/.terraform.d/plugin-cache"'
         )
 
-        subprocess.run("pre-commit install", shell=True)
+        subprocess.run("uv run pre-commit install", shell=True)
 
 if args.profile == "ci":
-    dependency_setup()
+    shared_setup()

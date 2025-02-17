@@ -8,7 +8,7 @@ import dagger
 async def ci():
     async with dagger.Connection(dagger.Config(log_output=stdout)) as client:
         user_dir = "/root"
-        workspace = client.host().directory(".")
+        workspace = client.host().directory(".", exclude=[".venv", ".git", ".uv_cache"])
 
         ci = (
             client.container()
@@ -36,6 +36,7 @@ async def ci():
                     "install",
                     "-y",
                     "--no-install-recommends",
+                    "ca-certificates",
                     "curl",
                     "openssh-client",
                     "openssl",
@@ -55,17 +56,14 @@ async def ci():
             .with_mounted_directory(f"{user_dir}/workspace", workspace)
             .with_workdir(f"{user_dir}/workspace")
             .with_mounted_cache(
-                "/root/.cache/pip",
-                cache=client.cache_volume(key="ci-cache-pip"),
-                sharing=dagger.CacheSharingMode.LOCKED,
+                f"{user_dir}/.local/share/uv", client.cache_volume("uv_cache")
             )
             .with_exec(
                 [
-                    "pip",
-                    "install",
-                    "--no-warn-script-location",
-                    "-r",
-                    "ci/requirements/ci/requirements.txt",
+                    "uv",
+                    "sync",
+                    "--group",
+                    "dagger",
                 ]
             )
         )
@@ -87,12 +85,10 @@ async def ci():
             .with_mounted_cache(
                 f"{user_dir}/.ansible", client.cache_volume("ansible_cache")
             )
-            .with_exec(["python", ".devcontainer/main.py", "--profile=ci"])
+            .with_exec(["uv", "run", ".devcontainer/main.py", "--profile=ci"])
         )
 
-        ci = ci.with_exec(
-            ["ansible-galaxy", "install", "-r", "requirements.yaml"]
-        ).with_env_variable("ANSIBLE_HOST_KEY_CHECKING", "False")
+        ci = ci.with_env_variable("ANSIBLE_HOST_KEY_CHECKING", "False")
 
         ansible_config = {
             "ANSIBLE_CALLBACKS_ENABLED": "timer",
@@ -118,7 +114,7 @@ async def ci():
             )
             ci = ci.with_secret_variable("SOPS_AGE_KEY", secret_sops_env)
 
-        ci = ci.with_exec(["ansible-playbook", "main.yaml"])
+        ci = ci.with_exec(["uv", "run", "ansible-playbook", "main.yaml"])
 
         await ci.stdout()
 

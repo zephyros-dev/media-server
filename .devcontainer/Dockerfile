@@ -1,4 +1,6 @@
-FROM mcr.microsoft.com/devcontainers/python:3.13-bookworm@sha256:f84dde6b1993dca054dbeab997220a1e346ac1c6bf08af1f69412e47ac1d2200
+FROM mcr.microsoft.com/devcontainers/base:debian@sha256:4807916fa13f4f2a4d1ced226a31f71bc49e40864bf0825e7196f0a52a535a2c
+
+COPY --from=ghcr.io/astral-sh/uv:0.6.0@sha256:75f4ea85272b431ba65d72f2c2dc19a71d67a4b2e01bfc287a008e949c910ae8 /uv /uvx /bin/
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -20,20 +22,14 @@ RUN mkdir -p \
     ~/.ansible \
     ~/.cache/pip \
     ~/.config/sops/age \
+    ~/.local/bin \
     ~/.local/share/aquaproj-aqua/bin \
     ~/.local/share/aquaproj-aqua/pkgs \
     ~/.local/share/aquaproj-aqua/registries \
     ~/.local/share/fish \
+    ~/.local/share/uv \
     ~/.ssh \
     ~/.terraform.d/plugin-cache \
     ~/bin
-
-COPY --chown=${USERNAME}:${USERNAME} requirements.txt .
-RUN \
-    --mount=type=cache,uid=${UID},target=/home/${USERNAME}/.cache/pip \
-    pip install \
-    --no-warn-script-location \
-    --requirement requirements.txt \
-    --user
 
 ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/bin:$PATH

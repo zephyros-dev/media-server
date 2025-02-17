@@ -1,6 +1,7 @@
 all:
   children:
     server:
-      hosts: server.lan
+      hosts: server.lan # Broken with local dagger due to podman rootless network
+      # hosts: host.containers.internal
     staging:
       hosts: staging.lan
