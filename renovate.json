@@ -82,7 +82,7 @@
     {
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "containers/podman",
-      "fileMatch": ["Dockerfile"],
+      "fileMatch": ["dependencies.json"],
       "matchStrings": ["\"podman\": \"(?<currentValue>.*?)\"\n"]
     }
   ],

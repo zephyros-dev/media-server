@@ -77,7 +77,7 @@
     "source=uv-cache,target=/home/vscode/.local/share/uv,type=volume,chown=true"
   ],
   "name": "Infra",
-  "onCreateCommand": "uv run .devcontainer/main.py --stage onCreateCommand",
+  "onCreateCommand": "uv sync && uv run .devcontainer/main.py --stage onCreateCommand",
   "postAttachCommand": "uv run .devcontainer/main.py --stage postAttachCommand",
   "remoteEnv": {
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",

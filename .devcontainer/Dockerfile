@@ -20,12 +20,10 @@ ARG UID=1000
 USER ${USERNAME}
 RUN mkdir -p \
     ~/.ansible \
-    ~/.cache/pip \
+    ~/.cache \
     ~/.config/sops/age \
     ~/.local/bin \
-    ~/.local/share/aquaproj-aqua/bin \
-    ~/.local/share/aquaproj-aqua/pkgs \
-    ~/.local/share/aquaproj-aqua/registries \
+    ~/.local/share/aquaproj-aqua \
     ~/.local/share/fish \
     ~/.local/share/uv \
     ~/.ssh \
