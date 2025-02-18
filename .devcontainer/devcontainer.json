@@ -24,10 +24,10 @@
         "richie5um2.vscode-sort-json",
         "samuelcolvin.jinjahtml",
         "signageos.signageos-vscode-sops",
+        "tamasfe.even-better-toml",
         "vivaxy.vscode-conventional-commits",
         "wholroyd.jinja",
-        "yzhang.markdown-all-in-one",
-        "tamasfe.even-better-toml"
+        "yzhang.markdown-all-in-one"
       ],
       "settings": {
         "[json]": {
