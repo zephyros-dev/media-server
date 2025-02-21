@@ -28,4 +28,4 @@ dagger = [
     "mitogen>=0.3.22",
     "requests>=2.32.3",
 ]
-ci = ["dagger-io==0.16.0"]
+ci = ["dagger-io==0.16.1"]
