@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/devcontainers/base:debian@sha256:4807916fa13f4f2a4d1ced226a31f71bc49e40864bf0825e7196f0a52a535a2c
 
-COPY --from=ghcr.io/astral-sh/uv:0.6.3@sha256:a50e49276f95bdcedab2fd4f65ff6aecd0464ad2cf928e306032d3e0a090c1e1 /uv /uvx /bin/
+# Use the same image as CI, otherwise we could've used just the version
+COPY --from=ghcr.io/astral-sh/uv:0.6.3-debian-slim@sha256:c68b48b3c483db1a45e1cd9bc67ccbca768db71c7fd6f343cfddcedd8db17971 /uv /uvx /bin/
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
