@@ -6,7 +6,7 @@ collections:
   - name: containers.podman
     version: 1.16.3
   - name: devsec.hardening
-    version: 10.2.0
+    version: 10.3.0
   - name: sdorra.porkbun
     version: 1.0.1
 roles:
