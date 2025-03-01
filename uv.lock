@@ -272,7 +272,7 @@ wheels = [
 
 [[package]]
 name = "dagger-io"
-version = "0.16.1"
+version = "0.16.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -285,9 +285,9 @@ dependencies = [
     { name = "rich" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4a/13/8a45a42903761f833fee5cedf7ef0c40f88a95196426d24fc5514affad88/dagger_io-0.16.1.tar.gz", hash = "sha256:370b53fcef5a7309f7053dff9707c775e882c6454897be6f62a02fba0d4a2bb5", size = 79127 }
+sdist = { url = "https://files.pythonhosted.org/packages/53/bf/26f6089ccfd90b24b90910ff77359466e5be29b058819b9b066ffdf464a7/dagger_io-0.16.2.tar.gz", hash = "sha256:274e715cf6d586c758f071427b79a8b8e41f81f22c4e5dd5173435f0f346034f", size = 79487 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/36/ba/2f10fc50165b373b5e223fd7f88b1f6d3f55d69ed15238a11a496339a850/dagger_io-0.16.1-py3-none-any.whl", hash = "sha256:e53e8569562120324a59699795cb0bcd3a33f3ee0d72f82102581ea9bf03e442", size = 75845 },
+    { url = "https://files.pythonhosted.org/packages/8e/36/94c5b29bb251a9037e54e1d16e22c01e6a4dce0f10cee857ff7a881ceed8/dagger_io-0.16.2-py3-none-any.whl", hash = "sha256:4dd56d9511c81c4ff3ffb741365a575fa82d92d095ba8f259680cc7c3f05cd83", size = 76232 },
 ]
 
 [[package]]
@@ -458,7 +458,7 @@ dev = [
 [package.metadata]
 
 [package.metadata.requires-dev]
-ci = [{ name = "dagger-io", specifier = "==0.16.1" }]
+ci = [{ name = "dagger-io", specifier = "==0.16.2" }]
 dagger = [
     { name = "ansible", specifier = ">=11.2.0" },
     { name = "jmespath", specifier = ">=1.0.1" },
