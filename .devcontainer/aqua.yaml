@@ -7,4 +7,4 @@ packages:
   - name: golang/go@go1.24.1
   - name: hashicorp/terraform@v1.11.1
   - name: sharkdp/fd@v10.2.0
-  - name: dagger/dagger@v0.16.2
+  - name: dagger/dagger@v0.16.3
