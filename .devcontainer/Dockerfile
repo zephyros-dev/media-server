@@ -1,7 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/base:debian@sha256:4807916fa13f4f2a4d1ced226a31f71bc49e40864bf0825e7196f0a52a535a2c
-
-# Use the same image as CI, otherwise we could've used just the version
-COPY --from=ghcr.io/astral-sh/uv:0.6.6-debian-slim@sha256:ebd4738ad7105c0759c80b99b735452e0fd199699a273edf8f6596f136dcd9a3 /usr/local/bin/uv /usr/local/bin/uvx /bin/
+FROM ghcr.io/astral-sh/uv:0.6.6-debian-slim@sha256:ebd4738ad7105c0759c80b99b735452e0fd199699a273edf8f6596f136dcd9a3
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -11,12 +8,18 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     docker-compose \
     fish \
     gettext-base \
+    git \
+    locales \
+    openssh-client \
     openssl \
     sshpass \
-    whois
+    whois \
+    # https://stackoverflow.com/a/28406007
+    && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
 
 ARG USERNAME
-ARG UID=1000
+RUN useradd --create-home --shell /bin/bash ${USERNAME}
 
 USER ${USERNAME}
 RUN mkdir -p \
