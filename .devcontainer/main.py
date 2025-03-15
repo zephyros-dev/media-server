@@ -75,6 +75,7 @@ def install_podman():
             shell=True,
         )
 
+        (Path.home() / ".local/bin").mkdir(parents=True, exist_ok=True)
         subprocess.run(
             f"ln -s {podman_path} {Path.home()}/.local/bin/docker", shell=True
         )
