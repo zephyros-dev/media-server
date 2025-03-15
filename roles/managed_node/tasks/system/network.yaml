@@ -16,7 +16,8 @@
 
     - name: Set ethernet interface as slave to master bridge
       community.general.nmcli:
-        type: bridge-slave
+        type: ethernet
+        slave_type: bridge
         conn_name: "{{ physical_interface }}"
         master: bridge0
         hairpin: false

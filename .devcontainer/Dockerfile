@@ -5,20 +5,22 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt update \
     && apt install -y --no-install-recommends \
+    curl \
     docker-compose \
     fish \
-    gettext-base \
     git \
-    locales \
+    # Ansbile
     openssh-client \
     openssl \
     sshpass \
-    whois \
+    # Fix locales for python
     # https://stackoverflow.com/a/28406007
+    locales \
     && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
     locale-gen
 
 ARG USERNAME
+ARG workspaceFolder
 RUN useradd --create-home --shell /bin/bash ${USERNAME}
 
 USER ${USERNAME}
@@ -34,4 +36,4 @@ RUN mkdir -p \
     ~/.terraform.d/plugin-cache \
     ~/bin
 
-ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:/home/${USERNAME}/bin:$PATH
+ENV PATH=/home/${USERNAME}/.local/share/aquaproj-aqua/bin:${workspaceFolder}/.venv/bin:/home/${USERNAME}/bin:$PATH

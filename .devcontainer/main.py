@@ -100,7 +100,7 @@ def shared_setup():
     Path(home_path / ".ansible/plugins/strategy_tmp").rename(
         home_path / ".ansible/plugins/strategy"
     )
-    subprocess.run("uv run ansible-galaxy install -r requirements.yaml", shell=True)
+    subprocess.run("ansible-galaxy install -r requirements.yaml", shell=True)
 
 
 environment = Environment(
@@ -124,11 +124,13 @@ if args.profile == "devcontainer":
                 f"tar -zxvf {home_path / 'podman.tar.gz'} -C {home_path}", shell=True
             )
             subprocess.run(
-                f"sudo mv {home_path}/bin/podman-remote-static-linux_{go_arch} {podman_path}",
+                f"mv {home_path}/bin/podman-remote-static-linux_{go_arch} {podman_path}",
                 shell=True,
             )
 
-        subprocess.run(f"sudo ln -s {podman_path} /usr/local/bin/docker", shell=True)
+        subprocess.run(
+            f"ln -s {podman_path} {Path.home()}/.local/bin/docker", shell=True
+        )
 
         # Fix cue vscode extension
         cue_path = subprocess.run(
@@ -143,7 +145,7 @@ if args.profile == "devcontainer":
             "git config --global init.templateDir ~/.git-template", shell=True
         )
         subprocess.run(
-            "uv run pre-commit init-templatedir -t pre-commit ~/.git-template",
+            "pre-commit init-templatedir -t pre-commit ~/.git-template",
             shell=True,
         )
         gitignore_list = [
@@ -168,7 +170,7 @@ if args.profile == "devcontainer":
             'plugin_cache_dir = "/home/vscode/.terraform.d/plugin-cache"'
         )
 
-        subprocess.run("uv run pre-commit install", shell=True)
+        subprocess.run("pre-commit install", shell=True)
 
 if args.profile == "ci":
     shared_setup()

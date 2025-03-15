@@ -1,7 +1,8 @@
 {
   "build": {
     "args": {
-      "USERNAME": "vscode"
+      "USERNAME": "vscode",
+      "workspaceFolder": "${localWorkspaceFolder}"
     },
     "dockerfile": "Dockerfile"
   },
@@ -70,7 +71,8 @@
     "source=custom-bin-cache,target=/home/vscode/bin,type=volume,chown=true",
     "source=go,target=/home/vscode/go,type=volume,chown=true",
     "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume,chown=true",
-    "source=terraform-plugin-cache,target=/home/vscode/.terraform.d/plugin-cache,type=volume,chown=true"
+    "source=terraform-plugin-cache,target=/home/vscode/.terraform.d/plugin-cache,type=volume,chown=true",
+    "source=uv-cache,target=/home/vscode/.local/share/uv,type=volume,chown=true"
   ],
   "name": "Infra",
   "onCreateCommand": "uv sync && uv run .devcontainer/main.py --stage onCreateCommand",

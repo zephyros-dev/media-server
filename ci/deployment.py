@@ -36,14 +36,11 @@ async def ci():
                     "install",
                     "-y",
                     "--no-install-recommends",
-                    "ca-certificates",
+                    "ca-certificates",  # For ansible-galaxy
                     "curl",
                     "openssh-client",
                     "openssl",
-                    "rsync",
                     "sshpass",
-                    "tar",
-                    "whois",
                 ]
             )
         )
@@ -73,7 +70,7 @@ async def ci():
         ci = (
             ci.with_env_variable(
                 "PATH",
-                f"{user_dir}/.local/share/aquaproj-aqua/bin:{container_path}",
+                f"{user_dir}/.local/share/aquaproj-aqua/bin:{user_dir}/workspace/.venv/bin:{container_path}",
             )
             .with_env_variable(
                 "AQUA_GLOBAL_CONFIG", f"{user_dir}/.config/aquaproj-aqua/aqua.yaml"
@@ -85,7 +82,7 @@ async def ci():
             .with_mounted_cache(
                 f"{user_dir}/.ansible", client.cache_volume("ansible_cache")
             )
-            .with_exec(["uv", "run", ".devcontainer/main.py", "--profile=ci"])
+            .with_exec(["python", ".devcontainer/main.py", "--profile=ci"])
         )
 
         ci = ci.with_env_variable("ANSIBLE_HOST_KEY_CHECKING", "False")
@@ -114,7 +111,7 @@ async def ci():
             )
             ci = ci.with_secret_variable("SOPS_AGE_KEY", secret_sops_env)
 
-        ci = ci.with_exec(["uv", "run", "ansible-playbook", "main.yaml"])
+        ci = ci.with_exec(["ansible-playbook", "main.yaml"])
 
         await ci.stdout()
 
