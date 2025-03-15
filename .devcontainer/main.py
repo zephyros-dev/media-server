@@ -57,7 +57,31 @@ def check_version(command, desired_version):
         return False
 
 
+def install_podman():
+    # Install latest version of podman
+    podman_path = f"{home_path}/bin/podman"
+
+    PODMAN_VERSION = dependencies_version["podman"]
+    if check_version("docker --version", PODMAN_VERSION):
+        subprocess.run(
+            f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{PODMAN_VERSION}/podman-remote-static-linux_{go_arch}.tar.gz",
+            shell=True,
+        )
+        subprocess.run(
+            f"tar -zxvf {home_path / 'podman.tar.gz'} -C {home_path}", shell=True
+        )
+        subprocess.run(
+            f"mv {home_path}/bin/podman-remote-static-linux_{go_arch} {podman_path}",
+            shell=True,
+        )
+
+        subprocess.run(
+            f"ln -s {podman_path} {Path.home()}/.local/bin/docker", shell=True
+        )
+
+
 def shared_setup():
+    install_podman()
     AQUA_VERSION = dependencies_version["aqua"]
     aqua_bin_path = home_path / ".local/share/aquaproj-aqua/bin/aqua"
     aqua_bin_path.parent.mkdir(parents=True, exist_ok=True)
@@ -111,27 +135,6 @@ if args.profile == "devcontainer":
     if args.stage == "all" or args.stage == "onCreateCommand":
         shared_setup()
 
-        # Install latest version of podman
-        podman_path = f"{home_path}/bin/podman"
-
-        PODMAN_VERSION = dependencies_version["podman"]
-        if check_version("podman --version", PODMAN_VERSION):
-            subprocess.run(
-                f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{PODMAN_VERSION}/podman-remote-static-linux_{go_arch}.tar.gz",
-                shell=True,
-            )
-            subprocess.run(
-                f"tar -zxvf {home_path / 'podman.tar.gz'} -C {home_path}", shell=True
-            )
-            subprocess.run(
-                f"mv {home_path}/bin/podman-remote-static-linux_{go_arch} {podman_path}",
-                shell=True,
-            )
-
-        subprocess.run(
-            f"ln -s {podman_path} {Path.home()}/.local/bin/docker", shell=True
-        )
-
         # Fix cue vscode extension
         cue_path = subprocess.run(
             "aqua which cue", shell=True, capture_output=True, text=True
@@ -174,3 +177,6 @@ if args.profile == "devcontainer":
 
 if args.profile == "ci":
     shared_setup()
+
+if args.profile == "ci-host":
+    install_podman()
