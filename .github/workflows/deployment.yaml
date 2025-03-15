@@ -43,6 +43,11 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           version: latest # TODO: update uv with renovate
+      - name: Setup tmate session
+        if: env.DEBUG_MODE == 'true' && failure()
+        uses: mxschmitt/action-tmate@v3
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: Run dagger pipeline
         uses: nick-fields/retry@v3
         with:
@@ -51,10 +56,5 @@ jobs:
           retry_on: error
           command: ./ci/run.sh
           on_retry_command: ./ci/retry.sh
-        env:
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-      - name: Setup tmate session
-        if: env.DEBUG_MODE == 'true' && failure()
-        uses: mxschmitt/action-tmate@v3
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
