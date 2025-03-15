@@ -44,7 +44,7 @@ jobs:
         with:
           version: latest # TODO: update uv with renovate
       - name: Setup tmate session
-        if: env.DEBUG_MODE == 'true' && failure()
+        if: env.DEBUG_MODE == 'true'
         uses: mxschmitt/action-tmate@v3
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
