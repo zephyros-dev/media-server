@@ -5,7 +5,6 @@
     },
     "dockerfile": "Dockerfile"
   },
-  "containerUser": "vscode",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -18,8 +17,6 @@
         "mhutchie.git-graph",
         "mikestead.dotenv",
         "ms-azuretools.vscode-docker",
-        "njpwerner.autodocstring",
-        "pascalreitermann93.vscode-yaml-sort",
         "redhat.ansible",
         "richie5um2.vscode-sort-json",
         "samuelcolvin.jinjahtml",
@@ -45,7 +42,7 @@
         "[yaml]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
-        "ansible.python.interpreterPath": "/usr/local/bin/python",
+        "ansible.python.interpreterPath": "${localWorkspaceFolder}/.venv/bin/python",
         "cue.moduleRoot": "${workspaceFolder}/cue",
         "editor.codeActionsOnSave": {
           "source.fixAll.sortJSON": "always"
@@ -64,17 +61,16 @@
   "initializeCommand": "./.devcontainer/initializeCommand.sh",
   "mounts": [
     "source=/mnt,target=/mnt,type=bind",
-    "source=${localEnv:HOME}/.ansible,target=/home/vscode/.ansible,type=bind",
     "source=${localEnv:HOME}/.config/sops/age/keys.txt,target=/home/vscode/.config/sops/age/keys.txt,type=bind",
     "source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
     "source=${localEnv:XDG_RUNTIME_DIR}/podman/podman.sock,target=/run/user/1000/podman/podman.sock,type=bind",
+    "source=ansible-cache,target=/home/vscode/.ansible,type=volume,chown=true",
     "source=aqua-cache,target=/home/vscode/.local/share/aquaproj-aqua,type=volume,chown=true",
     "source=custom-bin-cache,target=/home/vscode/bin,type=volume,chown=true",
     "source=go,target=/home/vscode/go,type=volume,chown=true",
     "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume,chown=true",
-    "source=terraform-plugin-cache,target=/home/vscode/.terraform.d/plugin-cache,type=volume,chown=true",
-    "source=uv-cache,target=/home/vscode/.local/share/uv,type=volume,chown=true"
+    "source=terraform-plugin-cache,target=/home/vscode/.terraform.d/plugin-cache,type=volume,chown=true"
   ],
   "name": "Infra",
   "onCreateCommand": "uv sync && uv run .devcontainer/main.py --stage onCreateCommand",
@@ -86,7 +82,7 @@
     "DOCKER_HOST": "unix:///run/user/1000/podman/podman.sock",
     "EDITOR": "code --wait"
   },
-  "remoteUser": "vscode",
+  "updateRemoteUserUID": false,
   "runArgs": ["--userns=keep-id", "--privileged", "--network=host"],
   "workspaceFolder": "${localWorkspaceFolder}",
   "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind"

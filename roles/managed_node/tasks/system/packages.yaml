@@ -120,14 +120,13 @@
 - name: Setup auto update dnf
   become: true
   block:
-    # Disable auto update to stay in 40 since mergerfs is not available on 41 yet
     - name: Setup automatic update service
       when: ansible_pkg_mgr == "atomic_container"
       ansible.builtin.systemd:
         name: rpm-ostreed-automatic.timer
         daemon_reload: true
         enabled: false
-        state: stopped
+        state: started
 
 - name: Enable cockpit
   become: true

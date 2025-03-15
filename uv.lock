@@ -458,7 +458,7 @@ dev = [
 [package.metadata]
 
 [package.metadata.requires-dev]
-ci = [{ name = "dagger-io", specifier = "==0.16.3" }]
+ci = [{ name = "dagger-io", specifier = ">=0.15.4" }]
 dagger = [
     { name = "ansible", specifier = ">=11.2.0" },
     { name = "jmespath", specifier = ">=1.0.1" },
