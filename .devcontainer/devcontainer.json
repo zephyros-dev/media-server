@@ -81,7 +81,6 @@
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
     "CONTAINER_HOST": "unix:///run/user/1000/podman/podman.sock",
     "DEBUG_MODE": "true",
-    "DOCKER_HOST": "unix:///run/user/1000/podman/podman.sock",
     "EDITOR": "code --wait"
   },
   "updateRemoteUserUID": false,
