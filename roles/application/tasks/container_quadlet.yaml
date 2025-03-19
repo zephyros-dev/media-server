@@ -72,62 +72,33 @@
           loop: "{{ image_list.files }}"
           register: image_build_service_state
 
-    - name: Setup quadlet files {{ application_name }}
+    - name: Setup deployment {{ application_name }}
       vars:
         image_changed: "{{ image_build_service_state.changed or image_containerfile_state.changed }}"
       block:
-        - name: Create kube service {{ application_name }}
-          when: application_item.value.param.kind == "kube"
+        - name: Create kube deployment {{ application_name }} # noqa: risky-file-permissions
+          vars:
+            manifest_query: "{{ application_name }}.manifest"
+          ansible.builtin.copy:
+            content: "{{ application | json_query(manifest_query) }}"
+            dest: "{{ container_quadlet_path }}/{{ application_name }}/deployment.yaml"
+          register: kube_file_yaml
+        - name: Create kube quadlet file {{ application_name }} # noqa: risky-file-permissions
+          ansible.builtin.template:
+            src: quadlet/service.kube.j2
+            dest: "{{ container_quadlet_path }}/{{ application_name }}.kube"
+          register: kube_file_quadlet
+        - name: Start systemd service {{ application_name }}
           block:
-            - name: Setup kube deployment {{ application_name }}
-              block:
-                - name: Create kube deployment {{ application_name }} # noqa: risky-file-permissions
-                  vars:
-                    manifest_query: "{{ application_name }}.manifest"
-                  ansible.builtin.copy:
-                    content: "{{ application | json_query(manifest_query) }}"
-                    dest: "{{ container_quadlet_path }}/{{ application_name }}/deployment.yaml"
-                  register: kube_file_yaml
-                - name: Create kube quadlet file {{ application_name }} # noqa: risky-file-permissions
-                  ansible.builtin.template:
-                    src: quadlet/service.kube.j2
-                    dest: "{{ container_quadlet_path }}/{{ application_name }}.kube"
-                  register: kube_file_quadlet
-                - name: Start systemd service {{ application_name }}
-                  block:
-                    - name: Start systemd service {{ application_name }}
-                      changed_when: false
-                      when: not (kube_file_yaml.changed or kube_file_quadlet.changed)
-                      ansible.builtin.systemd:
-                      async: 45
-                      poll: 0
-                    - name: Restart systemd service if changed {{ application_name }} # noqa: args[module]
-                      changed_when: false
-                      when: kube_file_yaml.changed or kube_file_quadlet.changed or image_changed
-                      ansible.builtin.systemd:
-                        state: restarted
-                      async: 45
-                      poll: 0
-
-        - name: Create container service {{ application_name }}
-          when: application_item.value.param.kind == "container"
-          block:
-            - name: Create container quadlet file {{ application_name }} # noqa: risky-file-permissions
-              vars:
-                volumes: "{{ application_item.value.transform.volumes }}"
-              ansible.builtin.template:
-                src: "quadlet/{{ application_name }}.container.j2"
-                dest: "{{ container_quadlet_path }}/{{ application_name }}.container"
-              register: container_file_state
             - name: Start systemd service {{ application_name }}
               changed_when: false
-              when: not container_file_state.changed
+              when: not (kube_file_yaml.changed or kube_file_quadlet.changed)
               ansible.builtin.systemd:
               async: 45
               poll: 0
-            - name: Restart systemd service if changed {{ application_name }} # noqa: args[module] no-handler
+            - name: Restart systemd service if changed {{ application_name }} # noqa: args[module]
               changed_when: false
-              when: container_file_state.changed or image_changed
+              when: kube_file_yaml.changed or kube_file_quadlet.changed or image_changed
               ansible.builtin.systemd:
                 state: restarted
               async: 45
@@ -142,15 +113,14 @@
       scope: "{{ container_systemd_scope }}"
       state: stopped
   block:
-    - name: Check if container or kube service exists {{ application_name }}
+    - name: Check if kube service exists {{ application_name }}
       ansible.builtin.find:
         paths: "{{ container_quadlet_path }}/"
         patterns:
           - "{{ application_name }}.kube"
-          - "{{ application_name }}.container"
       register: service_file_exists
 
-    - name: Stop container service {{ application_name }}
+    - name: Stop application service {{ application_name }}
       when: service_file_exists.files | length > 0
       ansible.builtin.systemd:
 

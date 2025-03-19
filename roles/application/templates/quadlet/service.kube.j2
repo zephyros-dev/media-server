@@ -10,4 +10,22 @@ SetWorkingDirectory=yaml
 [Service]
 {# Extend Timeout to allow time to pull the image #}
 TimeoutStartSec=1800
-{% include 'common.j2' %}
+[Install]
+{# Start by default on boot #}
+{% if application_item.value.param.become %}
+WantedBy=multi-user.target
+{% else %}
+WantedBy=default.target
+{% endif %}
+[Unit]
+{% if application_item.value.param.unit is defined %}
+{% for key, value in application_item.value.param.quadlet_unit_options | dictsort %}
+{{ key }}={{ value }}
+{% endfor %}
+{% endif %}
+[Service]
+{# New podman version will have a user network online target, for now the container will break on machine startup, so setup restart always for it as workaround #}
+{# https://github.com/containers/podman/issues/24796 #}
+{# https://github.com/systemd/systemd/issues/3312#issuecomment-922096361 #}
+ExecStartPre=nm-online
+Restart=on-failure

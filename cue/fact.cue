@@ -65,7 +65,6 @@ application: [applicationName=string]: {
 		dashy_icon?:                   string
 		dashy_show:                    *true | bool // Show service endpoint in dashy
 		dashy_statusCheckAcceptCodes?: uint16 & >99 & <600
-		kind:                          *"kube" | "container"
 		quadlet_kube_options?: {
 			[string]: string
 		}
@@ -678,16 +677,31 @@ application: {
 	jellyfin: {
 		_
 		param: {
-			caddy_proxy: "jellyfin:8096"
-			// This is a hack so we can migrate the folder fields to volumes
-			// Once podman support mounting nvidia gpu in quadlet kubernetes we can remove this
-			// https://github.com/containers/podman/issues/17833
-			kind: "container"
+			caddy_proxy: 8096
 			volumes: {
 				cache:  "./cache/"
 				config: "./config/"
 				media:  "\(_fact.global_media)/"
 			}
+		}
+		pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "web"
+				image: "jellyfin"
+				if _fact.nvidia_installed {
+					resources: limits: "nvidia.com/gpu=all": 1
+				}
+				volumeMounts: [{
+					name:      "cache"
+					mountPath: "/cache:z"
+				}, {
+					name:      "config"
+					mountPath: "/config:z"
+				}, {
+					name:      "media"
+					mountPath: "/home"
+				}]
+			}]
 		}
 	}
 
@@ -919,22 +933,77 @@ application: {
 		param: {
 			become:      true
 			caddy_proxy: 19999
-			kind:        "container"
 			volumes: {
-				config:    "/etc/netdata/"
-				lib:       "pvc"
 				cache:     "pvc"
-				root:      "/root/"
-				passwd:    "/etc/passwd"
-				group:     "/etc/group"
-				localtime: "/etc/localtime"
-				proc:      "/proc/"
-				sys:       "/sys/"
-				osrelease: "/etc/os-release"
-				varlog:    "/var/log/"
-				systemd:   "/run/dbus/"
+				config:    "/etc/netdata/"
 				dev_dri:   "/dev/dri/"
+				group:     "/etc/group"
+				lib:       "pvc"
+				localtime: "/etc/localtime"
+				osrelease: "/etc/os-release"
+				passwd:    "/etc/passwd"
+				proc:      "/proc/"
+				root:      "/root/"
+				sys:       "/sys/"
+				systemd:   "/run/dbus/"
+				varlog:    "/var/log/"
 			}
+		}
+
+		pod: spec: {
+			containers: [{
+				name:  "web"
+				image: "netdata"
+				securityContext: capabilities: add: [
+					"CAP_SYS_ADMIN",
+					"CAP_SYS_PTRACE",
+				]
+				if _fact.nvidia_installed {
+					resources: limits: "nvidia.com/gpu=all": 1
+				}
+				volumeMounts: [{
+					name:      "cache"
+					mountPath: "/var/cache/netdata"
+				}, {
+					name:      "config"
+					mountPath: "/etc/netdata:z"
+				}, {
+					name:      "dev_dri"
+					mountPath: "/dev/dri"
+				}, {
+					name:      "group"
+					mountPath: "/etc/group:ro"
+				}, {
+					name:      "lib"
+					mountPath: "/var/lib/netdata"
+				}, {
+					name:      "localtime"
+					mountPath: "/etc/localtime:ro"
+				}, {
+					name:      "osrelease"
+					mountPath: "/host/ect/os-release:ro"
+				}, {
+					name:      "passwd"
+					mountPath: "/etc/passwd:ro"
+				}, {
+					name:      "proc"
+					mountPath: "/host/prox:ro"
+				}, {
+					name:      "root"
+					mountPath: "/host/root:ro"
+				}, {
+					name:      "sys"
+					mountPath: "/host/sys:ro"
+				}, {
+					name:      "systemd"
+					mountPath: "/run/dbus:ro"
+				}, {
+					name:      "varlog"
+					mountPath: "/host/var/log:ro"
+				}]
+			}]
+			hostPID:     true
+			hostNetwork: true
 		}
 	}
 
