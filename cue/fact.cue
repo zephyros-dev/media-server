@@ -64,6 +64,7 @@ application: [applicationName=string]: {
 		caddy_sso:                     *false | bool
 		dashy_icon?:                   string
 		dashy_show:                    *true | bool // Show service endpoint in dashy
+		dashy_name?:                   string       // Use custom name on dashy
 		dashy_statusCheckAcceptCodes?: uint16 & >99 & <600
 		quadlet_kube_options?: {
 			[string]: string
@@ -93,13 +94,16 @@ application: [applicationName=string]: {
 			type:  "pvc" | "file" | "absolutePathDir" | "relativePathDir"
 			value: string
 		}
+		// This is for url parsable name
+		// applicationName is reserved for proper UNIX file path and cuelang key name
+		applicationCanonName: strings.Replace(applicationName, "_", "-", -1)
 		volumes: {
 			if param.volumes != _|_
 			for k, v in param.volumes {"\(k)": {
 				_volume_path: path.Join([_fact.global_volume_path, applicationName, path.Clean(v)])
 				if v == "pvc" {
 					type:  "pvc"
-					value: "\(applicationName)-\(k)"
+					value: "\(applicationCanonName)-\(k)"
 				}
 				if v =~ "\/.+[^\/]$" {
 					type: "file"
@@ -133,7 +137,7 @@ application: [applicationName=string]: {
 					out: "http://\(_fact.caddyfile_host_address):\(in)"
 				}
 				if !param.become && !pod.spec.hostNetwork && param.quadlet_kube_options.Network == _|_ {
-					out: "http://\(applicationName):\(in)"
+					out: "http://\(applicationCanonName):\(in)"
 				}
 				if param.quadlet_kube_options.Network != _|_
 				if param.quadlet_kube_options.Network == "pasta" {
@@ -165,8 +169,8 @@ application: [applicationName=string]: {
 		apiVersion: "v1"
 		kind:       "Pod"
 		metadata: {
-			annotations: "io.podman.annotations.infra.name": "\(applicationName)-pod"
-			name: applicationName
+			annotations: "io.podman.annotations.infra.name": "\(transform.applicationCanonName)-pod"
+			name: transform.applicationCanonName
 		}
 		spec: {
 			hostNetwork: *false | bool
@@ -192,7 +196,7 @@ application: [applicationName=string]: {
 				for k, v in param.secret if v.type == "file" {
 					name: k
 					secret: {
-						secretName: applicationName
+						secretName: transform.applicationCanonName
 						items: [{
 							key:  k
 							path: k
@@ -211,7 +215,7 @@ application: [applicationName=string]: {
 				apiVersion: "v1"
 				kind:       "Secret"
 				metadata: {
-					name: applicationName
+					name: transform.applicationCanonName
 				}
 				type: "Opaque"
 				stringData: {
@@ -368,6 +372,7 @@ application: {
 			volumes: {
 				books:  "\(_fact.global_media)/Storage/Books/"
 				config: "./config/"
+				ingest: "./ingest/" // This path can be added in calibre Add Books > Control the adding of books > Automatic adding
 			}
 		}
 		pod: _profile.lsio & {
@@ -385,8 +390,37 @@ application: {
 				}, {
 					name:      "books"
 					mountPath: "/books"
+				}, {
+					name:      "ingest"
+					mountPath: "/config/ingest:z"
+				}]
+			}, {
+				name:  "downloader"
+				image: "calibre-downloader"
+				env: [{
+					name:  "UID"
+					value: "911"
+				}, {
+					name:  "GID"
+					value: "911"
+				}, {
+					name:  "FLASK_DEBUG"
+					value: "false"
+				}]
+				volumeMounts: [{
+					name:      "ingest"
+					mountPath: "/cwa-book-ingest:z"
 				}]
 			}]
+		}
+	}
+
+	calibre_web_automated_downloader: {
+		_
+		param: {
+			caddy_proxy: "http://calibre:8084"
+			caddy_sso:   true
+			dashy_name:  "cwa-downloader"
 		}
 	}
 
@@ -423,16 +457,22 @@ application: {
 							items: [
 								for k, v in application
 								if v.param.dashy_show {
-									_url_key:    strings.Replace(k, "_", "-", -1)
-									_url_public: string | *"https://\(_url_key).\(_fact.server_domain)"
+									_title: string
+									if v.param.dashy_name != _|_ {
+										_title: v.param.dashy_name
+									}
+									if v.param.dashy_name == _|_ {
+										_title: v.transform.applicationCanonName
+									}
+									_url_public: string | *"https://\(v.transform.applicationCanonName).\(_fact.server_domain)"
 									if v.param.state == "started" {
-										title: strings.ToTitle(_url_key)
+										title: strings.ToTitle(_title)
 										if v.param.dashy_icon == _|_ {
-											icon: "hl-\(_url_key)"
+											icon: "hl-\(_title)"
 										}
 										if v.param.dashy_icon != _|_ {
 											if strings.HasPrefix(v.param.dashy_icon, "/") {
-												icon: "https://\(_url_key).\(_fact.server_domain)\(v.param.dashy_icon)"
+												icon: "https://\(_title).\(_fact.server_domain)\(v.param.dashy_icon)"
 											}
 											if !strings.HasPrefix(v.param.dashy_icon, "/") {
 												icon: v.param.dashy_icon

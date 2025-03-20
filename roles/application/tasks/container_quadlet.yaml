@@ -78,7 +78,7 @@
       block:
         - name: Create kube deployment {{ application_name }} # noqa: risky-file-permissions
           vars:
-            manifest_query: "{{ application_name }}.manifest"
+            manifest_query: "{{ application_item.key }}.manifest"
           ansible.builtin.copy:
             content: "{{ application | json_query(manifest_query) }}"
             dest: "{{ container_quadlet_path }}/{{ application_name }}/deployment.yaml"

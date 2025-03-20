@@ -10,6 +10,13 @@
       ansible.builtin.set_fact:
         nvidia_installed: "{{ nvidia_smi.stat.exists }}"
     # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/cdi-support.html
+    - name: Get current timezone identifier
+      changed_when: false
+      check_mode: true
+      become: true
+      community.general.timezone:
+        name: UTC
+      register: tz_output
 
 - name: Generate facts
   delegate_to: localhost
@@ -20,6 +27,8 @@
     ansible.builtin.copy:
       mode: "0600"
       dest: cue/tmp/fact.json
+  vars:
+    tz_id: "{{ tz_output | json_query('diff.before.name') }}"
   block:
     - name: Create tmp cue folder
       ansible.builtin.file:
