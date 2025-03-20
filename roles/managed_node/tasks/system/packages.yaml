@@ -23,7 +23,6 @@
 # The os-prober takes a long time since we have large disks
 - name: Disable os-prober
   become: true
-  when: ansible_pkg_mgr == "atomic_container"
   ansible.builtin.file:
     path: /etc/grub.d/30_os-prober
     mode: "0644"
@@ -31,7 +30,6 @@
 
 - name: Setup global packages
   become: true
-  when: ansible_pkg_mgr == "atomic_container"
   community.general.rpm_ostree_pkg:
     name:
       - fd-find
@@ -117,15 +115,14 @@
       ansible.builtin.command:
         cmd: powerprofilesctl set power-saver
 
-- name: Setup auto update dnf
+- name: Setup auto update
   become: true
   block:
     - name: Setup automatic update service
-      when: ansible_pkg_mgr == "atomic_container"
       ansible.builtin.systemd:
         name: rpm-ostreed-automatic.timer
         daemon_reload: true
-        enabled: false
+        enabled: true
         state: started
 
 - name: Enable cockpit
