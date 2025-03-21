@@ -354,15 +354,6 @@ application: {
 		}
 	}
 
-	calibre_content: {
-		_
-		param: {
-			caddy_proxy:                  "http://calibre:8081"
-			dashy_icon:                   "/favicon.png"
-			dashy_statusCheckAcceptCodes: 401
-		}
-	}
-
 	calibre: {
 		_
 		param: {
@@ -415,12 +406,22 @@ application: {
 		}
 	}
 
-	calibre_web_automated_downloader: {
+	calibre_content: {
+		_
+		param: {
+			caddy_proxy:                  "http://calibre:8081"
+			dashy_icon:                   "/favicon.png"
+			dashy_statusCheckAcceptCodes: 401
+		}
+	}
+
+	calibre_downloader: {
 		_
 		param: {
 			caddy_proxy: "http://calibre:8084"
 			caddy_sso:   true
-			dashy_name:  "cwa-downloader"
+			dashy_name:  "calibre-downloader"
+			dashy_icon:  "/favicon.ico"
 		}
 	}
 
