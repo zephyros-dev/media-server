@@ -397,6 +397,9 @@ application: {
 				}, {
 					name:  "FLASK_DEBUG"
 					value: "false"
+				}, {
+					name:  "SUPPORTED_FORMATS"
+					value: "epub,pdf,cbz,cbr"
 				}]
 				volumeMounts: [{
 					name:      "ingest"
