@@ -1,1 +1,1 @@
-FROM ghcr.io/calibrain/calibre-web-automated-book-downloader:latest@sha256:2151f99cfb8c4db6df592d7fde6c81856a8d7bcceb2539633778c7f2e140c694
+FROM ghcr.io/calibrain/calibre-web-automated-book-downloader:latest@sha256:73da3a86a5f91d972ea462978afaa3de3f492d89e6c2e5a750b46d8cf9a9a1af
