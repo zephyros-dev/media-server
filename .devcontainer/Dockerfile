@@ -13,6 +13,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     openssh-client \
     openssl \
     sshpass \
+    # Openwrt
+    rsync \
     # Fix locales for python
     # https://stackoverflow.com/a/28406007
     locales \
