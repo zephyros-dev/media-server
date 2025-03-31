@@ -1587,7 +1587,7 @@ application: {
 					mountPath: "/var/syncthing:z"
 				}, {
 					name:      "koreader"
-					mountPath: "/var/syncthing/koreader/book"
+					mountPath: "/var/syncthing/koreader/book:z"
 				}]
 			}]
 		}
