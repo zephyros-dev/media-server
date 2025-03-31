@@ -1,7 +1,6 @@
 #!/usr/local/bin/python
 
 import argparse
-import json
 import os
 import platform
 import re
@@ -10,6 +9,7 @@ import subprocess
 from pathlib import Path
 
 import requests
+import yaml
 from jinja2 import Environment, FileSystemLoader
 
 parser = argparse.ArgumentParser(description="Setup devcontainer")
@@ -28,7 +28,9 @@ args = parser.parse_args()
 
 home_path = Path(os.getenv("HOME"))
 
-dependencies_version = json.loads(Path(".devcontainer/dependencies.json").read_text())
+dependencies_version = yaml.safe_load(
+    Path(".devcontainer/dependencies.yaml").read_text()
+)
 
 go_arch_map = {
     "x86_64": "amd64",
@@ -61,7 +63,7 @@ def install_podman():
     # Install latest version of podman
     podman_path = f"{home_path}/bin/podman"
 
-    PODMAN_VERSION = dependencies_version["podman"]
+    PODMAN_VERSION = dependencies_version["containers/podman"]
     if check_version("docker --version", PODMAN_VERSION):
         subprocess.run(
             f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{PODMAN_VERSION}/podman-remote-static-linux_{go_arch}.tar.gz",
@@ -83,7 +85,7 @@ def install_podman():
 
 def shared_setup():
     install_podman()
-    AQUA_VERSION = dependencies_version["aqua"]
+    AQUA_VERSION = dependencies_version["aquaproj/aqua"]
     aqua_bin_path = home_path / ".local/share/aquaproj-aqua/bin/aqua"
     aqua_bin_path.parent.mkdir(parents=True, exist_ok=True)
     if check_version("aqua --version", AQUA_VERSION):

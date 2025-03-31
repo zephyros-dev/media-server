@@ -1,6 +1,5 @@
 #!/usr/local/bin/python
 
-import json
 import os
 import shutil
 import subprocess
@@ -17,6 +16,8 @@ openwrt_config = yaml.safe_load(
         ["sops", "-d", "config.sops.yaml"], capture_output=True, text=True
     ).stdout
 )
+
+# TODO: Download zapret with version
 
 for router in openwrt_config["router_list"]:
     # Copy the repo

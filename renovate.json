@@ -75,15 +75,8 @@
   "regexManagers": [
     {
       "datasourceTemplate": "github-releases",
-      "depNameTemplate": "aquaproj/aqua",
-      "fileMatch": ["dependencies.json"],
-      "matchStrings": ["\"aqua\": \"(?<currentValue>.*?)\"\n"]
-    },
-    {
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "containers/podman",
-      "fileMatch": ["dependencies.json"],
-      "matchStrings": ["\"podman\": \"(?<currentValue>.*?)\"\n"]
+      "fileMatch": ["dependencies.yaml"],
+      "matchStrings": ["(?<depName>.+?): (?<currentValue>.*?)\n"]
     }
   ],
   "repositories": ["zephyros-dev/media-server"],
