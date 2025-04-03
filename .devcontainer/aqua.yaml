@@ -4,7 +4,7 @@ registries:
 packages:
   - name: cue-lang/cue@v0.12.0
   - name: getsops/sops@v3.10.1
-  - name: golang/go@go1.24.1
+  - name: golang/go@go1.24.2
   - name: hashicorp/terraform@v1.11.3
   - name: sharkdp/fd@v10.2.0
   - name: dagger/dagger@v0.17.2
