@@ -1,5 +1,3 @@
-#!/usr/local/bin/python
-
 import os
 import shutil
 import subprocess
@@ -17,17 +15,30 @@ openwrt_config = yaml.safe_load(
     ).stdout
 )
 
-# TODO: Download zapret with version
+version = yaml.safe_load(Path("../.devcontainer/dependencies.yaml").read_text())[
+    "bol-van/zapret"
+]
+if not Path(f".decrypted.zapret/zapret-{version}").exists():
+    print(f"New version detected {version}")
+    url = f"https://github.com/bol-van/zapret/releases/download/{version}/zapret-{version}-openwrt-embedded.tar.gz"
+    subprocess.run(
+        f"curl -Lo .decrypted.zapret.tar.gz {url}",
+        shell=True,
+    )
+    Path(".decrypted.zapret").mkdir(parents=True, exist_ok=True)
+    subprocess.run(
+        "tar -zxvf .decrypted.zapret.tar.gz -C .decrypted.zapret", shell=True
+    )
 
 for router in openwrt_config["router_list"]:
     # Copy the repo
     subprocess.run(
-        f"rsync -4 --mkpath --chown root:root -a --delete --exclude '.git' --exclude 'config' .decrypted.zapret/ root@{router}:/opt/zapret",
+        f"rsync -4 --mkpath --chown root:root -a --delete --exclude '.git' --exclude 'config' .decrypted.zapret/zapret-{version}/ root@{router}:/opt/zapret",
         shell=True,
     )
 
     # Copy tmp config
-    shutil.copy(".decrypted.zapret/config.default", ".env")
+    shutil.copy(f".decrypted.zapret/zapret-{version}/config.default", ".env")
 
     # Change the config
     for key, value in openwrt_config["config"].items():
