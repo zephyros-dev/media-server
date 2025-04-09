@@ -111,15 +111,6 @@ https://github.com/ublue-os/ucore
 
 # Maintenance notes
 
-## Python version upgrade
-
-<!-- Waiting for python version manager in renovate -->
-<!-- https://github.com/renovatebot/renovate/issues/22225 -->
-
-- To upgrade python version, update them in the following files:
-  - .devcontainer/Dockerfile
-  - .github/workflows/deployment.yaml
-
 ## Postgres major version update
 
 - To upgrade postgres major version, do the following
@@ -153,7 +144,7 @@ dagger run -i python ci/deployment.py
 1. Rebuild nextcloud
 
 ```
-ansible-playbook container_run.yaml --tags nextcloud
+ansible-playbook main.yaml --tags nextcloud
 ```
 
 ### Debug postgres
@@ -203,7 +194,7 @@ podman system reset
 
 - Renovate can be visisted at: https://developer.mend.io
 
-# FAQ
+# Misc
 
 1. Why HP Z230?
 
