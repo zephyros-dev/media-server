@@ -1,1 +1,1 @@
-FROM ghcr.io/triliumnext/notes:v0.92.6@sha256:15e76cd0b34ac1376e36c06b8bd1cb281ce4e1610b49dea50a2da9bfbeb369c9
+FROM ghcr.io/triliumnext/notes:v0.92.7@sha256:545c3f52e0da7b57700f657c1ed681e96ed47813aa0b4fd34cfe0a3c9072570f
