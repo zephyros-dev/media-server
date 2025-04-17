@@ -2,4 +2,4 @@ registries:
   - type: standard
     ref: main
 packages:
-  - name: getsops/sops@v3.10.1
+  - name: getsops/sops@v3.10.2
