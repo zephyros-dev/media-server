@@ -16,7 +16,6 @@
   "lockFileMaintenance": {
     "enabled": true
   },
-  "onboarding": false,
   "packageRules": [
     {
       "automerge": false,
