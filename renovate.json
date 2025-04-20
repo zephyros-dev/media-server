@@ -78,7 +78,6 @@
       "matchStrings": ["(?<depName>.+?): (?<currentValue>.*?)\n"]
     }
   ],
-  "repositories": ["zephyros-dev/media-server"],
   "schedule": ["after 1am, before 2pm"],
   "updateNotScheduled": false
 }
