@@ -16,7 +16,6 @@
   "lockFileMaintenance": {
     "enabled": true
   },
-  "minimumReleaseAge": "1 days",
   "onboarding": false,
   "packageRules": [
     {
