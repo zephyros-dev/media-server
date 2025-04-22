@@ -50,6 +50,7 @@
       "matchUpdateTypes": ["major", "minor"]
     },
     {
+      "automerge": false,
       "groupName": "caddy",
       "matchPackagePatterns": ["caddy"]
     },
