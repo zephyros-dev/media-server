@@ -41,7 +41,7 @@
     {
       "groupName": "renovate",
       "matchPackagePatterns": ["renovate"],
-      "schedule": ["every weekend"]
+      "schedule": ["* 16 * * 0"]
     },
     {
       "automerge": false,
@@ -77,6 +77,6 @@
       "matchStrings": ["(?<depName>.+?): (?<currentValue>.*?)\n"]
     }
   ],
-  "schedule": ["after 1am, before 2pm"],
+  "schedule": ["* 1-14 * * *"],
   "updateNotScheduled": false
 }
