@@ -111,7 +111,9 @@ async def ci():
             )
             ci = ci.with_secret_variable("SOPS_AGE_KEY", secret_sops_env)
 
-        ci = ci.with_exec(["ansible-playbook", "main.yaml"])
+        ci = ci.with_exec(
+            ["ansible-playbook", "main.yaml", "--inventory", "inventory/internal.yaml"]
+        )
 
         await ci.stdout()
 
