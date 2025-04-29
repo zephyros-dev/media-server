@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 eval `ssh-agent`
 sops -d secret/deployment/ssh_key.sops | ssh-add - &> /dev/null
 CONTAINER_HOST=$(sops -d secret/deployment/podman.sops)
