@@ -23,7 +23,6 @@
     },
     {
       "automerge": false,
-      "excludePackagePatterns": ["actions"],
       "matchPackagePatterns": ["python", "cue"],
       "matchUpdateTypes": ["major", "minor"]
     },
@@ -32,11 +31,6 @@
       "groupName": "go",
       "matchPackageNames": ["go", "golang/go"],
       "matchUpdateTypes": ["major", "minor"]
-    },
-    {
-      "excludePackagePatterns": ["actions"],
-      "groupName": "python",
-      "matchPackagePatterns": ["python"]
     },
     {
       "groupName": "renovate",
