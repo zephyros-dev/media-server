@@ -55,6 +55,9 @@ async def ci():
             .with_mounted_cache(
                 f"{user_dir}/.local/share/uv", client.cache_volume("uv_cache")
             )
+            .with_mounted_cache(
+                f"{user_dir}/workspace/.uv_cache", client.cache_volume("uv_dep_cache")
+            )
             .with_exec(
                 [
                     "uv",
@@ -70,7 +73,7 @@ async def ci():
         ci = (
             ci.with_env_variable(
                 "PATH",
-                f"{user_dir}/.local/share/aquaproj-aqua/bin:{user_dir}/workspace/.venv/bin:{container_path}",
+                f"{user_dir}/.local/share/aquaproj-aqua/bin:{user_dir}/workspace/.venv/bin:{user_dir}/.local/bin:{container_path}",
             )
             .with_env_variable(
                 "AQUA_GLOBAL_CONFIG", f"{user_dir}/.config/aquaproj-aqua/aqua.yaml"
@@ -81,6 +84,10 @@ async def ci():
             )
             .with_mounted_cache(
                 f"{user_dir}/.ansible", client.cache_volume("ansible_cache")
+            )
+            .with_mounted_cache(f"{user_dir}/bin", client.cache_volume("user_bin"))
+            .with_mounted_cache(
+                f"{user_dir}/.local/bin", client.cache_volume("local_bin")
             )
             .with_exec(["python", ".devcontainer/main.py", "--profile=ci"])
         )

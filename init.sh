@@ -4,4 +4,6 @@
 rm ~/.local/bin/docker
 ln -s /usr/bin/podman ~/.local/bin/docker
 # https://docs.dagger.io/troubleshooting/#dagger-restarts-with-a-cni-setup-error
-echo iptable_nat | sudo tee -a /etc/modules-load.d/modules
+# The instruction is wrong though, the file needs to have .conf
+# https://www.man7.org/linux/man-pages/man5/modules-load.d.5.html
+echo iptable_nat | sudo tee -a /etc/modules-load.d/modules.conf
