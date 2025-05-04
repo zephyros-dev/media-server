@@ -89,7 +89,7 @@ async def ci():
             .with_mounted_cache(
                 f"{user_dir}/.local/bin", client.cache_volume("local_bin")
             )
-            .with_exec(["python", ".devcontainer/main.py", "--profile=ci"])
+            .with_exec(["python", ".devcontainer/main.py", "--profile=dagger"])
         )
 
         ci = ci.with_env_variable("ANSIBLE_HOST_KEY_CHECKING", "False")

@@ -28,9 +28,10 @@ args = parser.parse_args()
 
 home_path = Path(os.getenv("HOME"))
 
-dependencies_version = yaml.safe_load(
-    Path(".devcontainer/dependencies.yaml").read_text()
-)
+if Path("dependencies.yaml").exists():
+    dependencies_version = yaml.safe_load(Path("dependencies.yaml").read_text())
+else:
+    dependencies_version = {}
 
 go_arch_map = {
     "x86_64": "amd64",
@@ -38,11 +39,6 @@ go_arch_map = {
 }
 
 go_arch = go_arch_map[platform.machine()]
-
-profile_map = {
-    "ci": {"aqua_dep_path": "ci/aqua.yaml"},
-    "devcontainer": {"aqua_dep_path": ".devcontainer/aqua.yaml"},
-}
 
 
 def check_version(command, desired_version):
@@ -60,54 +56,61 @@ def check_version(command, desired_version):
 
 
 def install_podman():
-    # Install latest version of podman
-    podman_path = f"{home_path}/bin/podman"
+    if "containers/podman" in dependencies_version:
+        # Install latest version of podman
+        podman_path = f"{home_path}/bin/podman"
 
-    PODMAN_VERSION = dependencies_version["containers/podman"]
-    if check_version("docker --version", PODMAN_VERSION):
-        subprocess.run(
-            f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{PODMAN_VERSION}/podman-remote-static-linux_{go_arch}.tar.gz",
-            shell=True,
-        )
-        subprocess.run(
-            f"tar -zxvf {home_path / 'podman.tar.gz'} -C {home_path}", shell=True
-        )
-        subprocess.run(
-            f"mv {home_path}/bin/podman-remote-static-linux_{go_arch} {podman_path}",
-            shell=True,
-        )
+        PODMAN_VERSION = dependencies_version["containers/podman"]
+        if check_version("docker --version", PODMAN_VERSION):
+            subprocess.run(
+                f"curl -Lo {home_path / 'podman.tar.gz'} https://github.com/containers/podman/releases/download/{PODMAN_VERSION}/podman-remote-static-linux_{go_arch}.tar.gz",
+                shell=True,
+            )
+            subprocess.run(
+                f"tar -zxvf {home_path / 'podman.tar.gz'} -C {home_path}", shell=True
+            )
+            subprocess.run(
+                f"mv {home_path}/bin/podman-remote-static-linux_{go_arch} {podman_path}",
+                shell=True,
+            )
 
-        (Path.home() / ".local/bin").mkdir(parents=True, exist_ok=True)
-        subprocess.run(
-            f"ln -s {podman_path} {Path.home()}/.local/bin/docker", shell=True
-        )
+            (Path.home() / ".local/bin").mkdir(parents=True, exist_ok=True)
+            subprocess.run(
+                f"ln -s {podman_path} {Path.home()}/.local/bin/docker", shell=True
+            )
+
+
+def install_aqua():
+    # Check if aqua.yaml is present
+    if (Path(os.getcwd()) / "aqua.yaml").exists():
+        AQUA_VERSION = yaml.safe_load(
+            Path(".devcontainer/dependencies.yaml").read_text()
+        )["aquaproj/aqua"]
+        aqua_bin_path = home_path / ".local/share/aquaproj-aqua/bin/aqua"
+        aqua_bin_path.parent.mkdir(parents=True, exist_ok=True)
+        if check_version("aqua --version", AQUA_VERSION):
+            subprocess.run(
+                f"curl -Lo {home_path / 'aqua.tar.gz'} https://github.com/aquaproj/aqua/releases/download/{AQUA_VERSION}/aqua_linux_{go_arch}.tar.gz",
+                shell=True,
+            )
+            subprocess.run(
+                f"tar -zxvf {home_path / 'aqua.tar.gz'} aqua -C {aqua_bin_path}",
+                shell=True,
+            )
+            shutil.move("aqua", aqua_bin_path)
+            os.chmod(aqua_bin_path, 0o755)
+
+        (Path(home_path) / ".config/aquaproj-aqua").mkdir(parents=True, exist_ok=True)
+
+        if not (home_path / ".config/aquaproj-aqua/aqua.yaml").is_symlink():
+            Path(home_path / ".config/aquaproj-aqua/aqua.yaml").symlink_to(
+                Path(os.getcwd()) / "aqua.yaml"
+            )
 
 
 def shared_setup():
     install_podman()
-    AQUA_VERSION = dependencies_version["aquaproj/aqua"]
-    aqua_bin_path = home_path / ".local/share/aquaproj-aqua/bin/aqua"
-    aqua_bin_path.parent.mkdir(parents=True, exist_ok=True)
-    if check_version("aqua --version", AQUA_VERSION):
-        subprocess.run(
-            f"curl -Lo {home_path / 'aqua.tar.gz'} https://github.com/aquaproj/aqua/releases/download/{AQUA_VERSION}/aqua_linux_{go_arch}.tar.gz",
-            shell=True,
-        )
-        subprocess.run(
-            f"tar -zxvf {home_path / 'aqua.tar.gz'} aqua -C {aqua_bin_path}", shell=True
-        )
-        shutil.move("aqua", aqua_bin_path)
-        os.chmod(aqua_bin_path, 0o755)
-
-    (Path(home_path) / ".config/aquaproj-aqua").mkdir(parents=True, exist_ok=True)
-
-    if not (home_path / ".config/aquaproj-aqua/aqua.yaml").is_symlink():
-        Path(home_path / ".config/aquaproj-aqua/aqua.yaml").symlink_to(
-            Path(os.getcwd()) / profile_map[args.profile]["aqua_dep_path"]
-        )
-
-    subprocess.run("aqua install --all", shell=True)
-
+    install_aqua()
     # Cue setup
     subprocess.run("cue get go k8s.io/api/core/...", shell=True, cwd="cue")
 
@@ -137,6 +140,8 @@ environment = Environment(
 if args.profile == "devcontainer":
     if args.stage == "all" or args.stage == "onCreateCommand":
         shared_setup()
+
+        subprocess.run("aqua install --all", shell=True)
 
         # Fix cue vscode extension
         cue_path = subprocess.run(
@@ -178,8 +183,10 @@ if args.profile == "devcontainer":
 
         subprocess.run("pre-commit install", shell=True)
 
-if args.profile == "ci":
+if args.profile == "dagger":
     shared_setup()
+    subprocess.run("aqua install --all --tags=dagger", shell=True)
 
-if args.profile == "ci-host":
+if args.profile == "ci":
     install_podman()
+    subprocess.run("aqua install --all --tags=ci", shell=True)

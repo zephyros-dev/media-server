@@ -17,7 +17,7 @@
         "hashicorp.terraform",
         "mhutchie.git-graph",
         "mikestead.dotenv",
-        "ms-azuretools.vscode-docker",
+        "ms-azuretools.vscode-containers",
         "redhat.ansible",
         "richie5um2.vscode-sort-json",
         "samuelcolvin.jinjahtml",
