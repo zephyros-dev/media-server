@@ -31,7 +31,7 @@ jobs:
           aqua_version: v2.50.1
       - name: Install aqua software
         run: |
-          aqua install
+          aqua install --tags ci
       - name: Set up WireGuard
         run: |
           sudo apt update && sudo apt install wireguard
