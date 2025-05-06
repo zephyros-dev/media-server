@@ -70,13 +70,14 @@
     "source=aqua-cache,target=/home/vscode/.local/share/aquaproj-aqua,type=volume,chown=true",
     "source=custom-bin-cache,target=/home/vscode/bin,type=volume,chown=true",
     "source=go,target=/home/vscode/go,type=volume,chown=true",
+    "source=local-bin-cache,target=/home/vscode/.local/bin,type=volume,chown=true",
     "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume,chown=true",
     "source=terraform-plugin-cache,target=/home/vscode/.terraform.d/plugin-cache,type=volume,chown=true",
     "source=uv-cache,target=/home/vscode/.local/share/uv,type=volume,chown=true"
   ],
   "name": "Infra",
-  "onCreateCommand": "uv sync && uv run .devcontainer/main.py --stage onCreateCommand",
-  "postAttachCommand": "uv run .devcontainer/main.py --stage postAttachCommand",
+  "onCreateCommand": "cd .devcontainer && uv sync && uv run devcontainer.py --stage onCreateCommand",
+  "postAttachCommand": "cd .devcontainer && uv run devcontainer.py --stage postAttachCommand",
   "remoteEnv": {
     "AQUA_GLOBAL_CONFIG": "/home/vscode/.config/aquaproj-aqua/aqua.yaml",
     "CONTAINER_HOST": "unix:///run/user/1000/podman/podman.sock",

@@ -4,11 +4,14 @@ version = "0.1.0"
 description = "Code for running self-hosted services using podman and ansible"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = ["devcontainer"]
 
 [tool.uv]
 cache-dir = "./.uv_cache"
 python-preference = "managed"
+
+[tool.uv.sources]
+devcontainer = { path = ".devcontainer" }
 
 [dependency-groups]
 dev = [

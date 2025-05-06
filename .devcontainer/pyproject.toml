@@ -1,0 +1,12 @@
+[project]
+name = "devcontainer"
+version = "0.1.0"
+description = "Personal devcontainer for various projects"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["pyyaml>=6.0.2"]
+
+[tool.uv]
+cache-dir = "./.uv_cache"
+python-preference = "managed"
+package = true

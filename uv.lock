@@ -303,6 +303,17 @@ wheels = [
 ]
 
 [[package]]
+name = "devcontainer"
+version = "0.1.0"
+source = { directory = ".devcontainer" }
+dependencies = [
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pyyaml", specifier = ">=6.0.2" }]
+
+[[package]]
 name = "distlib"
 version = "0.3.9"
 source = { registry = "https://pypi.org/simple" }
@@ -432,6 +443,9 @@ wheels = [
 name = "infra"
 version = "0.1.0"
 source = { virtual = "." }
+dependencies = [
+    { name = "devcontainer" },
+]
 
 [package.dev-dependencies]
 ci = [
@@ -457,6 +471,7 @@ dev = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "devcontainer", directory = ".devcontainer" }]
 
 [package.metadata.requires-dev]
 ci = [{ name = "dagger-io", specifier = ">=0.15.4" }]

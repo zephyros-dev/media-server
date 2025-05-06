@@ -26,12 +26,13 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           submodules: true
-      - uses: aquaproj/aqua-installer@5e54e5cee8a95ee2ce7c04cb993da6dfad13e59c # v3.1.2
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
         with:
-          aqua_version: v2.50.1
-      - name: Install aqua software
+          version: latest # TODO: update uv with renovate
+      - name: Setup CI dependencies
         run: |
-          aqua install --tags ci
+          uv run install.py --profile ci
       - name: Set up WireGuard
         run: |
           sudo apt update && sudo apt install wireguard
@@ -39,10 +40,6 @@ jobs:
           wg-quick up wg0 &> /dev/null
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
-        with:
-          version: latest # TODO: update uv with renovate
       - name: Setup tmate session
         if: env.DEBUG_MODE == 'true'
         uses: mxschmitt/action-tmate@v3
