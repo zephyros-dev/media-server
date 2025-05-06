@@ -60,9 +60,9 @@ if args.profile == "devcontainer":
 
 if args.profile == "dagger":
     shared_setup()
-    subprocess.run("aqua install --all --tags=dagger", shell=True)
+    subprocess.run("aqua install --tags=dagger", shell=True)
 
 if args.profile == "ci":
     devcontainer.install_aqua()
     devcontainer.install_podman()
-    subprocess.run("aqua install --all --tags=ci", shell=True)
+    subprocess.run("aqua install --tags=ci", shell=True)
