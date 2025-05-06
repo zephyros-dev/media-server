@@ -116,6 +116,6 @@ if __name__ == "__main__":
                 shell=True,
             )
             subprocess.run("pre-commit install", shell=True)
-        if Path("install.py").exists():
+        if Path("install.py").exists() and Path("uv.lock").exists():
             subprocess.run(["uv", "sync"])
             subprocess.run(["uv", "run", "install.py"])
