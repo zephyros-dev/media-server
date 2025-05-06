@@ -2,7 +2,6 @@ import argparse
 import os
 import platform
 import re
-import shutil
 import subprocess
 from pathlib import Path
 
@@ -68,19 +67,19 @@ def install_aqua():
         AQUA_VERSION = yaml.safe_load(
             Path(".devcontainer/dependencies.yaml").read_text()
         )["aquaproj/aqua"]
-        aqua_bin_path = Path.home() / ".local/share/aquaproj-aqua/bin/aqua"
-        aqua_bin_path.parent.mkdir(parents=True, exist_ok=True)
+        aqua_bin_dir_path = Path.home() / ".local/share/aquaproj-aqua/bin"
+        aqua_bin_dir_path.mkdir(parents=True, exist_ok=True)
+        local_bin_path = Path.home() / ".local/bin/"
+        local_bin_path.mkdir(parents=True, exist_ok=True)
         if check_version("aqua --version", AQUA_VERSION):
             subprocess.run(
                 f"curl -Lo {Path.home() / 'aqua.tar.gz'} https://github.com/aquaproj/aqua/releases/download/{AQUA_VERSION}/aqua_linux_{go_arch}.tar.gz",
                 shell=True,
             )
             subprocess.run(
-                f"tar -zxvf {Path.home() / 'aqua.tar.gz'} aqua -C {aqua_bin_path}",
+                f"tar -zxvf {Path.home() / 'aqua.tar.gz'} -C {local_bin_path} aqua",
                 shell=True,
             )
-            shutil.move("aqua", aqua_bin_path)
-            os.chmod(aqua_bin_path, 0o755)
 
         (Path(Path.home()) / ".config/aquaproj-aqua").mkdir(parents=True, exist_ok=True)
 

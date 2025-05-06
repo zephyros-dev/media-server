@@ -73,7 +73,7 @@ async def ci():
         ci = (
             ci.with_env_variable(
                 "PATH",
-                f"{user_dir}/.local/share/aquaproj-aqua/bin:{user_dir}/workspace/.venv/bin:{user_dir}/.local/bin:{container_path}",
+                f"{user_dir}/.local/share/aquaproj-aqua/bin:{user_dir}/workspace/.venv/bin:{container_path}",
             )
             .with_env_variable(
                 "AQUA_GLOBAL_CONFIG", f"{user_dir}/.config/aquaproj-aqua/aqua.yaml"
@@ -89,7 +89,7 @@ async def ci():
             .with_mounted_cache(
                 f"{user_dir}/.local/bin", client.cache_volume("local_bin")
             )
-            .with_exec(["python", ".devcontainer/main.py", "--profile=dagger"])
+            .with_exec(["python", "install.py", "--profile=dagger"])
         )
 
         ci = ci.with_env_variable("ANSIBLE_HOST_KEY_CHECKING", "False")
