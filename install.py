@@ -43,9 +43,7 @@ def shared_setup():
 
 if args.profile == "devcontainer":
     devcontainer.install_aqua()
-
     shared_setup()
-
     (Path.home() / ".terraformrc").write_text(
         'plugin_cache_dir = "/home/vscode/.terraform.d/plugin-cache"'
     )
@@ -59,6 +57,7 @@ if args.profile == "devcontainer":
         cue_bin_path.symlink_to(cue_path)
 
 if args.profile == "dagger":
+    devcontainer.install_aqua()
     shared_setup()
     subprocess.run("aqua install --tags=dagger", shell=True)
 
