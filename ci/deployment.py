@@ -62,7 +62,7 @@ async def ci():
                 [
                     "uv",
                     "sync",
-                    "--only-group",
+                    "--group",
                     "dagger",
                 ]
             )

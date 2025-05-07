@@ -4,20 +4,14 @@ version = "0.1.0"
 description = "Code for running self-hosted services using podman and ansible"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = ["devcontainer"]
 
 [tool.uv]
 cache-dir = "./.uv_cache"
 python-preference = "managed"
-conflicts = [[{ group = "dagger" }, { group = "dev" }, { group = "ci" }]]
 
 [tool.uv.sources]
-# We use url for this so that we don't have to install git in ci container
-devcontainer = [
-    { path = ".devcontainer", group = "dev" },
-    { url = "https://github.com/zephyros-dev/devcontainer/archive/refs/heads/main.zip", group = "dagger" },
-    { url = "https://github.com/zephyros-dev/devcontainer/archive/refs/heads/main.zip", group = "ci" },
-]
+devcontainer = [{ path = ".devcontainer" }]
 
 [dependency-groups]
 dev = [
@@ -31,13 +25,11 @@ dev = [
     "pre-commit>=4.1.0",
     "python-dotenv>=1.0.1",
     "transmission-rpc>=7.0.11",
-    "devcontainer",
 ]
 dagger = [
     "ansible>=11.2.0",
     "jmespath>=1.0.1",
     "mitogen>=0.3.22",
     "requests>=2.32.3",
-    "devcontainer",
 ]
-ci = ["dagger-io>=0.15.4", "devcontainer"]
+ci = ["dagger-io>=0.15.4"]
