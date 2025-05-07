@@ -258,6 +258,8 @@ terraform.rc
 # End of https://www.toptal.com/developers/gitignore/api/ansible,dotenv,go,python,terraform,VisualStudioCode
 
 ### Custom ###
+# Devcontainer
+.devcontainer
 # Ignore wifiqr generated code
 wifiqr/*
 # Ignore decrypted file
