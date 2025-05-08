@@ -23,6 +23,7 @@ dev = [
     "pip>=25.0.1",
     "python-dotenv>=1.0.1",
     "transmission-rpc>=7.0.11",
+    "pre-commit>=4.2.0",
 ]
 dagger = [
     "ansible>=11.2.0",
