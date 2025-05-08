@@ -307,11 +307,17 @@ name = "devcontainer"
 version = "0.1.0"
 source = { directory = ".devcontainer" }
 dependencies = [
+    { name = "podman-compose" },
+    { name = "pre-commit" },
     { name = "pyyaml" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pyyaml", specifier = ">=6.0.2" }]
+requires-dist = [
+    { name = "podman-compose", specifier = ">=1.3.0" },
+    { name = "pre-commit", specifier = ">=4.2.0" },
+    { name = "pyyaml", specifier = ">=6.0.2" },
+]
 
 [[package]]
 name = "distlib"
@@ -464,8 +470,6 @@ dev = [
     { name = "jmespath" },
     { name = "mitogen" },
     { name = "pip" },
-    { name = "podman-compose" },
-    { name = "pre-commit" },
     { name = "python-dotenv" },
     { name = "transmission-rpc" },
 ]
@@ -488,8 +492,6 @@ dev = [
     { name = "jmespath", specifier = ">=1.0.1" },
     { name = "mitogen", specifier = ">=0.3.22" },
     { name = "pip", specifier = ">=25.0.1" },
-    { name = "podman-compose", specifier = ">=1.3.0" },
-    { name = "pre-commit", specifier = ">=4.1.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "transmission-rpc", specifier = ">=7.0.11" },
 ]
