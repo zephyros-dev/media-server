@@ -4,20 +4,15 @@
     "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
   },
   "automerge": true,
-  "automergeType": "branch",
-  "extends": ["github>zephyros-dev/docker-koreader"],
+  "extends": [
+    "github>zephyros-dev/docker-koreader",
+    "github>zephyros-dev/renovate-config"
+  ],
   "git-submodules": {
     "enabled": true
   },
   "ignoreTests": true,
-  "lockFileMaintenance": {
-    "enabled": true
-  },
   "packageRules": [
-    {
-      "automerge": false,
-      "matchUpdateTypes": ["major"]
-    },
     {
       "automerge": false,
       "matchPackagePatterns": ["python", "cue"],
@@ -28,11 +23,6 @@
       "groupName": "go",
       "matchPackageNames": ["go", "golang/go"],
       "matchUpdateTypes": ["major", "minor"]
-    },
-    {
-      "groupName": "renovate",
-      "matchPackagePatterns": ["renovate"],
-      "schedule": ["* 16 * * 0"]
     },
     {
       "automerge": false,
@@ -54,20 +44,7 @@
       "matchPackagePatterns": ["ansible-lint"]
     }
   ],
-  "pinDigests": true,
-  "platformAutomerge": true,
   "postUpdateOptions": ["gomodTidy"],
-  "pre-commit": {
-    "enabled": true
-  },
-  "rebaseWhen": "auto",
-  "regexManagers": [
-    {
-      "datasourceTemplate": "github-releases",
-      "fileMatch": ["dependencies.yaml"],
-      "matchStrings": ["(?<depName>.+?): (?<currentValue>.*?)\n"]
-    }
-  ],
   "schedule": ["* 1-14 * * *"],
   "updateNotScheduled": false
 }
