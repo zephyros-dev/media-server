@@ -122,7 +122,7 @@
       ansible.builtin.systemd:
         name: rpm-ostreed-automatic.timer
         daemon_reload: true
-        enabled: true
+        enabled: false
         state: stopped
 
 - name: Enable cockpit
