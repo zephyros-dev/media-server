@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "brody715.vscode-cuelang",
+    "charliermarsh.ruff",
+    "hashicorp.terraform",
+    "ms-azuretools.vscode-containers",
+    "redhat.ansible",
+    "samuelcolvin.jinjahtml",
+    "signageos.signageos-vscode-sops",
+    "tamasfe.even-better-toml",
+    "wholroyd.jinja"
+  ],
+  "unwantedRecommendations": []
+}
