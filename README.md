@@ -121,6 +121,27 @@ https://github.com/ublue-os/ucore
   5. Check if the container startup correctly
   6. Change the `postgres_action` key in variable files to `clean` and run the playbook to cleanup the previous backup
 
+## Restic restores
+
+1. Source the secret files to current shell
+
+```
+# Fish shell
+. (sed 's/^/export /' /etc/restic/restic.env | psub)
+```
+
+2. Get list of snapshots
+
+```
+restic snapshot
+```
+
+3. Restore the files (remove the --dry-run once satisfied)
+
+```
+restic restore -v <snapshot-id> --target / --include <absolute-path-to-restore> -v --dry-run
+```
+
 # Troubleshooting
 
 ## CI debugging

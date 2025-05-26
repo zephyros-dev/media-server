@@ -1738,7 +1738,7 @@ restic_env: {
 	EXCLUDE_FILE:      "/etc/restic/exclude"
 	RETENTION_MONTHS:  1
 	RETENTION_WEEKS:   1
-	RETENTION_DAYS:    1
+	RETENTION_DAYS:    3
 	RESTIC_CACHE_DIR:  "/etc/restic/cache"
 }
 restic_env_path: "/etc/restic/restic.env"
