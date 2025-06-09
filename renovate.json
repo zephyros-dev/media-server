@@ -31,9 +31,14 @@
       "matchUpdateTypes": ["major", "minor"]
     },
     {
-      "automerge": false,
       "groupName": "caddy",
       "matchPackagePatterns": ["caddy"]
+    },
+    {
+      "automerge": false,
+      "groupName": "caddy",
+      "matchPackagePatterns": ["caddy"],
+      "matchUpdateTypes": ["major", "minor"]
     },
     {
       "groupName": "dagger",
