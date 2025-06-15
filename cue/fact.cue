@@ -1728,13 +1728,12 @@ application: {
 	}
 }
 
-restic_backup_path: _fact.global_volume_path
+restic_backup_paths: "\(_fact.global_volume_path) \(application.immich.transform.volumes.upload.value)"
 restic_env: {
 	B2_ACCOUNT_ID:     _fact.restic_b2_account_id
 	B2_ACCOUNT_KEY:    _fact.restic_b2_account_key
-	BACKUP_PATHS:      restic_backup_path
 	RESTIC_PASSWORD:   _fact.restic_password
-	RESTIC_REPOSITORY: "\(_fact.restic_repository)\(restic_backup_path)"
+	RESTIC_REPOSITORY: "\(_fact.restic_repository)"
 	EXCLUDE_FILE:      "/etc/restic/exclude"
 	RETENTION_MONTHS:  "1m"
 	RETENTION_WEEKS:   "1w"

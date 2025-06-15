@@ -133,7 +133,7 @@ https://github.com/ublue-os/ucore
 2. Get list of snapshots
 
 ```
-restic snapshot
+restic snapshots
 ```
 
 3. Restore the files (remove the --dry-run once satisfied)

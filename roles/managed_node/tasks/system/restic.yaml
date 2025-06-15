@@ -26,7 +26,9 @@
           ansible.builtin.command:
             cmd: restic init
           environment: "{{ restic_env }}"
-          when: '"bucket not found" in restic_repo_status.stderr'
+          when: >-
+            "bucket not found" in restic_repo_status.stderr
+            or "Is there a repository at the following location" in restic_repo_status.stderr
           changed_when: false
         - name: Unlock restic repo
           ansible.builtin.command:
