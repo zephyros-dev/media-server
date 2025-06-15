@@ -1735,9 +1735,9 @@ restic_env: {
 	RESTIC_PASSWORD:   _fact.restic_password
 	RESTIC_REPOSITORY: "\(_fact.restic_repository)"
 	EXCLUDE_FILE:      "/etc/restic/exclude"
-	RETENTION_MONTHS:  "1m"
-	RETENTION_WEEKS:   "1w"
-	RETENTION_DAYS:    "3d"
+	RETENTION_MONTHS:  "1"
+	RETENTION_WEEKS:   "1"
+	RETENTION_DAYS:    "3"
 	RESTIC_CACHE_DIR:  "/etc/restic/cache"
 }
 restic_env_path: "/etc/restic/restic.env"
