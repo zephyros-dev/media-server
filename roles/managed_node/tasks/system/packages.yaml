@@ -32,8 +32,11 @@
   become: true
   community.general.rpm_ostree_pkg:
     name:
+      # Terminal tools
+      - dua-cli
       - fd-find
       - fish
+      # Server software
       - pip
       - power-profiles-daemon
       - restic
