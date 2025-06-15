@@ -3,5 +3,5 @@ Description=Restic backup service
 [Service]
 Type=oneshot
 ExecStart=restic backup --verbose --one-file-system --tag systemd.timer $BACKUP_PATHS --exclude-file $EXCLUDE_FILE
-ExecStartPost=restic forget --verbose --tag systemd.timer --group-by "paths,tags" --keep-daily $RETENTION_DAYS --keep-weekly $RETENTION_WEEKS
+ExecStartPost=restic forget --verbose --tag systemd.timer --group-by "paths,tags" --keep-within-daily $RETENTION_DAYS --keep-within-weekly $RETENTION_WEEKS --keep-within-monthly $RETENTION_MONTHS
 EnvironmentFile={{ restic_env_path }}
