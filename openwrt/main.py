@@ -28,6 +28,12 @@ if not Path(f".decrypted.zapret/zapret-{version}").exists():
         "tar -zxvf .decrypted.zapret.tar.gz -C .decrypted.zapret", shell=True
     )
 
+# Need to create custom user include list since headless service fail those domain during the first call and do not retry for autohostlist
+# https://github.com/bol-van/zapret/blob/master/docs/readme.en.md#autohostlist-mode
+Path(f".decrypted.zapret/zapret-{version}/ipset/zapret-hosts-user.txt").write_text(
+    openwrt_config["custom_user_include"]
+)
+
 for router in openwrt_config["router_list"]:
     # Copy the repo
     subprocess.run(
