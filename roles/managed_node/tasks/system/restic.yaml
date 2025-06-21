@@ -59,6 +59,6 @@
         systemd_timer_schedule: "{{ item.schedule }}"
       loop:
         - name: restic-backup
-          schedule: "16:00:00"
+          schedule: "23:00:00"
         - name: restic-prune
           schedule: "Wed 8:00:00"
