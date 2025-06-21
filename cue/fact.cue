@@ -52,19 +52,22 @@ _profile: {
 	rootless_userns: rootless & userns_share
 }
 
+application_backup: strings.Join([for k, v in application if v.param.backup {k}], " ")
+
 application: [applicationName=string]: {
 	param: {
 		become:       *false | bool
+		backup:       *false | bool // Whether to backup
 		caddy_proxy?: uint16 | string
 		caddy_rewrite?: [...{
 			src:  string
 			dest: string
 		}]
-		staging:                       *true | bool
-		caddy_sso:                     *false | bool
-		dashy_icon?:                   string
-		dashy_show:                    *true | bool // Show service endpoint in dashy
-		dashy_name?:                   string       // Use custom name on dashy
+		staging:                       *true | bool  // Run on staging
+		caddy_sso:                     *false | bool // Use basic auth for service
+		dashy_icon?:                   string        // Custom dashy icon path
+		dashy_show:                    *true | bool  // Show service endpoint in dashy
+		dashy_name?:                   string        // Use custom name on dashy
 		dashy_statusCheckAcceptCodes?: uint16 & >99 & <600
 		quadlet_kube_options?: {
 			[string]: string
@@ -250,6 +253,7 @@ application: {
 	audiobookshelf: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 80
 			volumes: {
 				audiobooks: "\(_fact.global_storage)/Audiobooks/"
@@ -283,6 +287,7 @@ application: {
 	bazarr: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 6767
 			caddy_sso:   true
 			volumes: {
@@ -357,6 +362,7 @@ application: {
 	calibre: {
 		_
 		param: {
+			backup:                       true
 			caddy_proxy:                  8080
 			caddy_sso:                    true
 			dashy_statusCheckAcceptCodes: 401
@@ -582,6 +588,7 @@ application: {
 	filebrowser: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 80
 			volumes: {
 				"database.db": "./database.db"
@@ -617,6 +624,7 @@ application: {
 	immich: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 2283
 			volumes: {
 				database:   "./database/"
@@ -721,6 +729,7 @@ application: {
 	jellyfin: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 8096
 			volumes: {
 				cache:  "./cache/"
@@ -752,6 +761,7 @@ application: {
 	jdownloader: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 5800
 			volumes: {
 				config: "./config/"
@@ -785,6 +795,7 @@ application: {
 	kavita: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 5000
 			caddy_rewrite: [{
 				src:  "/"
@@ -813,6 +824,7 @@ application: {
 	koreader: {
 		_
 		param: {
+			backup:                       true
 			caddy_proxy:                  3000
 			caddy_sso:                    true
 			dashy_statusCheckAcceptCodes: 401
@@ -845,6 +857,7 @@ application: {
 	lidarr: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 8686
 			caddy_sso:   true
 			volumes: {
@@ -870,6 +883,7 @@ application: {
 	miniflux: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 8080
 			volumes: {
 				database: "./database/"
@@ -939,6 +953,7 @@ application: {
 	navidrome: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 4533
 			volumes: {
 				data:  "./data/"
@@ -1054,6 +1069,7 @@ application: {
 	nextcloud: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 80
 			volumes: {
 				data:     "./web/data/"
@@ -1188,6 +1204,7 @@ application: {
 	paperless: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 8000
 			quadlet_build_options: PodmanArgs: "--build-arg=INSTALL_LANGUAGE=\(_fact.paperless_ocr_languages)"
 			volumes: {
@@ -1327,6 +1344,7 @@ application: {
 	prowlarr: {
 		_
 		param: {
+			backup:      true
 			caddy_sso:   true
 			caddy_proxy: 9696
 			volumes: config: "./web/config/"
@@ -1346,6 +1364,7 @@ application: {
 	pymedusa: {
 		_
 		param: {
+			backup:      true
 			caddy_sso:   true
 			caddy_proxy: 8081
 			dashy_icon:  "favicon-local"
@@ -1372,6 +1391,7 @@ application: {
 	radarr: {
 		_
 		param: {
+			backup:      true
 			caddy_sso:   true
 			caddy_proxy: 7878
 			volumes: {
@@ -1550,6 +1570,7 @@ application: {
 	syncthing: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 8384
 			caddy_sso:   true
 			quadlet_kube_options: Network: "pasta"
@@ -1596,6 +1617,7 @@ application: {
 	transmission: {
 		_
 		param: {
+			backup:                       true
 			caddy_proxy:                  9091
 			dashy_statusCheckAcceptCodes: 401
 			quadlet_kube_options: Network: "pasta" // https://github.com/containers/podman/issues/23739#issuecomment-2310186061
@@ -1660,6 +1682,7 @@ application: {
 	trilium: {
 		_
 		param: {
+			backup:      true
 			caddy_proxy: 8080
 			volumes: {
 				data: "./data/"
