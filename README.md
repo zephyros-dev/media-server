@@ -1,14 +1,14 @@
-[![dagger](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml/badge.svg)](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml)
+# Selfhost Server
 
-# Introduction
+[![dagger](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml/badge.svg)](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml)
 
 Code for running self-hosted services using podman and ansible
 
-Want to know more about selfhosting a media server? Checkout the docs [here](docs/README.md)
+Want to know more about selfhosting a media server? [Checkout the docs](docs/README.md)
 
-# Infrastructure graph
+## Infrastructure graph
 
-## Networking
+### Networking
 
 ```mermaid
 flowchart TB
@@ -43,7 +43,7 @@ flowchart TB
   wireguard --> lan_network
 ```
 
-## Data
+#### Data
 
 ```mermaid
 flowchart TB
@@ -62,17 +62,17 @@ flowchart TB
   end
 ```
 
-# Note
+## Note
 
 - Always run partition playbook with --check first
 
-```
-ansible-playbook partition --check
-```
+  ```bash
+  ansible-playbook partition --check
+  ```
 
-## PC
+### PC
 
-### Intel AMT support
+#### Intel AMT support
 
 - It's possible to control the PC remotely from BIOS via Intel AMT
 - Setup:
@@ -82,7 +82,7 @@ ansible-playbook partition --check
 3. Set the integrated GPU as the default GPU in the BIOS
 4. Use [Intel software](https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/default.htm?turl=WordDocuments%2Ftoolsusingkvm.htm) for setting up KVM (remote mouse and keyboard) to the PC. For cross-platform open source solution, checkout [Meshcentral in a container](https://github.com/Typhonragewind/meshcentral-docker)
 
-### Boot from Nvme
+#### Boot from Nvme
 
 - I used a HPZ230 for the server with an NVME hard drive in the PCIE slot.
 - The mainboard does not allow booting from PCIE slot directly, so I have to boot from [Cloverboot](https://github.com/CloverHackyColor/CloverBootloader) installed in an USB.
@@ -92,26 +92,26 @@ ansible-playbook partition --check
   - Then set the following settings in the BIOS
     - Advanced -> Option ROM Launch Policy -> Storage Options Rom -> UEFI only
 
-### WOL
+#### WOL
 
 - In the BIOS, enable wol via Advanced -> Device Options -> S5 Wake on LAN
 
-## OS
+#### OS
 
-### Ucore (rpm-ostree variants)
+#### Ucore (rpm-ostree variants)
 
-https://github.com/ublue-os/ucore
+<https://github.com/ublue-os/ucore>
 
-## Services
+#### Services
 
-### Koreader connection to opds Calibre content server
+##### Koreader connection to opds Calibre content server
 
 - The koreader opds requires `/opds` path to the calibre content server
 - The calibre content server authentication need to be `digest` for the koreader opds
 
-# Maintenance notes
+## Maintenance notes
 
-## Postgres major version update
+### Postgres major version update
 
 - To upgrade postgres major version, do the following
   1. Change the `postgres_action` key in variable files to `export` and run the playbook for that container
@@ -121,101 +121,102 @@ https://github.com/ublue-os/ucore
   5. Check if the container startup correctly
   6. Change the `postgres_action` key in variable files to `clean` and run the playbook to cleanup the previous backup
 
-## Restic restores
+#### Restic restores
 
 1. Source the secret files to current shell
 
-```
-# Fish shell
-. (sed 's/^/export /' /etc/restic/restic.env | psub)
-```
+   ```bash
+   ## Fish shell
+   . (sed 's/^/export /' /etc/restic/restic.env | psub)
+   ```
 
 2. Get list of snapshots
 
-```
-restic snapshots
-```
+   ```bash
+   restic snapshots
+   ```
 
 3. Restore the files (remove the --dry-run once satisfied)
 
-```
-restic restore -v <snapshot-id> --target / --include <absolute-path-to-restore> -v --dry-run
-```
+   ```bash
+   restic restore -v <snapshot-id> --target / --include <absolute-path-to-restore> -v --dry-run
+   ```
 
-# Troubleshooting
+## Troubleshooting
 
-## CI debugging
+### CI debugging
 
 - To debug the CI, run the following command
 
-```
-dagger run -i python ci/deployment.py
-```
+  ```bash
+  dagger run -i python ci/deployment.py
+  ```
 
-## Kavita
+#### Kavita
 
-### Kavita failed to save progress
+##### Kavita failed to save progress
 
-- Consult [this](https://wiki.kavitareader.com/en/faq#q-im-seeing-database-is-locked-errors-in-my-logs)
+- Consult [this](https://wiki.kavitareader.com/en/faq##q-im-seeing-database-is-locked-errors-in-my-logs)
 
-## Nextcloud
+#### Nextcloud
 
-### Stuck in maintenance mode
+##### Stuck in maintenance mode
 
 1. Rebuild nextcloud
 
-```
-ansible-playbook main.yaml --tags nextcloud
-```
+   ```bash
+   ansible-playbook main.yaml --tags nextcloud
+   ```
 
-### Debug postgres
+###### Debug postgres
 
 1. Run the following command to enable adminer container for accessing postgres database
 
-```
-ansible-playbook main.yaml --tags nextcloud --extra-vars '{"debug":true}'
-```
+   ```bash
+   ansible-playbook main.yaml --tags nextcloud --extra-vars '{"debug":true}'
+   ```
 
-## Container name with pod exists
+#### Container name with pod exists
 
 - Check if the container exists as external storage in podman then remove that container
 
-```
-podman ps --external
-```
+  ```bash
+  podman ps --external
+  ```
 
 - Reference
-  - https://docs.podman.io/en/latest/markdown/podman-ps.1.html#external
-  - https://github.com/containers/podman/issues/3983
+  - <https://docs.podman.io/en/latest/markdown/podman-ps.1.html##external>
+  - <https://github.com/containers/podman/issues/3983>
 
-## Pymedusa
+#### Pymedusa
 
-### Pymedusa failed create hardlink
+##### Pymedusa failed create hardlink
 
 - Check [this](roles/pymedusa/README.md)
 
-### Check failed to hardlink file
+###### Check failed to hardlink file
 
 - Run this command in the Video folder
 
-```
-find . -type f -links 1 ! -name "*.srt" -print
-```
+  ```bash
+  find . -type f -links 1 ! -name "*.srt" -print
+  ```
 
 <!-- TODO: Write a scheduled monitoring for this -->
 
-## Reinstallation note
+#### Reinstallation note
 
 - If the server is reinstalled, some steps need to be taken:
+
   - Podman: Reset podman for rootless user
 
-```
-podman system reset
-```
+  ```bash
+  podman system reset
+  ```
 
-- Renovate can be visisted at: https://developer.mend.io
+- Renovate can be visisted at: <https://developer.mend.io>
 
-# Misc
+## Misc
 
 1. Why HP Z230?
 
