@@ -1,1 +1,1 @@
-FROM ghcr.io/astral-sh/uv:0.7.13-debian-slim@sha256:f958f0d24ea43cb51a864e3f2acfe7d016f5b65e9d89ad7463e91435477221aa
+FROM ghcr.io/astral-sh/uv:0.7.14-debian-slim@sha256:4c8b49890f8160b0dfa9e6a93e7c679c920e0f888b7f13969e4fd93f33b116ca
