@@ -2,7 +2,7 @@ collections:
   - name: ansible.posix
     version: 2.0.0
   - name: community.general
-    version: 10.7.1
+    version: 11.0.0
   - name: community.libvirt
     version: 1.4.0
   - name: containers.podman
