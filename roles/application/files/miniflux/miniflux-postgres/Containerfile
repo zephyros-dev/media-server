@@ -1,2 +1,2 @@
 # https://github.com/miniflux/v2/blob/main/contrib/docker-compose/basic.yml
-FROM docker.io/postgres:16-alpine@sha256:a3e31882cc5016f3d46cb75b4e467fd6d88cbe860945fdd72a6634c74995f738
+FROM docker.io/postgres:16-alpine@sha256:04c92036fc82720215c235f150dde30e44ad5789af2db78f61540fe0b9ecf16c
