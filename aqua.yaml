@@ -1,6 +1,6 @@
 registries:
   - type: standard
-    ref: main
+    ref: v4.391.0
 packages:
   - name: cue-lang/cue@v0.12.1
     tags:
