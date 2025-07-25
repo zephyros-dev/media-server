@@ -9,7 +9,7 @@ packages:
     tags:
       - dagger
       - ci
-  - name: golang/go@go1.24.2
+  - name: golang/go@go1.24.5
     tags:
       - dagger
   - name: dagger/dagger@v0.18.14
