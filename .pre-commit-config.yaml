@@ -23,4 +23,4 @@ repos:
     rev: 40.59.3
     hooks:
       - id: renovate-config-validator
-        language_version: 20.18.0
+        args: [--strict]

@@ -7,7 +7,7 @@ import (
 	"list"
 	"path"
 	"strings"
-	core "k8s.io/api/core/v1"
+	core "cue.dev/x/k8s.io/api/core/v1"
 )
 
 _fact_embed: _ @embed(file="tmp/fact.json")

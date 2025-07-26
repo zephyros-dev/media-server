@@ -1,17 +1,14 @@
 registries:
   - type: standard
-    ref: v4.391.0
+    ref: v4.393.0
 packages:
-  - name: cue-lang/cue@v0.12.1
+  - name: cue-lang/cue@v0.13.2
     tags:
       - dagger
   - name: getsops/sops@v3.10.2
     tags:
       - dagger
       - ci
-  - name: golang/go@go1.24.5
-    tags:
-      - dagger
   - name: dagger/dagger@v0.18.14
   - name: sharkdp/fd@v10.2.0
   - name: opentofu/opentofu@v1.10.3

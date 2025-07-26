@@ -1,34 +1,11 @@
-# Created by https://www.toptal.com/developers/gitignore/api/ansible,dotenv,go,python,terraform,VisualStudioCode
-# Edit at https://www.toptal.com/developers/gitignore?templates=ansible,dotenv,go,python,terraform,VisualStudioCode
+# Created by https://www.toptal.com/developers/gitignore/api/dotenv,python,ansible,terraform,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=dotenv,python,ansible,terraform,visualstudiocode
 
 ### Ansible ###
 *.retry
 
 ### dotenv ###
 .env
-
-### Go ###
-# If you prefer the allow list template instead of the deny list, see community template:
-# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
-#
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
-# Test binary, built with `go test -c`
-*.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
-
-# Dependency directories (remove the comment below to include it)
-# vendor/
-
-# Go workspace file
-go.work
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -37,6 +14,7 @@ __pycache__/
 *$py.class
 
 # C extensions
+*.so
 
 # Distribution / packaging
 .Python
@@ -255,7 +233,7 @@ terraform.rc
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/ansible,dotenv,go,python,terraform,VisualStudioCode
+# End of https://www.toptal.com/developers/gitignore/api/dotenv,python,ansible,terraform,visualstudiocode
 
 ### Custom ###
 # Devcontainer

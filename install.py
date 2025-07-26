@@ -19,9 +19,6 @@ dependencies_version = yaml.safe_load(Path("dependencies.yaml").read_text())
 
 
 def shared_setup():
-    # Cue setup
-    subprocess.run("cue get go k8s.io/api/core/...", shell=True, cwd="cue")
-
     # Install mitogen
     (Path(Path.home()) / ".ansible/plugins").mkdir(parents=True, exist_ok=True)
     mitogen_path = re.search(

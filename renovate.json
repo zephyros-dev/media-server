@@ -20,12 +20,6 @@
     },
     {
       "automerge": false,
-      "groupName": "go",
-      "matchPackageNames": ["go", "golang/go"],
-      "matchUpdateTypes": ["major", "minor"]
-    },
-    {
-      "automerge": false,
       "groupName": "immich",
       "matchPackagePatterns": ["ghcr.io/immich-app"],
       "matchUpdateTypes": ["major", "minor"]
@@ -49,7 +43,6 @@
       "matchPackagePatterns": ["ansible-lint"]
     }
   ],
-  "postUpdateOptions": ["gomodTidy"],
   "schedule": ["* 1-14 * * *"],
   "updateNotScheduled": false
 }
