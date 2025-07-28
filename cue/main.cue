@@ -741,9 +741,9 @@ application: {
 			spec: containers: [{
 				name:  "web"
 				image: "jellyfin"
-				if _fact.nvidia_installed {
-					resources: limits: "nvidia.com/gpu=all": 1
-				}
+				// if _fact.nvidia_installed {
+				// 	resources: limits: "nvidia.com/gpu=all": 1
+				// }
 				volumeMounts: [{
 					name:      "cache"
 					mountPath: "/cache:z"
