@@ -50,6 +50,12 @@ _profile: {
 	}]
 	userns_share: metadata: annotations: "io.podman.annotations.userns": "keep-id"
 	rootless_userns: rootless & userns_share
+	nvidia: {
+		if _fact.nvidia_installed {
+			resources: limits: "nvidia.com/gpu=all": 1
+			securityContext: seLinuxOptions: type:   "spc_t"
+		}
+	}
 }
 
 application_backup: strings.Join([for k, v in application if v.param.backup {k}], " ")
@@ -251,7 +257,6 @@ application: [applicationName=string]: {
 
 application: {
 	audiobookshelf: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 80
@@ -285,7 +290,6 @@ application: {
 	}
 
 	bazarr: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 6767
@@ -311,7 +315,6 @@ application: {
 	}
 
 	caddy: {
-		_
 		param: {
 			dashy_show:      false
 			preserve_volume: true
@@ -360,7 +363,6 @@ application: {
 	}
 
 	calibre: {
-		_
 		param: {
 			backup:                       true
 			caddy_proxy:                  8080
@@ -416,7 +418,6 @@ application: {
 	}
 
 	calibre_content: {
-		_
 		param: {
 			caddy_proxy:                  "http://calibre:8081"
 			dashy_icon:                   "/favicon.png"
@@ -425,7 +426,6 @@ application: {
 	}
 
 	calibre_downloader: {
-		_
 		param: {
 			caddy_proxy: "http://calibre:8084"
 			caddy_sso:   true
@@ -435,7 +435,6 @@ application: {
 	}
 
 	cockpit: {
-		_
 		param: {
 			caddy_proxy: "https://\(_fact.caddyfile_host_address):9090"
 		}
@@ -443,7 +442,6 @@ application: {
 
 	// Already set to run as rootless in image build
 	dashy: {
-		_
 		param: {
 			caddy_proxy: 8080
 			caddy_sso:   true
@@ -529,7 +527,6 @@ application: {
 	}
 
 	ddns: {
-		_
 		param: {
 			staging:         false
 			dashy_show:      false
@@ -586,7 +583,6 @@ application: {
 	}
 
 	filebrowser: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 80
@@ -611,7 +607,6 @@ application: {
 	}
 
 	flaresolverr: {
-		_
 		param: dashy_show: false
 		pod: _profile.rootless & {
 			spec: containers: [{
@@ -622,7 +617,6 @@ application: {
 	}
 
 	immich: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 2283
@@ -725,9 +719,8 @@ application: {
 		}
 	}
 
-	// Placeholder for getting volume list
+	// Nvidia does not work with userns=keep-id
 	jellyfin: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 8096
@@ -737,29 +730,23 @@ application: {
 				media:  "\(_fact.global_media)/"
 			}
 		}
-		pod: _profile.rootless_userns & {
-			spec: containers: [{
-				name:  "web"
-				image: "jellyfin"
-				// if _fact.nvidia_installed {
-				// 	resources: limits: "nvidia.com/gpu=all": 1
-				// }
-				volumeMounts: [{
-					name:      "cache"
-					mountPath: "/cache:z"
-				}, {
-					name:      "config"
-					mountPath: "/config:z"
-				}, {
-					name:      "media"
-					mountPath: "/home"
-				}]
+		pod: spec: containers: [_profile.nvidia & {
+			name:  "web"
+			image: "jellyfin"
+			volumeMounts: [{
+				name:      "cache"
+				mountPath: "/cache:z"
+			}, {
+				name:      "config"
+				mountPath: "/config:z"
+			}, {
+				name:      "media"
+				mountPath: "/home"
 			}]
-		}
+		}]
 	}
 
 	jdownloader: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 5800
@@ -793,7 +780,6 @@ application: {
 	}
 
 	kavita: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 5000
@@ -822,7 +808,6 @@ application: {
 	}
 
 	koreader: {
-		_
 		param: {
 			backup:                       true
 			caddy_proxy:                  3000
@@ -855,7 +840,6 @@ application: {
 	}
 
 	lidarr: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 8686
@@ -881,7 +865,6 @@ application: {
 	}
 
 	miniflux: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 8080
@@ -951,7 +934,6 @@ application: {
 	}
 
 	navidrome: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 4533
@@ -988,7 +970,6 @@ application: {
 	}
 
 	netdata: {
-		_
 		param: {
 			become:      true
 			caddy_proxy: 19999
@@ -1009,65 +990,62 @@ application: {
 			}
 		}
 
-		pod: spec: {
-			containers: [{
-				name:  "web"
-				image: "netdata"
-				securityContext: capabilities: add: [
-					"CAP_SYS_ADMIN",
-					"CAP_SYS_PTRACE",
-				]
-				if _fact.nvidia_installed {
-					resources: limits: "nvidia.com/gpu=all": 1
-				}
-				volumeMounts: [{
-					name:      "cache"
-					mountPath: "/var/cache/netdata"
-				}, {
-					name:      "config"
-					mountPath: "/etc/netdata:z"
-				}, {
-					name:      "dev_dri"
-					mountPath: "/dev/dri"
-				}, {
-					name:      "group"
-					mountPath: "/etc/group:ro"
-				}, {
-					name:      "lib"
-					mountPath: "/var/lib/netdata"
-				}, {
-					name:      "localtime"
-					mountPath: "/etc/localtime:ro"
-				}, {
-					name:      "osrelease"
-					mountPath: "/host/ect/os-release:ro"
-				}, {
-					name:      "passwd"
-					mountPath: "/etc/passwd:ro"
-				}, {
-					name:      "proc"
-					mountPath: "/host/prox:ro"
-				}, {
-					name:      "root"
-					mountPath: "/host/root:ro"
-				}, {
-					name:      "sys"
-					mountPath: "/host/sys:ro"
-				}, {
-					name:      "systemd"
-					mountPath: "/run/dbus:ro"
-				}, {
-					name:      "varlog"
-					mountPath: "/host/var/log:ro"
-				}]
+		pod: spec: containers: [{
+			name:  "web"
+			image: "netdata"
+			securityContext: capabilities: add: [
+				"CAP_SYS_ADMIN",
+				"CAP_SYS_PTRACE",
+			]
+			if _fact.nvidia_installed {
+				resources: limits: "nvidia.com/gpu=all": 1
+			}
+			volumeMounts: [{
+				name:      "cache"
+				mountPath: "/var/cache/netdata"
+			}, {
+				name:      "config"
+				mountPath: "/etc/netdata:z"
+			}, {
+				name:      "dev_dri"
+				mountPath: "/dev/dri"
+			}, {
+				name:      "group"
+				mountPath: "/etc/group:ro"
+			}, {
+				name:      "lib"
+				mountPath: "/var/lib/netdata"
+			}, {
+				name:      "localtime"
+				mountPath: "/etc/localtime:ro"
+			}, {
+				name:      "osrelease"
+				mountPath: "/host/ect/os-release:ro"
+			}, {
+				name:      "passwd"
+				mountPath: "/etc/passwd:ro"
+			}, {
+				name:      "proc"
+				mountPath: "/host/prox:ro"
+			}, {
+				name:      "root"
+				mountPath: "/host/root:ro"
+			}, {
+				name:      "sys"
+				mountPath: "/host/sys:ro"
+			}, {
+				name:      "systemd"
+				mountPath: "/run/dbus:ro"
+			}, {
+				name:      "varlog"
+				mountPath: "/host/var/log:ro"
 			}]
-			hostPID:     true
-			hostNetwork: true
-		}
+		}]
+		hostPID:     true
+		hostNetwork: true
 	}
 
 	nextcloud: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 80
@@ -1194,7 +1172,6 @@ application: {
 	}
 
 	nextcloud_office: {
-		_
 		param: {
 			caddy_proxy: "http://nextcloud:9980"
 			dashy_show:  false
@@ -1202,7 +1179,6 @@ application: {
 	}
 
 	paperless: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 8000
@@ -1342,7 +1318,6 @@ application: {
 	}
 
 	prowlarr: {
-		_
 		param: {
 			backup:      true
 			caddy_sso:   true
@@ -1362,7 +1337,6 @@ application: {
 	}
 
 	pymedusa: {
-		_
 		param: {
 			backup:      true
 			caddy_sso:   true
@@ -1389,7 +1363,6 @@ application: {
 	}
 
 	radarr: {
-		_
 		param: {
 			backup:      true
 			caddy_sso:   true
@@ -1415,7 +1388,6 @@ application: {
 	}
 
 	samba: {
-		_
 		param: {
 			dashy_show: false
 			quadlet_kube_options: Network: "pasta"
@@ -1468,7 +1440,6 @@ application: {
 	}
 
 	scrutiny: {
-		_
 		param: {
 			become:      true
 			caddy_sso:   true
@@ -1520,7 +1491,6 @@ application: {
 	}
 
 	speedtest: {
-		_
 		param: {
 			caddy_proxy: 80
 			dashy_icon:  "favicon-local"
@@ -1568,7 +1538,6 @@ application: {
 	}
 
 	syncthing: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 8384
@@ -1615,7 +1584,6 @@ application: {
 	}
 
 	transmission: {
-		_
 		param: {
 			backup:                       true
 			caddy_proxy:                  9091
@@ -1680,7 +1648,6 @@ application: {
 	}
 
 	trilium: {
-		_
 		param: {
 			backup:      true
 			caddy_proxy: 8080
@@ -1706,7 +1673,6 @@ application: {
 	}
 
 	wol: {
-		_
 		param: {
 			caddy_proxy: 8089
 			caddy_sso:   true
