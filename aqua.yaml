@@ -2,7 +2,7 @@ registries:
   - type: standard
     ref: v4.397.0 # renovate: depName=aquaproj/aqua-registry
 packages:
-  - name: cue-lang/cue@v0.13.2
+  - name: cue-lang/cue@v0.14.0
     tags:
       - dagger
   - name: getsops/sops@v3.10.2
