@@ -11,4 +11,4 @@ packages:
       - ci
   - name: dagger/dagger@v0.18.14
   - name: sharkdp/fd@v10.2.0
-  - name: opentofu/opentofu@v1.10.4
+  - name: opentofu/opentofu@v1.10.5
