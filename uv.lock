@@ -439,7 +439,6 @@ name = "infra"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "ansible-lint" },
     { name = "devcontainer" },
 ]
 
@@ -466,10 +465,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "ansible-lint", specifier = ">=25.7.0" },
-    { name = "devcontainer", directory = ".devcontainer" },
-]
+requires-dist = [{ name = "devcontainer", directory = ".devcontainer" }]
 
 [package.metadata.requires-dev]
 ci = [{ name = "dagger-io", specifier = ">=0.15.4" }]
