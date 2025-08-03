@@ -818,10 +818,21 @@ application: {
 				config: "./data/"
 			}
 		}
-		pod: _profile.lsio & {
+		pod: {
 			spec: containers: [{
 				name:  "web"
 				image: "koreader"
+				if _fact.nvidia_installed {
+					resources: limits: "nvidia.com/gpu=all": 1
+					securityContext: seLinuxOptions: type:   "spc_t"
+				}
+				env: [{
+					name:  "PUID"
+					value: "0"
+				}, {
+					name:  "PGID"
+					value: "0"
+				}]
 				volumeMounts: [{
 					name:      "config"
 					mountPath: "/config:z"

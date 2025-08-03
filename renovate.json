@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "ansible": {
-    "fileMatch": ["(^|/)tasks/.+\\.ya?ml$"]
+    "managerFilePatterns": ["/(^|/)tasks/.+\\.ya?ml$/"]
   },
   "automerge": true,
   "extends": [
@@ -15,32 +15,32 @@
   "packageRules": [
     {
       "automerge": false,
-      "matchPackagePatterns": ["python", "cue"],
+      "matchPackageNames": ["/python/", "/cue/"],
       "matchUpdateTypes": ["major", "minor"]
     },
     {
       "automerge": false,
       "groupName": "immich",
-      "matchPackagePatterns": ["ghcr.io/immich-app"],
+      "matchPackageNames": ["/ghcr.io/immich-app/"],
       "matchUpdateTypes": ["major", "minor"]
     },
     {
       "groupName": "caddy",
-      "matchPackagePatterns": ["caddy"]
+      "matchPackageNames": ["/caddy/"]
     },
     {
       "automerge": false,
       "groupName": "caddy",
-      "matchPackagePatterns": ["caddy"],
+      "matchPackageNames": ["/caddy/"],
       "matchUpdateTypes": ["major", "minor"]
     },
     {
       "groupName": "dagger",
-      "matchPackagePatterns": ["dagger"]
+      "matchPackageNames": ["/dagger/"]
     },
     {
       "groupName": "ansible-lint",
-      "matchPackagePatterns": ["ansible-lint"]
+      "matchPackageNames": ["/ansible-lint/"]
     }
   ],
   "schedule": ["* 1-14 * * *"],

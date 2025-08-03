@@ -13,7 +13,7 @@
 - name: Write to file {{ file_path }}
   vars:
     file_decode: "{{ file_slurp.content | b64decode }}"
-    file_content: "{{ file_decode is mapping | ternary(file_decode, file_decode | from_yaml_all) }}"
+    file_content: "{{ file_decode is mapping | ternary(file_decode, file_decode | from_yaml_all) }}" # noqa: jinja[invalid]
     file_edit: "{{ file_content | combine(structured_edit, recursive=true) }}"
   module_defaults:
     ansible.builtin.copy:
