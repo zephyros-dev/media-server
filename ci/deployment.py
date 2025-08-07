@@ -50,6 +50,7 @@ async def ci():
                 "/ssh-agent.sock",
                 client.host().unix_socket(os.getenv("SSH_AUTH_SOCK")),
             )
+            .with_env_variable("SSH_AUTH_SOCK", "/ssh-agent.sock")
             .with_mounted_directory(f"{user_dir}/workspace", workspace)
             .with_workdir(f"{user_dir}/workspace")
             .with_mounted_cache(
