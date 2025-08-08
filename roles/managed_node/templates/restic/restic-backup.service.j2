@@ -7,4 +7,5 @@ ExecStartPre=/usr/bin/systemctl --user --machine={{ ansible_user }}@.host stop {
 ExecStart=restic backup --verbose --skip-if-unchanged --one-file-system --tag systemd.timer {{ restic_backup_paths }} --exclude-file $EXCLUDE_FILE
 ExecStartPost=restic forget --verbose --tag systemd.timer --group-by "paths,tags" --keep-daily $RETENTION_DAYS --keep-weekly $RETENTION_WEEKS --keep-monthly $RETENTION_MONTHS
 ExecStartPost=/usr/bin/systemctl --user --machine={{ ansible_user }}@.host start --wait {{ application_backup }}
+ExecStopPost=/usr/bin/systemctl --user --machine={{ ansible_user }}@.host start {{ application_backup }}
 EnvironmentFile={{ restic_env_path }}
