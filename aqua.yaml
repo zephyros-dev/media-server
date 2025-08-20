@@ -9,6 +9,6 @@ packages:
     tags:
       - dagger
       - ci
-  - name: dagger/dagger@v0.18.15
+  - name: dagger/dagger@v0.18.16
   - name: sharkdp/fd@v10.2.0
   - name: opentofu/opentofu@v1.10.5
