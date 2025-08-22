@@ -1,1 +1,1 @@
-FROM ghcr.io/zephyros-dev/koreader:v2025.08-fedora@sha256:fc98357b129db1ebc2eb4862eebf1e23b2352b04642eafa37bc12d70a19c267d
+FROM ghcr.io/zephyros-dev/koreader:v2025.08-fedora@sha256:84f154e7d6426f2d509ac00ef1cc1179ec1adeb99525066db4505939fd7efd1e
