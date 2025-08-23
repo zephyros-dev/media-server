@@ -1011,6 +1011,10 @@ application: {
 			if _fact.nvidia_installed {
 				resources: limits: "nvidia.com/gpu=all": 1
 			}
+			ports: [{
+				containerPort: 19999
+				hostPort:      19999
+			}]
 			volumeMounts: [{
 				name:      "cache"
 				mountPath: "/var/cache/netdata"
