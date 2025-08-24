@@ -29,6 +29,20 @@
         - config:system:set trusted_domains 0 --value='nextcloud.{{ server_domain }}'
       retries: 60
 
+    - name: Get IP address for setting trusted_proxies nextcloud
+      containers.podman.podman_network_info:
+        name: podman-default-kube-network
+      register: podman_network_info
+
+    - name: Set system configuration for nextcloud
+      changed_when: false
+      ansible.builtin.command:
+        cmd: "{{ nextcloud_app_command }} config:system:set {{ item }}"
+      loop:
+        - maintenance_window_start --type=integer --value=6
+        - trusted_domains 0 --value='nextcloud.{{ server_domain }}'
+        - trusted_proxies 0 --value='{{ podman_network_info.networks[0].subnets[0].subnet }}'
+
     - name: Setup nextcloud app
       ansible.builtin.include_tasks:
         file: nextcloud_app_setup.yaml
