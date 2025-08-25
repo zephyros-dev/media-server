@@ -8,7 +8,8 @@
     "samuelcolvin.jinjahtml",
     "signageos.signageos-vscode-sops",
     "tamasfe.even-better-toml",
-    "wholroyd.jinja"
+    "wholroyd.jinja",
+    "hverlin.mise-vscode"
   ],
   "unwantedRecommendations": []
 }

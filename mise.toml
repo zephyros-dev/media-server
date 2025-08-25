@@ -1,0 +1,8 @@
+[settings]
+idiomatic_version_file_enable_tools = []
+
+[tools]
+dagger = "0.18.16"
+fd = "10.2.0"
+opentofu = "1.10.5"
+pre-commit = "4.3.0"
