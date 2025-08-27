@@ -74,14 +74,14 @@ async def ci():
         ci = (
             ci.with_env_variable(
                 "PATH",
-                f"{user_dir}/.local/share/aquaproj-aqua/bin:{user_dir}/workspace/.venv/bin:{user_dir}/.local/bin:{container_path}",
-            )
-            .with_env_variable(
-                "AQUA_GLOBAL_CONFIG", f"{user_dir}/.config/aquaproj-aqua/aqua.yaml"
+                f"{user_dir}/.local/share/mise/shims:{user_dir}/workspace/.venv/bin:{user_dir}/.local/bin:{container_path}",
             )
             .with_mounted_cache(
-                f"{user_dir}/.local/share/aquaproj-aqua",
-                client.cache_volume("aqua-cache"),
+                f"{user_dir}/.local/share/mise",
+                client.cache_volume("mise-local-cache"),
+            )
+            .with_mounted_cache(
+                f"{user_dir}/.cache/mise", client.cache_volume("mise-cache")
             )
             .with_mounted_cache(
                 f"{user_dir}/.ansible", client.cache_volume("ansible_cache")

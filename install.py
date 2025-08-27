@@ -1,10 +1,10 @@
 import argparse
+import os
 import re
 import subprocess
 from pathlib import Path
 
 import devcontainer
-import yaml
 
 parser = argparse.ArgumentParser(description="Setup devcontainer")
 parser.add_argument(
@@ -14,8 +14,6 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-
-dependencies_version = yaml.safe_load(Path("dependencies.yaml").read_text())
 
 
 def shared_setup():
@@ -39,7 +37,7 @@ def shared_setup():
 
 
 if args.profile == "devcontainer":
-    devcontainer.install_aqua()
+    devcontainer.install_mise()
     shared_setup()
     (Path.home() / ".terraformrc").write_text(
         'plugin_cache_dir = "/home/vscode/.terraform.d/plugin-cache"'
@@ -47,18 +45,22 @@ if args.profile == "devcontainer":
 
     # Fix cue vscode extension
     cue_path = subprocess.run(
-        "aqua which cue", shell=True, capture_output=True, text=True
+        "mise which cue", shell=True, capture_output=True, text=True
     ).stdout.strip()
     cue_bin_path = Path.home() / ".local/bin/cue"
     if not cue_bin_path.is_symlink():
         cue_bin_path.symlink_to(cue_path)
 
+env = os.environ.copy()
+
 if args.profile == "dagger":
-    devcontainer.install_aqua()
+    devcontainer.install_mise()
     shared_setup()
-    subprocess.run("aqua install --tags=dagger", shell=True)
+    env["MISE_ENV"] = "dagger"
+    subprocess.run("aqua install", shell=True, env=env)
 
 if args.profile == "ci":
-    devcontainer.install_aqua()
+    devcontainer.install_mise()
     devcontainer.install_podman()
-    subprocess.run("aqua install --tags=ci", shell=True)
+    env["MISE_ENV"] = "ci"
+    subprocess.run("mise install", shell=True, env=env)
