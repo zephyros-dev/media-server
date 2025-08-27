@@ -40,7 +40,7 @@ jobs:
       - name: Set up WireGuard
         run: |
           sudo apt update && sudo apt install wireguard
-          export PATH="$(aqua root-dir)/bin:$HOME/.local/bin:$PATH"
+          eval $(mise activate --shims)
           sops -d secret/deployment/wg0.sops.ini | sudo tee /etc/wireguard/wg0.conf > /dev/null
           wg-quick up wg0 &> /dev/null
         env:

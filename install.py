@@ -61,6 +61,6 @@ if args.profile == "dagger":
 
 if args.profile == "ci":
     devcontainer.install_mise()
-    devcontainer.install_podman()
     env["MISE_ENV"] = "ci"
     subprocess.run("mise install", shell=True, env=env)
+    devcontainer.install_podman()
