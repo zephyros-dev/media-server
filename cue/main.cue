@@ -984,6 +984,10 @@ application: {
 		param: {
 			become:      true
 			caddy_proxy: 19999
+			caddy_rewrite: [{
+				src:  "/"
+				dest: "/v3" // https://community.netdata.cloud/t/how-to-disable-sign-in-page-in-netdata-version-2-1-1-for-direct-dashboard-access/7032
+			}]
 			volumes: {
 				cache:     "pvc"
 				config:    "/etc/netdata/"
