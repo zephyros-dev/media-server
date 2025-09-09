@@ -57,7 +57,7 @@ if args.profile == "dagger":
     devcontainer.install_mise()
     shared_setup()
     env["MISE_ENV"] = "dagger"
-    subprocess.run("aqua install", shell=True, env=env)
+    subprocess.run("mise install", shell=True, env=env)
 
 if args.profile == "ci":
     devcontainer.install_mise()
