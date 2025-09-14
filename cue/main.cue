@@ -266,6 +266,7 @@ application: {
 				metadata:   "./metadata/"
 				podcasts:   "\(_fact.global_storage)/Podcasts/"
 			}
+			state: "absent"
 		}
 		pod: _profile.rootless_userns & {
 			spec: containers: [{
@@ -298,6 +299,7 @@ application: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
 			}
+			state: "absent"
 		}
 		pod: _profile.lsio & {
 			spec: containers: [{
@@ -373,6 +375,7 @@ application: {
 				config: "./config/"
 				ingest: "./ingest/" // This path can be added in calibre Add Books > Control the adding of books > Automatic adding
 			}
+			state: "absent"
 		}
 		pod: _profile.lsio & {
 			spec: containers: [{
@@ -590,6 +593,7 @@ application: {
 				"database.db": "./database.db"
 				srv:           "\(_fact.global_media)/"
 			}
+			state: "absent"
 		}
 		pod: _profile.rootless_userns & {
 			spec: containers: [{
@@ -626,6 +630,7 @@ application: {
 				redis:      "pvc"
 				upload:     "\(_fact.global_media)/Storage/Picture/Immich/"
 			}
+			state: "absent"
 			secret: {
 				database_password: {
 					type:    "env"
@@ -729,6 +734,7 @@ application: {
 				config: "./config/"
 				media:  "\(_fact.global_media)/"
 			}
+			state: "absent"
 		}
 		pod: spec: containers: [_profile.nvidia & {
 			name:  "web"
@@ -791,6 +797,7 @@ application: {
 				config: "./data/"
 				home:   "\(_fact.global_media)/"
 			}
+			state: "absent"
 		}
 		pod: _profile.lsio & {
 			spec: containers: [{
@@ -859,6 +866,7 @@ application: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
 			}
+			state: "absent"
 		}
 		pod: _profile.lsio & {
 			spec: containers: [{
@@ -952,6 +960,7 @@ application: {
 				data:  "./data/"
 				music: "\(_fact.global_media)/Download/torrent/complete/Music/"
 			}
+			state: "absent"
 		}
 		pod: _profile.userns_share & {
 			spec: containers: [{
@@ -1365,6 +1374,7 @@ application: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
 			}
+			state: "absent"
 		}
 		pod: {
 			spec: containers: [{
@@ -1390,6 +1400,7 @@ application: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
 			}
+			state: "absent"
 		}
 		pod: _profile.lsio & {
 			spec: containers: [{
@@ -1413,6 +1424,7 @@ application: {
 			volumes: {
 				storage: "\(_fact.global_storage)/"
 			}
+			state: "absent"
 			secret: {
 				"ACCOUNT_\(_fact.ansible_user)": {
 					type:    "env"
@@ -1612,6 +1624,7 @@ application: {
 				home:   "\(_fact.global_media)/"
 				config: "./web/config/"
 			}
+			state: "absent"
 			secret: {
 				USER: {
 					type:    "env"
