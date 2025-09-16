@@ -72,6 +72,37 @@ flowchart TB
 
 ### PC
 
+#### Mounting server into PC with libvirt
+
+- My server hardware failed recently due to a botched bios upgrade from fwupd, so I had to migrate the server to my current PC for temporary usage. Luckily qemu came to the rescue, and setting it to boot all the disks was possible. I did not write the code to setup the qemu machine since it's only a temporary solution until I build a new NAS, so I figure I'll write some tips here for my future self for reference should this ever happened again
+  1. Setup qemu for Linux machine
+     - On bazzite I just use `ujust setup-virtualization`
+       - Enable Virtualization
+       - Add `user` to libvirt group
+       - Install the virt-manager as user Flatpak
+       - Enable VFIO drivers
+  2. Setup bridge interface for machine (with `eno1` being the network interface)
+     - `nmcli con down eno1`
+     - `nmcli con delete eno1`
+     - `nmcli con add type bridge ifname br0`
+     - `nmcli con add type bridge-slave ifname eno1 master br0`
+  3. Setup machine on virt-manager
+     - Manual Install
+     - Coreos (or whatever linux flavor)
+     - Memory + CPUS
+     - Untick `Enable storage for this virtual machine`
+     - Tick `Customize configuration before install`
+       - NIC
+         - Network Source: Bridge device
+         - Device name: `br0`
+         - MAC Address: Use old mac address server so it can work with static router DHCP
+       - Add these PCI host device
+         - The OS SSD
+         - The Motherboard SATA Controller (AHCI)
+           - This is needed so that the disks are passthrough into the VM, the same as the previous server
+       - Autostart the machine by the command (virt-manager option on the UI doesn't help for some reason)
+         - `sudo virsh autostart <machine-name>`
+
 #### Intel AMT support
 
 - It's possible to control the PC remotely from BIOS via Intel AMT
