@@ -3,12 +3,13 @@
   block:
     - name: Check if nvidia is installed
       changed_when: false
-      ansible.builtin.stat:
-        path: /usr/bin/nvidia-smi
+      ansible.builtin.command:
+        cmd: /usr/bin/nvidia-smi
       register: nvidia_smi
+      ignore_errors: true
     - name: Set nvidia installed fact
       ansible.builtin.set_fact:
-        nvidia_installed: "{{ nvidia_smi.stat.exists }}"
+        nvidia_installed: "{{ not 'NVIDIA-SMI has failed' in nvidia_smi.stdout }}"
     # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/cdi-support.html
     - name: Get current timezone identifier
       changed_when: false
