@@ -46,12 +46,13 @@
       vars:
         systemd_name: "{{ systemd_loop_var.name }}"
         systemd_become: "{{ systemd_loop_var.become | default(false) }}"
-        systemd_state: "{{ systemd_loop_var.state | default('started') }}"
         systemd_schedule: "{{ systemd_loop_var.schedule | default('') }}"
+        systemd_state: "{{ systemd_loop_var.state | default('started') }}"
       loop:
         - name: shutdown
-          schedule: "00:00:00"
           become: true
+          schedule: "00:00:00"
+          state: absent
         - name: podman-prune
           schedule: Sat 19:00:00
         - name: add-executable
