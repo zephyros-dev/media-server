@@ -21,10 +21,16 @@
     - name: Remove systemd timer {{ systemd_timer_name }}
       when: systemd_timer_state == "absent"
       block:
+        - name: Check if service exists {{ systemd_name }}
+          ansible.builtin.stat:
+            path: "{{ systemd_timer_path }}"
+          register: systemd_timer_file
+
         - name: Stop systemd timer {{ systemd_timer_name }} # noqa: args[module]
           ansible.builtin.systemd:
             enabled: false
             state: stopped
+          when: systemd_timer_file.stat.exists
 
         - name: Remove systemd timer file {{ systemd_timer_name }}
           ansible.builtin.file:
