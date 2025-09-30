@@ -15,12 +15,8 @@ disks:
         disks_list:
             - ENC[AES256_GCM,data:uzWXcAo5xoKAGlzJ/dPzI6edjB0Aww==,iv:XpVrMYOEkczfM6UeJolvVNI8DP3rLPTIghIRjoW0urk=,tag:a54kgDJRjPdGu+pbzWwQ8A==,type:str]
 #ENC[AES256_GCM,data:fRZxshM7pQ==,iv:O9G7tJwiLUv7UIOe8uNmEx5m85hOrEa6WPkq8sYgZKo=,tag:WmDX+BCsqpxP86FziyBGuA==,type:comment]
-server_domain: ENC[AES256_GCM,data:+kShVXokU8J4ltJ96Pwv8JcWC+AxG/y7GQ==,iv:k6apfsrlk5CUlBd6QYF4s47yeyedtij5i81ujIsqr+k=,tag:71r6kAHI8njKtoDBJkoQRQ==,type:str]
+server_domain: ENC[AES256_GCM,data:Y8+0IHXxT3rLTeipvERsCw==,iv:3++4xceO5vOk0CfgRKEpA4jFJ3FGBxLQJhZkd43UFCw=,tag:VFKUk7CgE79x+gZo5Nm0og==,type:str]
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
     age:
         - recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
           enc: |
@@ -31,8 +27,7 @@ sops:
             QUlBVzVtbGo0VWtudUFLaklRcFNJSVUKVTVhLM2Z1gHkh6G9n9LS+KtutVppfKn9
             maZkcdkfBG72wTG84kiT53M1qa9buhCZ70sL+ro2QTIiSnOiHuKDtg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-09-24T10:58:56Z"
-    mac: ENC[AES256_GCM,data:QFDxyDMj6JS1EFpoXMoJabmKlcivfLbG/3ymkmpHLs6dypw5P2GFDr4oxHuMTqd1pj3Uh2xh2GS+vCDgKJV+8eBXLN8bC4ClpKBR4HzOKDOOaXA7bZbwHfHPjLKQx6gODld67ac8XRhIpp8JAssBpvg/fUxFdzLRVBQGmUuyMLU=,iv:sfS43y0oOBoC1C0osSpil/GI6hGDyCoqttf4z1SAQM8=,tag:MleeDKZA0ISSVH5o24nStg==,type:str]
-    pgp: []
+    lastmodified: "2025-09-30T16:24:27Z"
+    mac: ENC[AES256_GCM,data:7/SoHHvBdRS/BGzhNOiWWtk+jCAicgu9TmTafBKyUP4BV4EA0zxD30tths8emJ0TgnAnaYE2TWRvKIswFGTan1ue+y4KIBgV9mq6TLSYaHlSRN3JXhrIFQSh+OWIQajTTBO36y9bj4yNik01s55egb+CT2P4yT2xGM0n4EriYLU=,iv:DkUsUWDF7q8wlEtmCXf201SUUuSNlO1ajzSPSlFVUwc=,tag:xvT0tmURsp/ej85FtCKveA==,type:str]
     unencrypted_suffix: _unencrypted
-    version: 3.9.0
+    version: 3.11.0

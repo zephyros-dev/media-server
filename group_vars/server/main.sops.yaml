@@ -12,7 +12,7 @@ disks:
         disks_list:
             - ENC[AES256_GCM,data:E/Wv13hDml9qm9oaOhGEnk3/xu8GWg==,iv:Q8sPXYVC6zdL/dxA/MOCm0mH8ga1d4vqc7oLSlaZuew=,tag:2lO0QQzBeyIqEwTrAPiAww==,type:str]
 #ENC[AES256_GCM,data:6VGSMrmcaQ==,iv:dk1whpz4zm7IN5ZHGi9e/jw1fGr7JwdyUy6RcOC3ifc=,tag:HKFdqyVcJAwcbjHQFDJoQA==,type:comment]
-server_domain: ENC[AES256_GCM,data:+AHGk4pX0wXS6fzLepszU38=,iv:NL9s2Qr3afnAKFKWoORIxq3nfuoIhoj/ncLV46Opd5o=,tag:ywepiSdAu1EQl4+VnB/aQw==,type:str]
+server_domain: ENC[AES256_GCM,data:L9/yZ/27uHY=,iv:eaFoOugLgGj9fU/exQQ5Iw/rzd7bZDx9YwVcqTkQCZc=,tag:5emLH5tir8tDqV41FzFoCw==,type:str]
 #ENC[AES256_GCM,data:SOLrqq1wsw==,iv:8qOdSYUYLH6gZnT0V2QT5zlIkDSgsm68vpVC3L22RaM=,tag:y7zRo4jr2O71j2e/DjMWEA==,type:comment]
 restic_repository: ENC[AES256_GCM,data:67JiytqjGB6429dpPgu9+FDresuJrg==,iv:0DONCsSW8LJ1/fBjKxhlQ0QxmhQ0q1IvelDqk9zCAhA=,tag:AL01tuBYdQQOvIAUW+LS8g==,type:str]
 sops:
@@ -26,7 +26,7 @@ sops:
             TldEazJ1OHVhcVlhUmRBMURQZDZlYmMKUIX4kF5Fo/6+KQcULUvM8XReCEONOaXp
             Vwyy8h/AV0UWJ2doCHrnLUJkvqSlOHJAvu65Cr914aq8ZnC26HjB9Q==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-09-18T10:32:41Z"
-    mac: ENC[AES256_GCM,data:dEu2P3RGY6MdDnO8LIcJZyg8Yeaa+hhC6O6l+nliKmNZoGmcGLyQw2ZeIa/VhMdrKY3q80s8/ntB95nBue0v1JtmZW/x5yk5lCHcPfv27R3DKaWHAiLSw4nUvKAJtcl430v9Ne3GEu76c2wo7tnR0Ca6CQCuiP3R7K+JTQ4WwIM=,iv:gAKj2IHHMGP4UefFn0NQJ+0GhjeLnCEN6abdyX71P0w=,tag:GScjXFqZs/otuQigaKbLrA==,type:str]
+    lastmodified: "2025-09-30T16:24:23Z"
+    mac: ENC[AES256_GCM,data:SsUs5XyKpcskl5dLIIVtPPg38UfHcUjugMxzgupg4YMUEzSZ+Si/7SHZT3vAv4aFdg71NOlejDOdy/wcVJ+bqcToDDoMySLqB0t5/nXayh0tscHfQfYdQqEQ6NCfPECSDzT7pdGnk0iy81FzlQd9r3GJtXvQEKDCMh2VnVebCVk=,iv:TIxB8bkkenkSoi+VLDNUGQ0ybyhZFvehtweeoWwVa+M=,tag:H3gibSCZ75umwXBFgnxJWg==,type:str]
     unencrypted_suffix: _unencrypted
-    version: 3.10.2
+    version: 3.11.0
