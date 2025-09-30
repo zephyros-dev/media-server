@@ -3,9 +3,9 @@ idiomatic_version_file_enable_tools = []
 
 [tools]
 cue = "0.14.1"
-dagger = "0.18.16"
-fd = "10.2.0"
-opentofu = "1.10.5"
+dagger = "0.18.19"
+fd = "10.3.0"
+opentofu = "1.10.6"
 podman = "5.6.1"
 pre-commit = "4.3.0"
-sops = "3.10.2"
+sops = "3.11.0"
