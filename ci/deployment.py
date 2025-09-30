@@ -8,7 +8,16 @@ import dagger
 async def ci():
     async with dagger.Connection(dagger.Config(log_output=stdout)) as client:
         user_dir = "/root"
-        workspace = client.host().directory(".", exclude=[".venv", ".git", ".uv_cache"])
+        workspace = client.host().directory(
+            ".",
+            exclude=[
+                "**.egg-info",
+                "**.git",
+                "**.uv_cache",
+                "**.venv",
+                "**build",
+            ],
+        )
 
         ci = (
             client.container()
