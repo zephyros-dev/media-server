@@ -180,7 +180,7 @@ flowchart TB
 - To debug the CI, run the following command
 
   ```bash
-  dagger run -i python ci/deployment.py
+  dagger run -i uv run ci/deployment.py
   ```
 
 #### Kavita
