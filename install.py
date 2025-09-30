@@ -33,7 +33,7 @@ def shared_setup():
     Path(Path.home() / ".ansible/plugins/strategy_tmp").rename(
         Path.home() / ".ansible/plugins/strategy"
     )
-    subprocess.run("ansible-galaxy install -r requirements.yaml", shell=True)
+    subprocess.run("uv run ansible-galaxy install -r requirements.yaml", shell=True)
 
 
 if args.profile == "devcontainer":
