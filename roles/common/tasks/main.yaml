@@ -41,7 +41,7 @@
       vars:
         caddyfile_content: ""
       ansible.builtin.copy:
-        content: "{{ lookup('vars', 'vars') | to_nice_json }}"
+        content: "{{ lookup('ansible.builtin.vars', 'vars') | to_nice_json }}"
     - name: Get container cue facts
       changed_when: false
       ansible.builtin.command:
@@ -55,7 +55,7 @@
     - name: Export facts to file # noqa: args[module], risky-file-permissions
       changed_when: false
       ansible.builtin.copy:
-        content: "{{ lookup('vars', 'vars') | to_nice_json }}"
+        content: "{{ lookup('ansible.builtin.vars', 'vars') | to_nice_json }}"
     - name: Re-get container cue facts with caddyfile content
       changed_when: false
       ansible.builtin.command:

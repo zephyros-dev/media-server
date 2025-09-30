@@ -87,6 +87,7 @@
             section: "{{ item.section }}"
             option: "{{ item.option }}"
             value: "{{ item.value }}"
+            allow_no_value: "{{ item.allow_no_value | default(false) }}"
             mode: "0600"
           loop:
             - section: snapraid-btrfs
@@ -104,6 +105,7 @@
             - section: logging
               option: file
               value: null
+              allow_no_value: true
         - name: Template snapraid runner systemd
           ansible.builtin.template:
             src: snapraid/snapraid-runner.{{ item }}.j2
