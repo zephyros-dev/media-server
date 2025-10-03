@@ -52,7 +52,6 @@
         - name: shutdown
           become: true
           schedule: "00:00:00"
-          state: absent
         - name: podman-prune
           schedule: Sat 19:00:00
         - name: add-executable
