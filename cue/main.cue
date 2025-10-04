@@ -819,19 +819,18 @@ application: {
 			}
 		}
 		pod: {
-			spec: containers: [{
+			spec: containers: [_profile.nvidia & {
 				name:  "web"
 				image: "koreader"
-				if _fact.nvidia_installed {
-					resources: limits: "nvidia.com/gpu=all": 1
-					securityContext: seLinuxOptions: type:   "spc_t"
-				}
 				env: [{
 					name:  "PUID"
 					value: "0"
 				}, {
 					name:  "PGID"
 					value: "0"
+				}, {
+					name:  "SELKIES_FRAMERATE"
+					value: "30"
 				}]
 				volumeMounts: [{
 					name:      "config"
