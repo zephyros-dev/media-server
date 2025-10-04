@@ -50,10 +50,13 @@ _profile: {
 	}]
 	userns_share: metadata: annotations: "io.podman.annotations.userns": "keep-id"
 	rootless_userns: rootless & userns_share
-	nvidia: {
+	gpu: {
 		if _fact.nvidia_installed {
 			resources: limits: "nvidia.com/gpu=all": 1
 			securityContext: seLinuxOptions: type:   "spc_t"
+		}
+		if !_fact.nvidia_installed {
+			resources: limits: "podman.io/device=/dev/dri": 1
 		}
 	}
 }
@@ -730,7 +733,7 @@ application: {
 				media:  "\(_fact.global_media)/"
 			}
 		}
-		pod: spec: containers: [_profile.nvidia & {
+		pod: spec: containers: [_profile.gpu & {
 			name:  "web"
 			image: "jellyfin"
 			volumeMounts: [{
@@ -819,7 +822,7 @@ application: {
 			}
 		}
 		pod: {
-			spec: containers: [_profile.nvidia & {
+			spec: containers: [_profile.gpu & {
 				name:  "web"
 				image: "koreader"
 				env: [{
