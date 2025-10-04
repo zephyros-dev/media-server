@@ -36,6 +36,7 @@
       - dua-cli
       - fd-find
       - fish
+      - powertop
       # Server software
       - pip
       - power-profiles-daemon
