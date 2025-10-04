@@ -1,5 +1,5 @@
 specificed_hostname: ENC[AES256_GCM,data:i71xkrDf,iv:4XLFuqk5E1uF4KT0BQurIolJJCxYEuwlZKVyC2wp07A=,tag:ROn1r0mRS2dkj+AiurVTdw==,type:str]
-physical_interface: ENC[AES256_GCM,data:As5Wk0jH,iv:hXuXS2SqfWZgAJSdMu6a+NApBuX4zFuHm16cLS+uz+k=,tag:1RVZuQOORBMjVP61cbmTdg==,type:str]
+physical_interface: ENC[AES256_GCM,data:DfVqbmcr,iv:NhQbiHyOwXW4qvMUG5IhI7OV8VYTyZecWBKNcwJh/zM=,tag:eqB3ZabCZ3Pa1iIES3YsQQ==,type:str]
 #ENC[AES256_GCM,data:0h/PKgs=,iv:lp2kO93mPyI3m3vfSvp0HDirqh1JSgdOUx0t1DI7r78=,tag:D2eUXu0h3tG26qcUpJTQvw==,type:comment]
 disks:
     storage:
@@ -26,7 +26,7 @@ sops:
             TldEazJ1OHVhcVlhUmRBMURQZDZlYmMKUIX4kF5Fo/6+KQcULUvM8XReCEONOaXp
             Vwyy8h/AV0UWJ2doCHrnLUJkvqSlOHJAvu65Cr914aq8ZnC26HjB9Q==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-09-30T16:24:23Z"
-    mac: ENC[AES256_GCM,data:SsUs5XyKpcskl5dLIIVtPPg38UfHcUjugMxzgupg4YMUEzSZ+Si/7SHZT3vAv4aFdg71NOlejDOdy/wcVJ+bqcToDDoMySLqB0t5/nXayh0tscHfQfYdQqEQ6NCfPECSDzT7pdGnk0iy81FzlQd9r3GJtXvQEKDCMh2VnVebCVk=,iv:TIxB8bkkenkSoi+VLDNUGQ0ybyhZFvehtweeoWwVa+M=,tag:H3gibSCZ75umwXBFgnxJWg==,type:str]
+    lastmodified: "2025-10-03T02:00:44Z"
+    mac: ENC[AES256_GCM,data:e/JJaVR14aQ2aQItPDPnTFjb2bpe397PVCftTkJoreyz1OGZ/mrCG7WRpxHPUQkC4jOVbH//052x0dTE2O8PwwSbY1P/uAqfOvB1/CXm4bv6MnnnIvebnFlkdMXPt1ylf6nyNElCIFYhVL3A1yiu2d62cdWXpKflTdMdIZKKlCs=,iv:4noxSvdkMQXvapCxrqhWM7rgLbN3lzGfGg2VcapOsgo=,tag:qv6c2JKV2lkQUNztr57Qag==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.11.0
