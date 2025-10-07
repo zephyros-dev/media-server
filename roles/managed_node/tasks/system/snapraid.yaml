@@ -56,11 +56,11 @@
     - name: Setup snapraid-btrfs-runner
       tags: snapraid_runner
       vars:
-        snapraid_runner_path: /opt/snapraid-btrfs-runner/
+        snapraid_runner_path: /opt/snapraid-btrfs-runner
       block:
         - name: Setup snapraid-btrfs-runner folder
           ansible.builtin.file:
-            path: "{{ snapraid_runner_path }}"
+            path: "{{ snapraid_runner_path }}/"
             state: directory
             mode: "0755"
         - name: Install snapraid-btrfs-runner script
@@ -104,8 +104,7 @@
               value: /etc/snapraid.conf
             - section: logging
               option: file
-              value: null
-              allow_no_value: true
+              value: ""
         - name: Template snapraid runner systemd
           ansible.builtin.template:
             src: snapraid/snapraid-runner.{{ item }}.j2
