@@ -23,6 +23,11 @@
         hairpin: false
         state: present
 
+    - name: Enable auto negotiation of ethernet interface for wol
+      changed_when: false
+      ansible.builtin.command:
+        cmd: sudo nmcli c modify "{{ physical_interface }}" 802-3-ethernet.auto-negotiate yes
+
     - name: Setup firewall traffic for services
       ansible.posix.firewalld:
         service: "{{ item }}"
