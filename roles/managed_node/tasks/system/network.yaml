@@ -29,6 +29,8 @@
         cmd: sudo nmcli c modify {{ item }}
       loop:
         - bridge0 802-3-ethernet.wake-on-lan magic
+        - bridge0 802-3-ethernet.auto-negotiate yes
+        - "{{ physical_interface }} 802-3-ethernet.wake-on-lan magic"
         - "{{ physical_interface }} 802-3-ethernet.auto-negotiate yes"
 
     - name: Setup firewall traffic for services
