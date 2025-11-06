@@ -1,4 +1,4 @@
-FROM docker.io/caddy:2.10.2-builder-alpine@sha256:407924573f6ac35cd8859ee88e958628ccbad34481c53de31b9536f918d7de39 AS builder
+FROM docker.io/caddy:2.10.2-builder-alpine@sha256:71843392cb0d1fbe7e9858e59dd774bc5aa101fd57866cd6f71930e799d39549 AS builder
 RUN --mount=type=cache,target=/go/pkg,sharing=locked \
     xcaddy build \
     --with github.com/caddy-dns/porkbun
