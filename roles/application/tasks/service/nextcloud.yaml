@@ -51,7 +51,7 @@
       loop: "{{ nextcloud_app | dict2items }}"
       vars:
         nextcloud_app:
-          # bookmarks: {} # not available for nextcloud 32 yet
+          bookmarks: {} # not available for nextcloud 32 yet
           richdocuments:
             config:
               public_wopi_url: https://nextcloud-office.{{ server_domain }}
