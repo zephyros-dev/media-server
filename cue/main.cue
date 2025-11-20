@@ -259,6 +259,25 @@ application: [applicationName=string]: {
 }
 
 application: {
+	actual: {
+		param: {
+			backup:      true
+			caddy_proxy: 5006
+			volumes: {
+				data: "./data/"
+			}
+		}
+		pod: _profile.userns_share & {
+			spec: containers: [{
+				name:  "web"
+				image: "actual"
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/data:z"
+				}]
+			}]
+		}
+	}
 	audiobookshelf: {
 		param: {
 			backup:      true
