@@ -12,14 +12,12 @@
       ansible.posix.mount:
         path: /mnt/storage
         src: "{{ global_disks_storage_path }}/*"
-        fstype: fuse.mergerfs
+        fstype: mergerfs
         opts: "{{ mergerfs_options | join(',') }}"
         state: mounted
       vars:
         mergerfs_options:
-          - cache.files=off
-          - category.create=mfs
-          - fsname=mergerfs
+          - func.getattr=newest
 
     - name: Mount parity disks
       ansible.posix.mount:
