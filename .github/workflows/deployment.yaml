@@ -11,6 +11,7 @@ on:
       - group_vars/**
       - install.py
       - inventory/**
+      - mise*.toml
       - requirements.yaml
       - roles/**
       - secret/**
