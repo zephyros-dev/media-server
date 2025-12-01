@@ -50,7 +50,7 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-      - name: Run dagger pipeline
+      - name: Setup server
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 10

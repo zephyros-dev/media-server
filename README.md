@@ -1,6 +1,6 @@
 # Selfhost Server
 
-[![dagger](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml/badge.svg)](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml)
+[![Deployment](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml/badge.svg)](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml)
 
 Code for running self-hosted services using podman and ansible
 
@@ -175,17 +175,9 @@ flowchart TB
 
 ## Troubleshooting
 
-### CI debugging
+### Kavita
 
-- To debug the CI, run the following command
-
-  ```bash
-  dagger run -i uv run ci/deployment.py
-  ```
-
-#### Kavita
-
-##### Kavita failed to save progress
+#### Kavita failed to save progress
 
 - Consult [this](https://wiki.kavitareader.com/en/faq##q-im-seeing-database-is-locked-errors-in-my-logs)
 

@@ -39,8 +39,8 @@ def shared_setup():
 if args.profile == "devcontainer":
     devcontainer.install_mise()
     shared_setup()
-    (Path.home() / ".terraformrc").write_text(
-        'plugin_cache_dir = "/home/vscode/.terraform.d/plugin-cache"'
+    (Path.home() / ".tofurc").write_text(
+        f'plugin_cache_dir = "{Path.home()}/.terraform.d/plugin-cache"'
     )
 
     # Fix cue vscode extension
@@ -52,12 +52,6 @@ if args.profile == "devcontainer":
         cue_bin_path.symlink_to(cue_path)
 
 env = os.environ.copy()
-
-if args.profile == "dagger":
-    devcontainer.install_mise()
-    shared_setup()
-    env["MISE_ENV"] = "dagger"
-    subprocess.run("mise install", shell=True, env=env)
 
 if args.profile == "ci":
     devcontainer.install_mise()

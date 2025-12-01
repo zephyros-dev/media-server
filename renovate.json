@@ -35,10 +35,6 @@
       "matchUpdateTypes": ["major", "minor"]
     },
     {
-      "groupName": "dagger",
-      "matchPackageNames": ["/dagger/"]
-    },
-    {
       "groupName": "ansible-lint",
       "matchPackageNames": ["/ansible-lint/"]
     }
