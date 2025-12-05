@@ -1,3 +1,3 @@
-FROM ghcr.io/linuxserver/calibre:latest@sha256:705f69164b3d74e8599eba639557e47094d15ed2c52e37eec88baacc61134279
+FROM ghcr.io/linuxserver/calibre:latest@sha256:52ed42bdec2b05b2b2d7a00610e94b958a9031444ae99d62266ff0c7be7125ac
 
 RUN echo "\ntrue" >> /etc/s6-overlay/s6-rc.d/init-selkies-config/run
