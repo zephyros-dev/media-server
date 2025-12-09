@@ -5,6 +5,9 @@
   "[jsonc]": {
     "editor.defaultFormatter": "prettier.prettier-vscode"
   },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
   "[python]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": "always"
@@ -14,9 +17,7 @@
   "[yaml]": {
     "editor.defaultFormatter": "prettier.prettier-vscode"
   },
-  "[markdown]": {
-    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-  },
+  "ansible.python.interpreterPath": "/home/phong/infra/.venv/bin/python",
   "editor.codeActionsOnSave": {
     "source.fixAll.sortJSON": "always"
   },
@@ -26,6 +27,5 @@
     "**/tasks/**/*.yaml": "ansible"
   },
   "git.repositoryScanIgnoredFolders": [".terraform"],
-  "sops.creationEnabled": true,
-  "ansible.python.interpreterPath": "/home/phong/infra/.venv/bin/python"
+  "sops.creationEnabled": true
 }
