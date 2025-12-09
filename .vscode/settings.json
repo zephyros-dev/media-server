@@ -17,7 +17,6 @@
   "[yaml]": {
     "editor.defaultFormatter": "prettier.prettier-vscode"
   },
-  "ansible.python.interpreterPath": "/home/phong/infra/.venv/bin/python",
   "editor.codeActionsOnSave": {
     "source.fixAll.sortJSON": "always"
   },
