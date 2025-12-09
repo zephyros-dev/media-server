@@ -1,15 +1,23 @@
 {
   "recommendations": [
+    "bierner.markdown-mermaid",
     "charliermarsh.ruff",
     "cuelangorg.vscode-cue",
+    "DavidAnson.vscode-markdownlint",
+    "eamodio.gitlens",
+    "hverlin.mise-vscode",
+    "mhutchie.git-graph",
+    "mikestead.dotenv",
     "ms-azuretools.vscode-containers",
+    "ms-python.python",
     "OpenTofu.vscode-opentofu",
     "redhat.ansible",
+    "richie5um2.vscode-sort-json",
     "samuelcolvin.jinjahtml",
     "signageos.signageos-vscode-sops",
     "tamasfe.even-better-toml",
+    "vivaxy.vscode-conventional-commits",
     "wholroyd.jinja",
-    "hverlin.mise-vscode"
-  ],
-  "unwantedRecommendations": []
+    "yzhang.markdown-all-in-one"
+  ]
 }

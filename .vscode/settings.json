@@ -1,3 +1,33 @@
 {
-  "sops.binPath": "/home/vscode/.local/share/mise/shims/sops"
+  "[json]": {
+    "editor.defaultFormatter": "prettier.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "prettier.prettier-vscode"
+  },
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "prettier.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "ansible.python.interpreterPath": "${localWorkspaceFolder}/.venv/bin/python",
+  "cue.moduleRoot": "${workspaceFolder}/cue",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.sortJSON": "always"
+  },
+  "editor.formatOnSave": true,
+  "files.associations": {
+    "**/handlers/**/*.yaml": "ansible",
+    "**/tasks/**/*.yaml": "ansible"
+  },
+  "git.repositoryScanIgnoredFolders": [".terraform"],
+  "sops.creationEnabled": true,
+  "terraform.experimentalFeatures.validateOnSave": true
 }
