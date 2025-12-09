@@ -17,8 +17,6 @@
   "[markdown]": {
     "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
   },
-  "ansible.python.interpreterPath": "${localWorkspaceFolder}/.venv/bin/python",
-  "cue.moduleRoot": "${workspaceFolder}/cue",
   "editor.codeActionsOnSave": {
     "source.fixAll.sortJSON": "always"
   },
@@ -29,5 +27,5 @@
   },
   "git.repositoryScanIgnoredFolders": [".terraform"],
   "sops.creationEnabled": true,
-  "terraform.experimentalFeatures.validateOnSave": true
+  "ansible.python.interpreterPath": "/home/phong/infra/.venv/bin/python"
 }
