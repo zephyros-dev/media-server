@@ -4,7 +4,6 @@ import re
 import subprocess
 from pathlib import Path
 
-import devcontainer
 
 parser = argparse.ArgumentParser(description="Setup devcontainer")
 parser.add_argument(
@@ -37,7 +36,6 @@ def shared_setup():
 
 
 if args.profile == "devcontainer":
-    devcontainer.install_mise()
     shared_setup()
     (Path.home() / ".tofurc").write_text(
         f'plugin_cache_dir = "{Path.home()}/.terraform.d/plugin-cache"'
@@ -54,8 +52,6 @@ if args.profile == "devcontainer":
 env = os.environ.copy()
 
 if args.profile == "ci":
-    devcontainer.install_mise()
     shared_setup()
     env["MISE_ENV"] = "ci"
     subprocess.run("mise install", shell=True, env=env)
-    devcontainer.install_podman()
