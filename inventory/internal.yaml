@@ -1,4 +1,0 @@
-all:
-  children:
-    server:
-      hosts: host.containers.internal
