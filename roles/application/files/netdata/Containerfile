@@ -1,1 +1,1 @@
-FROM docker.io/netdata/netdata:v2.8.2@sha256:2b41c488661742eac7e57d1335203b13fe08bc8f9f4806a8d1718640b2f64d28
+FROM docker.io/netdata/netdata:v2.8.3@sha256:cc9b44c4677a69a3341e0030c2c97fbede160ca0ca2dcdb7df5cf08e90cb4353
