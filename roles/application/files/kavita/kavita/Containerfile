@@ -1,1 +1,1 @@
-FROM ghcr.io/linuxserver/kavita:0.8.8@sha256:1faa2d4daf95d983414b26b8d37dd7f7ffa771bcd155ac8f9f5872edf2e34ae7
+FROM ghcr.io/linuxserver/kavita:0.8.8@sha256:eaf3de24e944fb6316de3659d184ebbefdd67b50934e75644e3d1ecb40724b6b
