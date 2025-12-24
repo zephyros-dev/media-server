@@ -12,7 +12,7 @@
       until: podman_container_info.containers | length > 0
     - name: Setup postgres action for pod {{ application_name }}
       vars:
-        postgres_data_path: "{{ podman_container_info | json_query('containers[0].Mounts[?Destination==`/var/lib/postgresql/data`].Source') | first }}"
+        postgres_data_path: "{{ podman_container_info | json_query('containers[0].Mounts[?Destination==`/var/lib/postgresql`].Source') | first }}"
         postgres_user: "{{ podman_container_info | json_query('containers[0].Config.Env[?contains(@, `POSTGRES_USER`) == `true`]') | first | regex_replace('^POSTGRES_USER=', '') }}"
         postgres_backup_path: "{{ postgres_data_path | dirname }}/postgres_backup"
       block:
