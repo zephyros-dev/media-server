@@ -1,1 +1,1 @@
-FROM ghcr.io/almarklein/timetagger:v25.12.1-nonroot@sha256:502675ef876f072ba0b0159c353d591d4073ed9883e230003010dc87be10c7d9
+FROM ghcr.io/almarklein/timetagger:v25.12.1-nonroot@sha256:f65e45b75fb5db04443552d859e7aafcdf9e9942a3c3c1bfcfd235e578e4fab6
