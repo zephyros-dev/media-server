@@ -77,6 +77,7 @@ application: [applicationName=string]: {
 		dashy_icon?:                   string        // Custom dashy icon path
 		dashy_show:                    *true | bool  // Show service endpoint in dashy
 		dashy_name?:                   string        // Use custom name on dashy
+		dashy_url_path:                *"" | string
 		dashy_statusCheckAcceptCodes?: uint16 & >99 & <600
 		quadlet_kube_options?: {
 			[string]: string
@@ -494,7 +495,7 @@ application: {
 									if v.param.dashy_name == _|_ {
 										_title: v.transform.applicationCanonName
 									}
-									_url_public: string | *"https://\(v.transform.applicationCanonName).\(_fact.server_domain)"
+									_url_public: string | *"https://\(v.transform.applicationCanonName).\(_fact.server_domain)\(v.param.dashy_url_path)"
 									if v.param.state == "started" {
 										title: strings.ToTitle(_title)
 										if v.param.dashy_icon == _|_ {
@@ -1618,6 +1619,44 @@ application: {
 				}, {
 					name:      "koreader"
 					mountPath: "/var/syncthing/koreader/book:z"
+				}]
+			}]
+		}
+	}
+
+	timetagger: {
+		param: {
+			backup:         true
+			caddy_proxy:    8080
+			caddy_sso:      true
+			dashy_url_path: "/timetagger/app/"
+			secret: {
+				cred: {
+					type:    "env"
+					content: _fact.timetagger_cred
+				}
+			}
+			volumes: {
+				data: "./"
+			}
+		}
+		pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "web"
+				image: "timetagger"
+				env: [{
+					name:  "TIMETAGGER_BIND"
+					value: "0.0.0.0:8080"
+				}, {
+					name: "TIMETAGGER_CREDENTIALS"
+					valueFrom: secretKeyRef: {
+						name: "timetagger"
+						key:  "cred"
+					}
+				}]
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/home/timetagger/_timetagger:z"
 				}]
 			}]
 		}
