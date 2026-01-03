@@ -1628,7 +1628,6 @@ application: {
 		param: {
 			backup:         true
 			caddy_proxy:    8080
-			caddy_sso:      true
 			dashy_url_path: "/timetagger/app/"
 			secret: {
 				cred: {
