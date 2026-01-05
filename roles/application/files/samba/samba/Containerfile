@@ -1,1 +1,1 @@
-FROM ghcr.io/servercontainers/samba:smbd-only-latest@sha256:3984f931e863fe00ffa37c576b483d8ab866a3a01b836ecb1094040da1afdb3b
+FROM ghcr.io/servercontainers/samba:smbd-only-latest@sha256:cf0d36de0477093e5cb6fd19b98d7a911a523c0976c20e634bd42c2bcffe172c
