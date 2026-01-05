@@ -1,1 +1,1 @@
-FROM docker.io/actualbudget/actual-server:latest-alpine@sha256:34aae5813fdfee12af2a50c4d0667df68029f1d61b90f45f282473273eb70d0d
+FROM docker.io/actualbudget/actual-server:26.1.0-alpine@sha256:34aae5813fdfee12af2a50c4d0667df68029f1d61b90f45f282473273eb70d0d
