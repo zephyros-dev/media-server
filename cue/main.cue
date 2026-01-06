@@ -392,9 +392,10 @@ application: {
 			caddy_sso:                    true
 			dashy_statusCheckAcceptCodes: 401
 			volumes: {
-				books:  "\(_fact.global_media)/Storage/Books/"
-				config: "./config/"
-				ingest: "./ingest/" // This path can be added in calibre Add Books > Control the adding of books > Automatic adding
+				books:     "\(_fact.global_media)/Storage/Books/"
+				config:    "./config/"
+				ingest:    "./ingest/" // This path can be added in calibre Add Books > Control the adding of books > Automatic adding
+				dl_config: "./dl_config"
 			}
 		}
 		pod: _profile.lsio & {
@@ -417,8 +418,8 @@ application: {
 					mountPath: "/config/ingest:z"
 				}]
 			}, {
-				name:  "downloader"
-				image: "calibre-downloader"
+				name:  "dl"
+				image: "calibre-dl"
 				env: [{
 					name:  "UID"
 					value: "911"
@@ -435,12 +436,15 @@ application: {
 				volumeMounts: [{
 					name:      "ingest"
 					mountPath: "/cwa-book-ingest:z"
+				}, {
+					name:      "dl_config"
+					mountPath: "/config:z"
 				}]
 			}]
 		}
 	}
 
-	calibre_content: {
+	calibre_sv: {
 		param: {
 			caddy_proxy:                  "http://calibre:8081"
 			dashy_icon:                   "/favicon.png"
@@ -448,11 +452,11 @@ application: {
 		}
 	}
 
-	calibre_downloader: {
+	calibre_dl: {
 		param: {
 			caddy_proxy: "http://calibre:8084"
 			caddy_sso:   true
-			dashy_name:  "calibre-downloader"
+			dashy_name:  "calibre-dl"
 			dashy_icon:  "/favicon.ico"
 		}
 	}
