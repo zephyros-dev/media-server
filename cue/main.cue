@@ -395,7 +395,7 @@ application: {
 				books:     "\(_fact.global_media)/Storage/Books/"
 				config:    "./config/"
 				ingest:    "./ingest/" // This path can be added in calibre Add Books > Control the adding of books > Automatic adding
-				dl_config: "./dl_config"
+				dl_config: "./dl_config/"
 			}
 		}
 		pod: _profile.lsio & {
@@ -421,10 +421,10 @@ application: {
 				name:  "dl"
 				image: "calibre-dl"
 				env: [{
-					name:  "UID"
+					name:  "PUID"
 					value: "911"
 				}, {
-					name:  "GID"
+					name:  "PGID"
 					value: "911"
 				}, {
 					name:  "FLASK_DEBUG"
