@@ -1,6 +1,7 @@
 config:
     MODE_FILTER: ENC[AES256_GCM,data:FIc7m3KG9DXy6fu6,iv:PGN+sqJP4Llk3LYiSO2JB83YKugYG3/wp0uH71BiA/w=,tag:6dOWp1GQNTULk5+CTbBBGg==,type:str]
     FLOWOFFLOAD: ENC[AES256_GCM,data:LcmSpV0L4ao=,iv:6cCHcnLQaMRZ7HdFDfCbv9E42KW2EjjJJjal35QD1Po=,tag:fbl05z0KDrzkyoT56fAWLA==,type:str]
+    NFQWS_ENABLE: ENC[AES256_GCM,data:ag==,iv:UHt9H+LLRdNtMQdwE25LFg2fl6AbUm5yKqV4W6a4PlA=,tag:04oZcfDr5HnMjk9HMXjuHw==,type:str]
 router_list:
     - ENC[AES256_GCM,data:WPMddjm7PYZjxFg8p0gf,iv:GLU+eflNVw0E+6YoCfz8trZ355xFMS+rNteu12limI4=,tag:oSuu8lBCINV8r+YVDxnTGA==,type:str]
 custom_user_include: ENC[AES256_GCM,data:AhHkWscLAMg=,iv:F98pOJayIjZGWJlO5BOcbPx2eR06uhFjrZ8Cg1p7FtE=,tag:1Fe2EyiN1M275zDt2UTTFw==,type:str]
@@ -15,7 +16,7 @@ sops:
             aTdoVjkwMHFPVWVQeklHZE9sd3pMRjAKt6hgPodrGEgIZnW5B/BhtjMAl2d4MANv
             Ie2CQ3osLO7bwUFU9lfzk4CvEnACBZPDnVm+0L8+HdPGr1UZ6fpzMA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-15T13:58:16Z"
-    mac: ENC[AES256_GCM,data:FKfWlpvVYjxZFgsOYSJJW9qapvg1PJctFBeYbNl92TBboFaiZJ0qYtPi3WHtz9IA+fBjkFmQOu034M6mMlfjyJsw/jyisHTXnKRFGmwh7LSIROhWzx6z0trK0hHDPPo5yUMgmUs8O4gb0qauC1HgozbIr80YCO/0fOa08NwibFQ=,iv:zrDyuVvd6bKWHMl0pJQsCAh21Fg48mVVzRVkgqR9Du8=,tag:l4+uRY/ZB+BpCTHV40+GmA==,type:str]
+    lastmodified: "2026-01-21T01:31:40Z"
+    mac: ENC[AES256_GCM,data:nPHqzvBf3KByTjO3mGt3B/pcm+6dXHcm0g4MGLi/oXT1uF7z+YehtLcz4zbbGMBMhgLtlUQSPWmDJigovKez7YdJfaCGx40RjqsDEZXBRV8Odz7bowOK98Uw3CxfJXVaFJ57iERDHKmZve2k4/42Jt9WDWe3lDGPFwBkfVGQOmQ=,iv:iTbM3+gIvDX7Jc9DQQIAfP/4wI5GSfsUJ9eTleS4pIk=,tag:cYvKuGqrVp5oktttlJjNnQ==,type:str]
     unencrypted_suffix: _unencrypted
-    version: 3.10.2
+    version: 3.11.0
