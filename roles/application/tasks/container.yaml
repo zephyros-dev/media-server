@@ -103,8 +103,6 @@
                     xpath: "{{ item.key }}"
                     value: "{{ item.value }}"
                   loop:
-                    - key: /Config/AuthenticationMethod
-                      value: Basic
                     - key: /Config/AuthenticationRequired
                       value: DisabledForLocalAddresses
                   register: arr_config
