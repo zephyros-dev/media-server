@@ -1806,7 +1806,7 @@ application: {
 		param: {
 			caddy_proxy: 8089
 			caddy_sso:   true
-			dashy_icon:  "mdi-desktop-classic"
+			dashy_icon:  "mdi-power"
 			secret: {
 				WOLWEBBCASTIP: {
 					type:    "env"
