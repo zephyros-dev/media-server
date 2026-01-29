@@ -1754,6 +1754,54 @@ application: {
 		}
 	}
 
+	wealthfolio: {
+		param: {
+			caddy_proxy: 8088
+			dashy_icon:  "/logo.svg"
+			volumes: {
+				data: "./data/"
+			}
+			secret: {
+				WF_SECRET_KEY: {
+					type:    "env"
+					content: _fact.wealthfolio_secret_key
+				}
+				WF_AUTH_PASSWORD_HASH: {
+					type:    "env"
+					content: _fact.wealthfolio_auth_password_hash
+				}
+			}
+		}
+
+		pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "web"
+				image: "wealthfolio"
+				env: [{
+					name:  "WF_DB_PATH"
+					value: "/data/wealthfolio.db"
+				}, {
+					name: "WF_SECRET_KEY"
+					valueFrom: secretKeyRef: {
+						name: "wealthfolio"
+						key:  "WF_SECRET_KEY"
+					}
+				}, {
+					name: "WF_AUTH_PASSWORD_HASH"
+					valueFrom: secretKeyRef: {
+						name: "wealthfolio"
+						key:  "WF_AUTH_PASSWORD_HASH"
+					}
+				}]
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/data:z"
+				}]
+			},
+			]
+		}
+	}
+
 	wol: {
 		param: {
 			caddy_proxy: 8089
