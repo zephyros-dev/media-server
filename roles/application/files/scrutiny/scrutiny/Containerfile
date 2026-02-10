@@ -1,1 +1,1 @@
-FROM ghcr.io/analogj/scrutiny:v0.8.3-omnibus@sha256:f7f153ad78241f32906da4f317a75fb2de6ed79bf3d9411cdee65d27d6b40745
+FROM ghcr.io/analogj/scrutiny:v0.8.6-omnibus@sha256:8dcc722855198da5c198f8b0cdb1b0a33dac7ca91df57bc01fc24052e18ce49f
