@@ -1,1 +1,1 @@
-FROM afadil/wealthfolio:3.0.1@sha256:055d8fbcb96a44e0452f6943b72e0d26e03b6bef982f2c3cf1307cc28230f44d
+FROM afadil/wealthfolio:3.0.2@sha256:24d6e5d80a9d1534aa97eb511e761c9969a02ca4e5c34c67a7a6c5fc5683e7b4
