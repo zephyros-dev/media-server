@@ -1792,6 +1792,9 @@ application: {
 						name: "wealthfolio"
 						key:  "WF_AUTH_PASSWORD_HASH"
 					}
+				}, {
+					name: "WF_CORS_ALLOW_ORIGINS"
+					value: "https://wealthfolio.\(_fact.server_domain)"
 				}]
 				volumeMounts: [{
 					name:      "data"
