@@ -16,9 +16,9 @@ openwrt_config = yaml.safe_load(
 )
 
 version = yaml.safe_load(Path("../dependencies.yaml").read_text())["bol-van/zapret"]
-if not Path(f".decrypted.zapret/zapret-{version}").exists():
+if not Path(f".decrypted.zapret/zapret2-{version}").exists():
     print(f"New version detected {version}")
-    url = f"https://github.com/bol-van/zapret/releases/download/{version}/zapret-{version}-openwrt-embedded.tar.gz"
+    url = f"https://github.com/bol-van/zapret2/releases/download/{version}/zapret2-{version}-openwrt-embedded.tar.gz"
     subprocess.run(
         f"curl -Lo .decrypted.zapret.tar.gz {url}",
         shell=True,
@@ -27,22 +27,26 @@ if not Path(f".decrypted.zapret/zapret-{version}").exists():
     subprocess.run(
         "tar -zxvf .decrypted.zapret.tar.gz -C .decrypted.zapret", shell=True
     )
+for file_walker in Path(f".decrypted.zapret/zapret2-{version}/binaries").iterdir():
+    if file_walker.is_dir() and file_walker.name not in ["linux-arm64"]:
+        shutil.rmtree(file_walker)
 
-# Need to create custom user include list since headless service fail those domain during the first call and do not retry for autohostlist
-# https://github.com/bol-van/zapret/blob/master/docs/readme.en.md#autohostlist-mode
-Path(f".decrypted.zapret/zapret-{version}/ipset/zapret-hosts-user.txt").write_text(
-    openwrt_config["custom_user_include"]
-)
+
+# # Need to create custom user include list since headless service fail those domain during the first call and do not retry for autohostlist
+# # https://github.com/bol-van/zapret/blob/master/docs/readme.en.md#autohostlist-mode
+# Path(f".decrypted.zapret/zapret2-{version}/ipset/zapret-hosts-user.txt").write_text(
+#     openwrt_config["custom_user_include"]
+# )
 
 for router in openwrt_config["router_list"]:
     # Copy the repo
     subprocess.run(
-        f"rsync -4 --mkpath --chown root:root -a --delete --exclude '.git' --exclude 'config' .decrypted.zapret/zapret-{version}/ root@{router}:/opt/zapret",
+        f"rsync -4 --mkpath --chown root:root -a --delete --exclude '.git' --exclude 'config' .decrypted.zapret/zapret2-{version}/ root@{router}:/opt/zapret2",
         shell=True,
     )
 
     # Copy tmp config
-    shutil.copy(f".decrypted.zapret/zapret-{version}/config.default", ".env")
+    shutil.copy(f".decrypted.zapret/zapret2-{version}/config.default", ".env")
 
     # Change the config
     for key, value in openwrt_config["config"].items():
@@ -50,7 +54,7 @@ for router in openwrt_config["router_list"]:
 
     # Copy the config
     subprocess.run(
-        f"rsync -4 --chown root:root -a --delete .env root@{router}:/opt/zapret/config",
+        f"rsync -4 --chown root:root -a --delete .env root@{router}:/opt/zapret2/config",
         shell=True,
     )
 
