@@ -5,6 +5,7 @@
     "cuelangorg.vscode-cue",
     "DavidAnson.vscode-markdownlint",
     "eamodio.gitlens",
+    "esbenp.prettier-vscode",
     "hverlin.mise-vscode",
     "mhutchie.git-graph",
     "mikestead.dotenv",
