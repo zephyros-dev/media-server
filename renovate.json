@@ -15,7 +15,7 @@
   "packageRules": [
     {
       "automerge": false,
-      "matchPackageNames": ["/python/", "/cue/"],
+      "matchPackageNames": ["/python/", "/cue/", "/dashy/"],
       "matchUpdateTypes": ["major", "minor"]
     },
     {
