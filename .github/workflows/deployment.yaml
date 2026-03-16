@@ -28,7 +28,7 @@ jobs:
         with:
           submodules: true
       - name: Install mise
-        uses: jdx/mise-action@v3
+        uses: jdx/mise-action@c1ecc8f748cd28cdeabf76dab3cccde4ce692fe4 # v4
       - name: Setup CI dependencies
         run: |
           uv run install.py --profile ci
