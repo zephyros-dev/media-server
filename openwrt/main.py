@@ -15,7 +15,7 @@ openwrt_config = yaml.safe_load(
     ).stdout
 )
 
-version = yaml.safe_load(Path("../dependencies.yaml").read_text())["bol-van/zapret"]
+version = yaml.safe_load(Path("../dependencies.yaml").read_text())["bol-van/zapret2"]
 if not Path(f".decrypted.zapret/zapret2-{version}").exists():
     print(f"New version detected {version}")
     url = f"https://github.com/bol-van/zapret2/releases/download/{version}/zapret2-{version}-openwrt-embedded.tar.gz"
