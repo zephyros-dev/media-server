@@ -1,6 +1,6 @@
 - name: Create ansible folder
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.config/ansible"
+    path: "{{ ansible_facts.user_dir }}/.config/ansible"
     state: directory
     mode: "0755"
 
@@ -8,8 +8,8 @@
   ansible.builtin.copy:
     src: ansible/requirements.txt
     mode: "0644"
-    dest: "{{ ansible_user_dir }}/.config/ansible/requirements.txt"
+    dest: "{{ ansible_facts.user_dir }}/.config/ansible/requirements.txt"
 
 - name: Install ansible python requirements
   ansible.builtin.pip:
-    requirements: "{{ ansible_user_dir }}/.config/ansible/requirements.txt"
+    requirements: "{{ ansible_facts.user_dir }}/.config/ansible/requirements.txt"

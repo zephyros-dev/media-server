@@ -4,12 +4,12 @@
     mode: "0755"
     state: directory
   loop:
-    - "{{ ansible_user_dir }}/.config/mergerfs_directory"
+    - "{{ ansible_facts.user_dir }}/.config/mergerfs_directory"
 
 - name: Copy the mergerfs scripts to destination
   ansible.builtin.copy:
     src: mergerfs_directory/main.py
-    dest: "{{ ansible_user_dir }}/.config/mergerfs_directory/main.py"
+    dest: "{{ ansible_facts.user_dir }}/.config/mergerfs_directory/main.py"
     mode: "0755"
 
 - name: Setup mergerfs config file
@@ -17,7 +17,7 @@
     name: common
     tasks_from: structured_edit.yaml
   vars:
-    file_path: "{{ ansible_user_dir }}/.config/mergerfs_directory/config.json"
+    file_path: "{{ ansible_facts.user_dir }}/.config/mergerfs_directory/config.json"
     structured_edit:
       mergerfs_disks_name: "{{ disks.storage.disks_list }}"
       mergerfs_disks_storage_path: "{{ global_disks_storage_path }}"

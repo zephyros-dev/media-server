@@ -165,10 +165,10 @@ application: [applicationName=string]: {
 			caddy_proxy_url: (#caddy_proxy & {in: param.caddy_proxy}).out
 		}
 
-		if _fact.ansible_hostname != "staging" {
+		if _fact.ansible_facts.hostname != "staging" {
 			state: param.state
 		}
-		if _fact.ansible_hostname == "staging" {
+		if _fact.ansible_facts.hostname == "staging" {
 			if param.staging {
 				state: param.state
 			}

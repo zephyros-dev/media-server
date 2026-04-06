@@ -65,7 +65,7 @@
 - name: Setup rootless podman
   tags: podman
   vars:
-    podman_config_dir_path: "{{ ansible_user_dir }}/.config/containers/containers.conf.d"
+    podman_config_dir_path: "{{ ansible_facts.user_dir }}/.config/containers/containers.conf.d"
   block:
     - name: Enable podman socket
       ansible.builtin.systemd:
@@ -87,9 +87,9 @@
     # https://github.com/containers/podman/issues/23515
     # This may be removed once podman is on version 5.2.2
     - name: Fix podman invalid volume
-      when: ansible_hostname == "staging"
+      when: ansible_facts.hostname == "staging"
       ansible.builtin.file:
-        path: "{{ ansible_user_dir }}/.local/share/containers/storage/volumes"
+        path: "{{ ansible_facts.user_dir }}/.local/share/containers/storage/volumes"
         mode: "0755"
         state: directory
 

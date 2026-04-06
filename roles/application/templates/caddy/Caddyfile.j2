@@ -1,5 +1,5 @@
 #jinja2:lstrip_blocks: True
-{% if ansible_hostname == 'staging' %}
+{% if ansible_facts.hostname == 'staging' %}
 {
 	acme_dns porkbun {
     api_key {{ porkbun_api_key }}

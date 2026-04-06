@@ -6,6 +6,6 @@
     - name: Setup server
       ansible.builtin.import_role:
         name: managed_node
-    - name: Setup applicaiton
+    - name: Setup application
       ansible.builtin.import_role:
         name: application

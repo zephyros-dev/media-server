@@ -1,6 +1,6 @@
 - name: Harden ssh
   tags: ssh
-  when: ansible_pkg_mgr != "atomic_container"
+  when: ansible_facts.pkg_mgr != "atomic_container"
   ansible.builtin.import_role:
     name: devsec.hardening.ssh_hardening
   vars:
