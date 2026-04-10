@@ -1,2 +1,2 @@
-lxml==6.0.2
+lxml==6.0.3
 packaging==26.0
