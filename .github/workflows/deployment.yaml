@@ -32,17 +32,17 @@ jobs:
       - name: Setup CI dependencies
         run: |
           uv run install.py --profile ci
+      - name: Setup tmate session
+        if: env.DEBUG_MODE == 'true'
+        uses: mxschmitt/action-tmate@v3
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: Set up WireGuard
         run: |
           sudo apt update && sudo apt install wireguard
           eval $(mise activate --shims)
           sops -d secret/deployment/wg0.sops.ini | sudo tee /etc/wireguard/wg0.conf > /dev/null
           wg-quick up wg0 &> /dev/null
-        env:
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-      - name: Setup tmate session
-        if: env.DEBUG_MODE == 'true'
-        uses: mxschmitt/action-tmate@v3
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: Setup server
