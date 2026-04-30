@@ -3,7 +3,7 @@ idiomatic_version_file_enable_tools = []
 
 [tools]
 cue = "0.14.1"
-fd = "10.3.0"
+fd = "10.4.2"
 opentofu = "1.10.6"
 podman = "5.6.1"
 prek = "0.2.20"
