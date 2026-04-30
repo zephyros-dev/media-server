@@ -1,1 +1,1 @@
-FROM ghcr.io/linuxserver/calibre:latest@sha256:0b93327231a4ef4d23d5d6702c3df719be08fc31ad0bb49d37f0b75b22d32851
+FROM ghcr.io/linuxserver/calibre:latest@sha256:927205dfcc563726d48357f4d6524ee443e36d2b31029253360160f973731bef
