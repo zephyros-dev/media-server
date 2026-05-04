@@ -20,7 +20,7 @@
     },
     {
       "automerge": false,
-      "matchPackageNames": ["/dashy/", "/calibre/"]
+      "matchPackageNames": ["/dashy/"]
     },
     {
       "automerge": false,
