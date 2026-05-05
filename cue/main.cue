@@ -263,6 +263,7 @@ application: {
 	actual: {
 		param: {
 			backup:      true
+			dashy_icon:  "hl-actual-budget"
 			caddy_proxy: 5006
 			volumes: {
 				data: "./data/"
@@ -1793,7 +1794,7 @@ application: {
 						key:  "WF_AUTH_PASSWORD_HASH"
 					}
 				}, {
-					name: "WF_CORS_ALLOW_ORIGINS"
+					name:  "WF_CORS_ALLOW_ORIGINS"
 					value: "https://wealthfolio.\(_fact.server_domain)"
 				}]
 				volumeMounts: [{
