@@ -25,6 +25,10 @@
       "matchUpdateTypes": ["major", "minor"]
     },
     {
+      "automerge": false,
+      "matchPackageNames": ["/calibre/"]
+    },
+    {
       "groupName": "caddy",
       "matchPackageNames": ["/caddy/"]
     },
