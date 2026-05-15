@@ -1,1 +1,1 @@
-FROM ghcr.io/wealthfolio/wealthfolio:3.4.0@sha256:3d821081071ca7d864dc1b1689140df1f6163e83fd42000f56a7c6a2d207a11e
+FROM ghcr.io/wealthfolio/wealthfolio:3.4.0@sha256:706746726dbebac6ff57d5ab87a1636d69f08d98cc94d81d9b25ff77a6d3e5c2
