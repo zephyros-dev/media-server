@@ -20,6 +20,10 @@
     },
     {
       "automerge": false,
+      "matchPackageNames": ["/dashy/"]
+    },
+    {
+      "automerge": false,
       "groupName": "immich",
       "matchPackageNames": ["/ghcr.io/immich-app/"],
       "matchUpdateTypes": ["major", "minor"]
