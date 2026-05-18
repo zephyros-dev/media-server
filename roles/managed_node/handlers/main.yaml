@@ -1,0 +1,6 @@
+- name: Restart cockpit service
+  become: true
+  ansible.builtin.systemd:
+    name: cockpit.service
+    daemon_reload: true
+    state: restarted

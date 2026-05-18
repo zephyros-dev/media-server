@@ -69,3 +69,7 @@
 - name: Miscellaneous settings
   ansible.builtin.import_tasks: system/misc.yaml
   tags: misc
+
+- name: Setup cockpit
+  ansible.builtin.import_tasks: system/cockpit.yaml
+  tags: cockpit

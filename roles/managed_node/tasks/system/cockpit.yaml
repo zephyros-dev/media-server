@@ -1,0 +1,22 @@
+- name: Create cockpit extra configuration
+  become: true
+  block:
+    - name: Create systemd service override folder
+      ansible.builtin.file:
+        path: /etc/systemd/system/cockpit.service.d
+        mode: "0755"
+        owner: root
+        group: root
+        state: directory
+    - name: Create systemd extra file
+      ansible.builtin.template:
+        src: cockpit/override.conf.j2
+        dest: /etc/systemd/system/cockpit.service.d/override.conf
+        mode: "644"
+      notify: Restart cockpit service
+    - name: Create cockpit config file
+      ansible.builtin.template:
+        src: cockpit/cockpit.conf.j2
+        dest: /etc/cockpit/cockpit.conf
+        mode: "0644"
+      notify: Restart cockpit service
