@@ -475,7 +475,6 @@ application: {
 			caddy_sso:   true
 			dashy_show:  false
 			volumes: {
-				home_cache:   "pvc"
 				node_modules: "pvc"
 			}
 			secret: {
@@ -547,10 +546,8 @@ application: {
 			}, {
 				name:      "node_modules"
 				mountPath: "/app/node_modules"
-			}, {
-				name:      "home_cache"
-				mountPath: "/home/node"
-			}]
+			},
+			]
 		}]
 	}
 
