@@ -24,7 +24,8 @@
   "editor.formatOnSave": true,
   "files.associations": {
     "**/handlers/**/*.yaml": "ansible",
-    "**/tasks/**/*.yaml": "ansible"
+    "**/tasks/**/*.yaml": "ansible",
+    "**/group_vars/**/*.yaml": "yaml"
   },
   "git.repositoryScanIgnoredFolders": [".terraform"],
   "sops.creationEnabled": true
