@@ -8,7 +8,7 @@ opentofu = "1.10.6"
 podman = "5.6.1"
 prek = "0.4.5"
 sops = "3.11.0"
-uv = "0.11.21"
+uv = "0.11.23"
 
 [tasks.setup]
 run = "uv run install.py"
