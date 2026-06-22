@@ -39,7 +39,7 @@
     - name: Setup restic exclude file
       ansible.builtin.template:
         src: restic/exclude.j2
-        dest: "{{ restic_env.EXCLUDE_FILE }}"
+        dest: "{{ restic_exclude_file }}"
         mode: "0644"
     - name: Setup restic systemd
       ansible.builtin.template:
