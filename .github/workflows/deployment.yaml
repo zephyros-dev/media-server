@@ -16,6 +16,8 @@ on:
       - roles/**
       - secret/**
       - submodules/**
+permissions:
+  contents: read
 jobs:
   deploy:
     concurrency: deployment
