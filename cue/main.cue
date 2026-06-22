@@ -1854,13 +1854,13 @@ restic_env: {
 	B2_ACCOUNT_KEY:    _fact.restic_b2_account_key
 	RESTIC_PASSWORD:   _fact.restic_password
 	RESTIC_REPOSITORY: "\(_fact.restic_repository)"
-	EXCLUDE_FILE:      "/etc/restic/exclude"
-	RETENTION_MONTHS:  "1"
-	RETENTION_WEEKS:   "1"
-	RETENTION_DAYS:    "3"
 	RESTIC_CACHE_DIR:  "/etc/restic/cache"
 }
-restic_env_path: "/etc/restic/restic.env"
+restic_exclude_file: "/etc/restic/exclude"
+restic_keep_daily:   "3"
+restic_keep_weekly:  "1"
+resitc_keep_monthly: "1"
+restic_env_path:     "/etc/restic/restic.env"
 
 scrutiny_port: 18080
 
