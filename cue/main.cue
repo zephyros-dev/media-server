@@ -674,6 +674,9 @@ application: {
 					name:  "POSTGRES_USER"
 					value: "immich"
 				}, {
+					name:  "POSTGRES_INITDB_ARGS"
+					value: "--data-checksums"
+				}, {
 					name: "POSTGRES_PASSWORD"
 					valueFrom: secretKeyRef: {
 						name: "immich"
