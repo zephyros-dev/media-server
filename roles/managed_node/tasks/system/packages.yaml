@@ -30,6 +30,7 @@
       - power-profiles-daemon
       - restic
       - snapper
+      - unzip
   register: rpm_ostree_pkg
 
 - name: Reboot to apply rpm-ostree packages # noqa: no-handler
