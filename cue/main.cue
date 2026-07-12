@@ -1623,7 +1623,7 @@ application: {
 					mountPath: "/var/syncthing:z"
 				}, {
 					name:      "koreader"
-					mountPath: "/var/syncthing/koreader/book:z"
+					mountPath: "/config/book:z"
 				}]
 			}]
 		}

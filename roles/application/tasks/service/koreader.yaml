@@ -4,24 +4,25 @@
     koreader_syncery_version: "{{ koreader_dependencies['d0nizam/syncery.koplugin'] | regex_replace('^v', '') }}"
     koreader_syncery_plugin_path: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins/syncery.koplugin"
   block:
-    - name: Create koreader plugins directory
-      ansible.builtin.file:
-        path: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins"
-        state: directory
-        mode: "0755"
+    # - name: Create koreader plugins directory
+    #   ansible.builtin.file:
+    #     path: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins"
+    #     state: directory
+    #     mode: "0755"
 
-    - name: Read installed syncery.koplugin metadata
-      ansible.builtin.slurp:
-        path: "{{ koreader_syncery_plugin_path }}/_meta.lua"
-      register: koreader_syncery_meta
-      failed_when: false
+    # - name: Read installed syncery.koplugin metadata
+    #   ansible.builtin.slurp:
+    #     path: "{{ koreader_syncery_plugin_path }}/_meta.lua"
+    #   register: koreader_syncery_meta
+    #   failed_when: false
 
-    - name: Download and extract syncery.koplugin
-      ansible.builtin.unarchive:
-        src: "https://github.com/d0nizam/syncery.koplugin/releases/download/v{{ koreader_syncery_version }}/syncery.koplugin.zip"
-        dest: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins"
-        remote_src: true
-      when: koreader_syncery_version not in (koreader_syncery_meta.content | default('') | b64decode)
+    # - name: Download and extract syncery.koplugin
+    #   ansible.builtin.unarchive:
+    #     # src: "https://github.com/d0nizam/syncery.koplugin/releases/download/v{{ koreader_syncery_version }}/syncery.koplugin.zip"
+    #     src: https://github.com/d0nizam/syncery.koplugin/archive/refs/heads/main.zip
+    #     dest: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins"
+    #     remote_src: true
+    #   when: koreader_syncery_version not in (koreader_syncery_meta.content | default('') | b64decode)
 
     - name: Create container {{ application_name }}
       ansible.builtin.include_tasks:
