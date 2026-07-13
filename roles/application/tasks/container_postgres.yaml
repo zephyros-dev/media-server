@@ -31,7 +31,7 @@
                 state: directory
             - name: Backup volume {{ application_name }}
               ansible.builtin.copy:
-                dest: "{{ postgres_backup_path }}/{{ ansible_date_time.iso8601_basic_short }}"
+                dest: "{{ postgres_backup_path }}/{{ ansible_facts.date_time.iso8601_basic_short }}"
                 directory_mode: recursive
                 mode: "0700"
                 remote_src: true

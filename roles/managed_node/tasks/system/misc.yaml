@@ -31,7 +31,7 @@
 
     - name: Add user to libvirt group
       ansible.builtin.user:
-        name: "{{ ansible_user }}"
+        name: "{{ ansible_facts.user_id }}"
         groups:
           - libvirt
         append: true

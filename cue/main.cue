@@ -44,8 +44,8 @@ _profile: {
 	}
 	rootless: spec: containers: [...{
 		securityContext: {
-			runAsUser:  _fact.ansible_user_uid
-			runAsGroup: _fact.ansible_user_gid
+			runAsUser:  _fact.ansible_facts.user_uid
+			runAsGroup: _fact.ansible_facts.user_gid
 		}
 	}]
 	userns_share: metadata: annotations: "io.podman.annotations.userns": "keep-id"
@@ -1441,7 +1441,7 @@ application: {
 				storage: "\(_fact.global_storage)/"
 			}
 			secret: {
-				"ACCOUNT_\(_fact.ansible_user)": {
+				"ACCOUNT_\(_fact.ansible_facts.user_id)": {
 					type:    "env"
 					content: _fact.samba_password
 				}
@@ -1463,19 +1463,19 @@ application: {
 					name:  "SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive"
 					value: "yes"
 				}, {
-					name:  "UID_\(_fact.ansible_user)"
+					name:  "UID_\(_fact.ansible_facts.user_id)"
 					value: "911"
 				}, {
 					name:  "WSDD2_DISABLE"
 					value: "1"
 				}], [for k, v in param.volumes {
 					name:  "SAMBA_VOLUME_CONFIG_\(k)"
-					value: "[\(k)]; path=/shares/\(k); valid users = \(_fact.ansible_user); guest ok = no; read only = no; browseable = yes;"
+					value: "[\(k)]; path=/shares/\(k); valid users = \(_fact.ansible_facts.user_id); guest ok = no; read only = no; browseable = yes;"
 				}], [{
-					name: "ACCOUNT_\(_fact.ansible_user)"
+					name: "ACCOUNT_\(_fact.ansible_facts.user_id)"
 					valueFrom: secretKeyRef: {
 						name: "samba"
-						key:  "ACCOUNT_\(_fact.ansible_user)"
+						key:  "ACCOUNT_\(_fact.ansible_facts.user_id)"
 					}}]])
 				volumeMounts: [{
 					name:      "storage"
@@ -1561,7 +1561,7 @@ application: {
 					value: "sqlite"
 				}, {
 					name:  "DISPLAY_TIMEZONE"
-					value: _fact.ansible_date_time.tz
+					value: _fact.ansible_facts.date_time.tz
 				}, {
 					name:  "SPEEDTEST_SCHEDULE"
 					value: "0 * * * *"
@@ -1872,8 +1872,8 @@ snapper_configs: list.Concat([[
 		path: "\(_fact.global_disks_storage_path)/\(disk)"
 		name: disk
 		vars: {
-			ALLOW_USERS:      _fact.ansible_env.USER
-			ALLOW_GROUPS:     _fact.ansible_env.USER
+			ALLOW_USERS:      _fact.ansible_facts.env.USER
+			ALLOW_GROUPS:     _fact.ansible_facts.env.USER
 			SYNC_ACL:         true
 			TIMELINE_CREATE:  false
 			TIMELINE_CLEANUP: false
@@ -1883,8 +1883,8 @@ snapper_configs: list.Concat([[
 	path: "/home"
 	name: "home"
 	vars: {
-		ALLOW_USERS:            _fact.ansible_env.USER
-		ALLOW_GROUPS:           _fact.ansible_env.USER
+		ALLOW_USERS:            _fact.ansible_facts.env.USER
+		ALLOW_GROUPS:           _fact.ansible_facts.env.USER
 		SYNC_ACL:               true
 		TIMELINE_LIMIT_HOURLY:  "6"
 		TIMELINE_LIMIT_DAILY:   "7"

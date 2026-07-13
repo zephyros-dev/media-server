@@ -55,5 +55,5 @@
         domain: "{{ root_domain }}"
         name: "*.staging"
         record_type: A
-        content: "{{ ansible_default_ipv4.address }}"
+        content: "{{ ansible_facts.default_ipv4.address }}"
         state: present

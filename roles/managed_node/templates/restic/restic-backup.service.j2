@@ -2,10 +2,10 @@
 Description=Restic backup service
 [Service]
 Type=oneshot
-ExecStartPre=/usr/bin/systemctl --user --machine={{ ansible_user }}@.host stop {{ application_backup }}
+ExecStartPre=/usr/bin/systemctl --user --machine={{ ansible_facts.user_id }}@.host stop {{ application_backup }}
 {# Backup paths contains spaces, so it cannot be exported from EnvironmentFile #}
 ExecStart=restic backup --verbose --skip-if-unchanged --one-file-system --tag systemd.timer {{ restic_backup_paths }} --exclude-file {{ restic_exclude_file }}
 ExecStartPost=restic forget --verbose --tag systemd.timer --group-by "paths,tags" --keep-daily {{ restic_keep_daily }} --keep-weekly {{ restic_keep_weekly }} --keep-monthly {{ resitc_keep_monthly }}
-ExecStartPost=/usr/bin/systemctl --user --machine={{ ansible_user }}@.host start --wait {{ application_backup }}
-ExecStopPost=/usr/bin/systemctl --user --machine={{ ansible_user }}@.host start {{ application_backup }}
+ExecStartPost=/usr/bin/systemctl --user --machine={{ ansible_facts.user_id }}@.host start --wait {{ application_backup }}
+ExecStopPost=/usr/bin/systemctl --user --machine={{ ansible_facts.user_id }}@.host start {{ application_backup }}
 EnvironmentFile={{ restic_env_path }}

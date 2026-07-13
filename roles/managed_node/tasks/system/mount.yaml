@@ -31,6 +31,6 @@
       ansible.builtin.file:
         path: "{{ global_storage }}"
         mode: "0755"
-        owner: "{{ ansible_user_uid }}"
-        group: "{{ ansible_user_gid }}"
+        owner: "{{ ansible_facts.user_uid }}"
+        group: "{{ ansible_facts.user_gid }}"
         state: directory

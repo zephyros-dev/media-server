@@ -29,11 +29,11 @@
   block:
     - name: Check if user is lingering
       ansible.builtin.stat:
-        path: /var/lib/systemd/linger/{{ ansible_user }}
+        path: /var/lib/systemd/linger/{{ ansible_facts.user_id }}
       register: user_lingering
     - name: Enable lingering if neccessary
       ansible.builtin.command:
-        cmd: loginctl enable-linger {{ ansible_user }}
+        cmd: loginctl enable-linger {{ ansible_facts.user_id }}
       changed_when: false
       when: not user_lingering.stat.exists
     - name: Setup systemd services
