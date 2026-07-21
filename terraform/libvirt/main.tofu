@@ -2,7 +2,7 @@
 resource "libvirt_pool" "default" {
   name = "default"
   type = "dir"
-  target {
+  target = {
     path = "/var/lib/libvirt/images"
   }
   # Default path for the libvirt storage pool
