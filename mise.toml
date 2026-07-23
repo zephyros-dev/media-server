@@ -6,7 +6,7 @@ cue = "0.17.1"
 fd = "10.4.2"
 opentofu = "1.12.5"
 prek = "0.4.10"
-sops = "3.13.2"
+sops = "3.13.3"
 uv = "0.11.30"
 
 [tasks.setup]
