@@ -543,11 +543,7 @@ application: {
 				readOnly:  true
 				mountPath: "/app/user-data/conf.yml"
 				subPath:   "conf.yml"
-			}, {
-				name:      "node_modules"
-				mountPath: "/app/node_modules"
-			},
-			]
+			}]
 		}]
 	}
 
