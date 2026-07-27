@@ -35,10 +35,6 @@
       "matchUpdateTypes": ["major", "minor"]
     },
     {
-      "automerge": false,
-      "matchPackageNames": ["/collabora/"]
-    },
-    {
       "groupName": "ansible-lint",
       "matchPackageNames": ["/ansible-lint/"]
     }
