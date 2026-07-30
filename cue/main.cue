@@ -681,7 +681,7 @@ application: {
 				}]
 				volumeMounts: [{
 					name:      "database"
-					mountPath: "/var/lib/postgresql/data:U,z"
+					mountPath: "/var/lib/postgresql:U,z"
 				}]
 			}], [if param.postgres_action == "none" for v in [{
 				name:  "redis"

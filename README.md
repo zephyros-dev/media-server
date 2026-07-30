@@ -146,7 +146,7 @@ flowchart TB
 
 - To upgrade postgres major version, do the following
   1. Change the `postgres_action` key in variable files to `export` and run the playbook for that container
-  2. Change the image tag to the next major version
+  2. Change the image tag to the next major version (if coming from version below 18, also change the path of the mount point in the container_postgres.yaml and the container mountPath in cue file)
   3. Change the `postgres_action` key in variable files to `import` and run the playbook for that container
   4. Change the `postgres_action` key in variable files to `none` and run the playbook for that container
   5. Check if the container startup correctly
