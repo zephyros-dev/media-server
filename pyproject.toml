@@ -18,6 +18,4 @@ cache-dir = "./.uv_cache"
 python-preference = "managed"
 
 [dependency-groups]
-dev = [
-    "podman-compose>=1.5.0",
-]
+dev = ["podman-compose>=1.5.0"]

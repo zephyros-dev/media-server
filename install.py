@@ -20,7 +20,11 @@ def shared_setup():
     mitogen_path = re.search(
         r"Location: (.+)\n",
         subprocess.run(
-            "uv pip show mitogen", shell=True, capture_output=True, text=True
+            "uv pip show mitogen",
+            shell=True,
+            capture_output=True,
+            text=True,
+            check=True,
         ).stdout,
     ).group(1)
 
@@ -31,7 +35,9 @@ def shared_setup():
     Path(Path.home() / ".ansible/plugins/strategy_tmp").rename(
         Path.home() / ".ansible/plugins/strategy"
     )
-    subprocess.run("uv run ansible-galaxy install -r requirements.yaml", shell=True)
+    subprocess.run(
+        "uv run ansible-galaxy install -r requirements.yaml", shell=True, check=True
+    )
 
 
 if args.profile == "dev":
@@ -45,4 +51,4 @@ env = os.environ.copy()
 if args.profile == "ci":
     shared_setup()
     env["MISE_ENV"] = "ci"
-    subprocess.run("mise install", shell=True, env=env)
+    subprocess.run("mise install", shell=True, env=env, check=True)
