@@ -1,1 +1,1 @@
-FROM ghcr.io/triliumnext/trilium:v0.104.1@sha256:43d421dc5b5102cc78c1844f500956971f2192ebe133b5ee4c050331d4a964d9
+FROM ghcr.io/triliumnext/trilium:v0.104.1@sha256:3332fa03198f0b3ecddf11fcf37f3aace352a664728d669a1ffa7a5594a6f2d6
