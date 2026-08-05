@@ -1,2 +1,2 @@
 # Postgres version: https://github.com/immich-app/immich/blob/main/docker/docker-compose.prod.yml
-FROM ghcr.io/immich-app/postgres:18-vectorchord1.1.1@sha256:a7817c23f8269681eb4342760d43c435713278a66d4c06c3596573b342ec1e41
+FROM ghcr.io/immich-app/postgres:18-vectorchord1.1.1@sha256:6007d0ae11493318bea327f330bb89af4a75e57d6789e30b04009d9cf5d81dd5
