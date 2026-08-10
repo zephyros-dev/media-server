@@ -491,7 +491,7 @@ application: {
 							name: "All"
 							items: [
 								for k, v in application
-								if v.param.dashy_show {
+								if v.param.dashy_show && !list.Contains(["absent", "stopped"], v.param.state) {
 									_title: string
 									if v.param.dashy_name != _|_ {
 										_title: v.param.dashy_name
@@ -603,6 +603,7 @@ application: {
 		}
 	}
 
+	// TODO: Replace with https://filebrowserquantum.com/
 	filebrowser: {
 		param: {
 			backup:      true
@@ -611,6 +612,7 @@ application: {
 				"database.db": "./database.db"
 				srv:           "\(_fact.global_media)/"
 			}
+			state: "absent"
 		}
 		pod: _profile.rootless_userns & {
 			spec: containers: [{
