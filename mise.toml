@@ -7,7 +7,7 @@ fd = "10.5.0"
 opentofu = "1.13.1"
 prek = "0.5.4"
 sops = "3.13.3"
-uv = "0.12.22"
+uv = "0.12.23"
 
 [tasks.setup]
 run = "uv run install.py"
