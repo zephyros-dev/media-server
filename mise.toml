@@ -1,6 +1,9 @@
 [settings]
 idiomatic_version_file_enable_tools = []
 
+[env]
+TF_PLUGIN_CACHE_DIR = "{{env.HOME}}/.terraform.d/plugin-cache"
+
 [tools]
 cue = "0.17.1"
 fd = "10.5.0"
@@ -8,6 +11,3 @@ opentofu = "1.13.1"
 prek = "0.5.5"
 sops = "3.13.3"
 uv = "0.12.23"
-
-[tasks.setup]
-run = "uv run install.py"

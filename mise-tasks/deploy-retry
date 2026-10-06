@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#MISE description="Reset the wireguard tunnel before retrying a failed deployment"
+set -euo pipefail
+
+wg-quick down wg0 && wg-quick up wg0 &> /dev/null

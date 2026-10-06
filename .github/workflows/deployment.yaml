@@ -6,12 +6,11 @@ on:
     paths:
       - .github/workflows/deployment.yaml
       - "!submodules/zapret"
-      - ci/**
       - cue/**
       - group_vars/**
-      - install.py
       - inventory/**
       - mise*.toml
+      - mise-tasks/**
       - requirements.yaml
       - roles/**
       - secret/**
@@ -32,8 +31,7 @@ jobs:
       - name: Install mise
         uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5
       - name: Setup CI dependencies
-        run: |
-          uv run install.py --profile ci
+        run: mise run setup
       - name: Setup tmate session
         if: env.DEBUG_MODE == 'true'
         uses: mxschmitt/action-tmate@v3
@@ -54,7 +52,7 @@ jobs:
           timeout_minutes: 10
           max_attempts: 3
           retry_on: error
-          command: ./ci/run.sh
-          on_retry_command: ./ci/retry.sh
+          command: mise run deploy
+          on_retry_command: mise run deploy-retry
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}

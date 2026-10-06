@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+#MISE description="Run the ansible deployment playbook against the server"
+set -euo pipefail
+
 eval $(ssh-agent)
-eval $(mise activate --shims)
 sops -d secret/deployment/ssh_key.sops | ssh-add - &> /dev/null
 export ANSIBLE_CALLBACKS_ENABLED="timer"
 export ANSIBLE_DISPLAY_SKIPPED_HOSTS="False"

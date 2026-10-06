@@ -1,0 +1,24 @@
+#!/usr/bin/env -S uv run --script
+# MISE description="Install local dev environment dependencies"
+import re
+import subprocess
+from pathlib import Path
+
+Path.home().joinpath(".ansible/plugins").mkdir(parents=True, exist_ok=True)
+mitogen_path = re.search(
+    r"Location: (.+)\n",
+    subprocess.run(
+        ["uv", "pip", "show", "mitogen"], capture_output=True, text=True, check=True
+    ).stdout,
+).group(1)
+
+# https://stackoverflow.com/questions/8299386/modifying-a-symlink-in-python/55742015#55742015
+strategy_tmp = Path.home() / ".ansible/plugins/strategy_tmp"
+strategy_tmp.symlink_to(Path(mitogen_path) / "ansible_mitogen/plugins/strategy")
+strategy_tmp.rename(Path.home() / ".ansible/plugins/strategy")
+
+subprocess.run(
+    ["uv", "run", "ansible-galaxy", "install", "-r", "requirements.yaml"], check=True
+)
+
+subprocess.run(["mise", "install"], check=True)
