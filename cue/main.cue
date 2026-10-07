@@ -1,4 +1,3 @@
-@extern(embed)
 package main
 
 import (
@@ -10,9 +9,13 @@ import (
 	core "cue.dev/x/k8s.io/api/core/v1"
 )
 
-_fact_embed: _ @embed(file="tmp/fact.json")
+// Populated at export time via: cue export . -l '"factEmbed"' json: -
+// Must be a regular (non-hidden) field: CLI-injected data files only unify
+// into the internal value graph for non-hidden fields, so this is filtered
+// back out ansible-side rather than being named with a "_" prefix.
+factEmbed: _
 // Type check for fact
-_fact: _fact_embed & {
+_fact: factEmbed & {
 	disks: {
 		storage?: {
 			fs_type: *"btrfs" | string
