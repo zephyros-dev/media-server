@@ -1,0 +1,96 @@
+variant: fcos
+version: 1.5.0
+passwd:
+  users:
+    - name: phong
+      groups:
+        - wheel
+        - sudo
+      ssh_authorized_keys:
+        - ${ssh_authorized_key}
+storage:
+  disks:
+    - device: /dev/disk/by-id/coreos-boot-disk
+      # This is the primary device (coreos-installer already partitioned it); don't wipe it.
+      wipe_table: false
+      partitions:
+        - number: 4
+          label: root
+          size_mib: 16384 # shrink root; remainder goes to /home
+          resize: true
+        - size_mib: 0 # use all remaining space
+          label: home
+  filesystems:
+    - path: /var/home
+      # Fedora CoreOS ships /home as a symlink to /var/home by default (part
+      # of its stateless / -> /var layout) — Ignition refuses to mount over
+      # the existing symlink at /home directly ("contains non-directory
+      # component"). Mounting at the symlink's real target has the identical
+      # practical effect, since everything under /home already resolves
+      # through to /var/home anyway.
+      device: /dev/disk/by-partlabel/home
+      format: btrfs
+      with_mount_unit: true
+  files:
+    - path: /etc/hostname
+      mode: 0644
+      contents:
+        inline: staging
+    # Stable SSH host key across rebuilds (generated once, stored as a
+    # secret, passed in via templatefile()) — without this, every from-scratch
+    # reinstall generates a brand new host key, so SSH clients see
+    # "REMOTE HOST IDENTIFICATION HAS CHANGED" and refuse to connect until
+    # ~/.ssh/known_hosts is manually fixed up (`ssh-keygen -R staging.lan`).
+    - path: /etc/ssh/ssh_host_ed25519_key
+      mode: 0600
+      overwrite: true
+      contents:
+        inline: |
+          ${indent(10, ssh_host_ed25519_key)}
+    - path: /etc/ssh/ssh_host_ed25519_key.pub
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: ${ssh_host_ed25519_key_pub}
+systemd:
+  units:
+    # Switching an existing Fedora CoreOS system to ucore is a documented two-stage
+    # rpm-ostree rebase (see https://projectucore.org/docs/rebasing/): first an unverified
+    # rebase to establish ucore's signing trust, reboot, then a signed rebase to actually
+    # track updates going forward. `bootc switch` alone only works on systems already on a
+    # bootc-managed (e.g. already-ucore) deployment, which a fresh FCOS boot is not.
+    - name: ucore-rebase-stage1.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Rebase to ucore (stage 1, unverified)
+        ConditionPathExists=!/var/lib/ucore-rebase-stage1-done
+        After=network-online.target
+        Wants=network-online.target
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/ucore-hci:stable
+        ExecStartPost=/usr/bin/touch /var/lib/ucore-rebase-stage1-done
+        ExecStartPost=/usr/bin/systemctl reboot
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: ucore-rebase-stage2.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Rebase to ucore (stage 2, signed)
+        ConditionPathExists=/var/lib/ucore-rebase-stage1-done
+        ConditionPathExists=!/var/lib/ucore-rebase-stage2-done
+        After=network-online.target
+        Wants=network-online.target
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/ucore-hci:stable
+        ExecStartPost=/usr/bin/touch /var/lib/ucore-rebase-stage2-done
+        ExecStartPost=/usr/bin/systemctl reboot
+
+        [Install]
+        WantedBy=multi-user.target

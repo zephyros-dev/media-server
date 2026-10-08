@@ -1,0 +1,142 @@
+- name: Create container {{ application_name }}
+  ansible.builtin.include_tasks:
+    file: container_quadlet.yaml
+
+# Configure the library, the content server and its user without going through
+# the calibre GUI. The GUI keeps its prefs in memory and rewrites them on exit,
+# so every change is done with the service stopped, and only when needed.
+- name: Setup calibre unattended
+  vars:
+    calibre_config_path: "{{ global_volume_path }}/calibre/config/.config/calibre"
+    calibre_books_path: "{{ global_media }}/Storage/Books"
+    calibre_userdb: /config/.config/calibre/server-users.sqlite
+    calibre_prefs:
+      # Despite the name this is JSON; without the flag a fresh GUI blocks on
+      # the welcome wizard and never autolaunches the content server
+      dynamic.pickle.json:
+        welcome_wizard_was_run: true
+      global.py.json:
+        library_path: /books
+      gui.py.json:
+        autolaunch_server: true
+    calibre_server_config:
+      auth: "True"
+      auth_mode: basic
+      port: 8081
+    # One-shot container with the same mounts and uid as the service, for use while it is stopped
+    calibre_run: >-
+      podman run --rm --userns keep-id:uid=911,gid=911 --user 911:911 --env HOME=/tmp
+      --volume {{ global_volume_path }}/calibre/config:/config:z
+      --volume {{ calibre_books_path }}:/books
+  block:
+    # The image is built and started asynchronously; the image's init script
+    # writes server-config.txt once the container is up
+    - name: Wait for calibre to initialize
+      ansible.builtin.wait_for:
+        path: "{{ calibre_config_path }}/server-config.txt"
+        timeout: 600
+
+    - name: Read calibre prefs
+      ansible.builtin.slurp:
+        path: "{{ calibre_config_path }}/{{ item }}"
+      loop: "{{ calibre_prefs.keys() }}"
+      register: calibre_prefs_files
+      failed_when: false
+
+    - name: Reset stale calibre prefs
+      ansible.builtin.set_fact:
+        calibre_prefs_stale: []
+
+    - name: Find stale calibre prefs
+      vars:
+        calibre_prefs_current: "{{ item.content | default('') | b64decode | default('{}', true) | from_json }}"
+      when: calibre_prefs_current | combine(calibre_prefs[item.item]) != calibre_prefs_current
+      ansible.builtin.set_fact:
+        calibre_prefs_stale: "{{ calibre_prefs_stale + [item.item] }}"
+      loop: "{{ calibre_prefs_files.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+
+    # server-config.txt is "<option> <value>" per line; other options set from the GUI are kept
+    - name: Check calibre content server config
+      check_mode: true
+      ansible.builtin.lineinfile:
+        path: "{{ calibre_config_path }}/server-config.txt"
+        regexp: ^{{ item.key }}\s
+        line: "{{ item.key }} {{ item.value }}"
+      loop: "{{ calibre_server_config | dict2items }}"
+      register: calibre_server_config_check
+
+    - name: Check calibre library
+      ansible.builtin.stat:
+        path: "{{ calibre_books_path }}/metadata.db"
+      register: calibre_library
+
+    - name: Get calibre content server users
+      changed_when: false
+      check_mode: false
+      ansible.builtin.command:
+        # As abc: on a fresh host this creates the user db, which must not end up owned by root
+        cmd: podman exec --user abc calibre-web calibre-server --userdb {{ calibre_userdb }} --manage-users -- list
+      register: calibre_users
+
+    - name: Apply calibre setup
+      when: >-
+        calibre_prefs_stale | length > 0
+        or calibre_server_config_check.changed
+        or not calibre_library.stat.exists
+        or calibre_server_user not in calibre_users.stdout_lines
+      block:
+        - name: Stop calibre
+          ansible.builtin.systemd:
+            name: "{{ application_name }}"
+            scope: "{{ container_systemd_scope }}"
+            state: stopped
+
+        # Re-read now that the GUI has flushed its prefs on exit
+        - name: Re-read calibre prefs
+          ansible.builtin.slurp:
+            path: "{{ calibre_config_path }}/{{ item }}"
+          loop: "{{ calibre_prefs_stale }}"
+          register: calibre_prefs_flushed
+          failed_when: false
+
+        - name: Set calibre prefs
+          ansible.builtin.copy:
+            content: "{{ item.content | default('') | b64decode | default('{}', true) | from_json | combine(calibre_prefs[item.item]) | to_nice_json(indent=2) }}"
+            dest: "{{ calibre_config_path }}/{{ item.item }}"
+            mode: "0644"
+          loop: "{{ calibre_prefs_flushed.results }}"
+          loop_control:
+            label: "{{ item.item }}"
+
+        - name: Set calibre content server config
+          ansible.builtin.lineinfile:
+            path: "{{ calibre_config_path }}/server-config.txt"
+            regexp: ^{{ item.key }}\s
+            line: "{{ item.key }} {{ item.value }}"
+          loop: "{{ calibre_server_config | dict2items }}"
+
+        # calibredb creates an empty library when the folder has none
+        - name: Create calibre library
+          when: not calibre_library.stat.exists
+          changed_when: true
+          ansible.builtin.command:
+            cmd: "{{ calibre_run }} --entrypoint calibredb localhost/calibre:latest --with-library /books list"
+
+        - name: Create calibre content server user
+          when: calibre_server_user not in calibre_users.stdout_lines
+          changed_when: true
+          no_log: true
+          ansible.builtin.command:
+            cmd: >-
+              {{ calibre_run }} --entrypoint calibre-server localhost/calibre:latest
+              --userdb {{ calibre_userdb }} --manage-users --
+              add '{{ calibre_server_user }}' '{{ calibre_server_password }}'
+
+      always:
+        - name: Start calibre
+          ansible.builtin.systemd:
+            name: "{{ application_name }}"
+            scope: "{{ container_systemd_scope }}"
+            state: started

@@ -1,12 +1,24 @@
 #jinja2:lstrip_blocks: True
-{% if ansible_facts.hostname == 'staging' %}
 {
 	acme_dns porkbun {
     api_key {{ porkbun_api_key }}
     api_secret_key {{ porkbun_api_secret_key }}
 	}
 }
-{% endif %}
+# Caddy (2.10+) serves every <app>.{{ server_domain }} site below from this one
+# wildcard cert instead of issuing a cert per site; unknown subdomains are dropped
+*.{{ server_domain }} {
+  tls {
+    dns porkbun {
+      api_key {{ porkbun_api_key }}
+      api_secret_key {{ porkbun_api_secret_key }}
+    }
+    # Porkbun's nameservers can take minutes to serve a new TXT record; the
+    # 2m default gives up and deletes it before it ever shows up
+    propagation_timeout 15m
+  }
+  abort
+}
 # CORS snippet
 # https://caddyserver.com/docs/caddyfile/directives/import#examples
 (cors) {
@@ -84,14 +96,6 @@ auth.{{ server_domain }} {
       {% if name == 'nextcloud' %}
   redir /.well-known/carddav /remote.php/dav/ 301
   redir /.well-known/caldav /remote.php/dav/ 301
-      {% endif %}
-      {% if name == 'cockpit' %}
-  tls {
-    dns porkbun {
-      api_key {{ porkbun_api_key }}
-      api_secret_key {{ porkbun_api_secret_key }}
-    }
-  }
       {% endif %}
 }
     {% endif %}

@@ -42,7 +42,7 @@
                   loop: "{{ volume_list | json_query(volume_query) }}"
                   register: container_volume_state
                 - name: Prepare volume {{ application_name }}
-                  when: not container_volume_state.skipped
+                  when: container_volume_state.results is defined
                   ansible.builtin.file:
                     path: "{{ item }}"
                     mode: "0755"

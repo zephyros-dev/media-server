@@ -10,6 +10,18 @@
     mode: "0644"
     dest: "{{ ansible_facts.user_dir }}/.config/ansible/requirements.txt"
 
+- name: Ensure packaging library is present # noqa: command-instead-of-module
+  # ansible.builtin.pip (used below) imports `packaging` internally just to
+  # run, and mitogen only ever auto-ships modules under the ansible/
+  # ansible_collections/ansible_mitogen namespaces to the target — never
+  # third-party PyPI packages (confirmed in ansible_mitogen/process.py's
+  # _setup_responder, which hardcodes that whitelist) — so the pip *module*
+  # can't even install packaging itself without already having it. Installing
+  # directly via command sidesteps the module-import step entirely.
+  ansible.builtin.command:
+    cmd: "{{ ansible_facts.python.executable }} -m pip install --user packaging"
+  changed_when: false
+
 - name: Install ansible python requirements
   ansible.builtin.pip:
     requirements: "{{ ansible_facts.user_dir }}/.config/ansible/requirements.txt"

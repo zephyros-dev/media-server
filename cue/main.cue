@@ -1645,8 +1645,16 @@ application: {
 				data: "./"
 			}
 		}
-		pod: _profile.rootless_userns & {
+		// Run as the image's own user (uid 1000) rather than the host uid: its
+		// python packages and data dir live under that user's home, so any other
+		// uid (e.g. 1001 on staging) fails with "No module named 'jwt'"
+		pod: {
+			metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=1000,gid=1000"
 			spec: containers: [{
+				securityContext: {
+					runAsUser:  1000
+					runAsGroup: 1000
+				}
 				name:  "web"
 				image: "timetagger"
 				env: [{
@@ -1759,7 +1767,7 @@ application: {
 	wealthfolio: {
 		param: {
 			caddy_proxy: 8088
-			dashy_icon:  "/logo.svg"
+			dashy_icon:  "/logo.png"
 			volumes: {
 				data: "./data/"
 			}

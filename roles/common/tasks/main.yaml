@@ -25,7 +25,7 @@
       chdir: cue
   vars:
     caddyfile_content: ""
-    fact_var_names: "{{ query('ansible.builtin.varnames', '^[^_].*') | difference(['vars', 'fact_var_names', 'fact_json', 'ansible_delegated_vars']) | list }}"
+    fact_var_names: "{{ query('ansible.builtin.varnames', '^[^_].*') | difference(['vars', 'fact_var_names', 'fact_json', 'ansible_delegated_vars', 'play_hosts']) | list }}"
     fact_json: "{{ dict(fact_var_names | zip(query('ansible.builtin.vars', *fact_var_names))) | to_nice_json }}"
   block:
     - name: Get container cue facts # noqa: args[module]

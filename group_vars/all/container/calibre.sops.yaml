@@ -1,0 +1,17 @@
+calibre_server_user: ENC[AES256_GCM,data:nvhMKNg=,iv:Hs20pKP+jhGKD4I835ixKcwwXLJ1nd9oEZeqwF3b4ug=,tag://si2FnU0E0yB3xqJd6QvQ==,type:str]
+calibre_server_password: ENC[AES256_GCM,data:kq6vY8SP7+IlEGp+c5f8zd6h43PxLEf+,iv:0okaAw7T93Vylmkl5sa8VSJM7/NIxoYNZm5jU25xY7s=,tag:QJ/CPUTEUnKUIDm6hluDqA==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjd0NiNENUY09FWkJmZUxn
+            K3VzVVJCZXdSa0kyK0tNcFc1UTJIbHh5UkI4ClE2UTRHUkdrWGcxMkwvdHJPZExF
+            NkxiMW1TTytITFdKWHRGQ0pMQTdWb0EKLS0tIDFFeUR4di9zYlpNdER5cVlwWnJq
+            cjBSSllLYzJNSG92SHprcE9lL0xISmcKvl7VhjJ64kdHJMAZI3xQfOQTZclXaxEs
+            WYumds7gr/wuwMSEWAZ6apB3p5WbxMJUgKsuKt8v4BfP2lPp70e6sQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+    lastmodified: "2026-10-08T09:17:01Z"
+    mac: ENC[AES256_GCM,data:FrlkmKhdRbyxLH53rEqQ22MFZWFQ+bLWrboFYnUtPENsyMwmKMFKS7WwIoJLpFU0QvP68w1fm6Ud/0edQHFOdKf9SB+w3mY12nImvxee2fAsZUJE6lNkiLaLxFi2SH5rWDxh63Sz2SwKH0JBic4TBi/8HnO6vB2q2Ous4Z9O688=,iv:kGGia/mGYlZe7M4LedVnOgiTjYRZ0URl4f75sgB3ch0=,tag:mKRGd6j/E1/1Bu0+s6A0hA==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3

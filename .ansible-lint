@@ -5,6 +5,7 @@ exclude_paths:
   - secret
   - submodules
   - group_vars
+  - tofu
 skip_list:
   - command-instead-of-shell
   - meta-no-info

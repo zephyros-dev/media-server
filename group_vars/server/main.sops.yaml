@@ -1,6 +1,6 @@
 specificed_hostname: ENC[AES256_GCM,data:i71xkrDf,iv:4XLFuqk5E1uF4KT0BQurIolJJCxYEuwlZKVyC2wp07A=,tag:ROn1r0mRS2dkj+AiurVTdw==,type:str]
 physical_interface: ENC[AES256_GCM,data:DfVqbmcr,iv:NhQbiHyOwXW4qvMUG5IhI7OV8VYTyZecWBKNcwJh/zM=,tag:eqB3ZabCZ3Pa1iIES3YsQQ==,type:str]
-#ENC[AES256_GCM,data:0h/PKgs=,iv:lp2kO93mPyI3m3vfSvp0HDirqh1JSgdOUx0t1DI7r78=,tag:D2eUXu0h3tG26qcUpJTQvw==,type:comment]
+#ENC[AES256_GCM,data:kMBWUUw=,iv:GZfp/qRszz8mdRoMd9maYtXN6yKCO7jBysQktl+jFHE=,tag:0lsN+7Hzowi3+TyQuB1VoA==,type:comment]
 disks:
     storage:
         fs_type: ENC[AES256_GCM,data:gQRHqTY=,iv:nNj4H8nU8vzAQKo5IU7mj9oLdCgLddSrtWg2gLOAHgA=,tag:jbWq5/y7k1AnlB3MOhsMxw==,type:str]
@@ -21,8 +21,7 @@ wealthfolio_secret_key: ENC[AES256_GCM,data:B+h+8oIUpvpjt0Egme/iAeZt/sVHN+kv08B0
 wealthfolio_auth_password_hash: ENC[AES256_GCM,data:DFDeQ3yvyrqG/mUXX9IdzPToAkv1I5Yj2fhAG8gM1fVMhnt2RIks+g2Ivdn1jQVl0bJum1OYZLuQ4OmOAA==,iv:bdY8yw9Egqbi/BOucSVz9b/Oj2+wDnWnBgk4fD/WqOo=,tag:7pQqPwS55vo9VAQgqezZpQ==,type:str]
 sops:
     age:
-        - recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
             YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmVEtzTytXU3NwM3g3ekV3
             YVBlYlIyNTZWZStoNGszbDQ3REkyUzVmYlRRCjhGa0RTQVFMMDd0VGUzTUdVM2xk
@@ -30,7 +29,8 @@ sops:
             TldEazJ1OHVhcVlhUmRBMURQZDZlYmMKUIX4kF5Fo/6+KQcULUvM8XReCEONOaXp
             Vwyy8h/AV0UWJ2doCHrnLUJkvqSlOHJAvu65Cr914aq8ZnC26HjB9Q==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-29T05:02:11Z"
-    mac: ENC[AES256_GCM,data:FM9Z5sHxAX0QR9vtnp5RcEPiysqKL4c2Qmts6Pxx3aGHlSb0Bh25lP1aujjNktQ8/3Gh9CEvxRXuRPMD5Oly8G9dtiI6e9f4t8QCyFmiRLa5W7CwmLhhzt+I6RWIALzHAnRhjx55c7DWnKFCwNV+zCUwGQZYWjKgpF/OKinKF6E=,iv:V1n9E0/FGOCPOGRezCJiFRcKjvC+j92IBvVw0sWF1hI=,tag:NiP6du7nMDyprDHocgqMEA==,type:str]
+          recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+    lastmodified: "2026-10-08T02:59:39Z"
+    mac: ENC[AES256_GCM,data:dDZ0E4ZDdFtOTRyqCMCjq5CsxQIYD3K5KmrnQLGJuhzMzWtGtbpMDqYRORc2ryJqM2tsaiNbPXvnmKU+sBulewwex+YKcslsba2eq+MvG2vKWATvfsvD6vX/2UfpxVnP1oSHrXrAoHTmX/NLkgThuf6H8lActTVQmaKJEAfBOLk=,iv:Nqg6oOHKydj/4vQYL9hDUAICisroeptLEne+dbSCHVU=,tag:pBblY4gnAcfOXC/TB24UxQ==,type:str]
     unencrypted_suffix: _unencrypted
-    version: 3.11.0
+    version: 3.13.3

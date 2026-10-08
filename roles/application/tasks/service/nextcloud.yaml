@@ -2,19 +2,39 @@
   ansible.builtin.include_tasks:
     file: container_quadlet.yaml
 
-# https://github.com/nextcloud/docker/issues/1880#issuecomment-1344309058
-- name: Fix permission error nextcloud with postgres 15
-  changed_when: false
-  containers.podman.podman_container_exec:
-    name: nextcloud-postgres
-    detach: true
-    command: psql --user $POSTGRES_USER -c "GRANT ALL ON SCHEMA public TO oc_{{ nextcloud_admin_user }};"
-  retries: 60
-
 - name: Setup php nextcloud
   vars:
-    nextcloud_app_command: podman exec --user www-data -it nextcloud-web php occ
+    nextcloud_app_command: podman exec --user www-data nextcloud-web php occ
   block:
+    # occ is unusable until the image entrypoint has finished copying the
+    # nextcloud sources into the volume on first start
+    - name: Get nextcloud status
+      changed_when: false
+      ansible.builtin.command:
+        cmd: "{{ nextcloud_app_command }} status --output=json"
+      register: nextcloud_status
+      until: nextcloud_status.rc == 0
+      retries: 60
+      delay: 5
+
+    # Fresh host (e.g. a rebuilt staging): install unattended instead of
+    # leaving the instance at the web installer
+    - name: Install nextcloud
+      when: not (nextcloud_status.stdout | regex_search('\{.*\}') | from_json).installed
+      changed_when: true
+      # -e nextcloud_install_debug=true to see why an install failed
+      no_log: "{{ not (nextcloud_install_debug | default(false) | bool) }}"
+      ansible.builtin.command:
+        cmd: >-
+          {{ nextcloud_app_command }} maintenance:install
+          --database pgsql
+          --database-host localhost:5432
+          --database-name nextcloud
+          --database-user postgres
+          --database-pass '{{ nextcloud_postgres_password }}'
+          --admin-user '{{ nextcloud_admin_user }}'
+          --admin-pass '{{ nextcloud_admin_password }}'
+
     - name: Upgrade nextcloud
       changed_when: false
       ansible.builtin.command:
@@ -27,7 +47,6 @@
         - db:add-missing-indices
         - config:system:set maintenance_window_start --type=integer --value=6
         - config:system:set trusted_domains 0 --value='nextcloud.{{ server_domain }}'
-      retries: 60
 
     - name: Get IP address for setting trusted_proxies nextcloud
       containers.podman.podman_network_info:
@@ -51,7 +70,7 @@
       loop: "{{ nextcloud_app | dict2items }}"
       vars:
         nextcloud_app:
-          bookmarks: {} # not available for nextcloud 32 yet
+          bookmarks: {}
           richdocuments:
             config:
               public_wopi_url: https://nextcloud-office.{{ server_domain }}
