@@ -1871,7 +1871,7 @@ restic_env: {
 restic_exclude_file: "/etc/restic/exclude"
 restic_keep_daily:   "3"
 restic_keep_weekly:  "1"
-resitc_keep_monthly: "1"
+restic_keep_monthly: "1"
 restic_env_path:     "/etc/restic/restic.env"
 
 scrutiny_port: 18080
