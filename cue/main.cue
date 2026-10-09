@@ -606,30 +606,78 @@ application: {
 		}
 	}
 
-	// TODO: Replace with https://filebrowserquantum.com/
+	// FileBrowser Quantum v2: https://filebrowserquantum.com/
 	filebrowser: {
 		param: {
 			backup:      true
-			caddy_proxy: 80
+			caddy_proxy: 8080
 			volumes: {
-				"database.db": "./database.db"
-				srv:           "\(_fact.global_media)/"
+				// Holds database.sqlite (the image's FILEBROWSER_DATABASE_PATH default)
+				data: "./data/"
+				srv:  "\(_fact.global_media)/"
 			}
-			state: "absent"
+			secret: {
+				// Reset to this on every start
+				admin_password: {
+					type:    "env"
+					content: _fact.filebrowser_admin_password
+				}
+				"config.yaml": {
+					type: "file"
+					content: yaml.Marshal({
+						server: sources: [{
+							path: "/srv"
+							name: "Media"
+							config: defaultEnabled: true
+						}]
+						auth: methods: password: {
+							enabled:       true
+							adminUsername: _fact.filebrowser_admin_user
+						}
+						http: {
+							// Unprivileged port, so the old CAP_NET_BIND_SERVICE is not needed
+							port:              8080
+							externalUrl:       "https://filebrowser.\(_fact.server_domain)"
+							trustProxyHeaders: true
+						}
+					})
+				}
+			}
 		}
-		pod: _profile.rootless_userns & {
+		// Run as the image's own user (uid 1000), see timetagger
+		pod: {
+			metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=1000,gid=1000"
 			spec: containers: [{
 				name:  "web"
 				image: "filebrowser"
-				securityContext: capabilities: add: ["CAP_NET_BIND_SERVICE"]
+				securityContext: {
+					runAsUser:  1000
+					runAsGroup: 1000
+				}
+				env: [{
+					name:  "FILEBROWSER_CONFIG"
+					value: "/home/filebrowser/config.yaml"
+				}, {
+					name: "FILEBROWSER_ADMIN_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "filebrowser"
+						key:  "admin_password"
+					}
+				}]
 				volumeMounts: [{
 					name:      "srv"
 					mountPath: "/srv"
 				}, {
-					name:      "database.db"
-					mountPath: "/database.db:z"
+					name:      "data"
+					mountPath: "/home/filebrowser/data:z"
+				}, {
+					name:      "config.yaml"
+					readOnly:  true
+					mountPath: "/home/filebrowser/config.yaml"
+					subPath:   "config.yaml"
 				}]
-			}]}
+			}]
+		}
 	}
 
 	flaresolverr: {
