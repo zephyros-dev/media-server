@@ -68,11 +68,6 @@ data "ct_config" "staging" {
   strict = true
 }
 
-resource "libvirt_ignition" "staging" {
-  name    = "staging.ign"
-  content = data.ct_config.staging.rendered
-}
-
 # Always reflects the current Fedora CoreOS "stable" stream release; no
 # version number to keep up to date by hand.
 data "http" "fcos_stream" {
@@ -230,21 +225,10 @@ resource "libvirt_domain" "this" {
     # which is SCSI-aware.
   }
 
-  # Standard CoreOS-family fw_cfg mechanism for passing an Ignition config to
-  # the guest on first boot; see https://libvirt.org/formatdomain.html#smbios-system-information
-  sys_info = [
-    {
-      fw_cfg = {
-        entry = [
-          {
-            name  = "opt/com.coreos/config"
-            file  = libvirt_ignition.staging.path
-            value = ""
-          }
-        ]
-      }
-    }
-  ]
+  # No fw_cfg Ignition here: the install ISO already embeds the config
+  # (--dest-ignition) and coreos-installer writes it to the installed disk.
+  # A fw_cfg entry would point at a file libvirt_ignition writes under /tmp,
+  # which is wiped on host reboot and then stops the domain from starting.
 
   devices = {
     interfaces = [

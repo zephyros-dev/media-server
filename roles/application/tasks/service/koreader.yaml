@@ -4,26 +4,49 @@
     koreader_syncery_version: "{{ koreader_dependencies['d0nizam/syncery.koplugin'] | regex_replace('^v', '') }}"
     koreader_syncery_plugin_path: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins/syncery.koplugin"
   block:
-    # - name: Create koreader plugins directory
-    #   ansible.builtin.file:
-    #     path: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins"
-    #     state: directory
-    #     mode: "0755"
+    - name: Create koreader plugins directory
+      ansible.builtin.file:
+        path: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins"
+        state: directory
+        mode: "0755"
 
-    # - name: Read installed syncery.koplugin metadata
-    #   ansible.builtin.slurp:
-    #     path: "{{ koreader_syncery_plugin_path }}/_meta.lua"
-    #   register: koreader_syncery_meta
-    #   failed_when: false
+    - name: Read installed syncery.koplugin metadata
+      ansible.builtin.slurp:
+        path: "{{ koreader_syncery_plugin_path }}/_meta.lua"
+      register: koreader_syncery_meta
+      failed_when: false
 
-    # - name: Download and extract syncery.koplugin
-    #   ansible.builtin.unarchive:
-    #     # src: "https://github.com/d0nizam/syncery.koplugin/releases/download/v{{ koreader_syncery_version }}/syncery.koplugin.zip"
-    #     src: https://github.com/d0nizam/syncery.koplugin/archive/refs/heads/main.zip
-    #     dest: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins"
-    #     remote_src: true
-    #   when: koreader_syncery_version not in (koreader_syncery_meta.content | default('') | b64decode)
+    # The pin in dependencies.yaml is kept at the latest release by renovate, so
+    # compare against it exactly (_meta.lua has `version = "x.y.z"`)
+    - name: Update syncery.koplugin
+      vars:
+        koreader_syncery_installed: >-
+          {{ koreader_syncery_meta.content | default('') | b64decode
+             | regex_search('version\s*=\s*"([^"]+)"', '\1') | default([''], true) | first }}
+      when: koreader_syncery_installed != koreader_syncery_version
+      block:
+        # Replace rather than extract over it, so files dropped upstream don't linger
+        - name: Remove old syncery.koplugin {{ koreader_syncery_installed }}
+          ansible.builtin.file:
+            path: "{{ koreader_syncery_plugin_path }}"
+            state: absent
+
+        - name: Download and extract syncery.koplugin {{ koreader_syncery_version }}
+          ansible.builtin.unarchive:
+            src: "https://github.com/d0nizam/syncery.koplugin/releases/download/v{{ koreader_syncery_version }}/syncery.koplugin.zip"
+            dest: "{{ global_volume_path }}/koreader/data/.config/koreader/plugins"
+            remote_src: true
+          register: koreader_syncery_update
 
     - name: Create container {{ application_name }}
       ansible.builtin.include_tasks:
         file: container_quadlet.yaml
+
+    # koreader only loads plugins at startup. Not a handler: handlers flush at the
+    # end of the play, after the per-application vars used here are gone
+    - name: Restart to load the updated syncery.koplugin {{ application_name }} # noqa: no-handler
+      when: koreader_syncery_update is changed
+      ansible.builtin.systemd:
+        name: "{{ application_name }}"
+        scope: "{{ container_systemd_scope }}"
+        state: restarted

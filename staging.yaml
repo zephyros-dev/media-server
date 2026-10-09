@@ -1,7 +1,42 @@
+- name: Start staging VM
+  hosts: server
+  gather_facts: false
+  tasks:
+    - name: Start staging VM
+      community.libvirt.virt:
+        uri: qemu:///system
+        name: staging
+        state: running
+
+# Only runs when asked for, with `--tags stop`
+- name: Stop staging VM
+  hosts: server
+  gather_facts: false
+  tags: [never, stop]
+  tasks:
+    - name: Stop staging VM
+      community.libvirt.virt:
+        uri: qemu:///system
+        name: staging
+        state: shutdown
+
 - name: Setup staging
   hosts: staging
+  # Facts are gathered once the VM is reachable, it may still be booting
+  gather_facts: false
   vars:
     debug: false
+  pre_tasks:
+    # `--tags stop` alone only shuts the VM down; skip the always-tagged setup tasks
+    - name: Skip setup when only stopping
+      tags: always
+      # ansible_run_tags is a tuple, so compare as a list
+      when: ansible_run_tags | list == ['stop']
+      ansible.builtin.meta: end_play
+    - name: Wait for staging to boot
+      ansible.builtin.wait_for_connection:
+    - name: Gather facts
+      ansible.builtin.setup:
   tasks:
     - name: Setup partition
       ansible.builtin.import_role:
