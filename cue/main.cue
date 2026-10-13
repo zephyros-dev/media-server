@@ -398,7 +398,7 @@ application: {
 			volumes: {
 				books:     "\(_fact.global_media)/Storage/Books/"
 				config:    "./config/"
-				ingest:    "./ingest/" // This path can be added in calibre Add Books > Control the adding of books > Automatic adding
+				ingest:    "./ingest/" // Set as calibre's automatic adding folder by service/calibre.yaml
 				dl_config: "./dl_config/"
 			}
 		}

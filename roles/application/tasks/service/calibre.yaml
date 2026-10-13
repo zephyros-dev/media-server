@@ -17,6 +17,11 @@
         welcome_wizard_was_run: true
       global.py.json:
         library_path: /books
+      # Automatic adding (Add books > Control the adding of books) from the ingest
+      # volume, which calibre-dl downloads into
+      gui.json:
+        auto_add_path: /config/ingest
+        auto_add_check_for_duplicates: true
       gui.py.json:
         autolaunch_server: true
     calibre_server_config:
