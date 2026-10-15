@@ -1,1 +1,1 @@
-FROM ghcr.io/gtsteffaniak/filebrowser:2.1.1-beta@sha256:1b70f147afa66225c3784468037ad0c86ac5265ef70e095282d5335e9926071d
+FROM ghcr.io/gtsteffaniak/filebrowser:2.1.2-beta@sha256:0ff80341ce8a9c1e3c5ac8ca319bdf9675092028b04ed97607bbfebc10810fff
