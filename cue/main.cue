@@ -1020,13 +1020,66 @@ application: {
 		}
 	}
 
+	// https://github.com/dbv111m/musicgrabber
+	musicgrabber: {
+		param: {
+			backup:      true
+			caddy_proxy: 8080
+			// Its own login is optional, so keep it behind the SSO like the other downloaders
+			caddy_sso: true
+			// selfh.st icon (no homelab dashboard-icons one exists)
+			dashy_icon: "sh-music-grabber"
+			volumes: {
+				data: "./data/"
+				// The library navidrome serves, so downloads show up there on its next scan
+				music: "\(_fact.global_media)/Storage/music-grabber/"
+			}
+			secret: navidrome_password: {
+				type:    "env"
+				content: _fact.navidrome_musicgrabber_password
+			}
+		}
+		// Runs as container root, which is the host user in rootless podman, so
+		// downloaded files are owned by the host user like the rest of the library
+		pod: spec: containers: [{
+			name:  "web"
+			image: "musicgrabber"
+			// Rescan navidrome after downloads and check it for duplicates, as the
+			// admin user service/navidrome.yaml creates
+			env: [{
+				// ReplayGain 2.0 tags only, the audio is never re-encoded
+				name:  "ENABLE_REPLAYGAIN"
+				value: "true"
+			}, {
+				name:  "NAVIDROME_URL"
+				value: "http://navidrome:4533"
+			}, {
+				name:  "NAVIDROME_USER"
+				value: "musicgrabber"
+			}, {
+				name: "NAVIDROME_PASS"
+				valueFrom: secretKeyRef: {
+					name: "musicgrabber"
+					key:  "navidrome_password"
+				}
+			}]
+			volumeMounts: [{
+				name:      "data"
+				mountPath: "/data:z"
+			}, {
+				name:      "music"
+				mountPath: "/music"
+			}]
+		}]
+	}
+
 	navidrome: {
 		param: {
 			backup:      true
 			caddy_proxy: 4533
 			volumes: {
 				data:  "./data/"
-				music: "\(_fact.global_media)/Download/torrent/complete/Music/"
+				music: "\(_fact.global_media)//Storage/music-grabber/"
 			}
 		}
 		pod: _profile.userns_share & {
@@ -1039,9 +1092,6 @@ application: {
 				}, {
 					name:  "ND_LOGLEVEL"
 					value: "info"
-				}, {
-					name:  "ND_SCANSCHEDULE"
-					value: "1h"
 				}, {
 					name:  "ND_SESSIONTIMEOUT"
 					value: "24h"

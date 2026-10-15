@@ -1,0 +1,17 @@
+#ENC[AES256_GCM,data:sKukTc+JMn2t4E8lh9xkcGDhCBaxoENq68BUgu3FNMOnsDZ/XWkeuzrLWnBgkQXlGO3jxTF/hqgkx27mYBhHDnWMLjrksw3jIIwfX06xGuXoaw==,iv:pX4rqWOUzmRJUsQyS0RxZlXI6Cm5eumacwl6ie1ze0A=,tag:ZLupB6CQBm4rN65YteA8xw==,type:comment]
+navidrome_musicgrabber_password: ENC[AES256_GCM,data:rWlFJLZL3jpN8+YaRyd98djcTiWCWYmip6i7cq0RXRI=,iv:uDYVMwg15+MHlQR6a4R+ddQdfYJ8bn3AawIcT1XDr88=,tag:CtWAGxaRq3o+2XAd+iau5g==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUSEZyQmZTb2s3SWc5VFli
+            Mm1rbUt2RjI5YVVQMlpzVi91Z2lJSUZ4OFRVCndqUTQ3cTZzRzZlTTkrL1dWR0dO
+            UG04UjFDODVQSnlZS2NsWjFZTVRHeGsKLS0tIFhoQno3dFBzY29jSGMvd1V0L203
+            VWM3OWJGT3JTRGxnS3grdjNOZDV4RWsKZKl0qrmMWQMUFWXXQIMqpf9m9XcViM+5
+            WY09AFwJfHPK4wbTV1LMRHVnrfflogFTvhW9/XSYZyEhbLrwGKv8fg==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+    lastmodified: "2026-10-15T09:32:58Z"
+    mac: ENC[AES256_GCM,data:KZX2XGOYkLwLozD80C4p4sZBV7IjMVOcXfCYt+kx+QAy2UpX59mS6Syh8fq/MLm8NvfxOQs6zZC+FTr5VSs7LDTM2a6ptBEnva9bOddJwowUzpEgv1YYIaDUT+xgVT+YQonL18RMrSGNAPln2d93lpqNsxQhs/dKgrJolWGFPWw=,iv:MfAwxvkEIL2J8okWPV3bQfq8Je+1H2nKpONk7PPS+c4=,tag:rRJ/s8hJEF7I1kYNnQd7lQ==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3

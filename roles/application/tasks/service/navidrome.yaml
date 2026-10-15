@@ -1,0 +1,40 @@
+- name: Create container {{ application_name }}
+  ansible.builtin.include_tasks:
+    file: container_quadlet.yaml
+
+# Dedicated user for musicgrabber's rescans and duplicate checks. Admin, since
+# navidrome only lets admins trigger a scan
+- name: Setup musicgrabber user in navidrome
+  vars:
+    navidrome_cli: podman exec navidrome-web /app/navidrome
+  block:
+    # The server creates the database schema on startup, so retry until it's there
+    - name: Get navidrome users
+      changed_when: false
+      ansible.builtin.command:
+        cmd: "{{ navidrome_cli }} user list --format csv --nobanner"
+      register: navidrome_users
+      until: navidrome_users.rc == 0
+      retries: 30
+      delay: 5
+
+    # `user create` only reads the password from a terminal, so answer its
+    # prompts with expect (pexpect comes from managed_node's ansible requirements)
+    - name: Create musicgrabber user in navidrome
+      # csv columns: user id,username,... (no regex backreference: its escaping
+      # differs inside when, which made this always true)
+      when: navidrome_users.stdout_lines | select('match', '[^,]*,musicgrabber,') | length == 0
+      # The password is a module argument; -e navidrome_debug=true to see why it failed
+      no_log: "{{ not (navidrome_debug | default(false) | bool) }}"
+      ansible.builtin.expect:
+        command: podman exec -it navidrome-web /app/navidrome user create --username musicgrabber --admin --nobanner
+        # Matches both "Enter new password" and "Confirm new password"
+        responses:
+          (?i)password: "{{ navidrome_musicgrabber_password }}"
+
+    # For a user created before it was made admin (csv: id,username,name,email,admin,...)
+    - name: Make musicgrabber user admin in navidrome
+      when: navidrome_users.stdout_lines | select('match', '[^,]*,musicgrabber,[^,]*,[^,]*,false,') | length > 0
+      changed_when: true
+      ansible.builtin.command:
+        cmd: "{{ navidrome_cli }} user edit --user musicgrabber --set-admin --nobanner"

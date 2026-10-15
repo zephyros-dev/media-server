@@ -2,7 +2,10 @@
   hosts: server
   gather_facts: false
   tasks:
+    # always, so it also runs for `--tags <app>`; skipped when only stopping
     - name: Start staging VM
+      tags: always
+      when: ansible_run_tags | list != ['stop']
       community.libvirt.virt:
         uri: qemu:///system
         name: staging
@@ -34,8 +37,10 @@
       when: ansible_run_tags | list == ['stop']
       ansible.builtin.meta: end_play
     - name: Wait for staging to boot
+      tags: always
       ansible.builtin.wait_for_connection:
     - name: Gather facts
+      tags: always
       ansible.builtin.setup:
   tasks:
     - name: Setup partition
