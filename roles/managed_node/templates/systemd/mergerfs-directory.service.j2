@@ -4,7 +4,6 @@ Description=Mergerfs directory
 [Service]
 WorkingDirectory={{ ansible_facts.user_dir }}/.config/mergerfs_directory
 ExecStart=python3 main.py
-RemainAfterExit=true
 Type=oneshot
 
 [Install]

@@ -6,7 +6,6 @@ RequiresMountsFor=%h/.local/share/containers/storage %t/containers
 
 [Service]
 ExecStart=podman system prune --all --force
-RemainAfterExit=true
 Type=oneshot
 
 [Install]

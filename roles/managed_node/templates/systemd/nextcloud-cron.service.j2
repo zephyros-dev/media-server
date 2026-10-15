@@ -1,0 +1,8 @@
+[Unit]
+Description=Nextcloud background jobs (log rotation, trash/version expiry, cleanup)
+# https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/background_jobs_configuration.html#systemd
+
+[Service]
+ExecStart=podman exec --user www-data nextcloud-web php -f /var/www/html/cron.php
+# No RemainAfterExit: the unit must go inactive again so the timer can rerun it
+Type=oneshot

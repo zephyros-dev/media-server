@@ -58,6 +58,9 @@
           schedule: "20:00:00"
         - name: mergerfs-directory
           schedule: "*:00:00"
+        # Nextcloud's background jobs are in cron mode, which needs this to run them
+        - name: nextcloud-cron
+          schedule: "*:0/5"
 
 - name: Setup mergerfs_directory service
   ansible.builtin.import_tasks: user/mergerfs_directory.yaml
