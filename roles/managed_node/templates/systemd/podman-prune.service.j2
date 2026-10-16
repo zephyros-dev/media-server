@@ -2,9 +2,20 @@
 Description=Podman image prune service
 Wants=network.target
 After=network-online.target
+{% if systemd_become %}
+RequiresMountsFor=/var/lib/containers/storage %t/containers
+{% else %}
 RequiresMountsFor=%h/.local/share/containers/storage %t/containers
+{% endif %}
 
 [Service]
+# Remove scratch containers left by interrupted image builds (status "Storage", not
+# managed by podman): they keep old base images "in use", so prune would skip them.
+# Best effort ("-"): a build running right now (e.g. at boot, when this persistent timer
+# catches up) owns one of these and refuses removal, which must not skip the prune
+{# podman's Go template braces as a Jinja literal: a {% raw %} block tag would let
+   trim_blocks eat the newline and glue ExecStart= onto this line #}
+ExecStartPre=-sh -c "podman ps -a --external --format '{{ "{{.ID}} {{.Status}}" }}' | grep ' Storage$$' | cut -d' ' -f1 | xargs -r podman rm"
 ExecStart=podman system prune --all --force
 Type=oneshot
 

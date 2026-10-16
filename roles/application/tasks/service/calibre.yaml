@@ -28,6 +28,9 @@
       auth: "True"
       auth_mode: basic
       port: 8081
+    # The image the pod runs: the pinned ref from its Containerfile (see container_images
+    # in common), or the locally built one if it ever gets real build steps
+    calibre_image: "{{ container_images['calibre'] | default('localhost/calibre:latest') }}"
     # One-shot container with the same mounts and uid as the service, for use while it is stopped
     calibre_run: >-
       podman run --rm --userns keep-id:uid=911,gid=911 --user 911:911 --env HOME=/tmp
@@ -77,9 +80,14 @@
         path: "{{ calibre_books_path }}/metadata.db"
       register: calibre_library
 
+    # Retried: after a restart server-config.txt already exists, so the wait above
+    # passes while the container may still be coming back up
     - name: Get calibre content server users
       changed_when: false
       check_mode: false
+      until: calibre_users.rc == 0
+      retries: 60
+      delay: 5
       ansible.builtin.command:
         # As abc: on a fresh host this creates the user db, which must not end up owned by root
         cmd: podman exec --user abc calibre-web calibre-server --userdb {{ calibre_userdb }} --manage-users -- list
@@ -127,7 +135,7 @@
           when: not calibre_library.stat.exists
           changed_when: true
           ansible.builtin.command:
-            cmd: "{{ calibre_run }} --entrypoint calibredb localhost/calibre:latest --with-library /books list"
+            cmd: "{{ calibre_run }} --entrypoint calibredb {{ calibre_image }} --with-library /books list"
 
         - name: Create calibre content server user
           when: calibre_server_user not in calibre_users.stdout_lines
@@ -135,7 +143,7 @@
           no_log: true
           ansible.builtin.command:
             cmd: >-
-              {{ calibre_run }} --entrypoint calibre-server localhost/calibre:latest
+              {{ calibre_run }} --entrypoint calibre-server {{ calibre_image }}
               --userdb {{ calibre_userdb }} --manage-users --
               add '{{ calibre_server_user }}' '{{ calibre_server_password }}'
 

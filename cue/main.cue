@@ -35,6 +35,25 @@ _fact: factEmbed & {
 	global_download: string
 }
 
+// Pins from images.cue must carry a digest
+_image: [string]: =~"@sha256:[0-9a-f]{64}$"
+
+// Pinned images as podman kube play takes them: digest only, since it rejects
+// `repo:tag@sha256:...` (the tag is only for renovate). Exported, so ansible knows
+// which images need no build (container_quadlet) and what they run (calibre)
+container_images: {
+	for name, ref in _image {
+		let _repo = strings.Split(ref, "@")[0]
+
+		// The tag is a ':' in the last path segment; one before it is a registry port
+		let _colon = strings.LastIndex(_repo, ":")
+		(name): [
+			if _colon > strings.LastIndex(_repo, "/") {strings.SliceRunes(_repo, 0, _colon)},
+			_repo,
+		][0] + "@" + strings.Split(ref, "@")[1]
+	}
+}
+
 _profile: {
 	lsio: {
 		metadata: annotations: "io.podman.annotations.userns": "keep-id:uid=911,gid=911"
@@ -258,8 +277,33 @@ application: [applicationName=string]: {
 			}
 		}]
 
+	// The pod as deployed: containers whose image is pinned in images.cue run that
+	// ref directly instead of a locally built image.
+	// A copy, since the image fields of pod are already concrete
+	_pod_manifest: _
+	if pod != null {
+		_pod_manifest: {
+			for k, v in pod if k != "spec" {(k): v}
+			spec: {
+				for k, v in pod.spec if k != "containers" {(k): v}
+				containers: [for c in pod.spec.containers {
+					for k, v in c if k != "image" {(k): v}
+					if container_images[c.image] != _|_ {
+						image: container_images[c.image]
+					}
+					if container_images[c.image] == _|_ {
+						image: c.image
+					}
+				}]
+			}
+		}
+	}
+
 	// Have to use MarshalStream since cue export does not make stream yaml
-	manifest: yaml.MarshalStream(list.Concat([[pod], #secret, #volume]))
+	manifest: yaml.MarshalStream(list.Concat([[
+		if pod == null {null},
+		if pod != null {_pod_manifest},
+	], #secret, #volume]))
 }
 
 application: {

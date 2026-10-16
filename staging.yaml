@@ -2,7 +2,8 @@
   hosts: server
   gather_facts: false
   tasks:
-    # always, so it also runs for `--tags <app>`; skipped when only stopping
+    # always, so it also runs for `--tags <app>`; skipped when only stopping.
+    # A no-op (ok, not changed) when the VM is already running
     - name: Start staging VM
       tags: always
       when: ansible_run_tags | list != ['stop']
@@ -10,6 +11,7 @@
         uri: qemu:///system
         name: staging
         state: running
+      register: staging_vm_start
 
 # Only runs when asked for, with `--tags stop`
 - name: Stop staging VM
@@ -36,9 +38,17 @@
       # ansible_run_tags is a tuple, so compare as a list
       when: ansible_run_tags | list == ['stop']
       ansible.builtin.meta: end_play
-    - name: Wait for staging to boot
+    # Only after a fresh start. Checks sshd from the controller, without logging in.
+    # Not a handler: the start happens in another play, on another host
+    - name: Wait for staging sshd after starting it # noqa: no-handler
       tags: always
-      ansible.builtin.wait_for_connection:
+      when: hostvars[groups['server'][0]].staging_vm_start is changed
+      delegate_to: localhost
+      ansible.builtin.wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 22
+        search_regex: OpenSSH
+        timeout: 600
     - name: Gather facts
       tags: always
       ansible.builtin.setup:

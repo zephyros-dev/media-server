@@ -17,6 +17,24 @@
       retries: 60
       delay: 5
 
+    # Postgres 15+ only lets the database owner create in schema public. The installer
+    # connects as postgres but creates its own oc_<admin> role and builds the tables as
+    # that, which fails with "Insufficient privilege". The role doesn't exist yet, so
+    # grant on the schema instead; this database belongs to nextcloud's pod alone.
+    # https://github.com/nextcloud/docker/issues/1880
+    - name: Allow nextcloud's database role to create tables
+      when: not (nextcloud_status.stdout | regex_search('\{.*\}') | from_json).installed
+      changed_when: true
+      ansible.builtin.command:
+        argv:
+          - podman
+          - exec
+          - nextcloud-postgres
+          - psql
+          - --username=postgres
+          - --dbname=nextcloud
+          - --command=GRANT ALL ON SCHEMA public TO PUBLIC;
+
     # Fresh host (e.g. a rebuilt staging): install unattended instead of
     # leaving the instance at the web installer
     - name: Install nextcloud

@@ -1,0 +1,92 @@
+package main
+
+// Pinned images, one per entry with a blank line in between so renovate bumps of
+// neighbouring entries merge cleanly. Kept up to date by the regex manager in
+// renovate.json; images with real build steps stay as Containerfiles instead
+_image: {
+	"actual": "docker.io/actualbudget/actual-server:26.10.0-alpine@sha256:67b1b5e9584e3e143b4f5c41e52b4506ed9cdd1072392d5ab5369f2d4fd0bffd"
+
+	"audiobookshelf": "ghcr.io/advplyr/audiobookshelf:2.37.1@sha256:581d68b2a6fc7ebf58d81c878a9f387cbbc0d88ac9d37b298b9cee10168af85b"
+
+	"bazarr": "ghcr.io/linuxserver/bazarr:latest@sha256:fb0437897eaa7f96cf6ac42f795f8dcc208d34ec969eac5d366454e767304eb9"
+
+	"calibre": "ghcr.io/linuxserver/calibre:9.16.0@sha256:48c8a5ba2a20c303012b1d4b2815a2b99b362a634a571fbec101b85bfa203ba3"
+
+	"calibre-dl": "ghcr.io/calibrain/calibre-web-automated-book-downloader:v1.4.0@sha256:4ef757349c3c7a7d90ba95b1e2a46ce4dd460a4776efbcf2aa1b1c476e7d5de5"
+
+	"dashy": "ghcr.io/lissy93/dashy:4.8.2@sha256:6321a943194d9ee5b3ff94b91e7e6829f4ef56e512622e797e2585c9574ee484"
+
+	"filebrowser": "ghcr.io/gtsteffaniak/filebrowser:2.1.2-beta@sha256:0ff80341ce8a9c1e3c5ac8ca319bdf9675092028b04ed97607bbfebc10810fff"
+
+	"flaresolverr": "ghcr.io/flaresolverr/flaresolverr:latest@sha256:c80ae007ce2ccdcd217a12426e4f039ef763ff90738c808d38810c3e59323767"
+
+	"immich-machine-learning": "ghcr.io/immich-app/immich-machine-learning:v3.3.3@sha256:73915f07e1f4289ba45b174c58443db74cef47ddf502613f475fc5e52458ea42"
+
+	"immich-postgres": "ghcr.io/immich-app/postgres:18-vectorchord1.1.1@sha256:a20e21841b21b9c009daf572c844ffedfaef75fce51287bbf080edf171ef0834"
+
+	"immich-redis": "docker.io/redis:8-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0"
+
+	"immich-server": "ghcr.io/immich-app/immich-server:v3.3.3@sha256:bae7664ff3aa4c2c1fcbdcdd86b40b105643c5f861f3e6a770fc760089f25862"
+
+	"jdownloader": "docker.io/jlesage/jdownloader-2:v26.09.1@sha256:bd6cd2fdc72818f30207e677b33cd7f1b425048c4e7132624e541e99f992be4c"
+
+	"jellyfin": "ghcr.io/jellyfin/jellyfin:10.11.11@sha256:45f648c382a0c8b552582fcea40e95cb17c5d475473a891cba0eb7523fb92112"
+
+	"kavita": "ghcr.io/linuxserver/kavita:0.9.1@sha256:49be245da019056e5627f0c01d46871a89b25683aa0b68c7c7afac3918bca0f5"
+
+	"koreader": "ghcr.io/zephyros-dev/koreader:v2026.03@sha256:114c64576efd8a82aedb0c6a4728ce092a527b0c0b6e142a4fe27d1027b0f4dd"
+
+	"librespeed": "ghcr.io/linuxserver/librespeed:latest@sha256:376c85ebfc8630b16351a2d02b1e10fcb2853e9ca5c3a80a07bcc4b738b844d9"
+
+	"lidarr": "ghcr.io/linuxserver/lidarr:latest@sha256:67887807b13ae025c0fe979da298347c8609969087ab064c81d8e9acc1e06bbf"
+
+	"miniflux": "ghcr.io/miniflux/miniflux:2.3.3-distroless@sha256:59e4e31b349f008ecd34b547f23498b1d8abc0c03d5f6d12bdb713ab7f7c04bf"
+
+	"miniflux-postgres": "docker.io/postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873"
+
+	"musicgrabber": "docker.io/g33kphr33k/musicgrabber:4.3.1@sha256:94e99d5c8aad9a876912db2f6d2f5e17dcf2bb04c0b2b7a13811e005b828ba86"
+
+	"navidrome": "ghcr.io/navidrome/navidrome:0.64.2@sha256:38dc2727bfcfd5ede290f8ada114fc90368146f265ae4701ddddbcbe2a44ee52"
+
+	"netdata": "docker.io/netdata/netdata:v2.12.1@sha256:5cfa05a5fa5686b98e0c70e884f00685fb3c662e9c5d727cf46c96d8e37b7818"
+
+	"nextcloud": "docker.io/nextcloud:35.0.2@sha256:b8aabb4fd607e79437ab9f2e97e132f8d19f08f37c9484d7b2a4ef45895f4867"
+
+	"nextcloud-office": "docker.io/collabora/code:26.04.5.1.1@sha256:bb8f3c9c5c9016045f25fccb5f0649be94469ebc7c7cc379f3576e470cccf33d"
+
+	"nextcloud-postgres": "docker.io/postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873"
+
+	"nextcloud-redis": "docker.io/redis:8-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0"
+
+	"paperless-gotenberg": "docker.io/gotenberg/gotenberg:8.37@sha256:f29984bd1e226bf1b93ba90af06000afa8b315853e99d27b9aaa41b93f15c769"
+
+	"paperless-postgres": "docker.io/postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873"
+
+	"paperless-redis": "docker.io/redis:8-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0"
+
+	"paperless-tika": "docker.io/apache/tika:3.3.1.0@sha256:90b7fa1dc018434075fce9e1d9b88b1e3d0ea6979d0cf86e116c79a8073ae973"
+
+	"prowlarr": "ghcr.io/linuxserver/prowlarr:latest@sha256:f9151e5bc1025c6d0a630d503210cdcb6bb55a7cc098562609d96a408d838902"
+
+	"pymedusa": "docker.io/pymedusa/medusa:master@sha256:0c2fc9980ce2f4a9abb7cdccacf7678d503b68a2e6822bc143a52f42171c2e6e"
+
+	"radarr": "ghcr.io/linuxserver/radarr:latest@sha256:ea6822c956d26db648b237919f41340318f32e5b7dcc4ba702cf256a0f5f3c12"
+
+	"samba": "ghcr.io/servercontainers/samba:smbd-only-latest@sha256:31b90ea7fe3258d30fccd971c85743b92694605f4b43dc8a4df23a202fced06a"
+
+	"scrutiny": "ghcr.io/analogj/scrutiny:v0.9.5-omnibus@sha256:6ee271ee531458f134220ca8b2c5c8ccc2711a799c827fef953fa865d91e312f"
+
+	"speedtest": "lscr.io/linuxserver/speedtest-tracker:1.15.0@sha256:1eeed2307699c083407bd4c1eb86f14d5179f9e1cd960f57d4cbab6f1f8b8a42"
+
+	"syncthing": "docker.io/syncthing/syncthing:2.1.6@sha256:4d0281bdcb4ed9baf503d251d0544ddd856f49fce3f114056257ae172b7fb670"
+
+	"timetagger": "ghcr.io/almarklein/timetagger:v26.1.3-nonroot@sha256:18a81afcb249142426fcff47bf9b54c343ca718a916f03d9722b84f8d7fafac6"
+
+	"transmission": "ghcr.io/linuxserver/transmission:latest@sha256:d6caecad406774a18511be7bfa99ba5070c17a3bdd7a5d73091651841603273c"
+
+	"trilium": "ghcr.io/triliumnext/trilium:v0.106.0@sha256:be93e82699b12950ac4e2e7b565ce092fe215b8dd6ddfc47921e37b49e6a0e8b"
+
+	"wealthfolio": "ghcr.io/wealthfolio/wealthfolio:3.9.1@sha256:0ebd0147463f3637afce8cf33e0601a7c5c060e70f15c19d5762435f5819234a"
+
+	"wol": "ghcr.io/sameerdhoot/wolweb:latest@sha256:5cd2aa228bc68d9e52e71c92c2aa354cab15731838e3fee80796c5209b3783f7"
+}

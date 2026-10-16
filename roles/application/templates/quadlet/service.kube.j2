@@ -2,6 +2,10 @@
 [Kube]
 Yaml=./{{ application_name }}/deployment.yaml
 SetWorkingDirectory=yaml
+{# Never let kube play build: images are pinned and pulled, or built by their own .build
+   unit. Otherwise a missing image plus an <image>/Containerfile next to the yaml (left
+   over from before images were pinned) makes it build, and fail to commit to a digest #}
+PodmanArgs=--build=false
 {% if application_item.value.param.quadlet_kube_options is defined %}
 {% for key,value in application_item.value.param.quadlet_kube_options | dictsort %}
 {{ key }}={{ value }}
@@ -18,7 +22,7 @@ WantedBy=multi-user.target
 WantedBy=default.target
 {% endif %}
 [Unit]
-{% if application_item.value.param.unit is defined %}
+{% if application_item.value.param.quadlet_unit_options is defined %}
 {% for key, value in application_item.value.param.quadlet_unit_options | dictsort %}
 {{ key }}={{ value }}
 {% endfor %}

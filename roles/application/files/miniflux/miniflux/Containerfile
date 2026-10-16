@@ -1,1 +1,0 @@
-FROM ghcr.io/miniflux/miniflux:2.3.3-distroless@sha256:59e4e31b349f008ecd34b547f23498b1d8abc0c03d5f6d12bdb713ab7f7c04bf

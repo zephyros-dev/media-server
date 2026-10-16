@@ -39,13 +39,30 @@
             paths: "{{ container_quadlet_path }}/{{ application_name }}"
             file_type: directory
           register: image_list
-        # We use build image service since its build can be cached, unlike using podman kube build flag
+        # We use build image service since its build can be cached, unlike using podman kube build flag.
+        # Only for real builds: images pinned in cue/images.cue (container_images, exported
+        # by cue) are pulled directly by podman kube play. Deleting the .build of a pinned
+        # image also cleans up hosts that still have its old Containerfile from before
         - name: Create build images services {{ application_name }} # noqa: risky-file-permissions
+          when: item.path | basename not in container_images
           ansible.builtin.template:
             src: quadlet/image.build.j2
             dest: "{{ container_quadlet_path }}/{{ item.path | basename }}.build"
           loop: "{{ image_list.files }}"
           register: image_build_service_state
+        - name: Remove build services of pinned images {{ application_name }}
+          when: item.path | basename in container_images
+          ansible.builtin.file:
+            path: "{{ container_quadlet_path }}/{{ item.path | basename }}.build"
+            state: absent
+          loop: "{{ image_list.files }}"
+        # Their old <image>/Containerfile copies too, which kube play would otherwise build
+        - name: Remove build contexts of pinned images {{ application_name }}
+          when: item.path | basename in container_images
+          ansible.builtin.file:
+            path: "{{ item.path }}"
+            state: absent
+          loop: "{{ image_list.files }}"
 
     - name: Setup deployment {{ application_name }}
       vars:
@@ -69,6 +86,9 @@
               changed_when: false
               when: not (kube_file_yaml.changed or kube_file_quadlet.changed)
               ansible.builtin.systemd:
+            # no_block comes from module_defaults: non-blocking, except for custom flows.
+            # Those must wait: their first exec would otherwise hit the old container
+            # before systemd stops it, and the next step lands mid-restart
             - name: Restart systemd service if changed {{ application_name }} # noqa: args[module]
               changed_when: false
               when: kube_file_yaml.changed or kube_file_quadlet.changed or image_changed
