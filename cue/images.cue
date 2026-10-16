@@ -86,7 +86,7 @@ _image: {
 
 	"trilium": "ghcr.io/triliumnext/trilium:v0.106.0@sha256:be93e82699b12950ac4e2e7b565ce092fe215b8dd6ddfc47921e37b49e6a0e8b"
 
-	"wealthfolio": "ghcr.io/wealthfolio/wealthfolio:3.9.1@sha256:0ebd0147463f3637afce8cf33e0601a7c5c060e70f15c19d5762435f5819234a"
+	"wealthfolio": "ghcr.io/wealthfolio/wealthfolio:3.10.0@sha256:6dcf9019aee7ba0747344087365ea57846107943ff0e2718a9bee72a98e20f85"
 
 	"wol": "ghcr.io/sameerdhoot/wolweb:latest@sha256:5cd2aa228bc68d9e52e71c92c2aa354cab15731838e3fee80796c5209b3783f7"
 }
