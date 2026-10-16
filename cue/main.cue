@@ -40,7 +40,7 @@ _image: [string]: =~"@sha256:[0-9a-f]{64}$"
 
 // Pinned images as podman kube play takes them: digest only, since it rejects
 // `repo:tag@sha256:...` (the tag is only for renovate). Exported, so ansible knows
-// which images need no build (container_quadlet) and what they run (calibre)
+// which image an app runs (calibre's one-off containers)
 container_images: {
 	for name, ref in _image {
 		let _repo = strings.Split(ref, "@")[0]

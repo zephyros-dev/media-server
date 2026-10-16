@@ -17,6 +17,8 @@
       no_block: "{{ not custom_flow.stat.exists }}"
   block:
     - name: Prepare image files {{ application_name }}
+      vars:
+        image_repo_names: "{{ image_repo_list.files | default([]) | map(attribute='path') | map('basename') | list }}"
       block:
         - name: Create deployment folder {{ application_name }}
           ansible.builtin.file:
@@ -39,28 +41,31 @@
             paths: "{{ container_quadlet_path }}/{{ application_name }}"
             file_type: directory
           register: image_list
-        # We use build image service since its build can be cached, unlike using podman kube build flag.
-        # Only for real builds: images pinned in cue/images.cue (container_images, exported
-        # by cue) are pulled directly by podman kube play. Deleting the .build of a pinned
-        # image also cleans up hosts that still have its old Containerfile from before
+        # The repo is the source of truth for what gets built: files/<app>/<image>/. Images
+        # pinned in cue/images.cue are pulled directly by podman kube play instead
+        - name: Get list of image built from the repo {{ application_name }}
+          # Apps with only pinned images have no files/<app> folder (empty list then)
+          when: (role_path ~ '/files/' ~ application_name) is directory
+          delegate_to: localhost
+          become: false
+          ansible.builtin.find:
+            paths: "{{ role_path }}/files/{{ application_name }}"
+            file_type: directory
+          register: image_repo_list
+        # We use build image service since its build can be cached, unlike using podman kube build flag
         - name: Create build images services {{ application_name }} # noqa: risky-file-permissions
-          when: item.path | basename not in container_images
+          when: item.path | basename in image_repo_names
           ansible.builtin.template:
             src: quadlet/image.build.j2
             dest: "{{ container_quadlet_path }}/{{ item.path | basename }}.build"
           loop: "{{ image_list.files }}"
           register: image_build_service_state
-        - name: Remove build services of pinned images {{ application_name }}
-          when: item.path | basename in container_images
+        # Anything else on the host is left over from an image that was pinned, renamed or
+        # dropped: its .build would still be RequiredBy the app and rebuild it on every start
+        - name: Remove build services of images no longer built {{ application_name }}
+          when: item.path | basename not in image_repo_names
           ansible.builtin.file:
             path: "{{ container_quadlet_path }}/{{ item.path | basename }}.build"
-            state: absent
-          loop: "{{ image_list.files }}"
-        # Their old <image>/Containerfile copies too, which kube play would otherwise build
-        - name: Remove build contexts of pinned images {{ application_name }}
-          when: item.path | basename in container_images
-          ansible.builtin.file:
-            path: "{{ item.path }}"
             state: absent
           loop: "{{ image_list.files }}"
 
