@@ -10,6 +10,10 @@ _image: {
 
 	"bazarr": "ghcr.io/linuxserver/bazarr:latest@sha256:fb0437897eaa7f96cf6ac42f795f8dcc208d34ec969eac5d366454e767304eb9"
 
+	"beszel": "docker.io/henrygd/beszel:0.21.0@sha256:6b39a8b64f9b15d00a25e7683e31a93c46161182a54f62713525107064e10599"
+
+	"beszel-agent": "docker.io/henrygd/beszel-agent:0.21.0@sha256:f27b1aa2c68404bc5b9e1a2ab36653bd9b4ee14f6299862f09cd5051a4134767"
+
 	"calibre": "ghcr.io/linuxserver/calibre:9.16.0@sha256:48c8a5ba2a20c303012b1d4b2815a2b99b362a634a571fbec101b85bfa203ba3"
 
 	"calibre-dl": "ghcr.io/calibrain/calibre-web-automated-book-downloader:v1.4.0@sha256:4ef757349c3c7a7d90ba95b1e2a46ce4dd460a4776efbcf2aa1b1c476e7d5de5"
@@ -47,8 +51,6 @@ _image: {
 	"musicgrabber": "docker.io/g33kphr33k/musicgrabber:4.3.1@sha256:94e99d5c8aad9a876912db2f6d2f5e17dcf2bb04c0b2b7a13811e005b828ba86"
 
 	"navidrome": "ghcr.io/navidrome/navidrome:0.64.2@sha256:38dc2727bfcfd5ede290f8ada114fc90368146f265ae4701ddddbcbe2a44ee52"
-
-	"netdata": "docker.io/netdata/netdata:v2.12.1@sha256:5cfa05a5fa5686b98e0c70e884f00685fb3c662e9c5d727cf46c96d8e37b7818"
 
 	"nextcloud": "docker.io/nextcloud:35.0.2@sha256:b8aabb4fd607e79437ab9f2e97e132f8d19f08f37c9484d7b2a4ef45895f4867"
 

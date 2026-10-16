@@ -385,6 +385,103 @@ application: {
 		}
 	}
 
+	// https://beszel.dev/ - host and container monitoring (hub + agent)
+	beszel: {
+		param: {
+			backup:      true
+			caddy_proxy: 8090
+			volumes: {
+				data:  "./data/"
+				agent: "./agent/"
+				// Folder, not the socket itself: a socket can't be a hostPath of type File
+				podman: "/run/user/\(_fact.ansible_facts.user_uid)/podman/"
+				media:  "\(_fact.global_media)/"
+			}
+			secret: {
+				user_password: {
+					type:    "env"
+					content: _fact.beszel_user_password
+				}
+				// Enabled on the hub as a permanent universal token by service/beszel.yaml
+				agent_token: {
+					type:    "env"
+					content: _fact.beszel_agent_token
+				}
+			}
+		}
+		// Host network, so the agent sees the host's real interfaces. The hub listens on
+		// 8090, which caddy reaches through the host and the firewall keeps off the LAN.
+		// Container root is the host user in rootless podman, so the agent can use the
+		// user's podman socket
+		pod: spec: {
+			hostNetwork: true
+			containers: list.Concat([[{
+				name:  "hub"
+				image: "beszel"
+				env: [{
+					name:  "APP_URL"
+					value: "https://beszel.\(_fact.server_domain)"
+				}, {
+					// First user, created on first start
+					name:  "USER_EMAIL"
+					value: "admin@\(_fact.server_domain)"
+				}, {
+					name: "USER_PASSWORD"
+					valueFrom: secretKeyRef: {
+						name: "beszel"
+						key:  "user_password"
+					}
+				}]
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/beszel_data:Z"
+				}]
+			}], [
+				{
+					name:  "agent"
+					image: "beszel-agent"
+					// SELinux otherwise blocks the podman socket despite file permissions
+					securityContext: seLinuxOptions: type: "container_runtime_t"
+					env: [{
+						name:  "HUB_URL"
+						value: "http://localhost:8090"
+					}, {
+						// The hub's public key, only known once it has started, so
+						// service/beszel.yaml fetches it into this file. Until then the
+						// agent exits and is restarted
+						name:  "KEY_FILE"
+						value: "/var/lib/beszel-agent/hub_key"
+					}, {
+						name: "TOKEN"
+						valueFrom: secretKeyRef: {
+							name: "beszel"
+							key:  "agent_token"
+						}
+					}, {
+						// WebSocket to the hub only, no SSH listener on the host
+						name:  "DISABLE_SSH"
+						value: "true"
+					}, {
+						name:  "DOCKER_HOST"
+						value: "unix:///run/podman-host/podman.sock"
+					}]
+					volumeMounts: [{
+						name:      "agent"
+						mountPath: "/var/lib/beszel-agent:Z"
+					}, {
+						// No relabel: the socket stays the host's (see securityContext)
+						name:      "podman"
+						mountPath: "/run/podman-host"
+					}, {
+						// Picked up as an extra disk by its /extra-filesystems/ path
+						name:      "media"
+						mountPath: "/extra-filesystems/media:ro"
+					}]
+				},
+			]])
+		}
+	}
+
 	caddy: {
 		param: {
 			dashy_show:      false
@@ -1148,90 +1245,6 @@ application: {
 					mountPath: "/music:ro"
 				}]
 			}]}
-	}
-
-	netdata: {
-		param: {
-			become:      true
-			caddy_proxy: 19999
-			caddy_rewrite: [{
-				src:  "/"
-				dest: "/v3" // https://community.netdata.cloud/t/how-to-disable-sign-in-page-in-netdata-version-2-1-1-for-direct-dashboard-access/7032
-			}]
-			volumes: {
-				cache:     "pvc"
-				config:    "/etc/netdata/"
-				dev_dri:   "/dev/dri/"
-				group:     "/etc/group"
-				lib:       "pvc"
-				localtime: "/etc/localtime"
-				osrelease: "/etc/os-release"
-				passwd:    "/etc/passwd"
-				proc:      "/proc/"
-				root:      "/root/"
-				sys:       "/sys/"
-				systemd:   "/run/dbus/"
-				varlog:    "/var/log/"
-			}
-		}
-
-		pod: spec: containers: [{
-			name:  "web"
-			image: "netdata"
-			securityContext: capabilities: add: [
-				"CAP_SYS_ADMIN",
-				"CAP_SYS_PTRACE",
-			]
-			if _fact.nvidia_installed {
-				resources: limits: "nvidia.com/gpu=all": 1
-			}
-			ports: [{
-				containerPort: 19999
-				hostPort:      19999
-			}]
-			volumeMounts: [{
-				name:      "cache"
-				mountPath: "/var/cache/netdata"
-			}, {
-				name:      "config"
-				mountPath: "/etc/netdata:z"
-			}, {
-				name:      "dev_dri"
-				mountPath: "/dev/dri"
-			}, {
-				name:      "group"
-				mountPath: "/etc/group:ro"
-			}, {
-				name:      "lib"
-				mountPath: "/var/lib/netdata"
-			}, {
-				name:      "localtime"
-				mountPath: "/etc/localtime:ro"
-			}, {
-				name:      "osrelease"
-				mountPath: "/host/ect/os-release:ro"
-			}, {
-				name:      "passwd"
-				mountPath: "/etc/passwd:ro"
-			}, {
-				name:      "proc"
-				mountPath: "/host/prox:ro"
-			}, {
-				name:      "root"
-				mountPath: "/host/root:ro"
-			}, {
-				name:      "sys"
-				mountPath: "/host/sys:ro"
-			}, {
-				name:      "systemd"
-				mountPath: "/run/dbus:ro"
-			}, {
-				name:      "varlog"
-				mountPath: "/host/var/log:ro"
-			}]
-		}]
-		hostPID:     true
-		hostNetwork: true
 	}
 
 	nextcloud: {
