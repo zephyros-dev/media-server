@@ -70,7 +70,7 @@ _image: {
 
 	"prowlarr": "ghcr.io/linuxserver/prowlarr:latest@sha256:f9151e5bc1025c6d0a630d503210cdcb6bb55a7cc098562609d96a408d838902"
 
-	"pymedusa": "docker.io/pymedusa/medusa:master@sha256:0c2fc9980ce2f4a9abb7cdccacf7678d503b68a2e6822bc143a52f42171c2e6e"
+	"pymedusa": "docker.io/pymedusa/medusa:master@sha256:0caf2991d15030b99864158144903c1d2b5f4f9ff019ec4450c4f1cb33569857"
 
 	"radarr": "ghcr.io/linuxserver/radarr:latest@sha256:ea6822c956d26db648b237919f41340318f32e5b7dcc4ba702cf256a0f5f3c12"
 
