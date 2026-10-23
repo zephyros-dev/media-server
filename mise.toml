@@ -7,6 +7,7 @@ TF_PLUGIN_CACHE_DIR = "{{env.HOME}}/.terraform.d/plugin-cache"
 [tools]
 cue = "0.17.1"
 fd = "10.5.0"
+"github:ljtn/epiq" = "1.14.0"
 opentofu = "1.13.1"
 prek = "0.5.6"
 sops = "3.13.3"
