@@ -837,7 +837,6 @@ application: {
 
 	immich: {
 		param: {
-			state:       "absent"
 			backup:      true
 			caddy_proxy: 2283
 			volumes: {
@@ -971,7 +970,6 @@ application: {
 
 	jdownloader: {
 		param: {
-			state:       "absent"
 			backup:      true
 			caddy_proxy: 5800
 			volumes: {
@@ -1388,7 +1386,6 @@ application: {
 
 	paperless: {
 		param: {
-			state:       "absent"
 			backup:      true
 			caddy_proxy: 8000
 			quadlet_build_options: PodmanArgs: "--build-arg=INSTALL_LANGUAGE=\(_fact.paperless_ocr_languages)"
