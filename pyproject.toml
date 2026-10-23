@@ -9,6 +9,7 @@ dependencies = [
     "ansible>=11.2.0",
     "jmespath>=1.0.1",
     "mitogen>=0.3.22",
+    "pyinfra>=3",
     "python-dotenv>=1.0.1",
     "transmission-rpc>=7.0.11",
 ]

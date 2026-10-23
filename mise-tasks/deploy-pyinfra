@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Run the pyinfra deployment, against the server unless LIMIT=staging (extra args go to pyinfra, e.g. --dry, --data apps=nextcloud)"
+set -euo pipefail
+
+eval $(ssh-agent)
+sops -d secret/deployment/ssh_key.sops | ssh-add - &> /dev/null
+uv run pyinfra deploy/inventory.py deploy/main.py --limit "${LIMIT:-server}" "$@"
