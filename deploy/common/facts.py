@@ -4,7 +4,7 @@ import json
 import subprocess
 
 from pyinfra import host
-from pyinfra.facts.server import Command, Home, Hostname, User
+from pyinfra.facts.server import Command, Hostname, User, Users
 
 from deploy.common.data import REPO
 from deploy.common.templates import render
@@ -22,17 +22,21 @@ _cache: dict[str, tuple[dict, dict]] = {}
 
 
 def _host_facts() -> dict:
-    """The subset of ansible_facts the cue code reads"""
+    """The host facts the cue code and templates read, as `host`, named after the pyinfra
+    facts they come from"""
     user = host.get_fact(User)
+    account = host.get_fact(Users)[user]
     return {
-        "ansible_facts": {
-            "user_id": user,
-            "user_uid": int(host.get_fact(Command, "id -u")),
-            "user_gid": int(host.get_fact(Command, "id -g")),
-            "user_dir": host.get_fact(Home),
+        "host": {
+            # The inventory name, e.g. server.lan
+            "name": host.name,
             "hostname": host.get_fact(Hostname).split(".")[0],
-            "date_time": {"tz": host.get_fact(Command, "date +%Z")},
-            "env": {"USER": user},
+            "user": user,
+            "uid": account["uid"],
+            "gid": account["gid"],
+            "home": account["home"],
+            # pyinfra has no timezone fact
+            "timezone": host.get_fact(Command, "date +%Z"),
         },
         # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/cdi-support.html
         "nvidia_installed": host.get_fact(
@@ -91,8 +95,8 @@ def cue_facts() -> dict:
     return _facts()[1]
 
 
-def ansible_vars() -> dict:
-    """What the ansible templates see: host data, host facts, then the cue output on top,
-    like the ansible role this replaced set the cue output as facts"""
+def host_vars() -> dict:
+    """What the deploy code and templates see: host data, the `host` facts, then the cue
+    output on top"""
     fact, output = _facts()
-    return {**fact, **output, "inventory_hostname": host.name}
+    return {**fact, **output}

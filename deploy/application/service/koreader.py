@@ -10,7 +10,7 @@ from pyinfra.operations import files, server
 
 from deploy.application.quadlet import App
 from deploy.common.data import REPO
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 from deploy.ops import systemd as systemd_ops
 
 RELEASES = "https://github.com/d0nizam/syncery.koplugin/releases/download"
@@ -18,7 +18,7 @@ RELEASES = "https://github.com/d0nizam/syncery.koplugin/releases/download"
 
 def deploy(app: App):
     plugins = (
-        f"{ansible_vars()['global_volume_path']}/koreader/data/.config/koreader/plugins"
+        f"{host_vars()['global_volume_path']}/koreader/data/.config/koreader/plugins"
     )
     plugin = f"{plugins}/syncery.koplugin"
     # Kept at the latest release by renovate, so compare against it exactly

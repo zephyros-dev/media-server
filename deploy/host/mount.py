@@ -6,7 +6,7 @@ from pyinfra import host
 from pyinfra.facts.files import Directory
 from pyinfra.operations import files, server
 
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 from deploy.ops import mount
 
 SUBVOLUMES = [
@@ -18,7 +18,7 @@ SUBVOLUMES = [
 
 
 def deploy():
-    v = ansible_vars()
+    v = host_vars()
     for disk in v["disks"]["storage"]["disks_list"]:
         _storage_disk(disk)
 
@@ -39,7 +39,7 @@ def deploy():
             _sudo=True,
         )
 
-    user = v["ansible_facts"]["user_id"]
+    user = v["host"]["user"]
     files.directory(
         name="Global storage owned by the user",
         path=v["global_storage"],

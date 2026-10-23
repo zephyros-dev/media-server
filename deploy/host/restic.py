@@ -4,7 +4,7 @@ from pyinfra import host
 from pyinfra.api import FactBase
 from pyinfra.operations import files, server
 
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 from deploy.host import systemd
 from deploy.host.common import template
 
@@ -48,7 +48,7 @@ class RepoStatus(FactBase):
 
 
 def deploy():
-    v = ansible_vars()
+    v = host_vars()
     env_path = v["restic_env_path"]
 
     files.directory(

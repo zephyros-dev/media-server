@@ -7,7 +7,7 @@ from pyinfra import host
 from pyinfra.facts.server import Command
 from pyinfra.operations import python, server
 
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 from deploy.ops import firewalld, nmcli
 
 FIREWALL_SERVICES = [
@@ -26,7 +26,7 @@ PORKBUN_API = "https://api.porkbun.com/api/json/v3"
 
 
 def deploy():
-    v = ansible_vars()
+    v = host_vars()
     interface = v["physical_interface"]
 
     server.hostname(
@@ -58,7 +58,7 @@ def deploy():
             name=f"Allow {service} in firewalld", service=service, _sudo=True
         )
 
-    if v["ansible_facts"]["hostname"] == "staging":
+    if v["host"]["hostname"] == "staging":
         _staging_dns(v)
 
 

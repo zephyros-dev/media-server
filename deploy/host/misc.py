@@ -4,7 +4,7 @@ from pyinfra import host
 from pyinfra.facts.server import Command
 from pyinfra.operations import files, server
 
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 from deploy.host.common import sysctl
 
 SYSCTL = {
@@ -37,7 +37,7 @@ def deploy():
 
     server.user(
         name="Add the user to the libvirt group",
-        user=ansible_vars()["ansible_facts"]["user_id"],
+        user=host_vars()["host"]["user"],
         groups=["libvirt"],
         append=True,
         # Like ansible's user module, which never touched the home directory

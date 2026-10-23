@@ -9,7 +9,7 @@ from pyinfra.operations import python
 
 from deploy.application import run
 from deploy.application.quadlet import App
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 
 API = "http://localhost:8090/api"
 
@@ -20,7 +20,7 @@ def deploy(app: App):
 
 
 def _connect(app: App):
-    v = ansible_vars()
+    v = host_vars()
     run.retry(lambda: run.curl_json(f"{API}/health"), retries=60)
 
     # The first user, created by the hub from USER_EMAIL/USER_PASSWORD

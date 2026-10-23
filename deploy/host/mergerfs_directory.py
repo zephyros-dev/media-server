@@ -8,7 +8,7 @@ from pyinfra import host
 from pyinfra.facts.files import FileContents
 from pyinfra.operations import files
 
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 from deploy.host.common import user_dir
 
 
@@ -23,7 +23,7 @@ def _merge(base: dict, edit: dict) -> dict:
 
 
 def deploy():
-    v = ansible_vars()
+    v = host_vars()
     config_dir = f"{user_dir()}/.config/mergerfs_directory"
 
     files.directory(name="mergerfs scripts folder", path=config_dir, mode="755")

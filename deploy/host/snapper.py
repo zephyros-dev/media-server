@@ -5,7 +5,7 @@ from pyinfra import host
 from pyinfra.facts.files import Directory, File
 from pyinfra.operations import files, server, systemd
 
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 from deploy.host.common import template
 
 CONFIG_DIR = "/etc/snapper/configs"
@@ -18,7 +18,7 @@ TIMERS = {
 
 
 def deploy():
-    configs = ansible_vars()["snapper_configs"]
+    configs = host_vars()["snapper_configs"]
     # A subvolume with snapshots from before a reinstall: register its config again, so
     # `create-config` isn't run on it (which fails on an existing .snapshots)
     restored = [

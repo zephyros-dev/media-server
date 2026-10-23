@@ -4,7 +4,7 @@ from pyinfra import host
 from pyinfra.facts.files import File
 from pyinfra.operations import server
 
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 from deploy.host import (
     cockpit,
     mergerfs_directory,
@@ -34,14 +34,14 @@ UNITS = [
 def deploy():
     # A fresh staging VM gets blank disks. The server's disks are
     # partitioned by hand with deploy/partition.py
-    if ansible_vars()["ansible_facts"]["hostname"] == "staging":
+    if host_vars()["host"]["hostname"] == "staging":
         partition.deploy()
     network.deploy()
     packages.deploy()
     restic.deploy()
     mount.deploy()
 
-    user = ansible_vars()["ansible_facts"]["user_id"]
+    user = host_vars()["host"]["user"]
     if not host.get_fact(File, path=f"/var/lib/systemd/linger/{user}"):
         server.shell(
             name="Enable lingering", commands=[f"loginctl enable-linger {user}"]

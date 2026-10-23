@@ -66,8 +66,8 @@ _profile: {
 	}
 	rootless: spec: containers: [...{
 		securityContext: {
-			runAsUser:  _fact.ansible_facts.user_uid
-			runAsGroup: _fact.ansible_facts.user_gid
+			runAsUser:  _fact.host.uid
+			runAsGroup: _fact.host.gid
 		}
 	}]
 	userns_share: metadata: annotations: "io.podman.annotations.userns": "keep-id"
@@ -187,10 +187,10 @@ application: [applicationName=string]: {
 			caddy_proxy_url: (#caddy_proxy & {in: param.caddy_proxy}).out
 		}
 
-		if _fact.ansible_facts.hostname != "staging" {
+		if _fact.host.hostname != "staging" {
 			state: param.state
 		}
-		if _fact.ansible_facts.hostname == "staging" {
+		if _fact.host.hostname == "staging" {
 			if param.staging {
 				state: param.state
 			}
@@ -394,7 +394,7 @@ application: {
 				data:  "./data/"
 				agent: "./agent/"
 				// Folder, not the socket itself: a socket can't be a hostPath of type File
-				podman: "/run/user/\(_fact.ansible_facts.user_uid)/podman/"
+				podman: "/run/user/\(_fact.host.uid)/podman/"
 				media:  "\(_fact.global_media)/"
 			}
 			secret: {
@@ -1604,7 +1604,7 @@ application: {
 				storage: "\(_fact.global_storage)/"
 			}
 			secret: {
-				"ACCOUNT_\(_fact.ansible_facts.user_id)": {
+				"ACCOUNT_\(_fact.host.user)": {
 					type:    "env"
 					content: _fact.samba_password
 				}
@@ -1626,19 +1626,19 @@ application: {
 					name:  "SAMBA_GLOBAL_CONFIG_case_SPACE_sensitive"
 					value: "yes"
 				}, {
-					name:  "UID_\(_fact.ansible_facts.user_id)"
+					name:  "UID_\(_fact.host.user)"
 					value: "911"
 				}, {
 					name:  "WSDD2_DISABLE"
 					value: "1"
 				}], [for k, v in param.volumes {
 					name:  "SAMBA_VOLUME_CONFIG_\(k)"
-					value: "[\(k)]; path=/shares/\(k); valid users = \(_fact.ansible_facts.user_id); guest ok = no; read only = no; browseable = yes;"
+					value: "[\(k)]; path=/shares/\(k); valid users = \(_fact.host.user); guest ok = no; read only = no; browseable = yes;"
 				}], [{
-					name: "ACCOUNT_\(_fact.ansible_facts.user_id)"
+					name: "ACCOUNT_\(_fact.host.user)"
 					valueFrom: secretKeyRef: {
 						name: "samba"
-						key:  "ACCOUNT_\(_fact.ansible_facts.user_id)"
+						key:  "ACCOUNT_\(_fact.host.user)"
 					}}]])
 				volumeMounts: [{
 					name:      "storage"
@@ -1724,7 +1724,7 @@ application: {
 					value: "sqlite"
 				}, {
 					name:  "DISPLAY_TIMEZONE"
-					value: _fact.ansible_facts.date_time.tz
+					value: _fact.host.timezone
 				}, {
 					name:  "SPEEDTEST_SCHEDULE"
 					value: "0 * * * *"
@@ -2043,8 +2043,8 @@ snapper_configs: list.Concat([[
 		path: "\(_fact.global_disks_storage_path)/\(disk)"
 		name: disk
 		vars: {
-			ALLOW_USERS:      _fact.ansible_facts.env.USER
-			ALLOW_GROUPS:     _fact.ansible_facts.env.USER
+			ALLOW_USERS:      _fact.host.user
+			ALLOW_GROUPS:     _fact.host.user
 			SYNC_ACL:         true
 			TIMELINE_CREATE:  false
 			TIMELINE_CLEANUP: false
@@ -2054,8 +2054,8 @@ snapper_configs: list.Concat([[
 	path: "/home"
 	name: "home"
 	vars: {
-		ALLOW_USERS:            _fact.ansible_facts.env.USER
-		ALLOW_GROUPS:           _fact.ansible_facts.env.USER
+		ALLOW_USERS:            _fact.host.user
+		ALLOW_GROUPS:           _fact.host.user
 		SYNC_ACL:               true
 		TIMELINE_LIMIT_HOURLY:  "6"
 		TIMELINE_LIMIT_DAILY:   "7"

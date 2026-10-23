@@ -2,7 +2,7 @@
 Description=Mergerfs directory
 
 [Service]
-WorkingDirectory={{ ansible_facts.user_dir }}/.config/mergerfs_directory
+WorkingDirectory={{ host.home }}/.config/mergerfs_directory
 ExecStart=python3 main.py
 Type=oneshot
 

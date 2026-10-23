@@ -7,7 +7,7 @@ from pyinfra.operations import python
 
 from deploy.application import run
 from deploy.application.quadlet import App
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 
 CLI = "podman exec navidrome-web /app/navidrome"
 USER = "musicgrabber"
@@ -53,7 +53,7 @@ def _user():
     if USER not in users:
         # `user create` only reads the password from a terminal, for both prompts (new and
         # confirm). The password goes in on stdin, out of argv
-        password = ansible_vars()["navidrome_musicgrabber_password"]
+        password = host_vars()["navidrome_musicgrabber_password"]
         run.run(
             f"python3 -c {shlex.quote(EXPECT_PASSWORD)}"
             " podman exec -it navidrome-web /app/navidrome user create"

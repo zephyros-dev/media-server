@@ -8,7 +8,7 @@ from pyinfra import host
 from pyinfra.facts.server import Command
 from pyinfra.operations import server
 
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 
 # The filesystem module's force flags: blkid saw no filesystem, so stale signatures blkid
 # doesn't report mustn't make mkfs refuse or prompt
@@ -24,7 +24,7 @@ def _probe(tag: str, device: str) -> str:
 
 
 def deploy():
-    for group, settings in ansible_vars()["disks"].items():
+    for group, settings in host_vars()["disks"].items():
         fs_type = settings["fs_type"]
         for disk in settings["disks_list"]:
             device = f"/dev/disk/by-id/{disk}"

@@ -10,7 +10,7 @@ from pyinfra.operations import python
 
 from deploy.application import run
 from deploy.application.quadlet import App
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 
 PREFS = {
     # Despite the name this is JSON; without the flag a fresh GUI blocks on
@@ -55,7 +55,7 @@ def _server_config(content: str) -> str:
 
 
 def _setup(app: App):
-    v = ansible_vars()
+    v = host_vars()
     config_path = f"{v['global_volume_path']}/calibre/config/.config/calibre"
     books_path = f"{v['global_media']}/Storage/Books"
     server_config_path = f"{config_path}/server-config.txt"

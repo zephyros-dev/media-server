@@ -4,12 +4,12 @@ from io import StringIO
 
 from pyinfra.operations import files, server
 
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 from deploy.common.templates import render
 
 
 def user_dir() -> str:
-    return ansible_vars()["ansible_facts"]["user_dir"]
+    return host_vars()["host"]["home"]
 
 
 def sysctl(name: str, key: str, value: int):
@@ -37,7 +37,7 @@ def template(
     host's vars, plus `context`"""
     return files.put(
         name=f"Template {dest}",
-        src=StringIO(render(name, {**ansible_vars(), **context}, package="host")),
+        src=StringIO(render(name, {**host_vars(), **context}, package="host")),
         dest=dest,
         mode=mode,
         _sudo=become,

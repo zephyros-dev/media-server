@@ -9,7 +9,7 @@ from pyinfra.operations import python
 
 from deploy.application import run
 from deploy.application.quadlet import App
-from deploy.common.facts import ansible_vars
+from deploy.common.facts import host_vars
 
 OCC = "podman exec --user www-data nextcloud-web php occ"
 
@@ -39,7 +39,7 @@ def occ(command: str, check=True, secret=False):
 
 
 def _setup():
-    v = ansible_vars()
+    v = host_vars()
     domain = v["server_domain"]
 
     # occ is unusable until the image entrypoint has finished copying the nextcloud
