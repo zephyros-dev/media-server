@@ -248,3 +248,7 @@ wifiqr/*
 **/cue.mod/gen
 # Ansible VSCode
 .ansible
+
+# [epiq]: local hydrated state is never committed
+.epiq/events/
+.epiq/log/
