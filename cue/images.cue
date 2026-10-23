@@ -84,7 +84,7 @@ _image: {
 
 	"timetagger": "ghcr.io/almarklein/timetagger:v26.1.3-nonroot@sha256:18a81afcb249142426fcff47bf9b54c343ca718a916f03d9722b84f8d7fafac6"
 
-	"transmission": "ghcr.io/linuxserver/transmission:latest@sha256:d6caecad406774a18511be7bfa99ba5070c17a3bdd7a5d73091651841603273c"
+	"transmission": "ghcr.io/linuxserver/transmission:latest@sha256:55aaeedf9fc354d34136387e15ee0ba4679096f20398dd2875867e5cd5cf8be5"
 
 	"trilium": "ghcr.io/triliumnext/trilium:v0.106.0@sha256:be93e82699b12950ac4e2e7b565ce092fe215b8dd6ddfc47921e37b49e6a0e8b"
 
