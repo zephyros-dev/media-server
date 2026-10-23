@@ -64,6 +64,7 @@ data "ct_config" "staging" {
     ssh_host_ed25519_key     = local.secret.staging_ssh_host_ed25519_key
     ssh_host_ed25519_key_pub = local.secret.staging_ssh_host_ed25519_key_pub
     ssh_authorized_key       = local.secret.staging_ssh_authorized_key
+    deploy_authorized_key    = local.secret.staging_deploy_authorized_key
   })
   strict = true
 }
@@ -185,6 +186,12 @@ resource "libvirt_volume" "install_iso" {
     content = {
       url = "file://${path.module}/.decrypted.staging-install.iso"
     }
+  }
+
+  # depends_on only orders the upload: without this, a rebuilt ISO (e.g. a changed
+  # ignition) never reaches the pool and a recreated VM installs the old one
+  lifecycle {
+    replace_triggered_by = [terraform_data.install_iso_build]
   }
 }
 

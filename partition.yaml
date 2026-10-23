@@ -1,6 +1,0 @@
-- name: Partition the server
-  hosts: server
-  tasks:
-    - name: Run partition
-      ansible.builtin.import_role:
-        name: partition

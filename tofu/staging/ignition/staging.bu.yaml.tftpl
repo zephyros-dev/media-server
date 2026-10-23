@@ -8,6 +8,8 @@ passwd:
         - sudo
       ssh_authorized_keys:
         - ${ssh_authorized_key}
+        # Deployment key (secret/deployment/ssh_key.sops), so the mise deploy tasks and CI can log in
+        - ${deploy_authorized_key}
 storage:
   disks:
     - device: /dev/disk/by-id/coreos-boot-disk

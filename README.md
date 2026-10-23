@@ -2,7 +2,7 @@
 
 [![Deployment](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml/badge.svg)](https://github.com/zephyros-dev/media-server/actions/workflows/deployment.yaml)
 
-Code for running self-hosted services using podman and ansible
+Code for running self-hosted services using podman and pyinfra
 
 Want to know more about selfhosting a media server? [Checkout the docs](docs/README.md)
 
@@ -62,12 +62,39 @@ flowchart TB
   end
 ```
 
+## Deployment
+
+pyinfra (`deploy/`) does the deployment. The mise tasks load the deployment ssh key themselves, and extra arguments go to pyinfra
+
+```bash
+# Server: host setup and every app
+mise run deploy
+# Preview the changes first
+mise run deploy --dry
+# Some apps only, without the host setup
+mise run deploy --data apps=nextcloud,caddy
+# Host setup only, without the apps
+mise run deploy --data host_only=true
+```
+
+Staging runs on the server as a libvirt VM (`tofu/staging`). `deploy-staging` starts it, waits for it to boot, then deploys to it the same way
+
+```bash
+mise run deploy-staging
+mise run deploy-staging --dry
+mise run deploy-staging --data apps=nextcloud
+# Shut the VM down
+mise run deploy-staging stop
+# Rebuild it from scratch (the data disks are kept)
+cd tofu/staging && tofu apply -replace=libvirt_volume.staging_root -replace=libvirt_domain.this
+```
+
 ## Note
 
-- Always run partition playbook with --check first
+- Always run the partition deploy with --dry first
 
   ```bash
-  ansible-playbook partition --check
+  uv run pyinfra deploy/inventory.py deploy/partition.py --limit server --dry
   ```
 
 ### PC
@@ -144,13 +171,14 @@ flowchart TB
 
 ### Postgres major version update
 
-- To upgrade postgres major version, do the following
-  1. Change the `postgres_action` key in variable files to `export` and run the playbook for that container
-  2. Change the image tag to the next major version (if coming from version below 18, also change the path of the mount point in the container_postgres.yaml and the container mountPath in cue file)
-  3. Change the `postgres_action` key in variable files to `import` and run the playbook for that container
-  4. Change the `postgres_action` key in variable files to `none` and run the playbook for that container
+- To upgrade postgres major version, do the following, deploying the app with `mise run deploy --data apps=<app>` at each step
+  1. Change the `postgres_action` key in variable files to `export` and deploy the app
+  2. Change the image tag to the next major version (if coming from version below 18, also change `DATA_MOUNT` in deploy/application/postgres.py and the container mountPath in cue file)
+  3. Change the `postgres_action` key in variable files to `import` and deploy the app
+  4. Change the `postgres_action` key in variable files to `none` and deploy the app
   5. Check if the container startup correctly
-  6. Change the `postgres_action` key in variable files to `clean` and run the playbook to cleanup the previous backup
+  6. Change the `postgres_action` key in variable files to `clean` and deploy the app to clean up the previous backup
+  7. Change the `postgres_action` key back to `none` and deploy the app again: with any other action the pod only runs its postgres container
 
 #### Restic restores
 
@@ -188,7 +216,7 @@ flowchart TB
 1. Rebuild nextcloud
 
    ```bash
-   ansible-playbook main.yaml --tags nextcloud
+   mise run deploy --data apps=nextcloud
    ```
 
 ###### Debug postgres
@@ -196,7 +224,7 @@ flowchart TB
 1. Run the following command to enable adminer container for accessing postgres database
 
    ```bash
-   ansible-playbook main.yaml --tags nextcloud --extra-vars '{"debug":true}'
+   mise run deploy --data apps=nextcloud --data debug=true
    ```
 
 #### Container name with pod exists
@@ -215,7 +243,13 @@ flowchart TB
 
 ##### Pymedusa failed create hardlink
 
-- Check [this](roles/pymedusa/README.md)
+- When pymedusa renames a show with hardlinks, it first creates the folder on the mergerfs pool. mergerfs creates it on the disks with the most common branch and most free space, so if an empty copy of that branch exists on every disk, the folder can land on another disk than the file. The hardlink can't be kept, and the file is silently moved to that disk instead
+- To avoid this, remove the empty folders on every data disk, so the branch only exists on the disk that holds the file. In the video folder of each data disk (`global_disks_storage_path/<disk>/global_storage_video_path`), remove them until none is listed (removing a folder can leave its parent empty):
+
+  ```bash
+  fd --type empty
+  fd --type empty --exec rm -r
+  ```
 
 ###### Check failed to hardlink file
 
@@ -238,16 +272,3 @@ flowchart TB
   ```
 
 - Renovate can be visisted at: <https://developer.mend.io>
-
-## Misc
-
-1. Why HP Z230?
-
-- The PC itself is a bit old, and the bios is no longer updated. However, it is good for home usage due to the following reasons:
-  - Can be cheaply build with a Xeon E3-1230v3 CPU
-  - Has 4 DIMM DDR3 slots, and support for ECC memory. DDDR4 ECC memory can be expensive
-  - Has 2 GPU slots, though I don't really need SLI
-  - Has Intel AMT support, so I can have headless remote access to the BIOS for troubleshooting
-- It has some annoyances however:
-  - The mainboard has no Nvme slot, and does not allow booting from PCIE slot directly, but can be solved via Cloverboot option from above
-  - Has little room for HDD (2 by default), but can be solved by using a HDD cage

@@ -12,7 +12,6 @@
     "ms-azuretools.vscode-containers",
     "ms-python.python",
     "OpenTofu.vscode-opentofu",
-    "redhat.ansible",
     "richie5um2.vscode-sort-json",
     "samuelcolvin.jinjahtml",
     "signageos.signageos-vscode-sops",

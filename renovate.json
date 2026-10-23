@@ -1,8 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "ansible": {
-    "managerFilePatterns": ["/(^|/)tasks/.+\\.ya?ml$/"]
-  },
   "automerge": true,
   "customManagers": [
     {
@@ -45,10 +42,6 @@
       "groupName": "caddy",
       "matchPackageNames": ["/caddy/"],
       "matchUpdateTypes": ["major", "minor"]
-    },
-    {
-      "groupName": "ansible-lint",
-      "matchPackageNames": ["/ansible-lint/"]
     }
   ],
   "schedule": ["* 1-14 * * *"],

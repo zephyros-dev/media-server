@@ -12,7 +12,7 @@ import (
 // Populated at export time via: cue export . -l '"factEmbed"' json: -
 // Must be a regular (non-hidden) field: CLI-injected data files only unify
 // into the internal value graph for non-hidden fields, so this is filtered
-// back out ansible-side rather than being named with a "_" prefix.
+// back out by deploy/common/facts.py rather than being named with a "_" prefix.
 factEmbed: _
 // Type check for fact
 _fact: factEmbed & {
@@ -39,7 +39,7 @@ _fact: factEmbed & {
 _image: [string]: =~"@sha256:[0-9a-f]{64}$"
 
 // Pinned images as podman kube play takes them: digest only, since it rejects
-// `repo:tag@sha256:...` (the tag is only for renovate). Exported, so ansible knows
+// `repo:tag@sha256:...` (the tag is only for renovate). Exported, so the deploy knows
 // which image an app runs (calibre's one-off containers)
 container_images: {
 	for name, ref in _image {
@@ -699,6 +699,10 @@ application: {
 			quadlet_kube_options: Network: "pasta" // Use pasta network instead of host since it can preserve the IP address from the host machine
 			quadlet_unit_options: {
 				Before: "caddy.service"
+				// Runs caddy's image, built by caddy's .build unit. Wants rather than Requires:
+				// a caddy restart restarts the build, which would restart ddns too
+				Wants: "caddy-build.service"
+				After: "caddy-build.service"
 			}
 			volumes: {
 				config: "pvc"
@@ -730,7 +734,7 @@ application: {
 		pod: _profile.rootless & {
 			spec: containers: [{
 				name:  "instance"
-				image: "ddns"
+				image: "caddy"
 				volumeMounts: [{
 					name:      "config"
 					mountPath: "/config:U"
@@ -833,6 +837,7 @@ application: {
 
 	immich: {
 		param: {
+			state:       "absent"
 			backup:      true
 			caddy_proxy: 2283
 			volumes: {
@@ -966,6 +971,7 @@ application: {
 
 	jdownloader: {
 		param: {
+			state:       "absent"
 			backup:      true
 			caddy_proxy: 5800
 			volumes: {
@@ -1382,6 +1388,7 @@ application: {
 
 	paperless: {
 		param: {
+			state:       "absent"
 			backup:      true
 			caddy_proxy: 8000
 			quadlet_build_options: PodmanArgs: "--build-arg=INSTALL_LANGUAGE=\(_fact.paperless_ocr_languages)"

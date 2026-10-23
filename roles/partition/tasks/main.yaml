@@ -1,8 +1,0 @@
-- name: Create partition for drives
-  ansible.builtin.include_tasks:
-    file: partition.yaml
-    apply:
-      become: true
-  loop: "{{ disks | dict2items }}"
-  loop_control:
-    loop_var: partition_item

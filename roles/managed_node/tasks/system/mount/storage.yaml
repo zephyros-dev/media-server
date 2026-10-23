@@ -1,9 +1,0 @@
-# https://wiki.selfhosted.show/tools/snapraid-btrfs/
-- name: Manage storage subvolume
-  ansible.builtin.include_tasks:
-    file: subvolume.yaml
-  loop:
-    - data # for actual data
-    - content # for the snapraid content
-  loop_control:
-    loop_var: subvolume_loop_var

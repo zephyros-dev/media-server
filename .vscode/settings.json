@@ -17,15 +17,12 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "ansible.python.interpreterPath": "${workspaceFolder}/.venv/bin/python",
   "editor.codeActionsOnSave": {
     "source.fixAll.sortJSON": "always"
   },
   "editor.formatOnSave": true,
   "files.associations": {
-    "**/handlers/**/*.yaml": "ansible",
-    "**/tasks/**/*.yaml": "ansible",
-    "**/group_vars/**/*.yaml": "yaml"
+    "**/group_data/**/*.yaml": "yaml"
   },
   "git.repositoryScanIgnoredFolders": [".terraform"],
   "sops.creationEnabled": true

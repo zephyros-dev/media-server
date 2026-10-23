@@ -7,14 +7,14 @@ on:
       - .github/workflows/deployment.yaml
       - "!submodules/zapret"
       - cue/**
-      - group_vars/**
-      - inventory/**
+      - dependencies.yaml
+      - deploy/**
       - mise*.toml
       - mise-tasks/**
-      - requirements.yaml
-      - roles/**
+      - pyproject.toml
       - secret/**
       - submodules/**
+      - uv.lock
 permissions:
   contents: read
 jobs:
@@ -52,7 +52,8 @@ jobs:
           timeout_minutes: 10
           max_attempts: 3
           retry_on: error
-          command: mise run deploy
+          # -y: pyinfra otherwise asks before applying the changes
+          command: mise run deploy -y
           on_retry_command: mise run deploy-retry
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
