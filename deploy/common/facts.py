@@ -1,33 +1,24 @@
-"""Port of roles/common: host facts fed into cue, which generates the application manifests"""
+"""Host facts fed into cue, which generates the application manifests"""
 
 import json
 import subprocess
 
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from pyinfra import host
 from pyinfra.facts.server import Command, Home, Hostname, User
 
 from deploy.common.data import REPO
+from deploy.common.templates import render
 
 CUE_DIR = REPO / "cue"
 CADDYFILE_TEMPLATE = "caddy/Caddyfile.j2"
 
-# roles/common/defaults
+# Facts cue reads that aren't host data
 DEFAULTS = {
     "caddyfile_host_address": "host.containers.internal",
     "debug": False,
 }
 
-_templates = Environment(
-    loader=FileSystemLoader(REPO / "roles/application/templates"),
-    undefined=StrictUndefined,
-    # Ansible's template defaults, plus the template's `#jinja2:lstrip_blocks` header
-    trim_blocks=True,
-    lstrip_blocks=True,
-    keep_trailing_newline=True,
-)
-
-_cache: dict[str, dict] = {}
+_cache: dict[str, tuple[dict, dict]] = {}
 
 
 def _host_facts() -> dict:
@@ -52,30 +43,28 @@ def _host_facts() -> dict:
 
 
 def _cue_export(fact: dict) -> dict:
-    output = subprocess.run(
+    process = subprocess.run(
         ["cue", "export", ".", "-l", '"factEmbed"', "json:", "-", "--out", "json"],
         cwd=CUE_DIR,
         # Sorted like ansible's to_nice_json, since key order shows up in the generated files
         input=json.dumps(fact, sort_keys=True),
         capture_output=True,
         text=True,
-        check=True,
-    ).stdout
-    result = json.loads(output)
+        check=False,
+    )
+    if process.returncode:
+        raise RuntimeError(f"cue export failed:\n{process.stderr}")
+    result = json.loads(process.stdout)
     result.pop("factEmbed")
     return result
 
 
 def _render_caddyfile(fact: dict, application: dict) -> str:
-    source, _, _ = _templates.loader.get_source(_templates, CADDYFILE_TEMPLATE)
-    # Ansible reads the `#jinja2:` header line as template options and drops it
-    if source.startswith("#jinja2:"):
-        source = source.split("\n", 1)[1]
-    return _templates.from_string(source).render({**fact, "application": application})
+    return render(CADDYFILE_TEMPLATE, {**fact, "application": application})
 
 
-def cue_facts() -> dict:
-    """cue output for the current host: `application`, `container_images`, ...
+def _facts() -> tuple[dict, dict]:
+    """The facts cue is fed, and its output
 
     cue runs twice: the first pass gives the application list the Caddyfile is rendered from,
     the second embeds that Caddyfile into the caddy manifest"""
@@ -93,5 +82,17 @@ def cue_facts() -> dict:
     fact["caddyfile_content"] = _render_caddyfile(
         fact, _cue_export(fact)["application"]
     )
-    _cache[host.name] = _cue_export(fact)
+    _cache[host.name] = (fact, _cue_export(fact))
     return _cache[host.name]
+
+
+def cue_facts() -> dict:
+    """cue output for the current host: `application`, `container_images`, ..."""
+    return _facts()[1]
+
+
+def ansible_vars() -> dict:
+    """What the ansible templates see: host data, host facts, then the cue output on top,
+    like the ansible role this replaced set the cue output as facts"""
+    fact, output = _facts()
+    return {**fact, **output, "inventory_hostname": host.name}

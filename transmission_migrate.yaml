@@ -1,7 +1,0 @@
-- name: Migrate transmission root torrent path
-  hosts: localhost
-  connection: local
-  tasks:
-    - name: Migrate transmission root torrent path
-      ansible.builtin.import_role:
-        name: transmission_migrate

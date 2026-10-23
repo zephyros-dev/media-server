@@ -187,6 +187,12 @@ resource "libvirt_volume" "install_iso" {
       url = "file://${path.module}/.decrypted.staging-install.iso"
     }
   }
+
+  # depends_on only orders the upload: without this, a rebuilt ISO (e.g. a changed
+  # ignition) never reaches the pool and a recreated VM installs the old one
+  lifecycle {
+    replace_triggered_by = [terraform_data.install_iso_build]
+  }
 }
 
 # Define KVM domain to create

@@ -1,6 +1,0 @@
-all:
-  children:
-    server:
-      hosts: server.lan
-    staging:
-      hosts: staging.lan

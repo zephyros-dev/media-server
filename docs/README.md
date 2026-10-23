@@ -131,7 +131,7 @@ graph TD
 ### Setup code
 
 - You can setup your server manually, and many do. But if you intend to maintain the system for years to come and not just for a few months, you need to use code to setup your server. If you want to read more on this, checkout [Infrastructure as Code](https://en.wikipedia.org/wiki/Infrastructure_as_code)
-- Personally I use [Ansible](https://www.ansible.com/) for this purpose. It has issues, but it's the most popular one so you can find plenty of resources online.
+- Personally I use [pyinfra](https://pyinfra.com/) for this purpose: deploys are plain Python, which is easier to debug than ansible's YAML (which this repo used before). [Ansible](https://www.ansible.com/) is the most popular option though, so you can find plenty of resources online for it.
 - Once you uses code to setup your server, you will want to setup a CD pipeline to deploy your code to the server. I use Github action for this.
 - You will also need some way to manage secrets (think Token, API keys, etc...). I recommend using [sops](https://github.com/getsops/sops)
 

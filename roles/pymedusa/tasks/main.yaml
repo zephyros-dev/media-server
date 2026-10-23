@@ -1,9 +1,0 @@
-- name: Remove all empty folder after post-processing
-  ansible.builtin.include_tasks: rmdir.yaml
-  loop: "{{ disks.storage.disks_list }}"
-  args:
-    apply:
-      tags:
-        - rmdir
-  tags:
-    - always

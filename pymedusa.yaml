@@ -1,6 +1,0 @@
-- name: Pymedusa preparation
-  hosts: server
-  tasks:
-    - name: Pymedusa
-      ansible.builtin.import_role:
-        name: pymedusa

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#MISE description="Start the staging VM and run the pyinfra deployment on it (extra args go to pyinfra, e.g. --dry, --data apps=nextcloud). `stop` shuts the VM down instead"
+set -euo pipefail
+
+eval $(ssh-agent)
+sops -d secret/deployment/ssh_key.sops | ssh-add - &> /dev/null
+
+if [ "${1:-}" = stop ]; then
+  uv run pyinfra deploy/inventory.py deploy/staging_vm.py --limit server --data stop=true -y
+  exit
+fi
+
+# --dry also only plans the VM start
+dry=()
+case " $* " in *" --dry "*) dry=(--dry) ;; esac
+uv run pyinfra deploy/inventory.py deploy/staging_vm.py --limit server -y "${dry[@]}"
+# The inventory makes pyinfra retry the connection while the VM boots
+uv run pyinfra deploy/inventory.py deploy/main.py --limit staging "$@"

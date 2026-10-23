@@ -5,6 +5,7 @@ idiomatic_version_file_enable_tools = []
 TF_PLUGIN_CACHE_DIR = "{{env.HOME}}/.terraform.d/plugin-cache"
 
 [tools]
+claude = "2.1.308"
 cue = "0.17.1"
 fd = "10.5.0"
 "github:ljtn/epiq" = "1.14.0"

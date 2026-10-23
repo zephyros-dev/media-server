@@ -1,0 +1,9 @@
+# Also the image of ddns (caddy-dynamicdns), so both apps share one build
+FROM docker.io/caddy:2.11.7-builder-alpine@sha256:ef9b65adf9a224770c6d5f6d1ae1bf99bc3caaa78d8c4bae3ea949ee6984f301 AS builder
+RUN --mount=type=cache,target=/go/pkg,sharing=locked \
+    xcaddy build \
+    --with github.com/caddy-dns/porkbun \
+    --with github.com/mholt/caddy-dynamicdns
+
+FROM docker.io/caddy:2.11.7-alpine@sha256:eb4d35b7452d1ab6171fbdbe8d9275b2301dad6dad92115d91e19fb9b24d510f
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy

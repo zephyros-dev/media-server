@@ -1,5 +1,0 @@
-systemd_timer_description: "{{ systemd_timer_name }}"
-# systemd_timer_name:
-# systemd_timer_schedule:
-# systemd_timer_become:
-systemd_timer_state: started
