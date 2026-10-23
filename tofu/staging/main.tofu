@@ -64,6 +64,7 @@ data "ct_config" "staging" {
     ssh_host_ed25519_key     = local.secret.staging_ssh_host_ed25519_key
     ssh_host_ed25519_key_pub = local.secret.staging_ssh_host_ed25519_key_pub
     ssh_authorized_key       = local.secret.staging_ssh_authorized_key
+    deploy_authorized_key    = local.secret.staging_deploy_authorized_key
   })
   strict = true
 }
