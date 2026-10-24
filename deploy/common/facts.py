@@ -7,7 +7,7 @@ from pyinfra import host
 from pyinfra.facts.server import Command, Hostname, User, Users
 
 from deploy.common.data import REPO
-from deploy.common.templates import render
+from deploy.common.templates import caddy_password_hash, render
 
 CUE_DIR = REPO / "cue"
 CADDYFILE_TEMPLATE = "caddy/Caddyfile.j2"
@@ -64,7 +64,15 @@ def _cue_export(fact: dict) -> dict:
 
 
 def _render_caddyfile(fact: dict, application: dict) -> str:
-    return render(CADDYFILE_TEMPLATE, {**fact, "application": application})
+    # caddyfile_auth_pass is the plaintext, which the apps with their own login use too
+    auth_hash = caddy_password_hash(
+        fact["caddyfile_auth_pass"],
+        f"{fact['caddyfile_auth_user']}@{fact['server_domain']}",
+    )
+    return render(
+        CADDYFILE_TEMPLATE,
+        {**fact, "caddyfile_auth_hash": auth_hash, "application": application},
+    )
 
 
 def _facts() -> tuple[dict, dict]:

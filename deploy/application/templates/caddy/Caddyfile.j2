@@ -44,7 +44,7 @@ auth.{{ server_domain }} {
   route {
     # require authentication
     basic_auth / {
-      {{ caddyfile_auth_user }} {{ caddyfile_auth_pass }}
+      {{ caddyfile_auth_user }} {{ caddyfile_auth_hash }}
     }
     # upon successful auth, set a client token
     header Set-Cookie "myid={{ caddyfile_auth_token }}; Domain={{ server_domain }}; Path=/; Max-Age=3600; HttpOnly; SameSite=Strict; Secure"

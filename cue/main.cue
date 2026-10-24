@@ -362,9 +362,9 @@ application: {
 
 	bazarr: {
 		param: {
-			backup:      true
-			caddy_proxy: 6767
-			caddy_sso:   true
+			backup:                       true
+			caddy_proxy:                  6767
+			dashy_statusCheckAcceptCodes: 401
 			volumes: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
@@ -1075,7 +1075,6 @@ application: {
 		param: {
 			backup:      true
 			caddy_proxy: 8686
-			caddy_sso:   true
 			volumes: {
 				config: "./web/config/"
 				home:   "\(_fact.global_media)/"
@@ -1526,7 +1525,6 @@ application: {
 	prowlarr: {
 		param: {
 			backup:      true
-			caddy_sso:   true
 			caddy_proxy: 9696
 			volumes: config: "./web/config/"
 		}
@@ -1571,7 +1569,6 @@ application: {
 	radarr: {
 		param: {
 			backup:      true
-			caddy_sso:   true
 			caddy_proxy: 7878
 			volumes: {
 				config: "./web/config/"

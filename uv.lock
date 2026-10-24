@@ -338,6 +338,7 @@ name = "infra"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "bcrypt" },
     { name = "pyinfra" },
 ]
 
@@ -347,7 +348,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pyinfra", specifier = ">=3" }]
+requires-dist = [
+    { name = "bcrypt", specifier = ">=5.0.0" },
+    { name = "pyinfra", specifier = ">=3" },
+]
 
 [package.metadata.requires-dev]
 dev = [{ name = "podman-compose", specifier = ">=1.5.0" }]

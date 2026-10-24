@@ -5,6 +5,7 @@ description = "Code for running self-hosted services using podman and pyinfra"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "bcrypt>=5.0.0",
     "pyinfra>=3",
 ]
 

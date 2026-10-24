@@ -64,9 +64,24 @@ def exists(path: str, sudo=False) -> bool:
     return run(f"test -e {shlex.quote(path)}", check=False, sudo=sudo)[0]
 
 
-def curl_json(url: str, headers: dict | None = None, body: dict | None = None):
-    """A request from the host. The url, headers and body go through a curl config on stdin,
-    so tokens and passwords stay out of argv"""
+def curl_json(
+    url: str,
+    headers: dict | None = None,
+    body: dict | None = None,
+    form: dict | None = None,
+    method: str | None = None,
+    container: str | None = None,
+    sudo=False,
+):
+    """A request from the host, or from inside `container` when it isn't reachable from the
+    host. The url, headers and body go through a curl config on stdin, so tokens and
+    passwords stay out of argv
+
+    + form: url-encoded form fields instead of a JSON body
+    + method: defaults to curl's, POST with a body or form
+
+    An empty response (204) gives None
+    """
     # max-time: ansible's uri timeout, so a hung server fails the attempt instead of hanging
     config = [
         f"url = {json.dumps(url)}",
@@ -75,6 +90,8 @@ def curl_json(url: str, headers: dict | None = None, body: dict | None = None):
         "show-error",
         "max-time = 30",
     ]
+    if method:
+        config.append(f"request = {json.dumps(method)}")
     config += [
         f"header = {json.dumps(f'{k}: {v}')}" for k, v in (headers or {}).items()
     ]
@@ -83,5 +100,11 @@ def curl_json(url: str, headers: dict | None = None, body: dict | None = None):
             'header = "Content-Type: application/json"',
             f"data = {json.dumps(json.dumps(body))}",
         ]
-    _, output = run("curl --config -", stdin="\n".join(config) + "\n", secret=True)
-    return json.loads(output.stdout)
+    config += [
+        f"data-urlencode = {json.dumps(f'{k}={v}')}" for k, v in (form or {}).items()
+    ]
+    command = f"podman exec -i {container} curl" if container else "curl"
+    _, output = run(
+        f"{command} --config -", stdin="\n".join(config) + "\n", secret=True, sudo=sudo
+    )
+    return json.loads(output.stdout) if output.stdout.strip() else None
