@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#MISE description="Install zapret2 on the OpenWrt routers (extra args go to pyinfra, e.g. --dry)"
+set -euo pipefail
+
+uv run pyinfra deploy/inventory.py deploy/openwrt/main.py --limit openwrt "$@"

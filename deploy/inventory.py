@@ -3,6 +3,8 @@ from next to this file"""
 
 import socket
 
+from deploy.common.data import load_group
+
 
 def _ipv4(hostname: str) -> str:
     # IPv4 only, like `ssh -4`. A host that doesn't resolve yet (staging VM off) keeps its name
@@ -14,3 +16,9 @@ def _ipv4(hostname: str) -> str:
 
 server = [("server.lan", {"ssh_hostname": _ipv4("server.lan")})]
 staging = [("staging.lan", {"ssh_hostname": _ipv4("staging.lan")})]
+
+# The OpenWrt routers of group_data/openwrt/
+openwrt = [
+    (router, {"ssh_hostname": _ipv4(router)})
+    for router in load_group("openwrt")["router_list"]
+]
