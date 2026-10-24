@@ -78,7 +78,7 @@ _image: {
 
 	"scrutiny": "ghcr.io/analogj/scrutiny:v0.9.5-omnibus@sha256:6ee271ee531458f134220ca8b2c5c8ccc2711a799c827fef953fa865d91e312f"
 
-	"speedtest": "lscr.io/linuxserver/speedtest-tracker:1.15.0@sha256:1eeed2307699c083407bd4c1eb86f14d5179f9e1cd960f57d4cbab6f1f8b8a42"
+	"speedtest": "lscr.io/linuxserver/speedtest-tracker:1.15.0@sha256:7f296f2f4f3fbc5ad7281a83743d3342a7ff143b9f382f0c8e87bdf5a4b29438"
 
 	"syncthing": "docker.io/syncthing/syncthing:2.1.6@sha256:4d0281bdcb4ed9baf503d251d0544ddd856f49fce3f114056257ae172b7fb670"
 
