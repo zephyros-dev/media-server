@@ -12,7 +12,7 @@ _image: {
 
 	"beszel": "docker.io/henrygd/beszel:0.21.1@sha256:8514a69d9bbbcb74f371a3205561ee231fc0289739cea64e8131f341d695b770"
 
-	"beszel-agent": "docker.io/henrygd/beszel-agent:0.21.0@sha256:f27b1aa2c68404bc5b9e1a2ab36653bd9b4ee14f6299862f09cd5051a4134767"
+	"beszel-agent": "docker.io/henrygd/beszel-agent:0.21.1@sha256:cb6868012964d7a68debaa2c84bb72285e5f08531e81f506bd4c493bf052e41c"
 
 	"calibre": "ghcr.io/linuxserver/calibre:9.16.0@sha256:2b931709295ca59808520428b05e0a2aec8695268e96f8baf76359da0e9c0f5c"
 
