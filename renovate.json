@@ -4,6 +4,13 @@
   "customManagers": [
     {
       "customType": "regex",
+      "description": "Versions of the router deploy, in its own file so that a bump doesn't run the server deployment (same as the dependencies.yaml of github>zephyros-dev/renovate-config)",
+      "managerFilePatterns": ["/^deploy/openwrt/dependencies\\.yaml$/"],
+      "matchStrings": ["(?<depName>.+?): (?<currentValue>.*?)\n"],
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
       "description": "Pinned container images in deploy/cue/images.cue (`\"name\": \"repo:tag@sha256:...\"`)",
       "managerFilePatterns": ["/^deploy/cue/images\\.cue$/"],
       "matchStrings": [
@@ -22,6 +29,11 @@
   },
   "ignoreTests": true,
   "packageRules": [
+    {
+      "description": "Local tools (mise.dev.toml) don't affect the deployment, so no need for daily updates",
+      "matchFileNames": ["mise.dev.toml"],
+      "schedule": ["* 1-14 * * 1"]
+    },
     {
       "automerge": false,
       "matchPackageNames": ["/python/", "/cue/"],

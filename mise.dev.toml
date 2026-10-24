@@ -1,0 +1,7 @@
+# Local tools only: CI doesn't load them (MISE_ENV=ci), so a bump isn't a server deployment
+[tools]
+claude = "2.1.310"
+fd = "10.5.0"
+"github:ljtn/epiq" = "1.14.0"
+opentofu = "1.13.1"
+prek = "0.5.6"

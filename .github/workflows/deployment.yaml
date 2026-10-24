@@ -5,11 +5,17 @@ on:
       - main
     paths:
       - .github/workflows/deployment.yaml
-      - "!submodules/zapret"
       - dependencies.yaml
       - deploy/**
+      # Only for the routers, which the server deployment doesn't touch
+      - "!deploy/group_data/openwrt/**"
+      - "!deploy/group_data/openwrt.py"
+      - "!deploy/openwrt/**"
       - mise*.toml
+      # Local tools, not loaded in CI (MISE_ENV below)
+      - "!mise.dev.toml"
       - mise-tasks/**
+      - "!mise-tasks/deploy-openwrt"
       - pyproject.toml
       - secret/**
       - submodules/**
@@ -23,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEBUG_MODE: ${{ vars.DEBUG_MODE }}
+      # Not the dev profile of .miserc.toml: only the tools of mise.toml
+      MISE_ENV: ci
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:

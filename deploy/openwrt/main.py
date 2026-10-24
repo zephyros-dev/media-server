@@ -72,7 +72,9 @@ def _first_config(default: str, settings: dict[str, str]) -> str:
 #     openwrt_config["custom_user_include"]
 # )
 
-version = yaml.safe_load((REPO / "dependencies.yaml").read_text())["bol-van/zapret2"]
+version = yaml.safe_load((REPO / "deploy/openwrt/dependencies.yaml").read_text())[
+    "bol-van/zapret2"
+]
 release = _release(version)
 
 INIT = "/etc/init.d/zapret2"
