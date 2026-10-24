@@ -80,7 +80,7 @@ _image: {
 
 	"speedtest": "lscr.io/linuxserver/speedtest-tracker:1.15.0@sha256:7f296f2f4f3fbc5ad7281a83743d3342a7ff143b9f382f0c8e87bdf5a4b29438"
 
-	"syncthing": "docker.io/syncthing/syncthing:2.1.6@sha256:4d0281bdcb4ed9baf503d251d0544ddd856f49fce3f114056257ae172b7fb670"
+	"syncthing": "docker.io/syncthing/syncthing:2.1.7@sha256:2b71da7c0d0a91a6ae5285ad079226fecc0a365d08b27720e1f7037b018f7546"
 
 	"timetagger": "ghcr.io/almarklein/timetagger:v26.1.3-nonroot@sha256:18a81afcb249142426fcff47bf9b54c343ca718a916f03d9722b84f8d7fafac6"
 
