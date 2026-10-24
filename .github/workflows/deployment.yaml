@@ -6,7 +6,6 @@ on:
     paths:
       - .github/workflows/deployment.yaml
       - "!submodules/zapret"
-      - cue/**
       - dependencies.yaml
       - deploy/**
       - mise*.toml

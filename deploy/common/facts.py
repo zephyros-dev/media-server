@@ -9,7 +9,7 @@ from pyinfra.facts.server import Command, Hostname, User, Users
 from deploy.common.data import REPO
 from deploy.common.templates import caddy_password_hash, render
 
-CUE_DIR = REPO / "cue"
+CUE_DIR = REPO / "deploy/cue"
 CADDYFILE_TEMPLATE = "caddy/Caddyfile.j2"
 
 # Facts cue reads that aren't host data

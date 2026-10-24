@@ -117,7 +117,7 @@ def _service(key: str, name: str, app: dict, quadlet_dir: str, become: bool):
     files.directory(name=f"{name}: quadlet dir", path=app_dir, mode="755", _sudo=become)
 
     # files/<app>/<image>/ -> <quadlet>/<app>/<image>/, one build unit per <image> dir.
-    # Images pinned in cue/images.cue are pulled by podman kube play instead
+    # Images pinned in deploy/cue/images.cue are pulled by podman kube play instead
     image_ops = []
     repo_images = set()
     local_dir = APP_FILES / name

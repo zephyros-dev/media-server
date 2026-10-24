@@ -4,8 +4,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Pinned container images in cue/images.cue (`\"name\": \"repo:tag@sha256:...\"`)",
-      "managerFilePatterns": ["/^cue/images\\.cue$/"],
+      "description": "Pinned container images in deploy/cue/images.cue (`\"name\": \"repo:tag@sha256:...\"`)",
+      "managerFilePatterns": ["/^deploy/cue/images\\.cue$/"],
       "matchStrings": [
         "\": \"(?<depName>[^\"@]+):(?<currentValue>[^\"@:]+)@(?<currentDigest>sha256:[a-f0-9]{64})\""
       ],

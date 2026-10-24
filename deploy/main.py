@@ -11,7 +11,7 @@ facts = cue_facts()
 
 # `--data cue_fact_debug=true` dumps the cue output
 if host.data.get("cue_fact_debug"):
-    debug_dir = REPO / "cue/tmp"
+    debug_dir = REPO / "deploy/cue/tmp"
     debug_dir.mkdir(exist_ok=True)
     (debug_dir / f"cue-{host.name}.json").write_text(
         json.dumps(facts, indent=2, sort_keys=True)
