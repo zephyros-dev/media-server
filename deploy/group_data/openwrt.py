@@ -1,6 +1,6 @@
 """Data of the OpenWrt routers: openwrt/, over all.py"""
 
-from deploy.common.data import load_group
+from deploy.tasks.common.data import load_group
 
 globals().update(load_group("openwrt"))
 

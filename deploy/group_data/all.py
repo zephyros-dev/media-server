@@ -1,7 +1,7 @@
 """Data of every host: the secrets and settings in all/ (ssh_user and _sudo_password
 included), lowest in precedence"""
 
-from deploy.common.data import load_group
+from deploy.tasks.common.data import load_group
 
 globals().update(load_group("all"))
 

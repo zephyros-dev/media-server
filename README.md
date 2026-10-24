@@ -173,7 +173,7 @@ cd tofu/staging && tofu apply -replace=libvirt_volume.staging_root -replace=libv
 
 - To upgrade postgres major version, do the following, deploying the app with `mise run deploy --data apps=<app>` at each step
   1. Change the `postgres_action` key in variable files to `export` and deploy the app
-  2. Change the image tag to the next major version (if coming from version below 18, also change `DATA_MOUNT` in deploy/application/postgres.py and the container mountPath in cue file)
+  2. Change the image tag to the next major version (if coming from version below 18, also change `DATA_MOUNT` in deploy/tasks/application/postgres.py and the container mountPath in cue file)
   3. Change the `postgres_action` key in variable files to `import` and deploy the app
   4. Change the `postgres_action` key in variable files to `none` and deploy the app
   5. Check if the container startup correctly

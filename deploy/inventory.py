@@ -3,7 +3,7 @@ from next to this file"""
 
 import socket
 
-from deploy.common.data import load_group
+from deploy.tasks.common.data import load_group
 
 
 def _ipv4(hostname: str) -> str:

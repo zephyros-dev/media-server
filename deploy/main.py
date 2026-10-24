@@ -2,10 +2,10 @@ import json
 
 from pyinfra import host
 
-from deploy import host as host_setup
-from deploy.application import quadlet
-from deploy.common.data import REPO
-from deploy.common.facts import cue_facts
+from deploy.tasks import system
+from deploy.tasks.application import quadlet
+from deploy.tasks.common.data import REPO
+from deploy.tasks.common.facts import cue_facts
 
 facts = cue_facts()
 
@@ -35,7 +35,7 @@ def _selected_apps(application: dict) -> dict:
 # Like ansible's `--tags <app>`, selected apps skip the host setup.
 # `--data host_only=true` runs the host setup alone
 if not host.data.get("apps"):
-    host_setup.deploy()
+    system.deploy()
 if not host.data.get("host_only"):
     for key, app in _selected_apps(facts["application"]).items():
         quadlet.deploy(key, app)

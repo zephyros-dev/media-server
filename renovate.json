@@ -5,7 +5,7 @@
     {
       "customType": "regex",
       "description": "Versions of the router deploy, in its own file so that a bump doesn't run the server deployment (same as the dependencies.yaml of github>zephyros-dev/renovate-config)",
-      "managerFilePatterns": ["/^deploy/openwrt/dependencies\\.yaml$/"],
+      "managerFilePatterns": ["/^deploy/tasks/openwrt/dependencies\\.yaml$/"],
       "matchStrings": ["(?<depName>.+?): (?<currentValue>.*?)\n"],
       "datasourceTemplate": "github-releases"
     },

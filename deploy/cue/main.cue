@@ -12,7 +12,7 @@ import (
 // Populated at export time via: cue export . -l '"factEmbed"' json: -
 // Must be a regular (non-hidden) field: CLI-injected data files only unify
 // into the internal value graph for non-hidden fields, so this is filtered
-// back out by deploy/common/facts.py rather than being named with a "_" prefix.
+// back out by deploy/tasks/common/facts.py rather than being named with a "_" prefix.
 factEmbed: _
 // Type check for fact
 _fact: factEmbed & {
