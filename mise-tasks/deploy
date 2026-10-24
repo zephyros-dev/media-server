@@ -2,6 +2,18 @@
 #MISE description="Run the pyinfra deployment, against the server unless LIMIT=staging (extra args go to pyinfra, e.g. --dry, --data apps=nextcloud)"
 set -euo pipefail
 
-eval $(ssh-agent)
+eval "$(ssh-agent)" > /dev/null
 sops -d secret/deployment/ssh_key.sops | ssh-add - &> /dev/null
-uv run pyinfra deploy/inventory.py deploy/main.py --limit "${LIMIT:-server}" "$@"
+deploy=(uv run pyinfra deploy/inventory.py deploy/main.py --limit "${LIMIT:-server}" "$@")
+
+# The CI logs are public: there the deploy output only shows with DEBUG_MODE=true (the
+# repository variable), otherwise it goes nowhere
+if [ "${CI:-}" = true ] && [ "${DEBUG_MODE:-}" != true ]; then
+  if ! "${deploy[@]}" &> /dev/null; then
+    echo "Deploy failed. Rerun with the DEBUG_MODE repository variable set to true for its logs" >&2
+    exit 1
+  fi
+  echo "Deploy succeeded"
+else
+  "${deploy[@]}"
+fi
