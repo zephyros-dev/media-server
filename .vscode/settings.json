@@ -25,5 +25,6 @@
     "**/group_data/**/*.yaml": "yaml"
   },
   "git.repositoryScanIgnoredFolders": [".terraform"],
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "sops.creationEnabled": true
 }

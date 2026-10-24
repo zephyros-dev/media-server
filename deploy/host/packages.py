@@ -15,7 +15,6 @@ PACKAGES = [
     "fish",
     "powertop",
     # Server software
-    "pip",
     "power-profiles-daemon",
     "restic",
     "snapper",
