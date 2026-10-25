@@ -86,7 +86,7 @@ _image: {
 
 	"transmission": "ghcr.io/linuxserver/transmission:latest@sha256:55aaeedf9fc354d34136387e15ee0ba4679096f20398dd2875867e5cd5cf8be5"
 
-	"trilium": "ghcr.io/triliumnext/trilium:v0.106.0@sha256:be93e82699b12950ac4e2e7b565ce092fe215b8dd6ddfc47921e37b49e6a0e8b"
+	"trilium": "ghcr.io/triliumnext/trilium:v0.106.1@sha256:d87d810fdcb549db65710a40933acaa16bc75c9426a9164c547f7ba95592941b"
 
 	"wealthfolio": "ghcr.io/wealthfolio/wealthfolio:3.10.0@sha256:6dcf9019aee7ba0747344087365ea57846107943ff0e2718a9bee72a98e20f85"
 
