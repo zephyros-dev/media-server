@@ -16,7 +16,7 @@ _image: {
 
 	"calibre": "ghcr.io/linuxserver/calibre:9.16.0@sha256:2b931709295ca59808520428b05e0a2aec8695268e96f8baf76359da0e9c0f5c"
 
-	"calibre-dl": "ghcr.io/calibrain/calibre-web-automated-book-downloader:v1.4.0@sha256:4ef757349c3c7a7d90ba95b1e2a46ce4dd460a4776efbcf2aa1b1c476e7d5de5"
+	"calibre-dl": "ghcr.io/calibrain/calibre-web-automated-book-downloader:v1.5.1@sha256:acfa46b8be80f1e2f084a7703ff027ab274397feb24006114e92c05c140b62c3"
 
 	"dashy": "ghcr.io/lissy93/dashy:4.8.7@sha256:689a9a88b2368cfb7646458d176edf7fa378ad02218ef0cc8ccb53e1a8a3edbf"
 
