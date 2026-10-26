@@ -2,6 +2,5 @@
 [tools]
 claude = "2.1.310"
 fd = "10.5.0"
-"github:ljtn/epiq" = "1.14.0"
 opentofu = "1.13.1"
 prek = "0.5.6"
