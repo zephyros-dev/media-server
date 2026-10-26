@@ -40,7 +40,7 @@ _image: {
 
 	"koreader": "ghcr.io/zephyros-dev/koreader:v2026.03@sha256:ba11862fa8f76a6e796fb42bc077f1d4660f8733467be5a68978b8912c0f74d9"
 
-	"librespeed": "ghcr.io/linuxserver/librespeed:latest@sha256:0f85aac620b60a2566049f95d085fd2b044c720abfe88d1f1e14496ea0496833"
+	"librespeed": "ghcr.io/linuxserver/librespeed:latest@sha256:8f383ce2954aca618347387e255769b9a927c549daa3f29c12a18b418acb5193"
 
 	"lidarr": "ghcr.io/linuxserver/lidarr:latest@sha256:d8549ff9ea29b4015c32257360652c1000c31ea471a2b3f0835ae77292faf35b"
 
