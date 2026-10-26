@@ -42,7 +42,7 @@ _image: {
 
 	"librespeed": "ghcr.io/linuxserver/librespeed:latest@sha256:8f383ce2954aca618347387e255769b9a927c549daa3f29c12a18b418acb5193"
 
-	"lidarr": "ghcr.io/linuxserver/lidarr:latest@sha256:d8549ff9ea29b4015c32257360652c1000c31ea471a2b3f0835ae77292faf35b"
+	"lidarr": "ghcr.io/linuxserver/lidarr:latest@sha256:9fddcf5c613361edfce390d4e6b7c364282e71e90a40ce7793077fed788f6e63"
 
 	"miniflux": "ghcr.io/miniflux/miniflux:2.3.4-distroless@sha256:4a457e73b6c298bd44f42b38d744afb8a08d3b94318f0c636162d0b35ce0f217"
 
