@@ -33,8 +33,9 @@ def _selected_apps(application: dict) -> dict:
 
 
 # Like ansible's `--tags <app>`, selected apps skip the host setup.
+# `--data all_apps=true` deploys every app, also skipping the host setup.
 # `--data host_only=true` runs the host setup alone
-if not host.data.get("apps"):
+if not host.data.get("apps") and not host.data.get("all_apps"):
     system.deploy()
 if not host.data.get("host_only"):
     for key, app in _selected_apps(facts["application"]).items():

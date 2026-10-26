@@ -5,20 +5,24 @@ import importlib
 import importlib.util
 import os
 from dataclasses import dataclass
-from io import StringIO
 from pathlib import Path
 from types import ModuleType
 
 from pyinfra import host
 from pyinfra.facts.files import FindDirectories, FindFiles, FindLinks
-from pyinfra.facts.server import Home
 from pyinfra.operations import files, systemd
 from pyinfra.operations.util import any_changed
 
+from deploy.tasks.application import content
+from deploy.tasks.common.facts import host_vars
 from deploy.tasks.common.templates import render
 from deploy.tasks.system import systemctl as systemd_ops
 
 APP_FILES = Path(__file__).parent / "files"
+
+# The quadlet dirs already ensured, per host: every app puts files in it, so it is
+# ensured once, not by each app
+_ensured_dirs: set[tuple[str, str]] = set()
 
 
 @dataclass
@@ -54,16 +58,24 @@ def deploy(key: str, app: dict):
     quadlet_dir = (
         "/etc/containers/systemd"
         if become
-        else f"{host.get_fact(Home)}/.config/containers/systemd"
+        else f"{host_vars()['host']['home']}/.config/containers/systemd"
     )
 
     state = app["transform"]["state"]
     if state == "started":
+        if (host.name, quadlet_dir) not in _ensured_dirs:
+            _ensured_dirs.add((host.name, quadlet_dir))
+            files.directory(
+                name=f"quadlet dir {quadlet_dir}",
+                path=quadlet_dir,
+                present=True,
+                _sudo=become,
+            )
         target = App(key, name, app, become, quadlet_dir)
         postgres_action = app["param"]["postgres_action"]
         # Like ansible, a postgres action runs the generic deploy, not the custom flow
         flow = _flow(key) if postgres_action == "none" else None
-        _volumes(name, app, become)
+        _directories(name, app, f"{quadlet_dir}/{name}", become)
         if flow:
             flow.deploy(target)
         else:
@@ -76,45 +88,34 @@ def deploy(key: str, app: dict):
         _remove(name, quadlet_dir, become)
 
 
-def _volumes(name: str, app: dict, become: bool):
-    if "volumes" not in app["param"]:
-        return
-    for volume in app["transform"]["volumes"].values():
+def _directories(name: str, app: dict, app_dir: str, become: bool):
+    """The app's dir and its volume dirs, checked in one lookup"""
+    # No mode for a volume: like ansible, leave the mode of an existing one alone
+    paths: dict[str, str | None] = {app_dir: "755"}
+    volumes = app["transform"]["volumes"].values() if "volumes" in app["param"] else ()
+    for volume in volumes:
         path = volume["value"]
         if (
             volume["type"] in ("relativePathDir", "absolutePathDir")
             and "/dev/" not in path
         ):
-            # No mode: like ansible, leave the mode of an existing volume alone
-            files.directory(
-                name=f"{name}: volume {path}", path=path, present=True, _sudo=become
-            )
+            paths.setdefault(path, None)
         elif volume["type"] == "file":
-            files.directory(
-                name=f"{name}: volume dir {os.path.dirname(path)}",
-                path=os.path.dirname(path),
-                mode="755",
-                _sudo=become,
-            )
+            paths[os.path.dirname(path)] = "755"
+    content.directories(name=f"{name}: directories", paths=paths, _sudo=become)
+    for volume in volumes:
+        if volume["type"] == "file":
             files.file(
-                name=f"{name}: volume {path}", path=path, mode="600", _sudo=become
+                name=f"{name}: volume {volume['value']}",
+                path=volume["value"],
+                mode="600",
+                _sudo=become,
             )
 
 
 def _service(key: str, name: str, app: dict, quadlet_dir: str, become: bool):
     app_dir = f"{quadlet_dir}/{name}"
     context = {"application_name": name, "application_item": {"key": key, "value": app}}
-
-    def put(content: str, dest: str):
-        return files.put(
-            name=f"{name}: {os.path.relpath(dest, quadlet_dir)}",
-            src=StringIO(content),
-            dest=dest,
-            mode="600",
-            _sudo=become,
-        )
-
-    files.directory(name=f"{name}: quadlet dir", path=app_dir, mode="755", _sudo=become)
 
     # files/<app>/<image>/ -> <quadlet>/<app>/<image>/, one build unit per <image> dir.
     # Images pinned in deploy/cue/images.cue are pulled by podman kube play instead
@@ -144,15 +145,16 @@ def _service(key: str, name: str, app: dict, quadlet_dir: str, become: bool):
         )
         if path.rstrip("/") != app_dir
     }
+    # Everything put on the host, in order: the build units, then the manifest and the unit
+    contents: dict[str, str] = {}
     stale_builds = []
     for image in sorted(repo_images | remote_images):
         build = f"{quadlet_dir}/{image}.build"
         if image in repo_images:
-            content = render(
+            contents[build] = render(
                 "quadlet/image.build.j2",
                 {**context, "item": {"path": f"{app_dir}/{image}"}},
             )
-            image_ops.append(put(content, build))
         else:
             stale_builds.append(
                 files.file(
@@ -162,9 +164,26 @@ def _service(key: str, name: str, app: dict, quadlet_dir: str, become: bool):
                     _sudo=become,
                 )
             )
+    contents[f"{app_dir}/deployment.yaml"] = app["manifest"]
+    contents[f"{quadlet_dir}/{name}.kube"] = render(
+        "quadlet/service.kube.j2", context
+    )
 
-    kube_yaml = put(app["manifest"], f"{app_dir}/deployment.yaml")
-    kube = put(render("quadlet/service.kube.j2", context), f"{quadlet_dir}/{name}.kube")
+    states = content.states(list(contents), become)
+    puts = {
+        dest: content.put(
+            name=f"{name}: {os.path.relpath(dest, quadlet_dir)}",
+            content=text,
+            dest=dest,
+            mode="600",
+            states=states,
+            _sudo=become,
+        )
+        for dest, text in contents.items()
+    }
+    kube_yaml = puts[f"{app_dir}/deployment.yaml"]
+    kube = puts[f"{quadlet_dir}/{name}.kube"]
+    image_ops += [op for dest, op in puts.items() if dest.endswith(".build")]
 
     systemd.daemon_reload(
         name=f"{name}: daemon-reload",
