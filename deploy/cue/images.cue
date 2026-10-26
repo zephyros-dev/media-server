@@ -48,7 +48,7 @@ _image: {
 
 	"miniflux-postgres": "docker.io/postgres:18-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
 
-	"musicgrabber": "docker.io/g33kphr33k/musicgrabber:4.3.1@sha256:94e99d5c8aad9a876912db2f6d2f5e17dcf2bb04c0b2b7a13811e005b828ba86"
+	"musicgrabber": "docker.io/g33kphr33k/musicgrabber:4.4.3@sha256:ad641f514508cd24c2c7e92f5d91f05d60a4cf7767feee8b76ecbc7509284390"
 
 	"navidrome": "ghcr.io/navidrome/navidrome:0.64.2@sha256:38dc2727bfcfd5ede290f8ada114fc90368146f265ae4701ddddbcbe2a44ee52"
 
