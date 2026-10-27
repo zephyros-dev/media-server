@@ -1183,38 +1183,37 @@ application: {
 				content: _fact.navidrome_musicgrabber_password
 			}
 		}
-		// Runs as container root, which is the host user in rootless podman, so
-		// downloaded files are owned by the host user like the rest of the library
-		pod: spec: containers: [{
-			name:  "web"
-			image: "musicgrabber"
-			// Rescan navidrome after downloads and check it for duplicates, as the
-			// admin user service/navidrome.yaml creates
-			env: [{
-				// ReplayGain 2.0 tags only, the audio is never re-encoded
-				name:  "ENABLE_REPLAYGAIN"
-				value: "true"
-			}, {
-				name:  "NAVIDROME_URL"
-				value: "http://navidrome:4533"
-			}, {
-				name:  "NAVIDROME_USER"
-				value: "musicgrabber"
-			}, {
-				name: "NAVIDROME_PASS"
-				valueFrom: secretKeyRef: {
-					name: "musicgrabber"
-					key:  "navidrome_password"
-				}
-			}]
-			volumeMounts: [{
-				name:      "data"
-				mountPath: "/data:z"
-			}, {
-				name:      "music"
-				mountPath: "/music"
-			}]
-		}]
+		pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "web"
+				image: "musicgrabber"
+				// Rescan navidrome after downloads and check it for duplicates, as the
+				// admin user service/navidrome.yaml creates
+				env: [{
+					// ReplayGain 2.0 tags only, the audio is never re-encoded
+					name:  "ENABLE_REPLAYGAIN"
+					value: "true"
+				}, {
+					name:  "NAVIDROME_URL"
+					value: "http://navidrome:4533"
+				}, {
+					name:  "NAVIDROME_USER"
+					value: "musicgrabber"
+				}, {
+					name: "NAVIDROME_PASS"
+					valueFrom: secretKeyRef: {
+						name: "musicgrabber"
+						key:  "navidrome_password"
+					}
+				}]
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/data:U,z"
+				}, {
+					name:      "music"
+					mountPath: "/music"
+				}]
+			}]}
 	}
 
 	navidrome: {
