@@ -7,7 +7,7 @@ TF_PLUGIN_CACHE_DIR = "{{env.HOME}}/.terraform.d/plugin-cache"
 [tools]
 cue = "0.17.1"
 sops = "3.13.3"
-uv = "0.13.5"
+uv = "0.13.6"
 
 [tasks.setup]
 description = "Install local dev environment dependencies"
