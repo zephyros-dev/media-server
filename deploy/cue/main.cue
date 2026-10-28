@@ -1177,10 +1177,22 @@ application: {
 				data: "./data/"
 				// The library navidrome serves, so downloads show up there on its next scan
 				music: "\(_fact.global_media)/Storage/music-grabber/"
+				// slskd's completed downloads, which musicgrabber copies into the library
+				slskd: "\(_fact.global_media)/Storage/slskd/"
 			}
-			secret: navidrome_password: {
-				type:    "env"
-				content: _fact.navidrome_musicgrabber_password
+			secret: {
+				navidrome_password: {
+					type:    "env"
+					content: _fact.navidrome_musicgrabber_password
+				}
+				slskd_username: {
+					type:    "env"
+					content: _fact.slskd_user
+				}
+				slskd_password: {
+					type:    "env"
+					content: _fact.slskd_password
+				}
 			}
 		}
 		pod: _profile.rootless_userns & {
@@ -1205,6 +1217,28 @@ application: {
 						name: "musicgrabber"
 						key:  "navidrome_password"
 					}
+				}, {
+					name:  "SOURCE_SOULSEEK_ENABLED"
+					value: "true"
+				}, {
+					name:  "SLSKD_URL"
+					value: "http://slskd:5030"
+				}, {
+					name: "SLSKD_USER"
+					valueFrom: secretKeyRef: {
+						name: "musicgrabber"
+						key:  "slskd_username"
+					}
+				}, {
+					name: "SLSKD_PASS"
+					valueFrom: secretKeyRef: {
+						name: "musicgrabber"
+						key:  "slskd_password"
+					}
+				}, {
+					// Where slskd's downloads are mounted here
+					name:  "SLSKD_DOWNLOADS_PATH"
+					value: "/downloads"
 				}]
 				volumeMounts: [{
 					name:      "data"
@@ -1212,6 +1246,9 @@ application: {
 				}, {
 					name:      "music"
 					mountPath: "/music"
+				}, {
+					name:      "slskd"
+					mountPath: "/downloads:ro"
 				}]
 			}]}
 	}
@@ -1695,6 +1732,69 @@ application: {
 					// Required for nvme drives to work: https://github.com/containers/podman/issues/17833
 					privileged: true
 				}
+			}]
+		}
+	}
+
+	// https://github.com/slskd/slskd
+	// Soulseek client musicgrabber searches and downloads through. The Soulseek account is
+	// created by its first login, so its credentials are only generated, not registered
+	slskd: {
+		param: {
+			backup:      true
+			caddy_proxy: 5030
+			// homelab dashboard-icons
+			dashy_icon: "hl-slskd"
+			volumes: {
+				config: "./config/"
+				// Completed downloads, which musicgrabber reads at the same path
+				downloads: "\(_fact.global_media)/Storage/slskd/"
+			}
+			secret: {
+				SLSKD_SLSK_USERNAME: {
+					type:    "env"
+					content: _fact.slskd_soulseek_user
+				}
+				SLSKD_SLSK_PASSWORD: {
+					type:    "env"
+					content: _fact.slskd_soulseek_password
+				}
+				// The web UI and API login, musicgrabber's too
+				SLSKD_USERNAME: {
+					type:    "env"
+					content: _fact.slskd_user
+				}
+				SLSKD_PASSWORD: {
+					type:    "env"
+					content: _fact.slskd_password
+				}
+			}
+		}
+		pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "web"
+				image: "slskd"
+				env: [for key in ["SLSKD_SLSK_USERNAME", "SLSKD_SLSK_PASSWORD", "SLSKD_USERNAME", "SLSKD_PASSWORD"] {
+					name: key
+					valueFrom: secretKeyRef: {
+						name:  "slskd"
+						"key": key
+					}
+				}, {
+					name:  "SLSKD_DOWNLOADS_DIR"
+					value: "/downloads"
+				}, {
+					// Incomplete files stay in the app dir, off the folder musicgrabber reads
+					name:  "SLSKD_INCOMPLETE_DIR"
+					value: "/app/incomplete"
+				}]
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/app:U,z"
+				}, {
+					name:      "downloads"
+					mountPath: "/downloads"
+				}]
 			}]
 		}
 	}
