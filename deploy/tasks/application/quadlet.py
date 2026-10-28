@@ -165,9 +165,7 @@ def _service(key: str, name: str, app: dict, quadlet_dir: str, become: bool):
                 )
             )
     contents[f"{app_dir}/deployment.yaml"] = app["manifest"]
-    contents[f"{quadlet_dir}/{name}.kube"] = render(
-        "quadlet/service.kube.j2", context
-    )
+    contents[f"{quadlet_dir}/{name}.kube"] = render("quadlet/service.kube.j2", context)
 
     states = content.states(list(contents), become)
     puts = {

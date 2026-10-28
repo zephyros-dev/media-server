@@ -27,6 +27,11 @@ class FileStates(FactBase):
             ' $(stat -c %a "$p") $p"; done; true',
         )
 
+    @staticmethod
+    def default():
+        # No output when none of the paths exists, e.g. the first deploy of an app
+        return {}
+
     def process(self, output):
         states = {}
         for line in output:
@@ -44,6 +49,10 @@ class DirectoryModes(FactBase):
             *(QuoteString(path) for path in paths),
             '; do [ -d "$p" ] && echo "$(stat -c %a "$p") $p"; done; true',
         )
+
+    @staticmethod
+    def default():
+        return {}
 
     def process(self, output):
         return {path: mode for mode, path in (line.split(" ", 1) for line in output)}

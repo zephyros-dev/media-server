@@ -1238,6 +1238,13 @@ application: {
 				}, {
 					name:  "ND_SESSIONTIMEOUT"
 					value: "24h"
+				}, {
+					// The plugins in <data>/plugins are installed by service/navidrome.py
+					name:  "ND_PLUGINS_ENABLED"
+					value: "true"
+				}, {
+					name:  "ND_PLUGINS_AUTORELOAD"
+					value: "true"
 				}]
 				volumeMounts: [{
 					name:      "data"
