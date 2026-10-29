@@ -52,7 +52,7 @@ _image: {
 
 	"navidrome": "ghcr.io/navidrome/navidrome:0.64.2@sha256:38dc2727bfcfd5ede290f8ada114fc90368146f265ae4701ddddbcbe2a44ee52"
 
-	"nextcloud": "docker.io/nextcloud:35.0.2@sha256:6f514aae04ad16917124064f7df851720c82b5ccb180b56cb787bed2ed8a7246"
+	"nextcloud": "docker.io/nextcloud:35.0.2@sha256:e0b1a2af52c82c07b7a0e8e59878bd8769e704447734d5d238a836982f51b9c8"
 
 	"nextcloud-office": "docker.io/collabora/code:26.04.5.2.1@sha256:c7415b963e32eb0986a562583f154d36d3d7a461e1ddfb660a95e87094328acb"
 
