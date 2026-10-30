@@ -115,6 +115,10 @@ sync = files.sync(
         f"{DEST}/ipset/*.txt.gz",
         f"{DEST}/ipset/*.log",
         f"{DEST}/tmp/*",
+        # The binaries the installer copies from binaries/<architecture> (install_bin.sh)
+        f"{DEST}/nfq2/nfqws2",
+        f"{DEST}/mdig/mdig",
+        f"{DEST}/ip2net/ip2net",
     ],
 )
 
