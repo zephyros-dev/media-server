@@ -1,8 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/dotenv,python,ansible,terraform,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=dotenv,python,ansible,terraform,visualstudiocode
-
-### Ansible ###
-*.retry
+# Created by https://www.toptal.com/developers/gitignore/api/dotenv,python,terraform,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=dotenv,python,terraform,visualstudiocode
 
 ### dotenv ###
 .env
@@ -233,11 +230,10 @@ terraform.rc
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/dotenv,python,ansible,terraform,visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/dotenv,python,terraform,visualstudiocode
+
 
 ### Custom ###
-# Devcontainer
-.devcontainer
 # Ignore wifiqr generated code
 wifiqr/*
 # Ignore decrypted file
