@@ -20,7 +20,7 @@ _image: {
 
 	"dashy": "ghcr.io/lissy93/dashy:4.9.11@sha256:721d49441537e8052f8b86e76be6467ac4b1dd24e304baf814640ea4b196432d"
 
-	"filebrowser": "ghcr.io/gtsteffaniak/filebrowser:2.1.3-beta@sha256:c91fbf4b442ba14f5d45f8687b74cf71477e36a1a8118b5d0643522dcf78f73c"
+	"filebrowser": "ghcr.io/gtsteffaniak/filebrowser:2.1.4-beta@sha256:d7ae18aa7e8ff81695a35a2c1af399f0c437339241ad90be446c5e71314c0c31"
 
 	"flaresolverr": "ghcr.io/flaresolverr/flaresolverr:latest@sha256:c80ae007ce2ccdcd217a12426e4f039ef763ff90738c808d38810c3e59323767"
 
