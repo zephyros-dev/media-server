@@ -44,7 +44,7 @@ _image: {
 
 	"lidarr": "ghcr.io/linuxserver/lidarr:latest@sha256:9fddcf5c613361edfce390d4e6b7c364282e71e90a40ce7793077fed788f6e63"
 
-	"miniflux": "ghcr.io/miniflux/miniflux:2.3.4-distroless@sha256:4a457e73b6c298bd44f42b38d744afb8a08d3b94318f0c636162d0b35ce0f217"
+	"miniflux": "ghcr.io/miniflux/miniflux:2.3.5-distroless@sha256:c826edc9c2284a8181e297d22a5ade1482bd9a8a4beabb2b6356bd22ce731310"
 
 	"miniflux-postgres": "docker.io/postgres:18-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
 
