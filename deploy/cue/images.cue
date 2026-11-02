@@ -4,7 +4,7 @@ package main
 // neighbouring entries merge cleanly. Kept up to date by the regex manager in
 // renovate.json; images with real build steps stay as Containerfiles instead
 _image: {
-	"actual": "docker.io/actualbudget/actual-server:26.10.0-alpine@sha256:67b1b5e9584e3e143b4f5c41e52b4506ed9cdd1072392d5ab5369f2d4fd0bffd"
+	"actual": "docker.io/actualbudget/actual-server:26.11.0-alpine@sha256:01ac24a51c6f585aba287c1bf1e96fcda46ab16a05952817c637415213251aa3"
 
 	"audiobookshelf": "ghcr.io/advplyr/audiobookshelf:2.37.2@sha256:b897c33f05972fb1bf484f7487bc878fa91ec8691335c1db6e2929c3a7658efa"
 
