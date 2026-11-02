@@ -38,7 +38,7 @@ _image: {
 
 	"kavita": "ghcr.io/linuxserver/kavita:0.9.1@sha256:34dddd2e79854772b788e5847f1702444b11118bbeabd0a5590f57e15346222b"
 
-	"koreader": "ghcr.io/zephyros-dev/koreader:v2026.03@sha256:ba11862fa8f76a6e796fb42bc077f1d4660f8733467be5a68978b8912c0f74d9"
+	"koreader": "ghcr.io/zephyros-dev/koreader:v2026.03@sha256:893db2181abe823a5cbd49755a30bcde014a18d80c7321d511450c202b465b16"
 
 	"librespeed": "ghcr.io/linuxserver/librespeed:latest@sha256:16a2c6a6ba7d60d825d73c682ba3036ca3877fe34f73dab9c88854bc099e1164"
 
