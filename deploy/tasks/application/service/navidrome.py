@@ -155,6 +155,8 @@ def _mood_plugin():
     wanted = {
         "navidrome_user": USER,
         "navidrome_password": host_vars()["navidrome_musicgrabber_password"],
+        # The plugin sends it with each request to the analyzer, which has no setting of its own
+        "lastfm_api_key": host_vars()["navidrome_lastfm_api_key"],
         # Noon in navidrome's timezone (UTC+7, the server's), where the default is 02:00
         "analyze_schedule": "0 12 * * *",
     }
