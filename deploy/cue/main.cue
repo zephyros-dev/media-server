@@ -1164,6 +1164,29 @@ application: {
 		}
 	}
 
+	// https://github.com/RFLundgren/navidrome-mood-plugin
+	// The audio analysis the navidrome mood-playlists plugin calls (essentia can't run in the
+	// plugin's WASM). Keep its version with the plugin's, in dependencies.yaml
+	mood_analyzer: {
+		param: {
+			dashy_show: false
+			volumes: {
+				// The library navidrome serves, at the same path (/music) the plugin sends
+				music: "\(_fact.global_media)/Storage/music-grabber/"
+			}
+		}
+		pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "web"
+				image: "mood-analyzer"
+				volumeMounts: [{
+					name:      "music"
+					mountPath: "/music:ro"
+				}]
+			}]
+		}
+	}
+
 	// https://github.com/dbv111m/musicgrabber
 	musicgrabber: {
 		param: {

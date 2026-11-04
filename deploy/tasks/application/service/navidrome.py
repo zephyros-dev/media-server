@@ -1,5 +1,5 @@
 """A dedicated user for musicgrabber's rescans and duplicate checks (admin, since navidrome
-only lets admins trigger a scan), and the NaviBeat Mixes plugin"""
+only lets admins trigger a scan), and the NaviBeat Mixes and Mood Playlists plugins"""
 
 import json
 import shlex
@@ -20,6 +20,9 @@ PLUGIN = "navibeat-mixes"
 PLUGIN_REPO = "nenadjokic/navibeat-mixes"
 # The build for navidrome 0.64 and up, the release has another one for 0.63
 PLUGIN_ASSET = "navibeat-mixes-navidrome-0.64.ndp"
+MOOD_PLUGIN = "mood-playlists"
+MOOD_PLUGIN_REPO = "RFLundgren/navidrome-mood-plugin"
+MOOD_PLUGIN_ASSET = "mood-playlists.ndp"
 # Runs `argv` in a terminal and answers each password prompt with the first stdin line,
 # like ansible's expect module (the host has python, not `script` or `expect`)
 EXPECT_PASSWORD = """
@@ -45,20 +48,22 @@ sys.exit(os.waitstatus_to_exitcode(os.waitpid(pid, 0)[1]))
 
 
 def deploy(app: App):
-    _install_plugin()
+    _install_plugin(PLUGIN, PLUGIN_REPO, PLUGIN_ASSET)
+    _install_plugin(MOOD_PLUGIN, MOOD_PLUGIN_REPO, MOOD_PLUGIN_ASSET)
     app.service()
     python.call(name=f"{app.name}: {USER} user", function=_user)
     python.call(name=f"{app.name}: {PLUGIN} plugin", function=_plugin)
+    python.call(name=f"{app.name}: {MOOD_PLUGIN} plugin", function=_mood_plugin)
 
 
-def _install_plugin():
+def _install_plugin(plugin: str, repo: str, asset: str):
     """The release pinned in dependencies.yaml (kept at the latest by renovate), copied to
     the plugins folder: navidrome finds it there, by itself or on the rescan below"""
-    tag = yaml.safe_load((REPO / "dependencies.yaml").read_text())[PLUGIN_REPO]
+    tag = yaml.safe_load((REPO / "dependencies.yaml").read_text())[repo]
     version = tag.removeprefix("v")
     plugins = f"{host_vars()['global_volume_path']}/navidrome/data/plugins"
-    ndp = f"{plugins}/{PLUGIN}.ndp"
-    url = f"https://github.com/{PLUGIN_REPO}/releases/download/{tag}/{PLUGIN_ASSET}"
+    ndp = f"{plugins}/{plugin}.ndp"
+    url = f"https://github.com/{repo}/releases/download/{tag}/{asset}"
     manifest_version = (
         "import json, sys, zipfile;"
         " print(json.load(zipfile.ZipFile(sys.argv[1]).open('manifest.json'))['version'])"
@@ -72,10 +77,12 @@ def _install_plugin():
         or ""
     ).strip()
 
-    files.directory(name="navidrome: plugins folder", path=plugins, present=True)
+    files.directory(
+        name=f"navidrome: {plugin} plugins folder", path=plugins, present=True
+    )
     if installed != version:
         server.shell(
-            name=f"navidrome: install {PLUGIN} {version}",
+            name=f"navidrome: install {plugin} {version}",
             commands=[
                 f"curl -fsSL -o {ndp}.download {url}",
                 f"mv {ndp}.download {ndp}",
@@ -83,20 +90,25 @@ def _install_plugin():
         )
 
 
-def _plugin():
-    user = host_vars()["navibeat_user"]
+def _plugin_info(plugin: str) -> dict:
+    """`plugin info` once navidrome has picked the plugin up"""
 
     def installed() -> dict:
         _, output = run.run(f"{CLI} plugin list --format json --nobanner")
-        if not any(p["id"] == PLUGIN for p in json.loads(output.stdout)):
+        if not any(p["id"] == plugin for p in json.loads(output.stdout)):
             # Not picked up (yet): the autoreload may be late, the first start has no
             # database to list from
             run.run(f"{CLI} plugin rescan --nobanner", check=False)
-            raise FileNotFoundError(PLUGIN)
-        _, info = run.run(f"{CLI} plugin info {PLUGIN} --format json --nobanner")
+            raise FileNotFoundError(plugin)
+        _, info = run.run(f"{CLI} plugin info {plugin} --format json --nobanner")
         return json.loads(info.stdout)
 
-    info = run.retry(installed, retries=60)
+    return run.retry(installed, retries=60)
+
+
+def _plugin():
+    user = host_vars()["navibeat_user"]
+    info = _plugin_info(PLUGIN)
 
     # It builds mixes per user, and won't enable without users to act as. Only this one.
     # The grant takes the id of the user, whatever `plugin edit --help` says about
@@ -131,6 +143,38 @@ def _plugin():
         )
     if not info["enabled"]:
         run.run(f"{CLI} plugin enable {PLUGIN} --nobanner")
+
+
+def _mood_plugin():
+    """It talks to navidrome's API as the musicgrabber admin (global playlists and the
+    scheduled tasks need an admin), and to the mood-analyzer app, whose address and music
+    path are the plugin's defaults. It makes playlists for every user and reads every
+    library, which navidrome won't enable it without"""
+    info = _plugin_info(MOOD_PLUGIN)
+    config = json.loads(info.get("config") or "{}")
+    wanted = {
+        "navidrome_user": USER,
+        "navidrome_password": host_vars()["navidrome_musicgrabber_password"],
+        # Noon in navidrome's timezone (UTC+7, the server's), where the default is 02:00
+        "analyze_schedule": "0 12 * * *",
+    }
+    flags = []
+    if not info.get("allUsers"):
+        flags.append("--all-users")
+    if not info.get("allLibraries"):
+        flags.append("--all-libraries")
+    if any(config.get(key) != value for key, value in wanted.items()):
+        # Only the managed keys, the rest of the settings are the UI's
+        flags.append("--config-file -")
+    if flags:
+        run.run(
+            f"podman exec -i navidrome-web /app/navidrome plugin edit {MOOD_PLUGIN}"
+            f" {' '.join(flags)} --nobanner",
+            stdin=json.dumps({**config, **wanted}),
+            secret=True,
+        )
+    if not info["enabled"]:
+        run.run(f"{CLI} plugin enable {MOOD_PLUGIN} --nobanner")
 
 
 def _user():
