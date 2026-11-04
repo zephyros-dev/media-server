@@ -1,5 +1,5 @@
 """A dedicated user for musicgrabber's rescans and duplicate checks (admin, since navidrome
-only lets admins trigger a scan), and the NaviBeat Mixes and Mood Playlists plugins"""
+only lets admins trigger a scan), and the Mood Playlists plugin"""
 
 import json
 import shlex
@@ -16,10 +16,6 @@ from deploy.tasks.common.facts import host_vars
 
 CLI = "podman exec navidrome-web /app/navidrome"
 USER = "musicgrabber"
-PLUGIN = "navibeat-mixes"
-PLUGIN_REPO = "nenadjokic/navibeat-mixes"
-# The build for navidrome 0.64 and up, the release has another one for 0.63
-PLUGIN_ASSET = "navibeat-mixes-navidrome-0.64.ndp"
 MOOD_PLUGIN = "mood-playlists"
 MOOD_PLUGIN_REPO = "RFLundgren/navidrome-mood-plugin"
 MOOD_PLUGIN_ASSET = "mood-playlists.ndp"
@@ -48,12 +44,12 @@ sys.exit(os.waitstatus_to_exitcode(os.waitpid(pid, 0)[1]))
 
 
 def deploy(app: App):
-    _install_plugin(PLUGIN, PLUGIN_REPO, PLUGIN_ASSET)
     _install_plugin(MOOD_PLUGIN, MOOD_PLUGIN_REPO, MOOD_PLUGIN_ASSET)
     app.service()
     python.call(name=f"{app.name}: {USER} user", function=_user)
-    python.call(name=f"{app.name}: {PLUGIN} plugin", function=_plugin)
-    python.call(name=f"{app.name}: {MOOD_PLUGIN} plugin", function=_mood_plugin)
+    python.call(
+        name=f"{app.name}: {MOOD_PLUGIN} plugin", function=_mood_plugin, app=app
+    )
 
 
 def _install_plugin(plugin: str, repo: str, asset: str):
@@ -106,46 +102,7 @@ def _plugin_info(plugin: str) -> dict:
     return run.retry(installed, retries=60)
 
 
-def _plugin():
-    user = host_vars()["navibeat_user"]
-    info = _plugin_info(PLUGIN)
-
-    # It builds mixes per user, and won't enable without users to act as. Only this one.
-    # The grant takes the id of the user, whatever `plugin edit --help` says about
-    # usernames: with a username the plugin is told there are no users
-    _, output = run.run(f"{CLI} user list --format csv --nobanner")
-    # csv columns: user id,username,name,email,admin,...
-    user_id = next(
-        (
-            row[0]
-            for line in output.stdout_lines
-            if (row := line.split(","))[1:2] == [user]
-        ),
-        None,
-    )
-    if user_id is None:
-        raise RuntimeError(f"navidrome has no user {user}")
-
-    config = json.loads(info.get("config") or "{}")
-    # The setting is the usernames
-    wanted = {"onlyForUsers": user}
-    flags = []
-    if info.get("allUsers") or json.loads(info.get("users") or "[]") != [user_id]:
-        flags.append(f"--users {shlex.quote(user_id)}")
-    if any(config.get(key) != value for key, value in wanted.items()):
-        # Only the managed keys, the rest of the settings are the UI's
-        flags.append("--config-file -")
-    if flags:
-        run.run(
-            f"podman exec -i navidrome-web /app/navidrome plugin edit {PLUGIN}"
-            f" {' '.join(flags)} --nobanner",
-            stdin=json.dumps({**config, **wanted}),
-        )
-    if not info["enabled"]:
-        run.run(f"{CLI} plugin enable {PLUGIN} --nobanner")
-
-
-def _mood_plugin():
+def _mood_plugin(app: App):
     """It talks to navidrome's API as the musicgrabber admin (global playlists and the
     scheduled tasks need an admin), and to the mood-analyzer app, whose address and music
     path are the plugin's defaults. It makes playlists for every user and reads every
@@ -177,6 +134,10 @@ def _mood_plugin():
         )
     if not info["enabled"]:
         run.run(f"{CLI} plugin enable {MOOD_PLUGIN} --nobanner")
+    if flags or not info["enabled"]:
+        # The running server reads the plugin's config and schedules when it loads it: the
+        # CLI only changes the stored settings, and a file touch doesn't reload it either
+        run.systemctl("restart", app.name, app.become)
 
 
 def _user():
