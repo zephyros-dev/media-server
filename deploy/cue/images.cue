@@ -36,7 +36,7 @@ _image: {
 
 	"jellyfin": "ghcr.io/jellyfin/jellyfin:10.11.11@sha256:45f648c382a0c8b552582fcea40e95cb17c5d475473a891cba0eb7523fb92112"
 
-	"kavita": "ghcr.io/linuxserver/kavita:0.9.1@sha256:34dddd2e79854772b788e5847f1702444b11118bbeabd0a5590f57e15346222b"
+	"kavita": "ghcr.io/linuxserver/kavita:0.9.1@sha256:de556f62dadefdd59dc69e04855db91157d774f84b242568c8858251aff1340b"
 
 	"koreader": "ghcr.io/zephyros-dev/koreader:v2026.03@sha256:893db2181abe823a5cbd49755a30bcde014a18d80c7321d511450c202b465b16"
 
