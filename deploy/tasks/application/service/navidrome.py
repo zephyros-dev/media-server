@@ -1,7 +1,9 @@
 """A dedicated user for musicgrabber's rescans and duplicate checks (admin, since navidrome
 only lets admins trigger a scan), and the Mood Playlists plugin"""
 
+import hashlib
 import json
+import secrets
 import shlex
 
 import yaml
@@ -116,6 +118,8 @@ def _mood_plugin(app: App):
         "lastfm_api_key": host_vars()["navidrome_lastfm_api_key"],
         # Noon in navidrome's timezone (UTC+7, the server's), where the default is 02:00
         "analyze_schedule": "0 12 * * *",
+        # Daily at 8 AM, where the default is Sundays at 03:00
+        "playlist_refresh_schedule": "0 8 * * *",
     }
     flags = []
     if not info.get("allUsers"):
@@ -150,16 +154,38 @@ def _user():
         row[1]: row for line in output.stdout_lines if len(row := line.split(",")) > 4
     }
 
+    password = host_vars()["navidrome_musicgrabber_password"]
     if USER not in users:
-        # `user create` only reads the password from a terminal, for both prompts (new and
-        # confirm). The password goes in on stdin, out of argv
-        password = host_vars()["navidrome_musicgrabber_password"]
-        run.run(
-            f"python3 -c {shlex.quote(EXPECT_PASSWORD)}"
-            " podman exec -it navidrome-web /app/navidrome user create"
-            f" --username {USER} --admin --nobanner",
-            stdin=f"{password}\n",
-        )
+        _set_password("create", password, "--admin")
+        return
     # For a user created before it was made admin
-    elif users[USER][4] == "false":
+    if users[USER][4] == "false":
         run.run(f"{CLI} user edit --user {USER} --set-admin --nobanner")
+    # The secret is the source of truth, but navidrome keeps no password to compare with:
+    # log in with it, and set it when navidrome refuses
+    if not _password_works(password):
+        _set_password("edit", password, "--set-password")
+
+
+def _set_password(command: str, password: str, flag: str):
+    """`user create` and `user edit --set-password` only read the password from a terminal,
+    for both prompts (new and confirm). It goes in on stdin, out of argv"""
+    run.run(
+        f"python3 -c {shlex.quote(EXPECT_PASSWORD)}"
+        f" podman exec -it navidrome-web /app/navidrome user {command}"
+        f" --{'username' if command == 'create' else 'user'} {USER} {flag} --nobanner",
+        stdin=f"{password}\n",
+    )
+
+
+def _password_works(password: str) -> bool:
+    """A Subsonic ping, with the token navidrome wants (md5 of password and salt), so the
+    password itself isn't in the command. Navidrome answers a refusal with a 200"""
+    salt = secrets.token_hex(6)
+    token = hashlib.md5((password + salt).encode()).hexdigest()
+    url = (
+        f"http://localhost:4533/rest/ping?u={USER}&t={token}&s={salt}"
+        "&v=1.16.1&c=deploy&f=json"
+    )
+    _, output = run.run(f"podman exec navidrome-web wget -qO- {shlex.quote(url)}")
+    return json.loads(output.stdout)["subsonic-response"]["status"] == "ok"
