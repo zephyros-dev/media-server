@@ -1,9 +1,7 @@
 """A dedicated user for musicgrabber's rescans and duplicate checks (admin, since navidrome
 only lets admins trigger a scan), and the Mood Playlists plugin"""
 
-import hashlib
 import json
-import secrets
 import shlex
 
 import yaml
@@ -179,13 +177,18 @@ def _set_password(command: str, password: str, flag: str):
 
 
 def _password_works(password: str) -> bool:
-    """A Subsonic ping, with the token navidrome wants (md5 of password and salt), so the
-    password itself isn't in the command. Navidrome answers a refusal with a 200"""
-    salt = secrets.token_hex(6)
-    token = hashlib.md5((password + salt).encode()).hexdigest()
-    url = (
-        f"http://localhost:4533/rest/ping?u={USER}&t={token}&s={salt}"
-        "&v=1.16.1&c=deploy&f=json"
+    """Log in with navidrome's own endpoint, which takes the password as it is: the Subsonic
+    one wants md5(password + salt), a hash of the password it can't do without. The body goes
+    in on stdin, out of argv. A refusal is a 401, any other failure isn't an answer"""
+    ok, output = run.run(
+        "podman exec -i navidrome-web wget -qO- --post-file=-"
+        ' --header "Content-Type: application/json" http://localhost:4533/auth/login',
+        stdin=json.dumps({"username": USER, "password": password}),
+        check=False,
+        secret=True,
     )
-    _, output = run.run(f"podman exec navidrome-web wget -qO- {shlex.quote(url)}")
-    return json.loads(output.stdout)["subsonic-response"]["status"] == "ok"
+    if ok:
+        return True
+    if any("401" in line for line in output.stderr_lines):
+        return False
+    raise RuntimeError(f"could not check the {USER} login: {output.stderr_lines}")
