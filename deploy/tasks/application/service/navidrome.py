@@ -5,14 +5,13 @@ import json
 import shlex
 
 import yaml
-from pyinfra import host
-from pyinfra.facts.server import Command
-from pyinfra.operations import files, python, server
-
 from deploy.tasks.application import run
 from deploy.tasks.application.quadlet import App
 from deploy.tasks.common.data import REPO
 from deploy.tasks.common.facts import host_vars
+from pyinfra import host
+from pyinfra.facts.server import Command
+from pyinfra.operations import files, python, server
 
 CLI = "podman exec navidrome-web /app/navidrome"
 USER = "musicgrabber"
@@ -110,14 +109,14 @@ def _mood_plugin(app: App):
     info = _plugin_info(MOOD_PLUGIN)
     config = json.loads(info.get("config") or "{}")
     wanted = {
-        "navidrome_user": USER,
-        "navidrome_password": host_vars()["navidrome_musicgrabber_password"],
+        "navidrome_user": host_vars()["navidrome_mood_user"],
+        "navidrome_password": host_vars()["navidrome_mood_password"],
         # The plugin sends it with each request to the analyzer, which has no setting of its own
         "lastfm_api_key": host_vars()["navidrome_lastfm_api_key"],
         # Noon in navidrome's timezone (UTC+7, the server's), where the default is 02:00
         "analyze_schedule": "0 12 * * *",
-        # Daily at 8 AM, where the default is Sundays at 03:00
-        "playlist_refresh_schedule": "0 8 * * *",
+        # Daily at 14 PM, where the default is Sundays at 03:00
+        "playlist_refresh_schedule": "0 14 * * *",
     }
     flags = []
     if not info.get("allUsers"):
