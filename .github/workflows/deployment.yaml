@@ -41,7 +41,7 @@ jobs:
         run: mise run setup
       - name: Setup tmate session
         if: env.DEBUG_MODE == 'true'
-        uses: mxschmitt/action-tmate@v3
+        uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113 # v3
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: Set up WireGuard
