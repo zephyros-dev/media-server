@@ -1216,6 +1216,13 @@ application: {
 					type:    "env"
 					content: _fact.slskd_password
 				}
+				// Only when set: an empty value would override the key it has built in
+				if _fact.acoustid_api_key != "" {
+					acoustid_api_key: {
+						type:    "env"
+						content: _fact.acoustid_api_key
+					}
+				}
 			}
 		}
 		pod: _profile.rootless_userns & {
@@ -1228,6 +1235,11 @@ application: {
 					// ReplayGain 2.0 tags only, the audio is never re-encoded
 					name:  "ENABLE_REPLAYGAIN"
 					value: "true"
+				}, {
+					// Settings > Deezer Album Fallback, off (as a variable it overrides the settings
+					// page). MusicBrainz Metadata is left on, its default
+					name:  "ENABLE_DEEZER_METADATA"
+					value: "false"
 				}, {
 					name:  "NAVIDROME_URL"
 					value: "http://navidrome:4533"
@@ -1262,6 +1274,13 @@ application: {
 					// Where slskd's downloads are mounted here
 					name:  "SLSKD_DOWNLOADS_PATH"
 					value: "/downloads"
+				}, if _fact.acoustid_api_key != "" {
+					// The key of the AcoustID application, for the fingerprint lookups
+					name: "ACOUSTID_API_KEY"
+					valueFrom: secretKeyRef: {
+						name: "musicgrabber"
+						key:  "acoustid_api_key"
+					}
 				}]
 				volumeMounts: [{
 					name:      "data"

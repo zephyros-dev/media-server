@@ -30,6 +30,11 @@
   "ignoreTests": true,
   "packageRules": [
     {
+      "description": "The pre-commit manager can't write a digest into `rev:` (\"Digest is not updated\"), which fails the whole renovate/pin-dependencies branch, the action pins included",
+      "matchManagers": ["pre-commit"],
+      "pinDigests": false
+    },
+    {
       "description": "Local tools (mise.dev.toml) don't affect the deployment, so no need for daily updates",
       "matchFileNames": ["mise.dev.toml"],
       "schedule": ["* 1-14 * * 1"]

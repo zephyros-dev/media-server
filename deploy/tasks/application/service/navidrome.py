@@ -5,13 +5,14 @@ import json
 import shlex
 
 import yaml
+from pyinfra import host
+from pyinfra.facts.server import Command
+from pyinfra.operations import files, python, server
+
 from deploy.tasks.application import run
 from deploy.tasks.application.quadlet import App
 from deploy.tasks.common.data import REPO
 from deploy.tasks.common.facts import host_vars
-from pyinfra import host
-from pyinfra.facts.server import Command
-from pyinfra.operations import files, python, server
 
 CLI = "podman exec navidrome-web /app/navidrome"
 USER = "musicgrabber"
