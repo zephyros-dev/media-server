@@ -14,7 +14,7 @@ _image: {
 
 	"beszel-agent": "docker.io/henrygd/beszel-agent:0.21.1@sha256:cb6868012964d7a68debaa2c84bb72285e5f08531e81f506bd4c493bf052e41c"
 
-	"calibre": "ghcr.io/linuxserver/calibre:9.18.0@sha256:5b5c0cba9fa70d65b5d92da73b8d486d4acf0d03ea648062586c4e3789700d89"
+	"calibre": "ghcr.io/linuxserver/calibre:9.18.0@sha256:fa5ae5f55859544ec026f82165b01bff913e812c7d67078744fcd119c1531ea3"
 
 	"calibre-dl": "ghcr.io/calibrain/calibre-web-automated-book-downloader:v1.6.2@sha256:0b400a5d58951b35bfede3d9943b632551259c31e130316fe56c5cc0e2e4faea"
 
