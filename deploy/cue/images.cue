@@ -62,7 +62,7 @@ _image: {
 
 	"nextcloud-redis": "docker.io/redis:8-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b15938f0b81ff8982feb327476f4911935c3"
 
-	"paperless-gotenberg": "docker.io/gotenberg/gotenberg:9.4@sha256:12b488c8fa15c52486c5bafb4af9fa00ffb82b2b7c2001f7ecd8d3cb83f78d40"
+	"paperless-gotenberg": "docker.io/gotenberg/gotenberg:9.4@sha256:7d790c081a944f4d30cacb59a2cdccbe71569532af691b93c36551f6a877b4fc"
 
 	"paperless-postgres": "docker.io/postgres:18-alpine@sha256:9ba53c7d41ea093baf5c1ba635ba5434c4f979880527d49bb7d9237d3193085b"
 
