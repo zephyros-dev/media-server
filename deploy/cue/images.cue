@@ -78,8 +78,6 @@ _image: {
 
 	"radarr": "ghcr.io/linuxserver/radarr:latest@sha256:51a9ac2a9eb47afc833541e5fd6c11b86eb9f810694c22fa2429e3078e9194b2"
 
-	"rdownloader": "ghcr.io/degoya/rdownloader:v1.42.0@sha256:e0ed10656fe8d7824deb932b2f495bd5806f8a2e255f59ccdfc81f614ff35e21"
-
 	"samba": "ghcr.io/servercontainers/samba:smbd-only-latest@sha256:31b90ea7fe3258d30fccd971c85743b92694605f4b43dc8a4df23a202fced06a"
 
 	"scrutiny": "ghcr.io/analogj/scrutiny:v0.10.0-omnibus@sha256:90062edac57a2bd891d641344184f5f730f19394b1124f6fc53904a3d8cb21c2"

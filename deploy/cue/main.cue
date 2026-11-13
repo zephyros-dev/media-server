@@ -1718,40 +1718,6 @@ application: {
 		}
 	}
 
-	// https://github.com/degoya/rDownloader
-	rdownloader: {
-		param: {
-			backup:      true
-			caddy_proxy: 8710
-			dashy_icon:  "/favicon.svg"
-			volumes: {
-				// The database, the plugins and the encrypted credentials
-				config: "./config/"
-				// Its fallback storage root: every storage root set in the app has to be a
-				// mounted path, or it lands in the container and goes with the next update
-				downloads: "\(_fact.global_download)/"
-			}
-		}
-		pod: _profile.rootless_userns & {
-			spec: containers: [{
-				name:  "web"
-				image: "rdownloader"
-				env: [{
-					// Schedules and quiet hours run on the container's clock, UTC by default
-					name:  "TZ"
-					value: "Asia/Ho_Chi_Minh"
-				}]
-				volumeMounts: [{
-					name:      "config"
-					mountPath: "/config:U,z"
-				}, {
-					name:      "downloads"
-					mountPath: "/downloads"
-				}]
-			}]
-		}
-	}
-
 	samba: {
 		param: {
 			dashy_show: false
