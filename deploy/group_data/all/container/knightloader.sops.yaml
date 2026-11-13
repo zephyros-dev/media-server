@@ -1,0 +1,17 @@
+knightloader_app_key: ENC[AES256_GCM,data:u3E8UGL6V/U4uWvQZbyonRj4OmE6zTilzcECLsP6OjrpBZU0EuD/SiULu4RhVdi21SnLvM8Dwup/bOo5AYrbLg==,iv:TvyzCVNkm0aofHfn1fyennpgCFvUf8EVt2dxiOT8L+0=,tag:YtyKSaxZYvl/ZblXZKs9fA==,type:str]
+knightloader_password: ENC[AES256_GCM,data:GvjL9WZfps+Y2iHp5n3NyeEUg1I4Hq6wTPor2HYtSM8=,iv:RRQrQmS+9mzvVEoAmRnu1FQvcZX0VVhQQuZGuffz1Wk=,tag:PXvuhuaRjCte2GJuYASjgg==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSREUwL2czZVY4NlBJZm1y
+            V2ZRcUtKcFV1K0hwNEs3Q09FdnFpeWtuMkVRCmM2TEthUFVReHFhVHFpamYrb0ZC
+            NEMzWSt4dWFsWDdTbHpzUm1OTDhYRlkKLS0tIC80UmNrVURBTjJvdTBVSjNxZGo2
+            dWdteStHdlpHVEpMRlByaHZxM0pXd1UKNoal1xgg4P+qnx/qt7neEiwCPTgJO2VJ
+            EDL5iCgQ1uNi1mUdKzvBqFqcGp0GVQKVIOW/AnVkCmZHCGvGzX3fZg==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age19ycrg4v57swrmzsuffwxlrw7ld26wfttxag3r7qwqq4jaatdeeeq9kmsu2
+    lastmodified: "2026-11-13T03:20:10Z"
+    mac: ENC[AES256_GCM,data:r1VULcIvs3H/F7VSGXVnwqRIQPVgQXou7dfEetRbLh3WqcETtlueXrFTKZlgfohLV86piFDsfN2XnyuWT7p6cxRAY1ciMCOQ9U7F6QxVl+nyDUBmbrdRGgdaRejjhdHuffKQihM/tDDdEVJfOTCFn9FdJ5g7LdhqirxxxwyRu1M=,iv:R3Y6QWEFwUvsvJK2bcefxPYdlidnzxbyUn4TWRZveus=,tag:oMbSiiXIbo0ZN3Ct7Un9Jw==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3

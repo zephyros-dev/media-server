@@ -970,6 +970,8 @@ application: {
 
 	jdownloader: {
 		param: {
+			// Off: the unit and its files are removed, the volumes are kept
+			state:       "absent"
 			backup:      true
 			caddy_proxy: 5800
 			volumes: {
@@ -996,6 +998,47 @@ application: {
 				}, {
 					name:      "output"
 					mountPath: "/output"
+				}]
+			}]
+		}
+	}
+
+	// https://github.com/junkerderprovinz/knightloader
+	knightloader: {
+		param: {
+			backup:      true
+			caddy_proxy: 8749
+			// The app's own favicon, which it serves without a login
+			dashy_icon: "/favicon.ico"
+			volumes: {
+				data: "./data/"
+				// Where the downloads land, like jdownloader's output
+				downloads: "\(_fact.global_download)/"
+			}
+			// Seals the passwords and secrets in the data directory: it won't start on a
+			// data directory sealed with another key
+			secret: KL_APP_KEY: {
+				type:    "env"
+				content: _fact.knightloader_app_key
+			}
+		}
+		pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "web"
+				image: "knightloader"
+				env: [{
+					name: "KL_APP_KEY"
+					valueFrom: secretKeyRef: {
+						name: "knightloader"
+						key:  "KL_APP_KEY"
+					}
+				}]
+				volumeMounts: [{
+					name:      "data"
+					mountPath: "/data:U,z"
+				}, {
+					name:      "downloads"
+					mountPath: "/data/downloads"
 				}]
 			}]
 		}
@@ -1670,6 +1713,40 @@ application: {
 				}, {
 					name:      "config"
 					mountPath: "/config:z"
+				}]
+			}]
+		}
+	}
+
+	// https://github.com/degoya/rDownloader
+	rdownloader: {
+		param: {
+			backup:      true
+			caddy_proxy: 8710
+			dashy_icon:  "/favicon.svg"
+			volumes: {
+				// The database, the plugins and the encrypted credentials
+				config: "./config/"
+				// Its fallback storage root: every storage root set in the app has to be a
+				// mounted path, or it lands in the container and goes with the next update
+				downloads: "\(_fact.global_download)/"
+			}
+		}
+		pod: _profile.rootless_userns & {
+			spec: containers: [{
+				name:  "web"
+				image: "rdownloader"
+				env: [{
+					// Schedules and quiet hours run on the container's clock, UTC by default
+					name:  "TZ"
+					value: "Asia/Ho_Chi_Minh"
+				}]
+				volumeMounts: [{
+					name:      "config"
+					mountPath: "/config:U,z"
+				}, {
+					name:      "downloads"
+					mountPath: "/downloads"
 				}]
 			}]
 		}

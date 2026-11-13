@@ -38,6 +38,8 @@ _image: {
 
 	"kavita": "ghcr.io/linuxserver/kavita:0.9.1@sha256:f75ad02b1de486ad8eaedd28e6f83e9d93929aa15aaba264fdacf070bf7194d5"
 
+	"knightloader": "ghcr.io/junkerderprovinz/knightloader:2.8.2@sha256:d492306a65a2dacd8924663695403212229e998cce041dda7ec33e97a7922f2a"
+
 	"koreader": "ghcr.io/zephyros-dev/koreader:v2026.07.1@sha256:a7c37cd2c5453b1642d6588ccdf89ff630d64b6918f17d6b896be608e5918fdb"
 
 	"librespeed": "ghcr.io/linuxserver/librespeed:latest@sha256:98ddd2a1357f961392789e078d5511dd09cb7461f87a26e6fc9cfb6e69ba96a4"
@@ -75,6 +77,8 @@ _image: {
 	"pymedusa": "docker.io/pymedusa/medusa:master@sha256:0caf2991d15030b99864158144903c1d2b5f4f9ff019ec4450c4f1cb33569857"
 
 	"radarr": "ghcr.io/linuxserver/radarr:latest@sha256:51a9ac2a9eb47afc833541e5fd6c11b86eb9f810694c22fa2429e3078e9194b2"
+
+	"rdownloader": "ghcr.io/degoya/rdownloader:v1.42.0@sha256:e0ed10656fe8d7824deb932b2f495bd5806f8a2e255f59ccdfc81f614ff35e21"
 
 	"samba": "ghcr.io/servercontainers/samba:smbd-only-latest@sha256:31b90ea7fe3258d30fccd971c85743b92694605f4b43dc8a4df23a202fced06a"
 

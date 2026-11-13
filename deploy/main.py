@@ -19,23 +19,25 @@ if host.data.get("cue_fact_debug"):
 
 
 def _selected_apps(application: dict) -> dict:
-    """`--data apps=a,b` deploys only those apps (replaces ansible's `--tags`)"""
+    """`--data apps=a,b` deploys only those apps (replaces ansible's `--tags`), `apps=all`
+    every one of them"""
     apps = host.data.get("apps")
     if not apps:
         return application
     if isinstance(apps, str):
         apps = apps.split(",")
     keys = [app.strip().replace("-", "_") for app in apps]
+    if keys == ["all"]:
+        return application
     unknown = sorted(set(keys) - application.keys())
     if unknown:
         raise ValueError(f"Unknown apps: {', '.join(unknown)}")
     return {key: application[key] for key in keys}
 
 
-# Like ansible's `--tags <app>`, selected apps skip the host setup.
-# `--data all_apps=true` deploys every app, also skipping the host setup.
+# Like ansible's `--tags <app>`, selected apps skip the host setup, `apps=all` included.
 # `--data host_only=true` runs the host setup alone
-if not host.data.get("apps") and not host.data.get("all_apps"):
+if not host.data.get("apps"):
     system.deploy()
 if not host.data.get("host_only"):
     for key, app in _selected_apps(facts["application"]).items():
