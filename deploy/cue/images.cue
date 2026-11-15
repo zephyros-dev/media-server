@@ -38,7 +38,7 @@ _image: {
 
 	"kavita": "ghcr.io/linuxserver/kavita:0.9.1@sha256:f75ad02b1de486ad8eaedd28e6f83e9d93929aa15aaba264fdacf070bf7194d5"
 
-	"knightloader": "ghcr.io/junkerderprovinz/knightloader:2.8.2@sha256:d492306a65a2dacd8924663695403212229e998cce041dda7ec33e97a7922f2a"
+	"knightloader": "ghcr.io/junkerderprovinz/knightloader:2.8.3@sha256:be048fddd8bf1541b22219935d9292a0146f2615cb8b5a7fece9c098c91e6886"
 
 	"koreader": "ghcr.io/zephyros-dev/koreader:v2026.07.1@sha256:13913b776773e09be587dc508b2e0fc1dceb51f34fac84cc2275893e80e3b8d3"
 
