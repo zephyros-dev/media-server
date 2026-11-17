@@ -72,9 +72,19 @@ def _setup():
             secret=True,
         )
 
+    # `upgrade` turns maintenance mode on and off only when it succeeds: after a failure the
+    # instance stays in maintenance mode (nextcloud.zota.top showed only the maintenance
+    # page). So the mode is turned off here whatever the upgrade did, unless the database
+    # still needs it, and a failed upgrade fails the deploy afterwards
+    upgraded, upgrade = occ("upgrade", check=False)
+    _, status = occ("status --output=json")
+    if not json.loads(re.search(r"\{.*\}", status.stdout)[0])["needsDbUpgrade"]:
+        occ("maintenance:mode --off")
+    if not upgraded:
+        stderr = "\n".join(upgrade.stderr_lines)
+        raise run.CommandError(f"occ upgrade failed:\n{stderr}")
+
     for command in (
-        "upgrade",
-        "maintenance:mode --off",
         "app:update --all",
         "background:cron",
         "db:add-missing-indices",
