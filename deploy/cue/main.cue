@@ -1275,11 +1275,6 @@ application: {
 				// Rescan navidrome after downloads and check it for duplicates, as the
 				// admin user service/navidrome.yaml creates
 				env: [{
-					// The image's HOME (/opt/musicgrabber) isn't writable by the container's
-					// user, which crashes the Chrome that Zarz's verification starts
-					name:  "HOME"
-					value: "/tmp"
-				}, {
 					// ReplayGain 2.0 tags only, the audio is never re-encoded
 					name:  "ENABLE_REPLAYGAIN"
 					value: "true"
@@ -1301,7 +1296,40 @@ application: {
 						key:  "navidrome_password"
 					}
 				}, {
+					// Search sources: only YouTube, Soulseek (below) and Zarz are on, with the
+					// health checks that take a failing one out of the search. As variables they
+					// override the Settings page
 					name:  "SOURCE_SOULSEEK_ENABLED"
+					value: "true"
+				}, {
+					name:  "SOURCE_YOUTUBE_ENABLED"
+					value: "true"
+				}, {
+					name:  "SOURCE_ZARZ_ENABLED"
+					value: "true"
+				}, {
+					name:  "SOURCE_SOUNDCLOUD_ENABLED"
+					value: "false"
+				}, {
+					name:  "SOURCE_ZVU4NO_ENABLED"
+					value: "false"
+				}, {
+					name:  "SOURCE_FREEMP3CLOUD_ENABLED"
+					value: "false"
+				}, {
+					name:  "SOURCE_JIOSAAVN_ENABLED"
+					value: "false"
+				}, {
+					name:  "SOURCE_MONOCHROME_ENABLED"
+					value: "false"
+				}, {
+					name:  "SOURCE_PROWLARR_ENABLED"
+					value: "false"
+				}, {
+					name:  "SOURCE_TORRENTS_ENABLED"
+					value: "false"
+				}, {
+					name:  "SOURCE_HEALTH_CHECKS_ENABLED"
 					value: "true"
 				}, {
 					name:  "SLSKD_URL"
