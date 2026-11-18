@@ -40,7 +40,7 @@ _image: {
 
 	"knightloader": "ghcr.io/junkerderprovinz/knightloader:2.8.3@sha256:be048fddd8bf1541b22219935d9292a0146f2615cb8b5a7fece9c098c91e6886"
 
-	"koreader": "ghcr.io/zephyros-dev/koreader:v2026.07.1@sha256:13913b776773e09be587dc508b2e0fc1dceb51f34fac84cc2275893e80e3b8d3"
+	"koreader": "ghcr.io/zephyros-dev/koreader:v2026.07.1@sha256:205b602a438888da504eddd54b5a8b640c28059016cf64de6adcb15403839d2b"
 
 	"librespeed": "ghcr.io/linuxserver/librespeed:latest@sha256:fa0ce663af2ecef06c143db770c9f46c60738c64bd9cc98ea36018fff841012a"
 
