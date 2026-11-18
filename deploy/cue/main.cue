@@ -1275,6 +1275,11 @@ application: {
 				// Rescan navidrome after downloads and check it for duplicates, as the
 				// admin user service/navidrome.yaml creates
 				env: [{
+					// The image's HOME (/opt/musicgrabber) isn't writable by the container's
+					// user, which crashes the Chrome that Zarz's verification starts
+					name:  "HOME"
+					value: "/tmp"
+				}, {
 					// ReplayGain 2.0 tags only, the audio is never re-encoded
 					name:  "ENABLE_REPLAYGAIN"
 					value: "true"
@@ -1317,6 +1322,25 @@ application: {
 					// Where slskd's downloads are mounted here
 					name:  "SLSKD_DOWNLOADS_PATH"
 					value: "/downloads"
+				}, {
+					// Convert what it downloads to Opus, leaving sources that are already lossy
+					// as they came. Songs already in the library are not touched
+					name:  "DEFAULT_CONVERT_AUDIO"
+					value: "true"
+				}, {
+					name:  "AUDIO_FORMAT"
+					value: "opus"
+				}, {
+					name:  "OPUS_BITRATE"
+					value: "160k"
+				}, {
+					name:  "CONVERT_LOSSLESS_ONLY"
+					value: "true"
+				}, {
+					// Files whose tags are changed in place must not be taken for a missing file
+					// by the refresh of a watched playlist, and downloaded again
+					name:  "REDOWNLOAD_MISSING_FILES"
+					value: "false"
 				}, if _fact.acoustid_api_key != "" {
 					// The key of the AcoustID application, for the fingerprint lookups
 					name: "ACOUSTID_API_KEY"
