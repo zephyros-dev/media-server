@@ -26,7 +26,7 @@ _image: {
 
 	"immich-machine-learning": "ghcr.io/immich-app/immich-machine-learning:v3.4.1@sha256:8adebf414256f6e4f837bfbb66fa94f14f4da7260e3a1d65cbba49e4e35d8764"
 
-	"immich-postgres": "ghcr.io/immich-app/postgres:18-vectorchord1.1.1@sha256:cc2229071e8092d43d0014ec1ce49e976d62fad3b2da5b576659cd3dc0f30f92"
+	"immich-postgres": "ghcr.io/immich-app/postgres:18-vectorchord1.1.1@sha256:f7388adc1e3414800a71506528917f4f5615249f5fe7a872b1e1431e01b72ad7"
 
 	"immich-redis": "docker.io/redis:8-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b15938f0b81ff8982feb327476f4911935c3"
 
