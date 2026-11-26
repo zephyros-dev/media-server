@@ -48,7 +48,7 @@ _image: {
 
 	"miniflux": "ghcr.io/miniflux/miniflux:2.3.5-distroless@sha256:c826edc9c2284a8181e297d22a5ade1482bd9a8a4beabb2b6356bd22ce731310"
 
-	"miniflux-postgres": "docker.io/postgres:18-alpine@sha256:ff64c9e3bdf8e2120107d3559de8db314e8305f7e38c5105903c6295876738ff"
+	"miniflux-postgres": "docker.io/postgres:18-alpine@sha256:0115267ab5a509022df9319c77be365cef335adb71556c75f60f5360ee247e71"
 
 	"mood-analyzer": "ghcr.io/rflundgren/navidrome-mood-plugin:v0.10.1@sha256:fce6a9b890aec30adaa86e3c7dfa246ced58cef711f590a6c636ea88b14db118"
 
@@ -60,13 +60,13 @@ _image: {
 
 	"nextcloud-office": "docker.io/collabora/code:26.04.6.1.1@sha256:95f29f1c0a1778999125f53f058d968fe0afb37c95e32ebfb9f3444140faebd2"
 
-	"nextcloud-postgres": "docker.io/postgres:18-alpine@sha256:ff64c9e3bdf8e2120107d3559de8db314e8305f7e38c5105903c6295876738ff"
+	"nextcloud-postgres": "docker.io/postgres:18-alpine@sha256:0115267ab5a509022df9319c77be365cef335adb71556c75f60f5360ee247e71"
 
 	"nextcloud-redis": "docker.io/redis:8-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b15938f0b81ff8982feb327476f4911935c3"
 
 	"paperless-gotenberg": "docker.io/gotenberg/gotenberg:9.5@sha256:a0f596c2aeee6391c24ccf2953737971f13976b14d4240525a447f209185e2c8"
 
-	"paperless-postgres": "docker.io/postgres:18-alpine@sha256:ff64c9e3bdf8e2120107d3559de8db314e8305f7e38c5105903c6295876738ff"
+	"paperless-postgres": "docker.io/postgres:18-alpine@sha256:0115267ab5a509022df9319c77be365cef335adb71556c75f60f5360ee247e71"
 
 	"paperless-redis": "docker.io/redis:8-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b15938f0b81ff8982feb327476f4911935c3"
 
