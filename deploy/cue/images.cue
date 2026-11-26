@@ -28,7 +28,7 @@ _image: {
 
 	"immich-postgres": "ghcr.io/immich-app/postgres:18-vectorchord1.1.1@sha256:f7388adc1e3414800a71506528917f4f5615249f5fe7a872b1e1431e01b72ad7"
 
-	"immich-redis": "docker.io/redis:8-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b15938f0b81ff8982feb327476f4911935c3"
+	"immich-redis": "docker.io/redis:8-alpine@sha256:5af80107c1eeecb484a2269b80a26d12bfa6521787da4663bd9f19f60a163483"
 
 	"immich-server": "ghcr.io/immich-app/immich-server:v3.4.1@sha256:7c489add298fc2f92cda4c777de6462aa206877e04087b815f62c7664af0b53b"
 
@@ -62,13 +62,13 @@ _image: {
 
 	"nextcloud-postgres": "docker.io/postgres:18-alpine@sha256:0115267ab5a509022df9319c77be365cef335adb71556c75f60f5360ee247e71"
 
-	"nextcloud-redis": "docker.io/redis:8-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b15938f0b81ff8982feb327476f4911935c3"
+	"nextcloud-redis": "docker.io/redis:8-alpine@sha256:5af80107c1eeecb484a2269b80a26d12bfa6521787da4663bd9f19f60a163483"
 
 	"paperless-gotenberg": "docker.io/gotenberg/gotenberg:9.5@sha256:a0f596c2aeee6391c24ccf2953737971f13976b14d4240525a447f209185e2c8"
 
 	"paperless-postgres": "docker.io/postgres:18-alpine@sha256:0115267ab5a509022df9319c77be365cef335adb71556c75f60f5360ee247e71"
 
-	"paperless-redis": "docker.io/redis:8-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b15938f0b81ff8982feb327476f4911935c3"
+	"paperless-redis": "docker.io/redis:8-alpine@sha256:5af80107c1eeecb484a2269b80a26d12bfa6521787da4663bd9f19f60a163483"
 
 	"paperless-tika": "docker.io/apache/tika:3.3.3.0@sha256:326b238b37904c94ff61fed87afe0af72e6a29fa715933b10af97b7d56f1d4cb"
 
