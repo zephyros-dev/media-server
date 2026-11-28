@@ -52,7 +52,7 @@ _image: {
 
 	"mood-analyzer": "ghcr.io/rflundgren/navidrome-mood-plugin:v0.10.1@sha256:fce6a9b890aec30adaa86e3c7dfa246ced58cef711f590a6c636ea88b14db118"
 
-	"musicgrabber": "docker.io/g33kphr33k/musicgrabber:dev@sha256:46156bac0bc2e88d9530c56ca4997eb5e98588a2818cc29297b459ed7b579965"
+	"musicgrabber": "docker.io/g33kphr33k/musicgrabber:dev@sha256:b3322679526fb2297fa8520e6ff32563369f0243826520c06055bb55bb219905"
 
 	"navidrome": "ghcr.io/navidrome/navidrome:0.64.2@sha256:38dc2727bfcfd5ede290f8ada114fc90368146f265ae4701ddddbcbe2a44ee52"
 
