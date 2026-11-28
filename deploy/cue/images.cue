@@ -84,7 +84,7 @@ _image: {
 
 	"slskd": "docker.io/slskd/slskd:0.26.2@sha256:d0963a3e5b16facd295bf4f2156dad0182f246b1b21a032cae12f5494c694843"
 
-	"speedtest": "lscr.io/linuxserver/speedtest-tracker:1.15.1@sha256:b7833e43bcf53859efd08605a48740a5cfa741916019373e4dbe730fc59bedf0"
+	"speedtest": "lscr.io/linuxserver/speedtest-tracker:1.15.1@sha256:132d35a355474be17822e2ff3df4866407187ca978a768935fea06f52ae24493"
 
 	"syncthing": "docker.io/syncthing/syncthing:2.1.7@sha256:2b71da7c0d0a91a6ae5285ad079226fecc0a365d08b27720e1f7037b018f7546"
 
