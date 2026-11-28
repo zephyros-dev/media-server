@@ -72,7 +72,7 @@ _image: {
 
 	"paperless-tika": "docker.io/apache/tika:3.3.3.0@sha256:326b238b37904c94ff61fed87afe0af72e6a29fa715933b10af97b7d56f1d4cb"
 
-	"prowlarr": "ghcr.io/linuxserver/prowlarr:latest@sha256:45117ba8439e2337a92ffe38a451a4dafc0be771754d05d88cdf102419d09646"
+	"prowlarr": "ghcr.io/linuxserver/prowlarr:latest@sha256:2806c9b763810589c42157730d547c293639e55c7610e9f5069314854639ec48"
 
 	"pymedusa": "docker.io/pymedusa/medusa:master@sha256:0caf2991d15030b99864158144903c1d2b5f4f9ff019ec4450c4f1cb33569857"
 
